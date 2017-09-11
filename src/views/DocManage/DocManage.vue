@@ -112,10 +112,10 @@ a {
 a:hover {
 	text-decoration: none;
 }
-fl{
+.fl{
   float: left;
 }
-fr{
+.fr{
   float: right;
 }
 </style>
