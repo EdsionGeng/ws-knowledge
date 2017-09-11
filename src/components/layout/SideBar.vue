@@ -4,11 +4,11 @@
          <Menu :theme="theme3" active-name="1" @on-select="change"> 
         <MenuGroup title="主页">
             <MenuItem name="SuperHome">
-                <Icon type="document-text"></Icon>
+                <!-- <Icon type="document-text"></Icon> -->
                 超管首页
             </MenuItem>
             <MenuItem name="PersonalHome">
-                <Icon type="chatbubbles"></Icon>
+                <!-- <Icon type="chatbubbles"></Icon> -->
                 个人首页
             </MenuItem>
         </MenuGroup>
@@ -36,23 +36,23 @@
         </MenuGroup> -->
         <MenuGroup title="管理中心">
             <MenuItem name="8">
-                <Icon type="heart"></Icon>
+                <!-- <Icon type="heart"></Icon> -->
                 文档管理
             </MenuItem>
             <MenuItem name="9">
-                <Icon type="heart-broken"></Icon>
+                <!-- <Icon type="heart-broken"></Icon> -->
                 文档类型管理
             </MenuItem>
             <MenuItem name="10">
-                <Icon type="heart"></Icon>
+                <!-- <Icon type="heart"></Icon> -->
                 消息推送
             </MenuItem>
             <MenuItem name="11">
-                <Icon type="heart-broken"></Icon>
+                <!-- <Icon type="heart-broken"></Icon> -->
                 历史下载
             </MenuItem>
             <MenuItem name="12">
-                <Icon type="heart-broken"></Icon>
+                <!-- <Icon type="heart-broken"></Icon> -->
                 历史上传
             </MenuItem>
         </MenuGroup>
