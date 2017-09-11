@@ -35,7 +35,7 @@
             </MenuItem>
         </MenuGroup> -->
         <MenuGroup title="管理中心">
-            <MenuItem name="8">
+            <MenuItem name="DocManage">
                 <!-- <Icon type="heart"></Icon> -->
                 文档管理
             </MenuItem>

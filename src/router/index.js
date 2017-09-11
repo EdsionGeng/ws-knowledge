@@ -6,6 +6,7 @@ import Login from '@/views/login/index'
 import Home from '@/components/layout/Home';
 import SuperHome from '@/views/Home/SuperHome';
 import PersonalHome from '@/views/Home/PersonalHome';
+import DocManage from "@/views/DocManage/DocManage";
 
 Vue.use(Router);
 
@@ -41,6 +42,10 @@ const constantRouteMap=[
     {
       path:'/PersonalHome',
       component:PersonalHome
+    },
+    {
+      path: '/DocManage',
+      component:DocManage
     }
 ];
 
