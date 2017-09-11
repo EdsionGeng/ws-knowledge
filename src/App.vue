@@ -1,12 +1,18 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <v-home></v-home>
+    <!-- <v-login></v-login> -->
   </div>
 </template>
 
 <script>
+import vHome from './components/layout/Home';
+import vLogin from './views/login/index';
 export default {
-  name: 'app'
+  name: 'app',
+  components:{
+    vHome,vLogin
+  }
 }
 </script>
 

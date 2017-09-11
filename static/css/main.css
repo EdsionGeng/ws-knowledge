@@ -24,5 +24,10 @@ body{
     overflow-y: auto;
 }
 .layout-main{
-    
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 66px;
+    background: #f8f8f9;
+    overflow: auto;
 }

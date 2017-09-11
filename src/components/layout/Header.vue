@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="header-logo">
-        <h1>VueAdmin</h1>
+        <h1>温商贷知识库</h1>
     </div>
     <div class="header-right">
         <Dropdown>
