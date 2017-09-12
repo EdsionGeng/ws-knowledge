@@ -30,8 +30,9 @@ new Vue({
     // this.checkLogin();
     console.log(this.$axios ? 'Axios works!' :'no');
   },
-  template: '<App/>',
-  components: { App },
+  // template: '<App/>',
+  // components: { App },
+  render:hello=>hello(App),
   methods:{
     checkLogin(){
       console.log(Cookies.get('isLogin'));

@@ -7,7 +7,7 @@
                 <!-- <Icon type="document-text"></Icon> -->
                 超管首页
             </MenuItem>
-            <MenuItem name="PersonalHome">
+            <MenuItem name="index">
                 <!-- <Icon type="chatbubbles"></Icon> -->
                 个人首页
             </MenuItem>
@@ -35,7 +35,7 @@
             </MenuItem>
         </MenuGroup> -->
         <MenuGroup title="管理中心">
-            <MenuItem name="DocManage">
+            <MenuItem name="8">
                 <!-- <Icon type="heart"></Icon> -->
                 文档管理
             </MenuItem>
@@ -43,11 +43,11 @@
                 <!-- <Icon type="heart-broken"></Icon> -->
                 文档类型管理
             </MenuItem>
-            <MenuItem name="10">
+            <MenuItem name="notice">
                 <!-- <Icon type="heart"></Icon> -->
                 消息推送
             </MenuItem>
-            <MenuItem name="11">
+            <MenuItem name="hisall">
                 <!-- <Icon type="heart-broken"></Icon> -->
                 历史下载
             </MenuItem>
@@ -89,6 +89,8 @@ export default {
 }
 </script>
 <style scoped>
-
+.layout-left-bottom{
+   flex: 1;
+}
 </style>
 
