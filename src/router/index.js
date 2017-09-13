@@ -12,54 +12,49 @@ import Notice from "@/views/Notice/notice"
 
 Vue.use(Router);
 
-const constantRouteMap=[
-    {
-      path:'/Login',
-      component:Login
-    },
-    // {
-    //   path:'/',
-    //   component:Home,
-    //   redirect:'/DashBoard',
-    //   children:[{
-    //     path:'DashBoard',
-    //     component:DashBoard
-    //   },{
-    //     path:'CRUD',
-    //     component:CRUD
-    //   }]
-    // },{
-    //   path:'*',
-    //   component:Home,
-    //   redirect:'/DashBoard'
-    // }
-    {
-      path:'/',
-      component:SuperHome
-    },
-    {
-      path:'/SuperHome',
-      component:SuperHome
-    },
-    {
-      path:'/PersonalHome',
-      component:PersonalHome
-    },
-    {
-      path: '/index',
-      component:DocManage
-    }
-    ,{
-      path: '/hisall',
-      component: Hisall
-    }
-    ,{
-      path:'/notice',
-      component:Notice
-    }
+const constantRouteMap = [
+  {
+    path: '/Login',
+    component: Login
+  },
+  {
+    path: '/',
+    component: Home,
+    children: [
+      {
+        path: '/',
+        component: SuperHome
+      },
+      {
+        path: '/SuperHome',
+        component: SuperHome
+      },
+      {
+        path: '/PersonalHome',
+        component: PersonalHome
+      },
+      {
+        path: '/index',
+        component: DocManage
+      },
+      {
+        path: '/hisall',
+        component: Hisall
+      },
+      {
+        path: '/notice',
+        component: Notice
+      }
+    ]
+  },
+  {
+    path: '*',
+    component: Home,
+    redirect: '/DashBoard'
+  }
 ];
 
 export default new Router({
-  mode:'history',
+  mode: 'history',
   routes: constantRouteMap
 });
