@@ -20,8 +20,8 @@
                       </div> 
                         <p>标题</p>
                         <p class='clearfix'>
-                          <span>演员</span>
-                          <span class='fr'>07/23 10:23</span>
+                           <span>07/23 10:23</span>
+                          <span class='fr'>下载次数213</span>
                         </p>
                     </a>
                   </Col>
@@ -32,9 +32,9 @@
                         <img src="../../../assets/bg.jpg" alt="" >
                       </div> 
                         <p>标题</p>
-                        <p class='clearfix'>
-                          <span>演员</span>
-                          <span class='fr'>07/23 10:23</span>
+                       <p class='clearfix'>
+                           <span>07/23 10:23</span>
+                          <span class='fr'>下载次数213</span>
                         </p>
                     </a>
                   </Col>
@@ -45,8 +45,8 @@
                       </div> 
                         <p>标题</p>
                         <p class='clearfix'>
-                          <span>演员</span>
-                          <span class='fr'>07/23 10:23</span>
+                           <span>07/23 10:23</span>
+                          <span class='fr'>下载次数213</span>
                         </p>
                     </a>
                   </Col>
@@ -57,9 +57,9 @@
                       </div>
 
                         <p>标题</p>
-                        <p class='clearfix'>
-                          <span>演员</span>
-                          <span class='fr'>07/23 10:23</span>
+                       <p class='clearfix'>
+                           <span>07/23 10:23</span>
+                          <span class='fr'>下载次数213</span>
                         </p>
                     </a>
                   </Col>

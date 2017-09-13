@@ -8,7 +8,9 @@ import SuperHome from '@/views/Home/SuperHome';
 import PersonalHome from '@/views/Home/PersonalHome';
 import DocManage from '@/views/DocManage/';
 import Hisall from '@/views/Hsup/hisall';
-import Notice from "@/views/Notice/notice"
+import Notice from "@/views/Notice/notice";
+import News from '@/views/news/mynews';
+import File from '@/views/File/file'
 
 Vue.use(Router);
 
@@ -44,6 +46,12 @@ const constantRouteMap = [
       {
         path: '/notice',
         component: Notice
+      },{
+        path:'/news',
+        component:News
+      },{
+        path:'/file',
+        component: File
       }
     ]
   },

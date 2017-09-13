@@ -1,24 +1,37 @@
 <template>
-  <div style='margin-top: 50px;'>
-    <!-- <Head></Head> -->
+  <div >
+    <p class='title'>公告推送</p>
     <Modal></Modal>
-    <!-- <Form></Form>  -->
+   
     <DataTime></DataTime>
+     <Forms></Forms> 
+     <Pages></Pages>
   </div>
 </template>
 <script>
 import DataTime from "../Notice/components/DataTime"
-// import Form from "../Notice/components/Form"
+import Forms from "../Notice/components/Forms"
 // import Head from "../Notice/components/Head"
 import Modal from "../Notice/components/Modal"
+import Pages from "../DocManage/components/pages"
 export default {
   components:{
     DataTime,
-    
-    
+    Forms,
+    Pages,
     Modal
 
   }
 }
 </script>
+<style scoped>
+ .title{
+padding: 20px;
+font-size: 18px;
+font-weight: 700;
+color:#000;
+}
+</style>
+
+
 

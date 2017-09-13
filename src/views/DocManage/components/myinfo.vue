@@ -1,5 +1,6 @@
 <template>
-    <Card style='margin-top: 50px;'>
+<div>
+    <Card >
         <p slot="title">
             <Icon type="ios-film-outline"></Icon>
             我的消息
@@ -21,6 +22,7 @@
             </li>
         </ul>
     </Card>
+</div>    
 </template>
 <script>
     export default {

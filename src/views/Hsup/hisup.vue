@@ -1,5 +1,5 @@
 <template>
-    <Card class='Card' style='margin-top: 50px;'>
+    <Card class='Card'>
         <p slot="title">
             <Icon type="ios-film-outline"></Icon>
             历史下载
