@@ -3,6 +3,7 @@ import axios from 'axios'
 // 封装axios 创建基础实例以及axios拦截
 
 const service = axios.create({
+    baseURL:'http://192.168.3.26:5626/mock/59b7358686d1e55aa43b3734/ws',
     timeout:5000
 });
 

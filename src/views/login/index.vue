@@ -45,18 +45,22 @@ export default {
   },
   methods:{
       ...mapActions([
-        'Login'
+        'SetIsLogin'
       ]),
       handleSubmit(name){
           this.$refs[name].validate((valid)=>{
               if(valid){
-                  this.isLoading=true;
-                  this.$store.dispatch('Login');
-                  Cookies.set('isLogin',true);
-                  Cookies.set('userName',this.loginForm.userName);
-                  // 密码验证成功之后，路由重定向
-                  this.isLoading=false;
-                  this.$router.push('/');
+                //   this.isLoading=true;
+                //   this.$store.dispatch('Login');
+                //   Cookies.set('isLogin',true);
+                //   Cookies.set('userName',this.loginForm.userName);
+                //   // 密码验证成功之后，路由重定向
+                //   this.isLoading=false;
+                //   console.log();
+                this.$store.dispatch('SetIsLogin',true);
+                console.log(this.$store.state.user.isLogin);
+                this.$router.push('/');
+                
               }else{
                   this.$Message.error('表单验证失败！');
               }

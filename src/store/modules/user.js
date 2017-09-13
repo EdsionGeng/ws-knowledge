@@ -22,6 +22,9 @@ const user = {
         },
         SET_COOKIEVALUE:(state,cookieValue)=>{
             state.cookieValue = cookieValue;
+        },
+        SET_IsLogin:(state,islogin)=>{
+            state.isLogin=islogin;
         }
 
     },
@@ -41,7 +44,14 @@ const user = {
         //获取用户信息
         GetUserInfo({commit,state}){
             commit('SET_USERNAME','lihaitao');
+        },
+
+        SetIsLogin({commit,state},islogin){
+            commit('SET_IsLogin',islogin);
         }
+
+
+
     }
 }
 
