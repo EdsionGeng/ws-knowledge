@@ -1,4 +1,5 @@
 <template>
+  <div style='height: 500px;'>
     <Card class='Card'>
         <p slot="title">
             <Icon type="ios-film-outline"></Icon>
@@ -20,7 +21,7 @@
                       </div> 
                         <p>标题</p>
                         <p class='clearfix'>
-                           <span>07/23 10:23</span>
+                          <span>07/23 10:23</span>
                           <span class='fr'>下载次数213</span>
                         </p>
                     </a>
@@ -68,6 +69,7 @@
           </li>
         </ul>
     </Card>
+</div>
 </template>
 <script>
     

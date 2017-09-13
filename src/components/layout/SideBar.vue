@@ -12,7 +12,7 @@
                 个人首页
             </MenuItem>
         </MenuGroup>
-        <!-- <MenuGroup title="文件管理">
+        <MenuGroup title="文件管理">
             <MenuItem name="3">
                 <Icon type="heart"></Icon>
                 全部文件
@@ -33,9 +33,13 @@
                 <Icon type="heart-broken"></Icon>
                 存档文件
             </MenuItem>
-        </MenuGroup> -->
+        </MenuGroup>
         <MenuGroup title="管理中心">
-            <MenuItem name="8">
+            <MenuItem name="news">
+                <!-- <Icon type="heart"></Icon> -->
+                我的消息
+            </MenuItem>
+            <MenuItem name="file">
                 <!-- <Icon type="heart"></Icon> -->
                 文档管理
             </MenuItem>

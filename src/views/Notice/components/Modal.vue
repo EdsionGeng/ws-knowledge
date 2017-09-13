@@ -1,69 +1,69 @@
 <template>
-    <div class='Nall clearfix'>
-        <p class='Ntitle'>
-           公告推送
-        </p>
-        <p>
-            <Button @click="render" class='fl'style='margin-right: 40px;'>添加公告</Button >
-        </p>
-        <p>
-            <Button @click="render" class='fl'>批量删除</Button>
-        </p>
-    </div>    
+<div class='ModalAll'>
+    
+    <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
+  
+    <Modal
+        v-model="modal1"
+        title="添加公告"
+        @on-ok="ok"
+        @on-cancel="cancel">
+        <addnotice></addnotice>
+        
+    </Modal>
+ <Button type="primary" @click="modal2 = true">批量删除</Button>
+
+  <Modal
+        v-model="modal2"
+        title="批量删除"
+        @on-ok="ok"
+        @on-cancel="cancel">
+       <p class='del'>确认是否删除选中文件</p>
+        
+    </Modal>
+</div>    
 </template>
 <script>
+import addnotice from "../components/addM"
     export default {
         data () {
             return {
-                value: ''
-            }            
+                modal1: false,
+                modal2: false
+
+            }
         },
         methods: {
-            render () {
-                this.$Modal.confirm({
-                    render: (h) => {
-                        return h('Input', {
-                            props: {
-                                value: this.value,
-                                autofocus: true,
-                                placeholder: 'Please enter your name...'
-                            },
-                            on: {
-                                input: (val) => {
-                                    this.value = val;
-                                }
-                            }
-                        })
-                    }
-                })
+            ok () {
+                this.$Message.info('点击了确定');
+            },
+            cancel () {
+                this.$Message.info('点击了取消');
             }
+        },
+        components:{
+            addnotice
         }
-    }
+     
+        }
+    
 </script>
 <style scoped>
-.fl{
-  float: left;
+.ModalAll{
+/* padding: 20px; */
+padding: 0 0px 20px 20px;
 }
-.clearfix:after {
-	content: "";
-	display: block;
-	visibility: hidden;
-	height: 0;
-	clear: both;
+Modal{
+    width: 500px;
 }
-.clearfix {
-	zoom: 1;
+.del{
+    text-align: center;
+    font-size: 16px;
+    color: #000;
 }
-.Ntitle{
-  font-size: 18px;
-  font-weight: 700;
-  color: #000;
-  margin-bottom: 20px;
-}
-.Nall{
-  padding: 20px 20px;
-}
+
 </style>
+
 
 
 
