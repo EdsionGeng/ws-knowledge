@@ -57,7 +57,7 @@ export default {
                       sessionStorage.setItem('userName',userName);
                       this.$Message.success(res.data.message);
                       this.$router.push('/');
-                  }).then(err=>{
+                  }).catch(err=>{
                       this.isLoading=false;
                   })
               }else{
