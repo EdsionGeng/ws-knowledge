@@ -52,12 +52,14 @@ export default {
               if(valid){
                   this.isLoading=true;
                   Login(this.loginForm).then(res=>{
+                      console.log(res);
                       this.$store.dispatch('Login',this.loginForm.userName);
                       const userName = this.loginForm.userName;
                       sessionStorage.setItem('userName',userName);
                       this.$Message.success(res.data.message);
                       this.$router.push('/');
                   }).catch(err=>{
+                      this.$Message.error("登录失败！");
                       this.isLoading=false;
                   })
               }else{
