@@ -10,7 +10,7 @@ import DocManage from '@/views/DocManage/';
 import Hisall from '@/views/Hsup/hisall';
 import Notice from "@/views/Notice/notice";
 import News from '@/views/news/mynews';
-import File from '@/views/File/file'
+// import File from '@/views/File/file'
 
 Vue.use(Router);
 
