@@ -6,7 +6,7 @@
     <div class="header-right">
         <Dropdown>
             <a href="javascript:void(0)">
-                管理员
+                {{userInfo}}
                 <Icon type="arrow-down-b"></Icon>
             </a>
             <Dropdown-menu slot="list" >
@@ -19,7 +19,16 @@
 </template>
 <script>
 export default {
-  
+    data(){
+        return{
+            userInfo:this.getUserName()
+        }
+    },
+    methods:{
+        getUserName(){
+            return sessionStorage.getItem('userName');
+        }
+    }
 }
 </script>
 <style scoped>

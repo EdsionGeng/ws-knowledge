@@ -1,7 +1,7 @@
 <template>
     <div class="login-layout">
         <Form ref="loginForm" :model="loginForm" :rules="loginRules"  class="login-form" inline>
-            <h1 class="login-title">系统登录</h1>
+            <h1 class="login-title">温商贷知识库</h1>
             <Form-item prop="userName">
                 <Input type="text" name="userName" v-model="loginForm.userName"  placeholder="Username" size="large">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
@@ -22,8 +22,8 @@
     </div>
 </template>
 <script>
-import Cookies from 'js-cookie'
 import {mapActions} from 'vuex'
+import {Login} from '../../api/login'
 export default {
   data(){
       return{
@@ -45,22 +45,21 @@ export default {
   },
   methods:{
       ...mapActions([
-        'SetIsLogin'
+        'Login'
       ]),
       handleSubmit(name){
           this.$refs[name].validate((valid)=>{
               if(valid){
-                //   this.isLoading=true;
-                //   this.$store.dispatch('Login');
-                //   Cookies.set('isLogin',true);
-                //   Cookies.set('userName',this.loginForm.userName);
-                //   // 密码验证成功之后，路由重定向
-                //   this.isLoading=false;
-                //   console.log();
-                this.$store.dispatch('SetIsLogin',true);
-                console.log(this.$store.state.user.isLogin);
-                this.$router.push('/');
-                
+                  this.isLoading=true;
+                  Login(this.loginForm).then(res=>{
+                      this.$store.dispatch('Login',this.loginForm.userName);
+                      const userName = this.loginForm.userName;
+                      sessionStorage.setItem('userName',userName);
+                      this.$Message.success(res.data.message);
+                      this.$router.push('/');
+                  }).then(err=>{
+                      this.isLoading=false;
+                  })
               }else{
                   this.$Message.error('表单验证失败！');
               }
