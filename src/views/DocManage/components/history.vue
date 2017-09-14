@@ -73,6 +73,7 @@
 </div>
 </template>
 <script>
+//历史下载
 import Imgs from "../components/Imgs.vue"  
   export default {
     components:{

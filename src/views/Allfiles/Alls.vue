@@ -1,3 +1,4 @@
+
 <template>
   <div style='margin-top: 50px;'>
     <Search></Search>
@@ -7,6 +8,7 @@
   </div>
 </template>
 <script>
+// 全部文件
 import Search from './search'
 import Btn from "./Btn"
 import Imgs from "../DocManage/components/Imgs"
