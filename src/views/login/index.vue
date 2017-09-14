@@ -55,9 +55,14 @@ export default {
                       console.log(res);
                       this.$store.dispatch('Login',this.loginForm.loginid);
                       const loginid = this.loginForm.loginid;
-                      sessionStorage.setItem('userName',loginid);
-                      this.$Message.success(res.data.message);
-                      this.$router.push('/');
+                      if(res.data.code===0){
+                        sessionStorage.setItem('userName',loginid);
+                        this.$Message.success(res.data.message);
+                        this.$router.push('/');
+                      }else{
+                        this.$Message.error(res.data.message);
+                        this.isLoading=false;
+                      }
                   }).catch(err=>{
                       this.$Message.error("登录失败！");
                       this.isLoading=false;
