@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Login from '@/views/login/index'
+import NotFound from '@/components/404/'
 
 import Home from '@/components/layout/Home';
 import SuperHome from '@/views/Home/SuperHome';
@@ -58,14 +59,14 @@ const constantRouteMap = [
       ,{
         path:'/afs',
         component: Afs
+      },
+      {
+        path: '*',
+        component: NotFound 
       }
     ]
-  },
-  {
-    path: '*',
-    component: Home,
-    redirect: '/DashBoard'
   }
+  
 ];
 
 export default new Router({
