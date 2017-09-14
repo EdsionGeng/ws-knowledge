@@ -7,9 +7,9 @@
         </p>
         <a href="#" slot="extra" @click.prevent="changeLimit">
             <Icon type="ios-loop-strong"></Icon>
-            更多
+            查看
         </a>
-        <ul class='clearfix'>
+        <!-- <ul class='clearfix'>
            <li class='updatali'>
            
               <Row>
@@ -67,12 +67,18 @@
              </Row>
            
           </li>
-        </ul>
+        </ul> -->
+        <Imgs></Imgs>
     </Card>
 </div>
 </template>
 <script>
-    
+import Imgs from "../components/Imgs.vue"  
+  export default {
+    components:{
+      Imgs
+    }
+  }  
 </script>
 <style scoped>
 .clearfix:after {

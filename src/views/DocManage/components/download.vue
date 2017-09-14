@@ -8,7 +8,7 @@
             <Icon type="ios-loop-strong"></Icon>
             更多
         </a>
-        <ul class='clearfix'>
+        <!-- <ul class='clearfix'>
            <li class='updatali'>
            
               <Row>
@@ -66,11 +66,17 @@
              </Row>
            
           </li>
-        </ul>
+        </ul> -->
+        <Imgs></Imgs>
     </Card>
 </template>
 <script>
-    
+import Imgs from "../components/Imgs.vue"  
+  export default {
+    components:{
+      Imgs
+    }
+  }  
 </script>
 <style scoped>
 .clearfix:after {
