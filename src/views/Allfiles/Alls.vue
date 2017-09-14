@@ -1,15 +1,23 @@
 <template>
   <div style='margin-top: 50px;'>
     <Search></Search>
-    <!-- <Main></Main> -->
+    <Btn></Btn>
+    <Imgs></Imgs>
+    <Pages></Pages>
   </div>
 </template>
 <script>
 import Search from './search'
-// import Main from "./main"
+import Btn from "./Btn"
+import Imgs from "../DocManage/components/Imgs"
+import Pages from "../DocManage/components/pages"
 export default {
   components:{
     Search,
+    Btn,
+    Imgs,
+    Pages
+
    
   }
 }

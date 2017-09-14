@@ -1,6 +1,6 @@
 <template>
 <div class='Card clearfix'>
-    <Card style="width:320px"  class='fl' v-for="item in movieList">
+    <Card style="width:300px"  class='fl mains' v-for="item in movieList">
         <div style="text-align:center;">
             <img src="../../../assets/bg.jpg">
             <h3>标题:{{item.title}}</h3>
@@ -45,6 +45,10 @@
     }
 </script>
 <style scoped>
+.mains{
+  margin: 10px 10px;
+}
+
 .Card img{
 width: 218px;
 }
