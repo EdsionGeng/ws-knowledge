@@ -17,7 +17,7 @@
                 <!-- <Icon type="heart"></Icon> -->
                 全部文件
             </MenuItem>
-            <MenuItem name="4">
+            <MenuItem name="seefile">
                 <Icon type="heart-broken"></Icon>
                 规章制度
             </MenuItem>
