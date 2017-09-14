@@ -2,13 +2,13 @@
     <div class="login-layout">
         <Form ref="loginForm" :model="loginForm" :rules="loginRules"  class="login-form" inline>
             <h1 class="login-title">温商贷知识库</h1>
-            <Form-item prop="userName">
-                <Input type="text" name="userName" v-model="loginForm.userName"  placeholder="Username" size="large">
+            <Form-item prop="loginid">
+                <Input type="text" name="loginid" v-model="loginForm.loginid"  placeholder="请输入用户名" size="large">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
             </Form-item>
-            <Form-item prop="password">
-                <Input type="password" name="password" v-model="loginForm.password" placeholder="Password" size="large">
+            <Form-item prop="pwd">
+                <Input type="password" name="pwd" v-model="loginForm.pwd" placeholder="请输入密码" size="large">
                     <Icon type="ios-locked-outline" slot="prepend"></Icon>
                 </Input>
             </Form-item>
@@ -28,15 +28,15 @@ export default {
   data(){
       return{
           loginForm:{
-              userName:'',
-              password:'',
+              loginid:'',
+              pwd:'',
           },
           isLoading:false,
           loginRules:{
-              userName:[
+              loginid:[
                   {required:true,message:'请填写用户名',trigger:'blur'}
                   ],
-              password:[
+              pwd:[
                   {required:true,message:'请填写密码',trigger:'blue'},
                   {type:'string',min:6,message:'密码长度不能少于6位',trigger:'blue'}
               ]
@@ -53,9 +53,9 @@ export default {
                   this.isLoading=true;
                   Login(this.loginForm).then(res=>{
                       console.log(res);
-                      this.$store.dispatch('Login',this.loginForm.userName);
-                      const userName = this.loginForm.userName;
-                      sessionStorage.setItem('userName',userName);
+                      this.$store.dispatch('Login',this.loginForm.loginid);
+                      const loginid = this.loginForm.loginid;
+                      sessionStorage.setItem('userName',loginid);
                       this.$Message.success(res.data.message);
                       this.$router.push('/');
                   }).catch(err=>{
