@@ -9,9 +9,10 @@
   </div>
 </template>
 <script>
+//公告推送
 import DataTime from "../Notice/components/DataTime"
 import Forms from "../Notice/components/Forms"
-// import Head from "../Notice/components/Head"
+
 import Modal from "../Notice/components/Modal"
 import Pages from "../DocManage/components/pages"
 export default {

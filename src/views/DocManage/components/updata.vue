@@ -71,6 +71,7 @@
     </Card>
 </template>
 <script>
+//最新上传
   import Imgs from "../components/Imgs.vue"  
   export default {
     components:{
