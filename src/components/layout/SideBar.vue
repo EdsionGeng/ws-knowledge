@@ -13,8 +13,8 @@
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="文件管理">
-            <MenuItem name="3">
-                <Icon type="heart"></Icon>
+            <MenuItem name="afs">
+                <!-- <Icon type="heart"></Icon> -->
                 全部文件
             </MenuItem>
             <MenuItem name="4">

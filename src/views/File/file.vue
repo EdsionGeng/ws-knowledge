@@ -8,7 +8,7 @@
   </div>
 </template>
 <script>
-import Filetit from "../File/filetit"
+import Filetit from "./filetit"
 import Model from "../Notice/components/Modal"
 import Forms from "../Notice/components/Forms"
 import Pages from "../DocManage/components/pages"

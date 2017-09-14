@@ -10,7 +10,12 @@ import DocManage from '@/views/DocManage/';
 import Hisall from '@/views/Hsup/hisall';
 import Notice from "@/views/Notice/notice";
 import News from '@/views/news/mynews';
+<<<<<<< HEAD
 // import File from '@/views/File/file'
+=======
+import Files from '@/views/File/file';
+import Afs from '@/views/Allfiles/Alls';
+>>>>>>> e2492b51ea7c28f7b564602c624b27bea99ebf52
 
 Vue.use(Router);
 
@@ -49,9 +54,14 @@ const constantRouteMap = [
       },{
         path:'/news',
         component:News
-      },{
+      }
+      ,{
         path:'/file',
-        component: File
+        component:Files
+      }
+      ,{
+        path:'/afs',
+        component: Afs
       }
     ]
   },
