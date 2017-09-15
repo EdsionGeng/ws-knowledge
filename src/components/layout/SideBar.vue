@@ -44,7 +44,7 @@
                 历史上传
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="个人中心">
+        <!-- <MenuGroup title="个人中心">
             <MenuItem name="13">
                 <Icon type="heart"></Icon>
                 我的消息
@@ -57,7 +57,7 @@
                 <Icon type="heart"></Icon>
                 历史上传
             </MenuItem>
-        </MenuGroup>
+        </MenuGroup> -->
     </Menu>
     </div>
 </template>

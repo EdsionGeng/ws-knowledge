@@ -14,6 +14,7 @@ import News from '@/views/news/mynews';
 import Files from '@/views/File/file';
 import Afs from '@/views/Allfiles/Alls';
 import Seefile from '@/views/Allfiles/check/Seefile'
+import filemanage from '@/views/FileManage/index'
 
 Vue.use(Router);
 
@@ -59,7 +60,7 @@ const constantRouteMap = [
       }
       ,{
         path:'/afs',
-        component: Afs
+        component: filemanage
       },{
         path:'/seefile',
         component:Seefile
