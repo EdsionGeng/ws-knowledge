@@ -1,13 +1,16 @@
 <template>
     <Card class='Card'>
+      
         <p slot="title">
             <Icon type="ios-film-outline"></Icon>
-            历史下载
+            <span> 历史下载</span>
+          
         </p>
         <a href="#" slot="extra" @click.prevent="changeLimit">
             <Icon type="ios-loop-strong"></Icon>
-            更多
+            <span> 更多</span>
         </a>
+    
           <!-- <ul class='clearfix'>
            <li class='updatali'>
               <Row type="flex">
@@ -118,6 +121,7 @@
 <script>
 import Imgs from "../DocManage/components/Imgs"
  export default{
+  
    components:{
      Imgs
    }
