@@ -21,8 +21,6 @@ export default {
     Btn,
     Imgs,
     Pages
-
-   
   }
 }
 </script>

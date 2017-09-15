@@ -12,6 +12,13 @@ export function Login(data){
     });
 }
 
+export function getFilelistdata(){
+    return fetch({
+        url:"list",
+        method:'get'
+    })
+}
+
 
 
 

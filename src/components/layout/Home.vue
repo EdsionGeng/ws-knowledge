@@ -64,7 +64,7 @@ export default {
     float: left;
     width: 1000px;
     height: 850px;
-    background: #ffffff;
+    /* background: #ffffff; */
     margin-top: 20px;
     margin-left: 550px;
 }
