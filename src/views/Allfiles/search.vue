@@ -5,8 +5,8 @@
         icon="ios-search"
         placeholder="input here"
         style="width:300px">
-        <tree></tree>
-        <!-- <div class="demo-auto-complete-item" v-for="item in data4">
+       
+        <div class="demo-auto-complete-item" v-for="item in data4">
             <div class="demo-auto-complete-group">
                 <span>{{ item.title }}</span>
                 <a href="https://www.google.com/search?q=iView" target="_blank">更多</a>
@@ -15,13 +15,14 @@
                 <span class="demo-auto-complete-title">{{ option.title }}</span>
                 <span class="demo-auto-complete-count">{{ option.count }} 人关注</span>
             </Option>
-        </div> -->
+            
+        </div>
         <!-- <a href="https://www.google.com/search?q=iView" target="_blank" class="demo-auto-complete-more">查看所有结果</a> -->
     </AutoComplete>
 </div>
 </template>
 <script>
-import tree from "../Allfiles/tree"
+// import tree from "../Allfiles/tree"
     export default {
         data () {
             return {
@@ -71,7 +72,7 @@ import tree from "../Allfiles/tree"
             }
         },
         components:{
-            tree
+            // tree
         }
     }
 </script>
