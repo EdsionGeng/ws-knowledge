@@ -17,22 +17,6 @@
                 <!-- <Icon type="heart"></Icon> -->
                 全部文件
             </MenuItem>
-            <MenuItem name="seefile">
-                <Icon type="heart-broken"></Icon>
-                规章制度
-            </MenuItem>
-            <MenuItem name="5">
-                <Icon type="heart"></Icon>
-                文档模板
-            </MenuItem>
-            <MenuItem name="6">
-                <Icon type="heart-broken"></Icon>
-                工作培训
-            </MenuItem>
-            <MenuItem name="7">
-                <Icon type="heart-broken"></Icon>
-                存档文件
-            </MenuItem>
         </MenuGroup>
         <MenuGroup title="管理中心">
             <MenuItem name="news">
@@ -60,7 +44,7 @@
                 历史上传
             </MenuItem>
         </MenuGroup>
-        <!-- <MenuGroup title="个人中心">
+        <MenuGroup title="个人中心">
             <MenuItem name="13">
                 <Icon type="heart"></Icon>
                 我的消息
@@ -73,7 +57,7 @@
                 <Icon type="heart"></Icon>
                 历史上传
             </MenuItem>
-        </MenuGroup> -->
+        </MenuGroup>
     </Menu>
     </div>
 </template>
