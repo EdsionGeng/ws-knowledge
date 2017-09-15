@@ -1,9 +1,11 @@
 
 <template>
-  <div style='margin-top: 50px;'>
+  <div>
     <Search></Search>
     <Btn></Btn>
-    <Imgs></Imgs>
+    <div style='margin:0 20px;'>
+        <Imgs></Imgs>
+    </div>
     <Pages></Pages>
   </div>
 </template>
