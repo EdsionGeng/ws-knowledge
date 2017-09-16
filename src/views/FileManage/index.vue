@@ -3,8 +3,8 @@
         <div class="file-search">
         <Form inline>
             <FormItem>
-                <Select placeholder="请选择部门" style="width:200px;">
-                    <Option value="beijing">北京市</Option>
+                <Select placeh  older="请选择部门" style="width:200px;">
+                    <Option value="beijing" >北京</Option>
                     <Option value="shanghai">上海市</Option>
                     <Option value="shenzhen">深圳市</Option>
                 </Select>
@@ -17,8 +17,8 @@
                 </Select>
             </FormItem>
             <FormItem class="btn-left">
-                <Button type="primary">按下载热度排行</Button>
-                <Button type="ghost">按上传时间排行</Button>
+                <Button type="primary" v-on:click='downLoad()'>按下载热度排行</Button>
+                <Button type="ghost" @click='upData'>按上传时间排行</Button>
             </FormItem>
         </Form>
     </div>
@@ -56,19 +56,29 @@ export default {
   created(){
     //初始化数据，方法写在methods里面
     this.initfiledata();
+    
   },
   watch:{
       '$route':'getSearchList'  // 监听路由变化，执行getSearchList方法
   },
   methods:{
+      upData(){
+        this.initfiledata();
+      },
+      downLoad(){
+         this.initfiledata();
+      },
       changePage(){
            this.initfiledata();
       },
+      
       initfiledata(){
+
            getFilelistdata().then(res=>{
                 if(res.data.code===0){
                     this.filelist = res.data.data;
                     this.filecount=res.data.count;
+                    this.despart = res.data;
                 }else{
                     this.$Message.error('系统异常，请刷新重试！');
                 }

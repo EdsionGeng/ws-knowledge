@@ -1,3 +1,5 @@
+
+
 <template>
     <Form :model="formItem" :label-width="80">
         <FormItem label="标题">
@@ -41,4 +43,3 @@
         }
     }
 </script>
-

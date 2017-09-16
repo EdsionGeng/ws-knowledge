@@ -15,6 +15,7 @@ import Files from '@/views/File/file';
 import Afs from '@/views/Allfiles/Alls';
 import Seefile from '@/views/Allfiles/check/Seefile'
 import filemanage from '@/views/FileManage/index'
+import Personal from '@/views/Personal/index'
 
 Vue.use(Router);
 
@@ -65,6 +66,9 @@ const constantRouteMap = [
       },{
         path:'/seefile',
         component:Seefile
+      },{
+        path: '/Personal',
+        component: Personal
       },
       {
         path: '*',

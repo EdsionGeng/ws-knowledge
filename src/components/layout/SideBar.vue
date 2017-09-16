@@ -7,7 +7,7 @@
                 <!-- <Icon type="document-text"></Icon> -->
                 超管首页
             </MenuItem>
-            <MenuItem name="index">
+            <MenuItem name="Personal">
                 <!-- <Icon type="chatbubbles"></Icon> -->
                 个人首页
             </MenuItem>
