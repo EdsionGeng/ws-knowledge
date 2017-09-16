@@ -58,6 +58,9 @@ export default {
     this.initfiledata();
     
   },
+  watch:{
+      '$route':'getSearchList'  // 监听路由变化，执行getSearchList方法
+  },
   methods:{
       upData(){
         this.initfiledata();
@@ -80,6 +83,12 @@ export default {
                     this.$Message.error('系统异常，请刷新重试！');
                 }
             })
+      },
+      getSearchList(){
+          // 获取路由url中的查询参数
+          var query = this.$route.query;
+          // axios 获取远程数据，改变data里面的数据渲染界面
+          console.log(this.$route.query)
       }
       
   }
