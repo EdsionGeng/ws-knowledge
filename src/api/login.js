@@ -18,6 +18,12 @@ export function getFilelistdata(){
         method:'get'
     })
 }
+export function getHistorydata(){
+    return fetch({
+        url:'history',
+        method:'get'
+    })
+}
 
 
 

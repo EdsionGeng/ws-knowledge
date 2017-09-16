@@ -1,5 +1,57 @@
 <template>
-<Card>
+<div>
+   <Card dis-hover>
+        <p slot="title">
+            <Icon type="ios-film-outline"></Icon>
+            经典电影
+        </p>
+        <a href="#" slot="extra" @click.prevent="changeLimit">
+            <Icon type="ios-loop-strong"></Icon>
+            换一换
+        </a>
+        <ul>
+            <li v-for="item in randomMovieList" :key='item.index' class="clearfix" >
+                <a :href="item.url" target="_blank" class='fl'>{{ item.name }}</a>
+                <span class='fr'>
+                  
+                    {{ item.rate }}
+                </span>
+            </li>
+        </ul>
+   
+   
+    </Card>
+    <Card dis-hover style='margin-top: 20px;'v-for='item in 3' key='item.index'>
+        
+            <div class="allTitel clearfix">
+                <p slot="title" class='fl'>
+                    <Icon type="ios-film-outline"></Icon>
+                    最新上传
+                </p>
+                <a href="#" slot="extra" @click.prevent="changeLimit" class='fr'>
+                    <Icon type="ios-loop-strong"></Icon>
+                    更多
+                </a>
+            </div>         
+            <Row>
+                <Col class="file-card" span="6" v-for="list in filelist" :key="list.index">
+                    <router-link to="filedid">
+                    <Card style="width:232px">
+                        <div style="">
+                            <img class="file-img" v-bind:src="list.img">
+                            <h6>{{list.title}}</h6>
+                            <span>{{list.timer}}</span>
+                            <span>{{list.down}}</span>
+                        </div>
+                    </Card>
+                    </router-link>
+                </Col>
+            </Row>
+     
+    </Card>
+  
+</div>
+<!-- <Card>
     <Card>
         <p slot="title">
             <Icon type="ios-film-outline"></Icon>
@@ -82,10 +134,10 @@
       </div>    
     
    </Card> 
-</Card>  
+</Card>   -->
 </template>
 <script>
-import {getFilelistdata} from '../../api/login'
+import {getHistorydata} from '../../api/login'
     export default {
         data () {
             return {
@@ -167,7 +219,7 @@ import {getFilelistdata} from '../../api/login'
       
       initfiledata(){
 
-           getFilelistdata().then(res=>{
+           getHistorydata().then(res=>{
                 if(res.data.code===0){
                     this.filelist = res.data.data;
                     this.filecount=res.data.count;
@@ -202,10 +254,13 @@ import {getFilelistdata} from '../../api/login'
             this.changeLimit();
         }
     }
+
+
 </script>
 <style scoped>
 .allTitel{
-    padding: 20px 20px;
+    padding: 10px 0px;
+    
 }
 .clearfix:after {
 	content: "";
@@ -226,27 +281,27 @@ import {getFilelistdata} from '../../api/login'
 .file{
     position: relative;
 }
-.file-list span{
+.file-card span{
     display: block;
 }
 .btn-left{
     position: absolute;
     right:0;
 }
-.file-list:hover{
+.file-card:hover{
     cursor: pointer;
 }
-.file-list a{
+.file-card a{
     color: #495060;
 }
-.file-list h6{
+.file-card h6{
     display: block;
     width: 200px;
     overflow: hidden; 
     white-space: nowrap; 
     text-overflow: ellipsis; 
 }
-.file-list h6:hover{
+.file-card h6:hover{
     color: #2d8cf0;
 }
 .file-img{
