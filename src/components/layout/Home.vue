@@ -6,7 +6,7 @@
             <div class="layout-left">
                 <div class="layout-left-top">
                     <div class="layout-left-top-search">
-                        <Input v-model="value4" icon="ios-search" placeholder="请输入..."></Input>    
+                        <Input v-model="searchvalue" icon="ios-search" @on-enter="entersearch" placeholder="请输入..."></Input>    
                     </div>
                     <div class="layout-left-top-upload">
                         <Button type="primary" icon="ios-cloud-upload-outline" long>上传文件</Button>
@@ -30,7 +30,16 @@ export default {
     },
     data(){
         return{
-            value4:''
+            searchvalue:''
+        }
+    },
+    methods:{
+        entersearch(e){
+            // 获取搜索框的值，通过路由参数的形式改变url,
+            // 全部文件组件通过读取参数请求数据
+            // 通过命名路由的name来判断跳转到哪一个路由，
+            // 路由的name别名尽量与组件名称和路径名称命名相同
+            this.$router.push({name:'afs',query:{searchvalue:this.searchvalue}});
         }
     }
   

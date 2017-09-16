@@ -60,6 +60,7 @@ const constantRouteMap = [
       }
       ,{
         path:'/afs',
+        name:'afs',
         component: filemanage
       },{
         path:'/seefile',
