@@ -31,3 +31,19 @@ body{
     background: #f8f8f9;
     overflow: auto;
 }
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.clearfix:after {
+	content: "";
+	display: block;
+	visibility: hidden;
+	height: 0;
+	clear: both;
+}
+.clearfix {
+	zoom: 1;
+}

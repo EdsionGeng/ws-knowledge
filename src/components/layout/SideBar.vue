@@ -19,7 +19,7 @@
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="管理中心">
-            <MenuItem name="news">
+            <MenuItem name="mynews">
                 <!-- <Icon type="heart"></Icon> -->
                 我的消息
             </MenuItem>

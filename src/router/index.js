@@ -12,10 +12,11 @@ import Hisall from '@/views/Hsup/hisall';
 import Notice from "@/views/Notice/notice";
 import News from '@/views/news/mynews';
 import Files from '@/views/File/file';
-import Afs from '@/views/Allfiles/Alls';
+// import Afs from '@/views/Allfiles/Alls';
 import Seefile from '@/views/Allfiles/check/Seefile'
 import filemanage from '@/views/FileManage/index'
 import Personal from '@/views/Personal/index'
+import Mynews from '@/views/mynews/index'
 
 Vue.use(Router);
 
@@ -69,6 +70,9 @@ const constantRouteMap = [
       },{
         path: '/Personal',
         component: Personal
+      },{
+        path:'/mynews',
+        component: Mynews
       },
       {
         path: '*',
