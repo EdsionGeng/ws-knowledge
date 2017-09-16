@@ -10,7 +10,7 @@
             换一换
         </a>
         <ul>
-            <li v-for="item in randomMovieList" :key='item.index' class="clearfix">
+            <li v-for="item in randomMovieList" :key='item.index' class="clearfix" >
                 <a :href="item.url" target="_blank" class='fl'>{{ item.name }}</a>
                 <span class='fr'>
                   
@@ -21,18 +21,21 @@
    
    
     </Card>
-    <Card>
-      
-        <p slot="title">
+   
+     <div class="allTitel clearfix">
+        <p slot="title" class='fl'>
             <Icon type="ios-film-outline"></Icon>
             最新上传
         </p>
-        <a href="#" slot="extra" @click.prevent="changeLimit">
+        <a href="#" slot="extra" @click.prevent="changeLimit" class='fr'>
             <Icon type="ios-loop-strong"></Icon>
             更多
         </a>
-  
-      <div class="file-list">
+    </div> 
+        
+    
+ 
+    <div class="file-list">
           <Row>
               <Col class="file-card" span="6" v-for="list in filelist" :key="list.index">
                   <router-link to="filedid">
@@ -48,9 +51,7 @@
               </Col>
           </Row>
           
-      </div>    
-    
-   </Card>
+      </div> 
     <Card>
       
         <p slot="title">
@@ -203,6 +204,9 @@ import {getFilelistdata} from '../../api/login'
     }
 </script>
 <style scoped>
+.allTitel{
+    padding: 20px 20px;
+}
 .clearfix:after {
 	content: "";
 	display: block;
@@ -215,6 +219,9 @@ import {getFilelistdata} from '../../api/login'
 }
 .fr{
   float: right;
+}
+.fl{
+    float: left;
 }
 .file{
     position: relative;
@@ -253,6 +260,8 @@ import {getFilelistdata} from '../../api/login'
 }
 .file-card{
     margin-top: 10px;
+    
+   box-sizing: border-box;
 }
 
 </style>
