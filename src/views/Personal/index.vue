@@ -1,14 +1,16 @@
 <template>
-<div>
+<div class='personal'>
    <Card dis-hover>
-        <p slot="title">
-            <Icon type="ios-film-outline"></Icon>
-            经典电影
-        </p>
-        <a href="#" slot="extra" @click.prevent="changeLimit">
-            <Icon type="ios-loop-strong"></Icon>
-            换一换
-        </a>
+       <div class='mainTitle clearfix'>
+            <p slot="title" class='fl'>
+                <Icon type="ios-film-outline"></Icon>
+                我的消息
+            </p>
+            <a href="#" slot="extra" @click.prevent="changeLimit" class='fr'>
+                <Icon type="ios-loop-strong"></Icon>
+                换一换
+            </a>
+        </div>
         <ul>
             <li v-for="item in randomMovieList" :key='item.index' class="clearfix" >
                 <a :href="item.url" target="_blank" class='fl'>{{ item.name }}</a>
@@ -258,8 +260,21 @@ import {getHistorydata} from '../../api/login'
 
 </script>
 <style scoped>
+.mainTitle a,.mainTitle p{
+    color: #000;
+    font-weight: 700;
+}
+.allTitel a,.allTitel p{
+    color: #000;
+    font-weight: 700;
+}
+
+.mainTitle{
+   margin-bottom: 20px; 
+}
 .allTitel{
     padding: 10px 0px;
+    /* border-bottom: 1px solid #ccc; */
     
 }
 .clearfix:after {

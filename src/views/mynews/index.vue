@@ -1,6 +1,6 @@
 <template>
   <div>
-       <Card dis-hover>
+      <Card dis-hover>
         <p slot="title">
             <Icon type="ios-film-outline"></Icon>
             经典电影
@@ -22,9 +22,9 @@
    
     </Card>
     
-        <div class="file-page">
-            <Page :total="filecount" size="small" show-total @on-change="changePage"></Page>
-        </div>
+      <div class="file-page">
+             <Page :total="100" show-total v-on:click="changePage"></Page>
+      </div>   
    
   </div>
 </template>
@@ -92,8 +92,10 @@ export default {
         },
           
         methods: {
-     
-      
+          changePage(){
+
+          },
+          
       
             changeLimit () {
                 function getArrayItems(arr, num) {
@@ -121,5 +123,11 @@ export default {
         }
     }
 </script>
+<style scoped>
+.file-page{
+  margin-top: 20px;
+  float: right;
+}
+</style>
 
 
