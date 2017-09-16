@@ -8,7 +8,7 @@ import Home from '@/components/layout/Home';
 import SuperHome from '@/views/Home/SuperHome';
 import PersonalHome from '@/views/Home/PersonalHome';
 import DocManage from '@/views/DocManage/';
-import Hisall from '@/views/Hsup/hisall';
+import Hisall from '@/views/Hsup/index';
 import Notice from "@/views/Notice/notice";
 import News from '@/views/news/mynews';
 import Files from '@/views/File/file';
@@ -17,6 +17,7 @@ import Seefile from '@/views/Allfiles/check/Seefile'
 import filemanage from '@/views/FileManage/index'
 import Personal from '@/views/Personal/index'
 import Mynews from '@/views/mynews/index'
+import affiche from '@/views/affiche/index'
 
 Vue.use(Router);
 
@@ -73,6 +74,9 @@ const constantRouteMap = [
       },{
         path:'/mynews',
         component: Mynews
+      },{
+        path:'/affiche',
+        component: affiche
       },
       {
         path: '*',

@@ -24,6 +24,12 @@ export function getHistorydata(){
         method:'get'
     })
 }
+export function getMynews(){
+    return fetch({
+        url:'mynews',
+        method:'get'
+    })
+}
 
 
 

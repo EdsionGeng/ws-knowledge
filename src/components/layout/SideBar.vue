@@ -31,7 +31,7 @@
                 <!-- <Icon type="heart-broken"></Icon> -->
                 文档类型管理
             </MenuItem>
-            <MenuItem name="notice">
+            <MenuItem name="affiche">
                 <!-- <Icon type="heart"></Icon> -->
                 消息推送
             </MenuItem>

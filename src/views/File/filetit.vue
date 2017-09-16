@@ -17,7 +17,7 @@
 
                  <Col  class='fl'>
                     <span >截止时间&nbsp;</span>
-                    <DatePicker type="date" placeholder="选择日期" v-model="formItem.date"></DatePicker>
+                    <DatePicker type="date1" placeholder="选择日期" v-model="formItem.date1"></DatePicker>
                 </Col>
             </Row>
         </FormItem>
@@ -43,6 +43,7 @@
                     checkbox: [],
                     switch: true,
                     date: '',
+                    data1:'',
                     time: '',
                     slider: [20, 50],
                     textarea: ''
