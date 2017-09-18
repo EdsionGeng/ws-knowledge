@@ -27,6 +27,26 @@
                 
             </Row>
     </div>
+    <div class='Modal'>
+        <Button type="primary" @click="modal1 = true">批量调整目录</Button>
+        <Modal
+            v-model="modal1"
+            title="批量调整目录"
+            @on-ok="ok"
+            @on-cancel="cancel">
+            <p>对话框内容</p>
+            <p>对话框内容</p>
+            <p>对话框内容</p>
+        </Modal>
+        <Button type="primary" @click="modal2 = true">批量删除</Button>
+        <Modal
+            v-model="modal2"
+            title=""
+            @on-ok="ok"
+            @on-cancel="cancel">
+           <p>确定删除选中的文件</p>
+        </Modal>
+    </div>   
     <div>
     
       <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
@@ -42,6 +62,8 @@
         data () {
             return {
               value4:'',
+              modal1: false,
+              modal2: false,
                 cityList: [
                     {
                         value: 'beijing',
@@ -126,6 +148,14 @@
                 showCheckbox: true,
                 fixedHeader: false,
                 tableSize: 'default'
+            }
+        },
+        methods: {
+            ok () {
+                this.$Message.info('点击了确定');
+            },
+            cancel () {
+                this.$Message.info('点击了取消');
             }
         },
         computed: {
@@ -213,6 +243,12 @@ margin-bottom: 20px;
 }
 .title{
   margin: 20px 0 ;
+}
+.Modal{
+  margin-bottom: 20px;
+}
+.Modal button{
+  margin-right: 20px;
 }
 .file-page{
 position: absolute;
