@@ -24,23 +24,27 @@
             
         </Modal>
     </div>
-    <div class='fl'style='margin-right: 30px;'>
-          <span >选择主题&nbsp;</span >
-          <Input  placeholder="请输入..." style="width: 200px"></Input>
-         
-          
-    </div>
+ 
 
 
     <div class='title clearfix' >
-        <Row class='fl'>
+         
+        
+         
+          
+ 
+        <Row >
+            <Col class='fl' style='margin-right: 30px;'>
+                  <span >选择主题&nbsp;</span >
+                <Input  placeholder="请输入..." style="width: 200px"></Input>
+            </Col>
             
             <Col class='fl' style='margin-right: 30px;'>
                 <span >发布时间&nbsp;</span>
                 <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
             </Col>
           
-            <Col class='fl'  style='margin-right:50px;'>
+            <Col class='fl'  style='margin-right:30px;'>
             <span >截止时间&nbsp;</span>
                 <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
             </Col>
@@ -216,7 +220,7 @@
 </script>
 <style scoped>
 .affiche{
-position: relative;
+    position: relative;
 }
 .affiche h2{
 color: #000;
@@ -233,7 +237,7 @@ margin-right: 10px;
 }
 .file-page{
 position: absolute;
-margin-top: 10px;
+ margin-top: 10px;
 right:20px;  
 }
 </style>
