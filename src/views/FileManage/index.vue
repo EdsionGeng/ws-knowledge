@@ -25,7 +25,7 @@
     <div class="file-list">
         <Row>
             <Col class="file-card" span="6" v-for="list in filelist" :key="list.index">
-                <router-link to="filedid">
+                <router-link to="details">
                 <Card style="width:232px">
                     <div style="">
                         <img class="file-img" v-bind:src="list.img">
