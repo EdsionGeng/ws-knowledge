@@ -68,7 +68,7 @@ export default {
     height: 105px;
 }
 .layout-left-top .layout-left-top-search{
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .layout-left-top .layout-left-top-upload{
     margin-top: 20px;
