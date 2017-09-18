@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='affiche'>
     <h2>公告推送</h2>
     <div class='ModalAll'>
     
@@ -24,31 +24,33 @@
             
         </Modal>
     </div>
-    <div class='fl'>
+    <div class='fl'style='margin-right: 30px;'>
           <span >选择主题&nbsp;</span >
-          <Input v-model="value" placeholder="请输入..." style="width: 200px"></Input>
+          <Input  placeholder="请输入..." style="width: 200px"></Input>
          
           
     </div>
 
 
-    <div >
+    <div class='title clearfix' >
         <Row class='fl'>
             
-            <Col class='fl'>
+            <Col class='fl' style='margin-right: 30px;'>
                 <span >发布时间&nbsp;</span>
                 <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
             </Col>
           
-            <Col class='fl'>
+            <Col class='fl'  style='margin-right:50px;'>
             <span >截止时间&nbsp;</span>
                 <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
             </Col>
+             <Col class='fr' >
+                <Button type="primary" >查询</Button>
+            </Col>
+            
         </Row>
     </div>
-    <div class='clearfix'>
-      <Button type="primary" class='fr'>查询</Button>
-    </div>
+  
     <div>
     
       <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
@@ -213,6 +215,26 @@
         }
 </script>
 <style scoped>
-
+.affiche{
+position: relative;
+}
+.affiche h2{
+color: #000;
+margin-bottom: 20px;
+}
+.ModalAll button{
+margin-bottom: 20px;
+}
+.title{
+margin-bottom: 20px;
+}
+.title Col{
+margin-right: 10px;
+}
+.file-page{
+position: absolute;
+ margin-top: 10px;
+right:20px;  
+}
 </style>
 
