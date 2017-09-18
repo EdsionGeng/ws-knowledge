@@ -1,74 +1,74 @@
 <template>
-  <div class='affiche'>
-    <h2>公告推送</h2>
-    <div class='ModalAll'>
+  <div class='Doc'>
+    <h2>文档管理</h2>
+    <div >
     
-        <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
-      
-        <Modal
-            v-model="modal1"
-            title="添加公告"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
-            
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
-
-        <Modal
-            v-model="modal2"
-            title="批量删除"
-            @on-ok="ok"
-            @on-cancel="cancel">
-          <p class='del'>确认是否删除选中文件</p>
-            
-        </Modal>
-    </div>
-    <div class='fl'style='margin-right: 30px;'>
-          <span >选择主题&nbsp;</span >
-          <Input  placeholder="请输入..." style="width: 200px"></Input>
-         
+        <Select v-model="model1" >
           
+            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
     </div>
-
-
     <div class='title clearfix' >
-        <Row class='fl'>
-            
-            <Col class='fl' style='margin-right: 30px;'>
-                <span >发布时间&nbsp;</span>
-                <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
-            </Col>
-          
-            <Col class='fl'  style='margin-right:50px;'>
-            <span >截止时间&nbsp;</span>
-                <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
-            </Col>
-             <Col class='fr' >
-                <Button type="primary" >查询</Button>
-            </Col>
-            
-        </Row>
+            <Row class='fl'>
+                
+                <Col class='fl' style='margin-right: 80px;'>
+                    <span >发布时间&nbsp;</span>
+                    <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
+                </Col>
+              
+                <Col class='fl'  style='margin-right:80px;'>
+                <span >截止时间&nbsp;</span>
+                    <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
+                </Col>
+                <Col class='fr' >
+                    <Input v-model="value4" icon="ios-search" placeholder="请输入..." style="width: 200px"></Input>
+
+                </Col>
+                
+            </Row>
     </div>
-  
     <div>
     
       <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
     </div>
     <div class="file-page">
-      <Page :total="100" size="small" show-total ></Page>
+            <Page :total="100" size="small" show-total ></Page>
     </div>
-</div>
+   
+  </div>
 </template>
 <script>
-        export default {
+    export default {
         data () {
             return {
-                modal1: false,
-                modal2: false,
-                value1: '',
-                value2: '',
-                value3: '',
+              value4:'',
+                cityList: [
+                    {
+                        value: 'beijing',
+                        label: '北京市'
+                    },
+                    {
+                        value: 'shanghai',
+                        label: '上海市'
+                    },
+                    {
+                        value: 'shenzhen',
+                        label: '深圳市'
+                    },
+                    {
+                        value: 'hangzhou',
+                        label: '杭州市'
+                    },
+                    {
+                        value: 'nanjing',
+                        label: '南京市'
+                    },
+                    {
+                        value: 'chongqing',
+                        label: '重庆市'
+                    }
+                ],
+                model1: '',
                  tableData3: [
                     {
                         name: '王小明',
@@ -126,7 +126,6 @@
                 showCheckbox: true,
                 fixedHeader: false,
                 tableSize: 'default'
-
             }
         },
         computed: {
@@ -202,34 +201,18 @@
                 return columns;
             }
         },
-        methods: {
-            ok () {
-                this.$Message.info('点击了确定');
-            },
-            cancel () {
-                this.$Message.info('点击了取消');
-            }
-        },
-      
-     
-        }
+    }
 </script>
 <style scoped>
-.affiche{
-position: relative;
+.Doc{
+  position: relative;
 }
-.affiche h2{
+.Doc h2{
 color: #000;
 margin-bottom: 20px;
 }
-.ModalAll button{
-margin-bottom: 20px;
-}
 .title{
-margin-bottom: 20px;
-}
-.title Col{
-margin-right: 10px;
+  margin: 20px 0 ;
 }
 .file-page{
 position: absolute;
@@ -237,4 +220,3 @@ margin-top: 10px;
 right:20px;  
 }
 </style>
-
