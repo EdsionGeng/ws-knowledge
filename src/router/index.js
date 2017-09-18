@@ -11,7 +11,7 @@ import DocManage from '@/views/DocManage/';
 import Hisall from '@/views/Hsup/index';
 import Notice from "@/views/Notice/notice";
 import News from '@/views/news/mynews';
-import Files from '@/views/File/file';
+import Files from '@/views/File/index';
 // import Afs from '@/views/Allfiles/Alls';
 import Seefile from '@/views/Allfiles/check/Seefile'
 import filemanage from '@/views/FileManage/index'
