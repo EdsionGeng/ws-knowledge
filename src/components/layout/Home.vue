@@ -17,6 +17,7 @@
             <div class="layout-right">
                 <!-- 页面主体内容 router-view -->
                 <router-view></router-view>
+              
             </div>
         </div>
     </div>
@@ -47,16 +48,20 @@ export default {
 </script>
 <style scoped>
 .layout{
-    clear: both;
     width: 100%;
     height: 100%;
-    display: flex;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.layout-main{
+    width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 66px;
 }
 .layout-left{
-    position: absolute;
-    float: left;
     width: 240px;
-    margin-left: 300px;
+    float: left;
 }
 .layout-left-top{
     width: 240px;
@@ -70,11 +75,9 @@ export default {
 }
 
 .layout-right{
-    float: left;
-    width: 1000px;
-    height: 850px;
-    /* background: #ffffff; */
-    margin-top: 20px;
-    margin-left: 550px;
+    width: 960px;
+    height: 100%;
+    float: right;
+    padding: 10px;
 }
 </style>
