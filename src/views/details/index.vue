@@ -39,17 +39,34 @@
         </Col>
        
     </Row>
+    <div class='Journal clearfix'>
+        <span class='fl'>操作日志</span>
+        <span class='fr'>查看更多>></span>
+    </div>
      <div>
-    
+         
       <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
     </div>
-
+    <div class='btn'>
+         <router-link to=''><Button type="primary">修改文件</Button></router-link>
+        <Button type="primary" @click="modal1 = true">删除文件</Button>
+        <Modal
+            v-model="modal1"
+            title=""
+            @on-ok="ok"
+            @on-cancel="cancel">
+            <p>确认是否删除文件</p>
+          
+        </Modal>
+    </div>
 </div>
+
 </template>
 <script>
     export default {
        data(){
            return{
+                modal1: false,
                 tableData3: [
                     {
                         name: '王小明',
@@ -100,7 +117,7 @@
                         date: '2016-10-04'
                     }
                 ],
-                showBorder: true,
+                showBorder: false,
                 showStripe: false,
                 showHeader: true,
                 showIndex: false,
@@ -109,6 +126,14 @@
                 tableSize: 'default'
            }
        },
+        methods: {
+            ok () {
+                this.$Message.info('点击了确定');
+            },
+            cancel () {
+                this.$Message.info('点击了取消');
+            }
+        },
        computed: {
             tableColumns3 () {
                 let columns = [];
@@ -194,4 +219,21 @@
 i{
     color: #ccc;
 }
+.Journal span{
+    font-size: 14px;
+    color: #000;
+    
+}
+.Journal{
+    margin-bottom:10px;
+    
+}
+.btn{
+    margin: 20px;
+    text-align: center;
+}
+.btn button{
+    margin-left: 20px;
+}
+
 </style>
