@@ -18,6 +18,7 @@ import filemanage from '@/views/FileManage/index'
 import Personal from '@/views/Personal/index'
 import Mynews from '@/views/mynews/index'
 import affiche from '@/views/affiche/index'
+import details from '@/views/details/index'
 
 Vue.use(Router);
 
@@ -77,6 +78,9 @@ const constantRouteMap = [
       },{
         path:'/affiche',
         component: affiche
+      },{
+        path:'/details',
+        component: details
       },
       {
         path: '*',

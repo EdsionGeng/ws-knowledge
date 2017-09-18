@@ -40,3 +40,6 @@ body{
 .clearfix {
 	zoom: 1;
 }
+i{
+    font-style: normal;
+}

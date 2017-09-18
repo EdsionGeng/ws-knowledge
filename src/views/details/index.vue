@@ -1,79 +1,73 @@
 <template>
-  <div class='affiche'>
-    <h2>公告推送</h2>
-    <div class='ModalAll'>
-    
-        <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
-      
-        <Modal
-            v-model="modal1"
-            title="添加公告"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
-            
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
-
-        <Modal
-            v-model="modal2"
-            title="批量删除"
-            @on-ok="ok"
-            @on-cancel="cancel">
-          <p class='del'>确认是否删除选中文件</p>
-            
-        </Modal>
+<div>
+  <h2 class='details'>文件详情</h2>
+    <Row style='margin-bottom: 20px;'>
+        <Col >
+            <Card dis-hover>
+                <p slot="title">标题</p>
+                <p><span> 文件类型:</span><span>  规则制度 </span>
+                  <span>文件上传者:</span> <span> 上传人姓名</span> 
+                  <span>上传时间:</span> <span>2017-09-04 12:31 </span>
+                  <span>文件大小:</span> <span> 200K</span>
+                  <span>已读人数:</span> <span>38</span>人
+                  <span>未读人数:</span><span>18</span>人
+                  <span>查阅次数:</span> <span>18</span>次</p>
+                <p><router-link to=''> 文件描述</router-link></p>
+            </Card>
+        </Col>
+       
+    </Row>
+    <Row  style='margin-bottom: 20px;'>
+        <Col >
+            <Card dis-hover>
+                <p slot="title">附件列表</p>
+               <p><router-link to=''>
+                  <img src="../../assets/link.png" alt="">
+                  <span>我的文档1.doc <i>(100k)</i></span>
+                  <i>描述:这是产品部门的规章制度，必看</i>
+               </router-link></p>
+              
+                  <p><router-link to=''>
+                  <img src="../../assets/link.png" alt="">
+                  <span>我的文档1.doc <i>(100k)</i></span>
+                  <i>描述:这是产品部门的规章制度，必看</i>
+                  </router-link></p>
+              
+              
+                <p></p>
+            </Card>
+        </Col>
+       
+    </Row>
+    <div class='Journal clearfix'>
+        <span class='fl'>操作日志</span>
+        <span class='fr'>查看更多>></span>
     </div>
- 
-
-
-    <div class='title clearfix' >
+     <div>
          
-        
-         
-          
- 
-        <Row >
-            <Col class='fl' style='margin-right: 30px;'>
-                  <span >选择主题&nbsp;</span >
-                <Input  placeholder="请输入..." style="width: 200px"></Input>
-            </Col>
-            
-            <Col class='fl' style='margin-right: 30px;'>
-                <span >发布时间&nbsp;</span>
-                <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
-            </Col>
-          
-            <Col class='fl'  style='margin-right:30px;'>
-            <span >截止时间&nbsp;</span>
-                <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
-            </Col>
-             <Col class='fr' >
-                <Button type="primary" >查询</Button>
-            </Col>
-            
-        </Row>
-    </div>
-  
-    <div>
-    
       <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
     </div>
-    <div class="file-page">
-      <Page :total="100" size="small" show-total ></Page>
+    <div class='btn'>
+         <router-link to=''><Button type="primary">修改文件</Button></router-link>
+        <Button type="primary" @click="modal1 = true">删除文件</Button>
+        <Modal
+            v-model="modal1"
+            title=""
+            @on-ok="ok"
+            @on-cancel="cancel">
+            <p>确认是否删除文件</p>
+          
+        </Modal>
     </div>
 </div>
+
 </template>
 <script>
-        export default {
-        data () {
-            return {
+    export default {
+       data(){
+           return{
                 modal1: false,
-                modal2: false,
-                value1: '',
-                value2: '',
-                value3: '',
-                 tableData3: [
+                tableData3: [
                     {
                         name: '王小明',
                         age: 18,
@@ -123,17 +117,24 @@
                         date: '2016-10-04'
                     }
                 ],
-                showBorder: true,
+                showBorder: false,
                 showStripe: false,
                 showHeader: true,
                 showIndex: false,
-                showCheckbox: true,
+                showCheckbox: false,
                 fixedHeader: false,
                 tableSize: 'default'
-
+           }
+       },
+        methods: {
+            ok () {
+                this.$Message.info('点击了确定');
+            },
+            cancel () {
+                this.$Message.info('点击了取消');
             }
         },
-        computed: {
+       computed: {
             tableColumns3 () {
                 let columns = [];
                 if (this.showCheckbox) {
@@ -206,39 +207,33 @@
                 return columns;
             }
         },
-        methods: {
-            ok () {
-                this.$Message.info('点击了确定');
-            },
-            cancel () {
-                this.$Message.info('点击了取消');
-            }
-        },
-      
-     
-        }
+    }
 </script>
 <style scoped>
-.affiche{
-    position: relative;
+.details{
+  font-size: 18px;
+  color: #000;  
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
-.affiche h2{
-color: #000;
-margin-bottom: 20px;
+i{
+    color: #ccc;
 }
-.ModalAll button{
-margin-bottom: 20px;
+.Journal span{
+    font-size: 14px;
+    color: #000;
+    
 }
-.title{
-margin-bottom: 20px;
+.Journal{
+    margin-bottom:10px;
+    
 }
-.title Col{
-margin-right: 10px;
+.btn{
+    margin: 20px;
+    text-align: center;
 }
-.file-page{
-position: absolute;
- margin-top: 10px;
-right:20px;  
+.btn button{
+    margin-left: 20px;
 }
-</style>
 
+</style>
