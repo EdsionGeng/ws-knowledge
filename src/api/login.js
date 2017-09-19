@@ -30,7 +30,12 @@ export function getMynews(){
         method:'get'
     })
 }
-
+export function logout(){
+    return fetch({
+        url:'logout',
+        method:'post'
+    })
+}
 
 
 
