@@ -5,10 +5,10 @@ import axios from 'axios'
 
 
 const service = axios.create({
-    baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
-    // baseURL:'http://192.168.3.26:8080',
+    // baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
+    baseURL:'http://192.168.3.26:8080/knowledge',
     
-    timeout:1000
+    timeout:1000,
 });
 
 /**
@@ -16,7 +16,7 @@ const service = axios.create({
  */
 service.interceptors.request.use(config=>{
     //通过判断store状态，添加一些请求headers数据
-    
+    config.headers['loginToken']=sessionStorage.getItem('loginToken');   
     return config;
 },error=>{
     console.log(error);

@@ -6,9 +6,9 @@ import fetch from '../utils/fetch.js'
  */
 export function Login(data){
     return fetch({
-        url:'/knowledge/loginSubmit',
-        method:'post',
-        data:data
+        url:'/loginSubmit',
+        method:'get',
+        params:data
     });
 }
 
