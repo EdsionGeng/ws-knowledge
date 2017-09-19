@@ -19,7 +19,6 @@ export default {
     updata,
     download,
     history,
-  
   }
 
 }

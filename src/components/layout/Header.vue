@@ -26,7 +26,7 @@ export default {
     },
     methods:{
         getUserName(){
-            return sessionStorage.getItem('userName');
+            return sessionStorage.getItem('UserName');
         }
     }
 }

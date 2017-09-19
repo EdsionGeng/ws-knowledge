@@ -2,13 +2,13 @@
     <div class="login-layout">
         <Form ref="loginForm" :model="loginForm" :rules="loginRules"  class="login-form" inline>
             <h1 class="login-title">温商贷知识库</h1>
-            <Form-item prop="loginid">
-                <Input type="text" name="loginid" v-model="loginForm.loginid"  placeholder="请输入用户名" size="large">
+            <Form-item prop="UserName">
+                <Input type="text" name="UserName" v-model="loginForm.UserName"  placeholder="请输入用户名" size="large">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
             </Form-item>
-            <Form-item prop="pwd">
-                <Input type="password" name="pwd" v-model="loginForm.pwd" placeholder="请输入密码" size="large">
+            <Form-item prop="password">
+                <Input type="password" name="password" v-model="loginForm.password" placeholder="请输入密码" size="large">
                     <Icon type="ios-locked-outline" slot="prepend"></Icon>
                 </Input>
             </Form-item>
@@ -28,35 +28,44 @@ export default {
   data(){
       return{
           loginForm:{
-              loginid:'',
-              pwd:'',
+              UserName:'',
+              password:'',
           },
           isLoading:false,
           loginRules:{
-              loginid:[
+              UserName:[
                   {required:true,message:'请填写用户名',trigger:'blur'}
                   ],
-              pwd:[
-                  {required:true,message:'请填写密码',trigger:'blue'},
-                  {type:'string',min:6,message:'密码长度不能少于6位',trigger:'blue'}
+              password:[
+                  {required:true,message:'请填写密码',trigger:'blur'},
+                  {type:'string',min:6,message:'密码长度不能少于6位',trigger:'blur'}
               ]
           }
       }
   },
+ 
   methods:{
       ...mapActions([
-        'Login'
+        'Login',
+        'SetAdmin'
       ]),
       handleSubmit(name){
           this.$refs[name].validate((valid)=>{
               if(valid){
                   this.isLoading=true;
-                  Login(this.loginForm).then(res=>{
-                      console.log(res);
-                      this.$store.dispatch('Login',this.loginForm.loginid);
-                      const loginid = this.loginForm.loginid;
+                  let params={
+                      "UserName":this.loginForm.UserName,
+                      "password":this.loginForm.password
+                  };
+                  Login(params).then(res=>{
+                     
+                      const UserName = this.loginForm.UserName;
                       if(res.data.code===0){
-                        sessionStorage.setItem('userName',loginid);
+                        sessionStorage.setItem('UserName',UserName);
+                        sessionStorage.setItem('loginToken',res.data.model.loginToken);
+                        sessionStorage.setItem('isAdmin',res.data.model.isAdmin);
+                        this.$store.dispatch('Login',this.loginForm.UserName);
+                        this.$store.dispatch('SetAdmin',res.data.model.isAdmin);
                         this.$Message.success(res.data.message);
                         this.$router.push('/');
                       }else{

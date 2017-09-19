@@ -34,6 +34,9 @@ export default {
             searchvalue:''
         }
     },
+    mounted(){
+      console.log(this.$store.state.user.isAdmin);
+    },
     methods:{
         entersearch(e){
             // 获取搜索框的值，通过路由参数的形式改变url,
