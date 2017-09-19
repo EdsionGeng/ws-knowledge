@@ -19,6 +19,9 @@ import Personal from '@/views/Personal/index'
 import Mynews from '@/views/mynews/index'
 import affiche from '@/views/affiche/index'
 import details from '@/views/details/index'
+import Journal from '@/views/Journal/index'
+import Modify from '@/views/Modify/index'
+
 
 Vue.use(Router);
 
@@ -51,6 +54,7 @@ const constantRouteMap = [
         path: '/hisall',
         component: Hisall
       },
+      
       {
         path: '/notice',
         component: Notice
@@ -81,6 +85,12 @@ const constantRouteMap = [
       },{
         path:'/details',
         component: details
+      },{
+        path:'/Journal',
+        component: Journal
+      },{
+        path:'/Modify',
+        component:Modify
       },
       {
         path: '*',
