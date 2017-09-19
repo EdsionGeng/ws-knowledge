@@ -2,12 +2,12 @@
 <div class='Journal'>
   <h2>操作日志</h2>
   <div class='chese'>
-      <span>部门</span>
-      <Select v-model="model1" style="width:200px;" >
+      <span>部门&nbsp;</span>
+      <Select v-model="model1" style="width:200px;margin-right: 30px;" >
             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
-      <span>操作类型</span>
-      <Select v-model="model1" style="width:200px">
+      <span>操作类型&nbsp;</span>
+      <Select v-model="model1" style="width:200px;margin-right: 30px;">
             <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <Button type="primary">查询</Button>

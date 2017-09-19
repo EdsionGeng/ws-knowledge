@@ -51,7 +51,7 @@
                     <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
                 </div>
                 <div class='btn'>
-                    <router-link to=''><Button type="primary">修改文件</Button></router-link>
+                    <router-link to='Modify'><Button type="primary">修改文件</Button></router-link>
                     <Button type="primary" @click="modal1 = true">删除文件</Button>
                     <Modal
                     v-model="modal1"
