@@ -1,15 +1,22 @@
 <template>
 <div class='Modify'>
-  <h2>修改文件</h2>
-  <p>标题：<span>这是标题的名字</span></p>
+  <Card dis-hover>
+    <h2>修改文件</h2>
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" >
+     <FormItem label="" prop="name"> 
+       <span>标题&nbsp;</span><Input  placeholder="请输入..." style="width: 300px"></Input>
+     </FormItem>
+  
   <div class='selct'>
       <Select v-model="model1" style="width:200px" placeholder="请选择文件类型">
             <Option v-for="item in cityList" :value="item.value" :key="item.value" >{{ item.label }}</Option>
       
       </Select>
+     
   </div>
+  </Form> 
   <div>权限：</div>
-  <div class='cover-all'>
+  <div class='cover-all clearfix'>
     <span>封面：</span> 
     <div class='cover'>
       <router-link to="details">
@@ -17,7 +24,7 @@
       </router-link>
     </div>
   </div>
-
+</Card>
 </div>
 </template>
 <script>
@@ -25,6 +32,14 @@
     
         data () {
             return {
+              formValidate:{
+                name:'',
+              },
+              ruleValidate:{
+                name:[{
+                   required: true, message: '最多为20个字', trigger: 'blur' 
+                }]
+              },
                 cityList: [
                     {
                         value: 'beijing',
