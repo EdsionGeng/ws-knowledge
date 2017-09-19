@@ -19,7 +19,7 @@ router.beforeEach((to,from,next)=>{
   next();
 });
 
-router.afterEach((to, from, next) => {
+router.afterEach((to, from) => {
   iView.LoadingBar.finish();
 });
 
