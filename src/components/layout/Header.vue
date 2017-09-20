@@ -13,8 +13,8 @@
                 <Dropdown-item name="修改密码">
                    <p>修改密码</p>
                 </Dropdown-item>
-                <Dropdown-item name="退出登录"> 
-                     <p v-on:click='loginOut()'>退出登陆</p>
+                <Dropdown-item name="安全退出"> 
+                     <p>退出登陆</p>
                 </Dropdown-item>
             </Dropdown-menu>
         </Dropdown>
@@ -75,13 +75,12 @@ export default {
             if(name==="修改密码"){
                 this.isShow=true;
             }else if(name==="安全退出"){
-
+                this.loginOut();
             }   
         },
         handleSubmit(name){
             this.$refs[name].validate((valid)=>{
                 if(valid){
-
                     changePassword(this.updatePwd).then(res=>{
                         if(res.data.code===0){
                             this.$Message.success(res.data.message);
@@ -100,15 +99,9 @@ export default {
         },
         loginOut(){
             // 安全退出，清空所有的sessionStorge并将路由调转到'/login'
-            console.log(111);
-            logout().then(res=>{
-                if(res.data.code === 0){
-                    console.log(res.data.code)
-                sessionStrong.clear();
-                this.$router.push('/login');
-                }
+                sessionStorage.clear();
+                this.$router.push({path:'/login'});
                 
-            })
             
         }
     }
