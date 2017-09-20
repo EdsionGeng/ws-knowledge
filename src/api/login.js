@@ -37,7 +37,13 @@ export function changePassword(data){
         data:data
     })
 }
-
+export function logout(data){
+    return fetch({
+        url:'/logout',
+        method:'post',
+        data:data
+    })
+}
 
 
 

@@ -14,7 +14,7 @@
                    <p>修改密码</p>
                 </Dropdown-item>
                 <Dropdown-item name="退出登录"> 
-                     <p>退出登陆</p>
+                     <p v-on:click='loginOut()'>退出登陆</p>
                 </Dropdown-item>
             </Dropdown-menu>
         </Dropdown>
@@ -42,7 +42,9 @@
 </div>
 </template>
 <script>
+
 import {changePassword} from '../../api/login'
+import {logout} from '../../api/login'
 export default {
     data(){
         return{
@@ -102,6 +104,15 @@ export default {
         },
         loginOut(){
             // 安全退出，清空所有的sessionStorge并将路由调转到'/login'
+            console.log(111);
+            logout().then(res=>{
+                if(res.data.code === 0){
+                    console.log(res.data.code)
+                sessionStrong.clear();
+                this.$router.push('/login');
+                }
+                
+            })
             
         }
     }
