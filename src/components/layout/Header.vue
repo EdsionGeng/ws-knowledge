@@ -44,7 +44,6 @@
 <script>
 
 import {changePassword} from '../../api/login'
-import {logout} from '../../api/login'
 export default {
     data(){
         return{
@@ -81,6 +80,7 @@ export default {
         handleSubmit(name){
             this.$refs[name].validate((valid)=>{
                 if(valid){
+                    // 与服务端交互，确认密码是否修改成功
                     changePassword(this.updatePwd).then(res=>{
                         if(res.data.code===0){
                             this.$Message.success(res.data.message);
@@ -91,7 +91,6 @@ export default {
                             this.$Message.error(res.data.message);
                         }
                     })
-                    // 与服务端交互，确认密码是否修改成功
                 }else{
                     
                 }
@@ -101,8 +100,6 @@ export default {
             // 安全退出，清空所有的sessionStorge并将路由调转到'/login'
                 sessionStorage.clear();
                 this.$router.push({path:'/login'});
-                
-            
         }
     }
 
