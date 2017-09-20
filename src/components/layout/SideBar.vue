@@ -3,11 +3,11 @@
         <!-- 搜索上传以及侧边栏导航 -->
          <Menu :theme="theme3" active-name="1" @on-select="change"> 
         <MenuGroup title="主页">
-            <MenuItem name="SuperHome">
+            <MenuItem name="SuperHome" v-if="isAdmin()">
                 <!-- <Icon type="document-text"></Icon> -->
                 超管首页
             </MenuItem>
-            <MenuItem name="Personal">
+            <MenuItem name="Personal" v-if="!isAdmin()">
                 <!-- <Icon type="chatbubbles"></Icon> -->
                 个人首页
             </MenuItem>
@@ -18,7 +18,7 @@
                 全部文件
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="管理中心">
+        <MenuGroup title="管理中心" v-if="isAdmin()">
             <MenuItem name="mynews">
                 <!-- <Icon type="heart"></Icon> -->
                 我的消息
@@ -44,7 +44,7 @@
                 历史上传
             </MenuItem>
         </MenuGroup>
-        <!-- <MenuGroup title="个人中心">
+        <MenuGroup title="个人中心" v-if="!isAdmin()">
             <MenuItem name="13">
                 <Icon type="heart"></Icon>
                 我的消息
@@ -57,7 +57,7 @@
                 <Icon type="heart"></Icon>
                 历史上传
             </MenuItem>
-        </MenuGroup> -->
+        </MenuGroup>
     </Menu>
     </div>
 </template>
@@ -65,7 +65,14 @@
 export default {
     data () {
         return {
-            theme3: 'light'
+            theme3: 'light',
+            isAdmin:function(){
+                if(this.$store.state.user.isAdmin==1){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
         }
     },
     methods:{

@@ -58,7 +58,6 @@ export default {
                       "password":this.loginForm.password
                   };
                   Login(params).then(res=>{
-                     
                       const UserName = this.loginForm.UserName;
                       if(res.data.code===0){
                         sessionStorage.setItem('UserName',UserName);
