@@ -81,24 +81,20 @@ export default {
         handleSubmit(name){
             this.$refs[name].validate((valid)=>{
                 if(valid){
-                    
-                    let id =  JSON.parse(this.updatePwd.id);
-                    let oldPwd = JSON.parse(this.updatePwd.oldPwd);
-                    let newPwd = JSON.parse(this.updatePwd.newPwd);
-                    let  updatePwds = {
-                        "id":id,
-                        "newPwd": newPwd,
-                        "oldPwd":oldPwd
-                    }
-                     console.log(updatePwds)
-                changePassword(updatePwds).then(res=>{
-                    
-                })
-                   
-                    // 与服务端交互，确认密码是否修改成功
-                    this.$Modal.remove();
-                }else{
 
+                    changePassword(this.updatePwd).then(res=>{
+                        if(res.data.code===0){
+                            this.$Message.success(res.data.message);
+                            this.isShow=false;
+                            sessionStorage.clear();
+                            this.$router.push({name:'login'});
+                        }else{
+                            this.$Message.error(res.data.message);
+                        }
+                    })
+                    // 与服务端交互，确认密码是否修改成功
+                }else{
+                    
                 }
             })
         },
