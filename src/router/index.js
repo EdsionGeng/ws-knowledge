@@ -28,7 +28,7 @@ Vue.use(Router);
 
 const constantRouteMap = [
   {
-    path: '/Login',
+    path: '/login',
     component: Login
   },
   {
