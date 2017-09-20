@@ -47,7 +47,8 @@ export default {
   methods:{
       ...mapActions([
         'Login',
-        'SetAdmin'
+        'SetAdmin',
+        'SetId'
       ]),
       handleSubmit(name){
           this.$refs[name].validate((valid)=>{
@@ -63,8 +64,10 @@ export default {
                         sessionStorage.setItem('UserName',UserName);
                         sessionStorage.setItem('loginToken',res.data.model.loginToken);
                         sessionStorage.setItem('isAdmin',res.data.model.isAdmin);
+                        sessionStorage.setItem('id',res.data.model.id);
                         this.$store.dispatch('Login',this.loginForm.UserName);
                         this.$store.dispatch('SetAdmin',res.data.model.isAdmin);
+                        this.$store.dispatch('SetId',res.data.model.id);
                         this.$Message.success(res.data.message);
                         this.$router.push('/');
                       }else{

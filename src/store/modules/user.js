@@ -9,7 +9,8 @@ const user = {
         // 用户id
         // 一般用户还是超级管理员用户
         // 菜单权限
-        isAdmin:0
+        isAdmin:0,
+        id:''
     },
     mutations:{
         SET_USERNAME:(state,username)=>{
@@ -17,7 +18,11 @@ const user = {
         },
         SET_ISADMIN:(state,isadmin)=>{
             state.isAdmin=isadmin;
+        },
+        SET_ID:(state,id)=>{
+            state.id=id;
         }
+
     },
     actions:{
         // 调用mutations里面的方法改变state状态，可以执行异步操作
@@ -27,6 +32,9 @@ const user = {
         
         SetAdmin({commit,state},isadmin){
             commit('SET_ISADMIN',isadmin);
+        },
+        SetId({commit,state},id){
+            commit('SET_ID',id);
         }
     }
 }

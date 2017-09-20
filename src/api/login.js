@@ -30,10 +30,11 @@ export function getMynews(){
         method:'get'
     })
 }
-export function logout(){
+export function changePassword(data){
     return fetch({
-        url:'logout',
-        method:'post'
+        url:'/changePassword',
+        method:'post',
+        data:data
     })
 }
 
