@@ -21,6 +21,7 @@ import affiche from '@/views/affiche/index'
 import details from '@/views/details/index'
 import Journal from '@/views/Journal/index'
 import Modify from '@/views/Modify/index'
+import editor from '@/views/ueitor/index'
 
 
 Vue.use(Router);
@@ -91,6 +92,9 @@ const constantRouteMap = [
       },{
         path:'/Modify',
         component:Modify
+      },{
+        path:'/editor',
+        component:editor
       },
       {
         path: '*',

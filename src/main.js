@@ -9,6 +9,10 @@ import  Cookies from 'js-cookie'
 import store from './store'
 // import AxiosPlugin from './utils/axios.js'
 // import './mock/index.js'
+import '../static/UE/ueditor.config.js'
+import '../static/UE/ueditor.all.min.js'
+import '../static/UE/lang/zh-cn/zh-cn.js'
+import '../static/UE/ueditor.parse.min.js'
 
 Vue.use(iView);
 // Vue.use(AxiosPlugin,'$axios');

@@ -37,7 +37,7 @@
             </div>         
             <Row>
                 <Col class="file-card" span="6" v-for="list in filelist" :key="list.index">
-                    <router-link to="filedid">
+                    <router-link to="details">
                     <Card style="width:232px">
                         <div style="">
                             <img class="file-img" v-bind:src="list.img">
@@ -295,6 +295,9 @@ import {getHistorydata} from '../../api/login'
 }
 .file{
     position: relative;
+}
+.file-card{
+    
 }
 .file-card span{
     display: block;

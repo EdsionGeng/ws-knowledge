@@ -39,7 +39,7 @@
                 <!-- <Icon type="heart-broken"></Icon> -->
                 历史下载
             </MenuItem>
-            <MenuItem name="editor">
+            <MenuItem name="">
                 <!-- <Icon type="heart-broken"></Icon> -->
                 历史上传
             </MenuItem>

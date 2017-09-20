@@ -20,7 +20,7 @@ export function getFilelistdata(){
 }
 export function getHistorydata(){
     return fetch({
-        url:'history',
+        url:'/history',
         method:'get'
     })
 }
