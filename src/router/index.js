@@ -33,6 +33,9 @@ const constantRouteMap = [
   },
   {
     path: '/',
+    meta:{
+      require:true
+    },
     component: Home,
     children: [
       {

@@ -35,7 +35,7 @@ export default {
         }
     },
     mounted(){
-      console.log(this.$store.state.user.isAdmin);
+    //   console.log(this.$store.state.user.isAdmin);
     },
     methods:{
         entersearch(e){
