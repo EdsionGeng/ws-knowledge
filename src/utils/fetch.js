@@ -5,8 +5,8 @@ import axios from 'axios'
 
 
 const service = axios.create({
-    baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
-    // baseURL:'http://192.168.3.26:8080/knowledge',
+    // baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
+    baseURL:'http://192.168.3.26:8080/knowledge',
     
     timeout:1000,
 });

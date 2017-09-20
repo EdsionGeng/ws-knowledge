@@ -23,15 +23,15 @@
         <p slot="header">
             <span>修改密码</span>
         </p>
-        <Form ref="updatepwd" :model="updatepwd" :rules="updatepwdrules" label-postion="left" :label-width="80">
-            <FormItem label="原密码" prop="oldpwd">
-                <Input :model="updatepwd.oldpwd" placeholder="请输入原密码" :autofocus="true"></Input>
+        <Form ref="updatePwd" :model="updatePwd" :rules="updatepwdrules" label-postion="left" :label-width="80">
+            <FormItem label="原密码" prop="oldPwd">
+                <Input v-model="updatePwd.oldPwd" placeholder="请输入原密码" :autofocus="true" type='password'></Input>
             </FormItem>
-            <FormItem label="新密码" prop="newpwd">
-                <Input :model="updatepwd.newpwd" placeholder="请输入新密码"></Input>
+            <FormItem label="新密码" prop="newPwd">
+                <Input v-model="updatePwd.newPwd" placeholder="请输入新密码" type='password'></Input>
             </FormItem>
             <FormItem>
-                <Button type="primary" @click="handleSubmit('updatepwd')">确认</Button>
+                <Button type="primary" @click="handleSubmit('updatePwd')">确认</Button>
                 <!-- 加一个表单重置 -->
             </FormItem>
         </Form>
@@ -42,22 +42,23 @@
 </div>
 </template>
 <script>
-import {logout} from '../../api/login'
+import {changePassword} from '../../api/login'
 export default {
     data(){
         return{
             userInfo:this.getUserName(),
             isShow:false,
-            updatepwd:{
-                oldpwd:'',
-                newpwd:''
+            updatePwd:{
+                id:sessionStorage.getItem('id'),
+                oldPwd:'',
+                newPwd:''
             },
             updatepwdrules:{
-                oldpwd:[
+                oldPwd:[
                     { required:true,message:'请填写原密码',trigger:'blur' },
                     { type:'string',min:6,message:'密码长度不能小于6位',trigger:'blur'}
                 ],
-                newpwd:[
+                newPwd:[
                     { required:true,message:'请填写新密码',trigger:'blur' },
                     { type:'string',min:6,message:'密码长度不能小于6位',trigger:'blur'}
                 ]
@@ -78,6 +79,20 @@ export default {
         handleSubmit(name){
             this.$refs[name].validate((valid)=>{
                 if(valid){
+                    
+                    let id =  JSON.parse(this.updatePwd.id);
+                    let oldPwd = JSON.parse(this.updatePwd.oldPwd);
+                    let newPwd = JSON.parse(this.updatePwd.newPwd);
+                    let  updatePwds = {
+                        "id":id,
+                        "newPwd": newPwd,
+                        "oldPwd":oldPwd
+                    }
+                     console.log(updatePwds)
+                changePassword(updatePwds).then(res=>{
+                    
+                })
+                   
                     // 与服务端交互，确认密码是否修改成功
                     this.$Modal.remove();
                 }else{
