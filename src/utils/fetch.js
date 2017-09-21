@@ -5,8 +5,8 @@ import Qs from 'qs'
 
 
 const service = axios.create({
-    baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
-    // baseURL:'http://192.168.3.26:8080/knowledge',
+    // baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
+    baseURL:'http://192.168.3.26:8080/knowledge',
     timeout:5000,
 
 });
@@ -16,9 +16,9 @@ const service = axios.create({
  */
 service.interceptors.request.use(config=>{
     //通过判断store状态，添加一些请求headers数据
-    config.headers['loginToken']=sessionStorage.getItem('loginToken');  
+    config.headers['loginToken']=sessionStorage.getItem('loginToken') || null;  
      
-    config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+    // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     console.log(config);
     config.data=Qs.stringify(config.data);
     return config;

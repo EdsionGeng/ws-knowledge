@@ -103,7 +103,6 @@ const constantRouteMap = [
       }
     ]
   }
-  
 ];
 
 export default new Router({
