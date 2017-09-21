@@ -1,3 +1,4 @@
+超管首页 路由SuperHome
 <template>
 <div>
      <Card shadow>

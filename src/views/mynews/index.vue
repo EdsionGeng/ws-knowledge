@@ -1,3 +1,4 @@
+我的消息 路由mynews
 <template>
   <div>
       <Card dis-hover>

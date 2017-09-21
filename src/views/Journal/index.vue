@@ -1,3 +1,4 @@
+全部文件下的文件详情下的更多内容 路由Journal
 <template>
 <div class='Journal'>
   <h2>操作日志</h2>

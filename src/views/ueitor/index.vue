@@ -1,3 +1,4 @@
+百度富文本编辑器页面布局
 <template>
   <div class="components-container">
    
@@ -22,10 +23,9 @@
     data() {
       return {
         defaultMsg: '这里是UE测试',
-        config: {
-          initialFrameWidth: null,
-          initialFrameHeight: 350
-        }
+      
+       
+
       }
     },
     methods: {

@@ -1,3 +1,4 @@
+全部文件下的文件详情 路由details
 <template>
 <div >
   <h2 class='details'>文件详情</h2>
