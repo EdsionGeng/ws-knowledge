@@ -20,19 +20,20 @@ Vue.config.productionTip = false
 
 router.beforeEach((to,from,next)=>{
   iView.LoadingBar.start();
-  if(sessionStorage.getItem('loginToken')){
-    if(to.path=='/login'){
-      next('/');
-    }else{
-      next();
-    }
-  }else{
-    if(to.path=='/login'){
-      next();
-    }else{
-      next('/login');
-    }
-  } 
+  // if(sessionStorage.getItem('loginToken')){
+  //   if(to.path=='/login'){
+  //     next('/');
+  //   }else{
+  //     next();
+  //   }
+  // }else{
+  //   if(to.path=='/login'){
+  //     next();
+  //   }else{
+  //     next('/login');
+  //   }
+  // } 
+  next();
 });
 
 
