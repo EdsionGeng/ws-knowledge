@@ -23,10 +23,9 @@
     data() {
       return {
         defaultMsg: '这里是UE测试',
-        config: {
-          initialFrameWidth: null,
-          initialFrameHeight: 350
-        }
+      
+       
+
       }
     },
     methods: {
