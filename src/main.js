@@ -32,7 +32,7 @@ router.beforeEach((to,from,next)=>{
     }else{
       next('/login');
     }
-  }
+  } 
 });
 
 router.afterEach((to, from) => {
