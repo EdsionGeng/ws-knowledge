@@ -70,7 +70,7 @@ export default {
                 if(this.$store.state.user.isAdmin==1){
                     return true;
                 }else{
-                    return true;
+                    return false;
                 }
             }
         }
