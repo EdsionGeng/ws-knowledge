@@ -1,3 +1,4 @@
+文档管理 路由file
 <template>
   <div class='Doc'>
     <h2>文档管理</h2>

@@ -1,3 +1,4 @@
+个人中心 路由Personal
 <template>
 <div class='personal'>
    <Card dis-hover>

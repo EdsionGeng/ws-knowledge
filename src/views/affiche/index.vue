@@ -1,4 +1,6 @@
+//消息推送 路由affiche
 <template>
+
   <div class='affiche'>
     <h2>公告推送</h2>
     <div class='ModalAll'>

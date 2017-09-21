@@ -1,3 +1,4 @@
+全部文件 路由afs
 <template>
     <div class="file">
         <div class="file-search">

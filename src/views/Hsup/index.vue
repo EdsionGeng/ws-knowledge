@@ -1,6 +1,7 @@
+历史下载 路由Hisall
 <template>
    <div class="file-list">
-     <h3>历史上传</h3>
+     <h3>历史下载</h3>
         <Row>
             <Col class="file-card" span="6" v-for="list in filelist" :key="list.index">
                 <router-link to="filedid">

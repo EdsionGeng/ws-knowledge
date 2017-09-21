@@ -1,3 +1,4 @@
+百度Ueditor富文本编辑器公共组件
 <template>
   <div>
     <script id="editor" type="text/plain"></script>
