@@ -32,77 +32,77 @@ const constantRouteMap = [
     name:'login',
     component: Login
   },
-  // {
-  //   path: '/',
-  //   component: Home,
-  //   children: [
-  //     {
-  //       path: '/',
-  //       component: SuperHome
-  //     },
-  //     {
-  //       path: '/SuperHome',
-  //       component: SuperHome
-  //     },
-  //     {
-  //       path: '/PersonalHome',
-  //       component: PersonalHome
-  //     },
-  //     {
-  //       path: '/index',
-  //       component: DocManage
-  //     },
-  //     {
-  //       path: '/hisall',
-  //       component: Hisall
-  //     },
+  {
+    path: '/',
+    component: Home,
+    children: [
+      {
+        path: '/',
+        component: SuperHome
+      },
+      {
+        path: '/SuperHome',
+        component: SuperHome
+      },
+      {
+        path: '/PersonalHome',
+        component: PersonalHome
+      },
+      {
+        path: '/index',
+        component: DocManage
+      },
+      {
+        path: '/hisall',
+        component: Hisall
+      },
       
-  //     {
-  //       path: '/notice',
-  //       component: Notice
-  //     },{
-  //       path:'/news',
-  //       component:News
-  //     }
-  //     ,{
-  //       path:'/file',
-  //       component:Files
-  //     }
-  //     ,{
-  //       path:'/afs',
-  //       name:'afs',
-  //       component: filemanage
-  //     },{
-  //       path:'/seefile',
-  //       component:Seefile
-  //     },{
-  //       path: '/Personal',
-  //       component: Personal
-  //     },{
-  //       path:'/mynews',
-  //       component: Mynews
-  //     },{
-  //       path:'/affiche',
-  //       component: affiche
-  //     },{
-  //       path:'/details',
-  //       component: details
-  //     },{
-  //       path:'/Journal',
-  //       component: Journal
-  //     },{
-  //       path:'/Modify',
-  //       component:Modify
-  //     },{
-  //       path:'/editor',
-  //       component:editor
-  //     },
-  //     {
-  //       path: '*',
-  //       component: NotFound 
-  //     }
-  //   ]
-  // }
+      {
+        path: '/notice',
+        component: Notice
+      },{
+        path:'/news',
+        component:News
+      }
+      ,{
+        path:'/file',
+        component:Files
+      }
+      ,{
+        path:'/afs',
+        name:'afs',
+        component: filemanage
+      },{
+        path:'/seefile',
+        component:Seefile
+      },{
+        path: '/Personal',
+        component: Personal
+      },{
+        path:'/mynews',
+        component: Mynews
+      },{
+        path:'/affiche',
+        component: affiche
+      },{
+        path:'/details',
+        component: details
+      },{
+        path:'/Journal',
+        component: Journal
+      },{
+        path:'/Modify',
+        component:Modify
+      },{
+        path:'/editor',
+        component:editor
+      },
+      {
+        path: '*',
+        component: NotFound 
+      }
+    ]
+  }
 ];
 
 export default new Router({
