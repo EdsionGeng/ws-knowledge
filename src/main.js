@@ -13,26 +13,25 @@ import '../static/UE/ueditor.config.js'
 import '../static/UE/ueditor.all.min.js'
 import '../static/UE/lang/zh-cn/zh-cn.js'
 import '../static/UE/ueditor.parse.min.js'
-
 Vue.use(iView);
 // Vue.use(AxiosPlugin,'$axios');
 Vue.config.productionTip = false
 
 router.beforeEach((to,from,next)=>{
   iView.LoadingBar.start();
-  // if(sessionStorage.getItem('loginToken')){
-  //   if(to.path=='/login'){
-  //     next('/');
-  //   }else{
-  //     next();
-  //   }
-  // }else{
-  //   if(to.path=='/login'){
-  //     next();
-  //   }else{
-  //     next('/login');
-  //   }
-  // } 
+  if(sessionStorage.getItem('loginToken')){
+    if(to.path=='/login'){
+      next('/');
+    }else{
+      next();
+    }
+  }else{
+    if(to.path=='/login'){
+      next();
+    }else{
+      next('/login');
+    }
+  } 
   next();
 });
 
@@ -48,6 +47,9 @@ new Vue({
   el: '#app',
   router,
   store,
+  created(){
+    console.log(sessionStorage.getItem('menuroute'));
+  },
   // template: '<App/>',
   // components: { App },
   render:hello=>hello(App),

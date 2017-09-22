@@ -19,7 +19,6 @@ service.interceptors.request.use(config=>{
     config.headers['loginToken']=sessionStorage.getItem('loginToken') || null;  
      
     // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-    console.log(config);
     config.data=Qs.stringify(config.data);
     return config;
 },error=>{
