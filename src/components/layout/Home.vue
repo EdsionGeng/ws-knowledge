@@ -45,6 +45,7 @@ export default {
             // 路由的name别名尽量与组件名称和路径名称命名相同
             this.$router.push({name:'afs',query:{searchvalue:this.searchvalue}});
         }
+      
     }
   
 }

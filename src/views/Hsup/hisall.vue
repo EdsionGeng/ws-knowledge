@@ -13,9 +13,7 @@ export default {
   components:{
     Pages,
     Hisup
-
   }
-
 }
 </script>
 
