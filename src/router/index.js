@@ -9,6 +9,7 @@ import SuperHome from '@/views/Home/SuperHome';
 import PersonalHome from '@/views/Home/PersonalHome';
 import DocManage from '@/views/DocManage/';
 import Hisall from '@/views/Hsup/index';
+import HisUp from '@/views/Hsup/hisup'
 import Notice from "@/views/Notice/notice";
 import News from '@/views/news/mynews';
 import Files from '@/views/File/index';
@@ -29,7 +30,7 @@ Vue.use(Router);
 const constantRouteMap = [
   {
     path: '/login',
-    name:'login',
+    name:'登录',
     component: Login
   },
   {
@@ -38,64 +39,108 @@ const constantRouteMap = [
     children: [
       {
         path: '/',
-        component: SuperHome
+        component: SuperHome,
+        meta:{
+          require:true
+        },
+        redirect:to=>{
+          if(sessionStorage.getItem('isAdmin')==1){
+            return '/SuperHome'
+          }else{
+            return '/Personal'
+          }
+        }
       },
       {
         path: '/SuperHome',
+        name:'超管首页',
+        meta:{
+          require:true,
+        },
         component: SuperHome
       },
       {
-        path: '/PersonalHome',
-        component: PersonalHome
+        path:'/allfiles',
+        name:'全部文件',
+        component: filemanage
       },
       {
-        path: '/index',
-        component: DocManage
+        path:'/allfiles/:id',     // 动态路由匹配每个文件详情页
+        name:'查看文件',
+        component:Seefile
       },
+      {
+        path:'/file',
+        name:'文档管理',
+        meta:{
+          require:true,
+        },
+        component:Files
+      },
+      // {
+      //   path: '/notice',         //消息推送和公告推送页面重复，请注意看需求分析,删除多余的页面
+      //   name:'消息推送',
+      //   meta:{
+      //     require:true,
+      //   },
+      //   component: Notice
+      // },
       {
         path: '/hisall',
+        name:'历史下载',
         component: Hisall
       },
-      
       {
-        path: '/notice',
-        component: Notice
-      },{
-        path:'/news',
-        component:News
-      }
-      ,{
-        path:'/file',
-        component:Files
-      }
-      ,{
-        path:'/afs',
-        name:'afs',
-        component: filemanage
-      },{
-        path:'/seefile',
-        component:Seefile
-      },{
+        path: '/hisup',
+        name:'历史上传',
+        component: HisUp
+      },
+      {
         path: '/Personal',
+        name:'个人首页',
         component: Personal
-      },{
+      },
+      {
         path:'/mynews',
+        name:'我的消息',
         component: Mynews
-      },{
+      },
+      {
+        path:'/news',   // 有多个重复页面
+        component:News
+      },
+     
+      {
         path:'/affiche',
+        name:'消息推送',
+        meta:{
+          require:true,
+        },
         component: affiche
-      },{
+      },
+      {
         path:'/details',
+        name:'文章详情',
         component: details
-      },{
+      },
+      {
         path:'/Journal',
+        name:'操作日志',
         component: Journal
-      },{
+      },
+      {
         path:'/Modify',
+        name:'文件修改',
         component:Modify
-      },{
+      },
+      {
         path:'/editor',
         component:editor
+      },
+      {
+        path: '/404',
+        name:'404',
+        component: NotFound 
       },
       {
         path: '*',

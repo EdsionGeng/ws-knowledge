@@ -3,58 +3,58 @@
         <!-- 搜索上传以及侧边栏导航 -->
          <Menu :theme="theme3" active-name="1" @on-select="change"> 
         <MenuGroup title="主页">
-            <MenuItem name="SuperHome" v-if="isAdmin()">
+            <MenuItem name="超管首页" v-if="isAdmin()">
                 <!-- <Icon type="document-text"></Icon> -->
                 超管首页
             </MenuItem>
-            <MenuItem name="Personal" v-if="!isAdmin()">
+            <MenuItem name="个人首页" v-if="!isAdmin()">
                 <!-- <Icon type="chatbubbles"></Icon> -->
                 个人首页
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="文件管理">
-            <MenuItem name="afs">
+            <MenuItem name="全部文件">
                 <!-- <Icon type="heart"></Icon> -->
                 全部文件
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="管理中心" v-if="isAdmin()">
-            <MenuItem name="mynews">
+            <MenuItem name="我的消息">
                 <!-- <Icon type="heart"></Icon> -->
                 我的消息
             </MenuItem>
-            <MenuItem name="file">
+            <MenuItem name="文档管理">
                 <!-- <Icon type="heart"></Icon> -->
                 文档管理
             </MenuItem>
-            <MenuItem name="9">
+            <MenuItem name="文档类型管理">
                 <!-- <Icon type="heart-broken"></Icon> -->
                 文档类型管理
             </MenuItem>
-            <MenuItem name="affiche">
+            <MenuItem name="消息推送">
                 <!-- <Icon type="heart"></Icon> -->
                 消息推送
             </MenuItem>
-            <MenuItem name="hisall">
+            <MenuItem name="历史下载">
                 <!-- <Icon type="heart-broken"></Icon> -->
                 历史下载
             </MenuItem>
-            <MenuItem name="">
+            <MenuItem name="历史上传">
                 <!-- <Icon type="heart-broken"></Icon> -->
                 历史上传
             </MenuItem>
         </MenuGroup>
         <MenuGroup title="个人中心" v-if="!isAdmin()">
-            <MenuItem name="13">
-                <Icon type="heart"></Icon>
+            <MenuItem name="我的消息">
+                <!-- <Icon type="heart"></Icon> -->
                 我的消息
             </MenuItem>
-            <MenuItem name="14">
-                <Icon type="heart-broken"></Icon>
+            <MenuItem name="历史下载">
+                <!-- <Icon type="heart-broken"></Icon> -->
                 历史下载
             </MenuItem>
-            <MenuItem name="15">
-                <Icon type="heart"></Icon>
+            <MenuItem name="历史上传">
+                <!-- <Icon type="heart"></Icon> -->
                 历史上传
             </MenuItem>
         </MenuGroup>
@@ -67,7 +67,7 @@ export default {
         return {
             theme3: 'light',
             isAdmin:function(){
-                if(this.$store.state.user.isAdmin==1){
+                if(sessionStorage.getItem('isAdmin')==1){
                     return true;
                 }else{
                     return false;
@@ -77,7 +77,7 @@ export default {
     },
     methods:{
         change(name){
-            this.$router.push('/'+name);
+            this.$router.push({name:name});
         }
     }
 

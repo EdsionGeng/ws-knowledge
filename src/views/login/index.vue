@@ -24,7 +24,6 @@
 <script>
 import {mapActions} from 'vuex'
 import {Login} from '../../api/login'
-import route1 from '../../router/route1'
 export default {
   data(){
       return{
