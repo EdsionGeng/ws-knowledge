@@ -1,13 +1,13 @@
 <template>
     <div class="layout-left-bottom">
         <!-- 搜索上传以及侧边栏导航 -->
-         <Menu :theme="theme3" active-name="1" @on-select="change"> 
+         <Menu :theme="theme3" v-bind:active-name="ActiveName" @on-select="change"> 
         <MenuGroup title="主页">
-            <MenuItem name="超管首页" v-if="isAdmin()">
+            <MenuItem name="超管首页" v-if="isAdmin">
                 <!-- <Icon type="document-text"></Icon> -->
                 超管首页
             </MenuItem>
-            <MenuItem name="个人首页" v-if="!isAdmin()">
+            <MenuItem name="个人首页" v-if="!isAdmin">
                 <!-- <Icon type="chatbubbles"></Icon> -->
                 个人首页
             </MenuItem>
@@ -18,7 +18,7 @@
                 全部文件
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="管理中心" v-if="isAdmin()">
+        <MenuGroup title="管理中心" v-if="isAdmin">
             <MenuItem name="我的消息">
                 <!-- <Icon type="heart"></Icon> -->
                 我的消息
@@ -44,7 +44,7 @@
                 历史上传
             </MenuItem>
         </MenuGroup>
-        <MenuGroup title="个人中心" v-if="!isAdmin()">
+        <MenuGroup title="个人中心" v-if="!isAdmin">
             <MenuItem name="我的消息">
                 <!-- <Icon type="heart"></Icon> -->
                 我的消息
@@ -66,18 +66,31 @@ export default {
     data () {
         return {
             theme3: 'light',
-            isAdmin:function(){
-                if(sessionStorage.getItem('isAdmin')==1){
-                    return true;
-                }else{
-                    return false;
-                }
-            }
+            isAdmin:true,
+            ActiveName:''
         }
+    },
+    created(){
+        this.setAdmin();
+        this.setActive();
     },
     methods:{
         change(name){
             this.$router.push({name:name});
+        },
+        setAdmin(){
+             if(sessionStorage.getItem('isAdmin')==1){
+                    this.isAdmin=true
+                }else{
+                    this.isAdmin=false;
+            }
+        },
+        setActive(){
+             if(sessionStorage.getItem('isAdmin')==1){
+                    this.ActiveName= '超管首页';
+                }else{
+                    this.ActiveName= '个人首页';
+                }
         }
     }
 
