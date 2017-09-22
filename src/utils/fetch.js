@@ -1,12 +1,16 @@
 import axios from 'axios'
-// import prod_env from '../../config/prod.env.js'
+import prod_env from '../../config/prod.env.js'
 import Qs from 'qs'
 // 封装axios 创建基础实例以及axios拦截
+let url ='';
+if(process.env.NODE_ENV===prod_env){
+    url='http://192.168.3.26:8080/knowledge';
+}else{
+    url='http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws/knowledge';
+}
 
-
-const service = axios.create({
-    // baseURL:'http://192.168.3.26:5626/mock/59b8cbd086d1e55aa43b3785/ws',
-    baseURL:'http://192.168.3.26:8080/knowledge',
+const service = axios.create({  
+    baseURL:url,
     timeout:5000,
 
 });
