@@ -10,6 +10,7 @@
    
   
   </Form> 
+  <!-- 三级联动 -->
   <div class='clearfix'>
     <div class='fl' style='height: 32px;line-height: 32px;margin-bottom:20px;'>类型&nbsp;&nbsp;</div>
  
@@ -77,7 +78,7 @@
    </div>
 </div>
 <div><img src="../../assets/link.png" alt=""><span>上传附件</span></div>
-<div class='doc'><img src="../../assets/link.png" alt=""><span>我的文档.doc</span><i >(100k)</i><i>描述：这是产品部门的规章制度，必看</i></div>
+<div class='doc'><img src="../../assets/link.png" alt=""><span>我的文档.doc</span><i >(100k)</i><i>描述：这是产品部门的规章制度，必看</i><em>删除</em></div>
 <div class='btn'><Button type="primary">修改</Button></div>  
 </Card>
 </div>
@@ -276,6 +277,10 @@ margin: 20px 0;
   }
   .doc i{
     color: #ccc;
+  }
+  em{
+      font-style: normal;
+      color:steelblue
   }
   .btn{
       text-align: center;
