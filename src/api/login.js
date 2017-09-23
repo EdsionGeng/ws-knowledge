@@ -3,7 +3,7 @@ import fetch from '../utils/fetch.js'
 import Qs from 'qs'
 /**
  * 登录请求
- * @param {*用户和密码} data 
+ * @param {*UserName,password} data 
  */
 export function Login(data){
     return fetch({
@@ -31,16 +31,14 @@ export function getMynews(){
         method:'get'
     })
 }
+
+/**
+ * 用户密码修改
+ * @param {*id,oldPwd,newPwd} data 
+ */
 export function changePassword(data){
     return fetch({
         url:'/changePassword',
-        method:'post',
-        data:data
-    })
-}
-export function logout(data){
-    return fetch({
-        url:'/logout',
         method:'post',
         data:data
     })

@@ -9,7 +9,7 @@
                         <Input v-model="searchvalue" icon="ios-search" @on-enter="entersearch" placeholder="请输入..."></Input>    
                     </div>
                     <div class="layout-left-top-upload">
-                        <Button type="primary" icon="ios-cloud-upload-outline" long>上传文件</Button>
+                        <Button type="primary" icon="ios-cloud-upload-outline" long @click="showUploadPage">上传文件</Button>
                     </div>
                 </div>
                 <v-sider></v-sider>
@@ -37,6 +37,7 @@ export default {
     mounted(){
     //   console.log(this.$store.state.user.isAdmin);
     },
+
     methods:{
         entersearch(e){
             // 获取搜索框的值，通过路由参数的形式改变url,
@@ -44,7 +45,11 @@ export default {
             // 通过命名路由的name来判断跳转到哪一个路由，
             // 路由的name别名尽量与组件名称和路径名称命名相同
             this.$router.push({name:'afs',query:{searchvalue:this.searchvalue}});
+        },
+        showUploadPage(){
+            this.$router.push({name:'文件上传'})
         }
+     
       
     }
   

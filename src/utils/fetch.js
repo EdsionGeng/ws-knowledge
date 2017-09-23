@@ -10,7 +10,7 @@ if(process.env.NODE_ENV===prod_env){
 }
 
 const service = axios.create({  
-    baseURL:url,
+    baseURL:'http://192.168.3.26:8080/knowledge',
     timeout:5000,
 
 });

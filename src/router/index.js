@@ -23,6 +23,7 @@ import details from '@/views/details/index'
 import Journal from '@/views/Journal/index'
 import Modify from '@/views/Modify/index'
 import editor from '@/views/ueitor/index'
+import UploadFile from '@/views/Uploadfiles/'
 
 
 Vue.use(Router);
@@ -58,6 +59,11 @@ const constantRouteMap = [
           require:true,
         },
         component: SuperHome
+      },
+      {
+        path:'/uploadfile',
+        name:'文件上传',
+        component:UploadFile
       },
       {
         path:'/allfiles',

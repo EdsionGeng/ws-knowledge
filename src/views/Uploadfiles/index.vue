@@ -1,0 +1,31 @@
+<template>
+  <div>
+    <h2>上传文件</h2>
+  </div>
+</template>
+<script>
+export default {
+  data(){
+    return{
+    }
+  },
+  beforeRouteLeave(to,from,next){
+    this.confirm(next);
+  },
+  methods:{
+      confirm(next){
+        this.$Modal.confirm({
+          title:'离开提示',
+          content:'确认要离开上传界面吗？当前编辑内容将不会保存',
+          onOk:()=>{
+            next()
+          },
+          onCancel:()=>{
+            next(false);
+          }
+        })
+      }
+  }
+}
+</script>
+
