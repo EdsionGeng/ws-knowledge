@@ -5,9 +5,7 @@
         <Form inline>
             <FormItem>
                 <Select placeh  older="请选择部门" style="width:200px;">
-                    <Option value="beijing" >北京</Option>
-                    <Option value="shanghai">上海市</Option>
-                    <Option value="shenzhen">深圳市</Option>
+                    
                 </Select>
             </FormItem>
              <FormItem>
@@ -46,6 +44,8 @@
 </template>
 <script>
 import {getFilelistdata} from '../../api/login'
+import {getDeptData} from '../../api/requestdata'
+
 export default {
   data(){
       return{
@@ -57,6 +57,7 @@ export default {
   created(){
     //初始化数据，方法写在methods里面
     this.initfiledata();
+    this.initDeptData();
     
   },
   watch:{
@@ -90,6 +91,12 @@ export default {
           var query = this.$route.query;
           // axios 获取远程数据，改变data里面的数据渲染界面
           console.log(this.$route.query)
+      },
+      //初始化部门选择下拉框
+      initDeptData(){
+          getDeptData().then(res=>{
+              console.log(res);
+          });
       }
       
   }
