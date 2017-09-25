@@ -138,13 +138,18 @@ import {getNoticeList} from '../../api/login'
                 showIndex: false,
                 showCheckbox: true,
                 fixedHeader: false,
-                tableSize: 'default'
+                tableSize: 'default',
+                data:{
+                    pageSize:20,
+                    pageIndex:1,
+                    type:'ddd'
+                }
 
             }
         },
          created(){
-    //初始化数据，方法写在methods里面
-        this.initfiledata();
+            //初始化数据，方法写在methods里面
+            this.initfiledata();
    
     
   },
@@ -229,7 +234,7 @@ import {getNoticeList} from '../../api/login'
                 this.$Message.info('点击了取消');
             },
             initfiledata(){
-                getNoticeList().then(res=>{
+                getNoticeList(this.data).then(res=>{
                     if(res.data.code == 0){
                         this.content = res.data;
                     console.log(this.content)
