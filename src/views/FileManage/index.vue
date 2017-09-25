@@ -4,7 +4,7 @@
         <div class="file-search">
         <Form inline>
             <FormItem>
-                <Select placeh  older="请选择部门" style="width:200px;">
+                <Select placeholder="请选择部门" style="width:200px;">
                     
                 </Select>
             </FormItem>
