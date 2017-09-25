@@ -19,30 +19,28 @@ Vue.config.productionTip = false
 
 router.beforeEach((to,from,next)=>{
   iView.LoadingBar.start();
-  // if(sessionStorage.getItem('loginToken')){
-  //   if(to.path=='/login'){
-  //     next('/');
-  //   }else{
-  //     if(to.meta.require===true){
-  //       // 检测当前用户是否有权限访问该路由
-  //       if(sessionStorage.getItem('isAdmin')==1){
-  //         next()
-  //       }else{
-  //         next({name:'404'});
-  //       }
-  //     }else{
-  //       next();
-  //     }
-  //   }
-   
-  // }else{
-  //   if(to.path=='/login'){
-  //     next();
-  //   }else{
-  //     next('/login');
-  //   }
-  // } 
-  next();
+  if(sessionStorage.getItem('token')){
+    if(to.path=='/login'){
+      next('/');
+    }else{
+      if(to.meta.require===true){
+        // 检测当前用户是否有权限访问该路由
+        if(sessionStorage.getItem('isAdmin')==1){
+          next()
+        }else{
+          next({name:'404'});
+        }
+      }else{
+        next();
+      }
+    }
+  }else{
+    if(to.path=='/login'){
+      next();
+    }else{
+      next('/login');
+    }
+  } 
 });
 
 
