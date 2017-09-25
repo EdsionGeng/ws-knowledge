@@ -62,7 +62,7 @@ export default {
                       const UserName = this.loginForm.UserName;
                       if(res.data.code===0){
                         sessionStorage.setItem('UserName',UserName);
-                        sessionStorage.setItem('token',res.data.model.token);
+                        sessionStorage.setItem('token',res.data.model.loginToken);
                         sessionStorage.setItem('isAdmin',res.data.model.isAdmin);
                         sessionStorage.setItem('id',res.data.model.id);
                         this.$store.dispatch('Login',this.loginForm.UserName);

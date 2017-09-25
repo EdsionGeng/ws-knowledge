@@ -82,7 +82,7 @@ export default {
              if(sessionStorage.getItem('isAdmin')==1){
                     this.isAdmin=true
                 }else{
-                    this.isAdmin=true;
+                    this.isAdmin=false;
             }
         },
         setActive(){
