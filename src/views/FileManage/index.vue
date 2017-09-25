@@ -39,6 +39,7 @@
 <script>
 import {getFilelistdata} from '../../api/login'
 import {getDeptData} from '../../api/requestdata'
+import {getFileListData} from '../../api/requestdata'
 
 export default {
   data(){
@@ -131,13 +132,17 @@ export default {
           // 获取路由url中的查询参数
           var query = this.$route.query;
           // axios 获取远程数据，改变data里面的数据渲染界面
-          console.log(this.$route.query)
+          console.log(this.
+          $route.query)
       },
       //初始化部门选择下拉框
       initDeptData(){
           getDeptData().then(res=>{
               console.log(res);
           });
+      },
+      initFileListData(){
+          
       }
       
   }

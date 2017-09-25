@@ -6,3 +6,12 @@ export function getDeptData(){
         method:'get'
     })
 }
+
+
+export function getFileListData(data){
+    return fetch({
+        url:'/getFileList',
+        method:'get',
+        params:data
+    })
+}
