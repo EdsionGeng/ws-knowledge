@@ -7,14 +7,14 @@ import NotFound from '@/components/404/'
 import Home from '@/components/layout/Home';
 import SuperHome from '@/views/Home/SuperHome';
 import PersonalHome from '@/views/Home/PersonalHome';
-import DocManage from '@/views/DocManage/';
+import DocManage from '@/views/DocManage/index';
 import Hisall from '@/views/Hsup/index';
-import HisUp from '@/views/Hsup/hisup'
-import Notice from "@/views/Notice/notice";
+
+
 import News from '@/views/news/mynews';
 import Files from '@/views/File/index';
 // import Afs from '@/views/Allfiles/Alls';
-import Seefile from '@/views/Allfiles/check/Seefile'
+
 import filemanage from '@/views/FileManage/index'
 import Personal from '@/views/Personal/index'
 import Mynews from '@/views/mynews/index'
@@ -70,11 +70,7 @@ const constantRouteMap = [
         name:'全部文件',
         component: filemanage
       },
-      {
-        path:'/allfiles/:id',     // 动态路由匹配每个文件详情页
-        name:'查看文件',
-        component:Seefile
-      },
+ 
       {
         path:'/file',
         name:'文档管理',
@@ -96,11 +92,7 @@ const constantRouteMap = [
         name:'历史下载',
         component: Hisall
       },
-      {
-        path: '/hisup',
-        name:'历史上传',
-        component: HisUp
-      },
+      
       {
         path: '/Personal',
         name:'个人首页',
@@ -138,6 +130,10 @@ const constantRouteMap = [
         path:'/Modify',
         name:'文件修改',
         component:Modify
+      }, {
+        path:'/DocManage',
+        name:'文档类型管理',
+        component:DocManage
       },
       {
         path:'/editor',
