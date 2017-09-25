@@ -4,16 +4,10 @@
         <div class="file-search">
         <Form inline>
             <FormItem>
-                <Select placeholder="请选择部门" style="width:200px;">
-                    
-                </Select>
+               <Cascader :data="data" change-on-select></Cascader>
             </FormItem>
              <FormItem>
-                <Select placeholder="请选择部门" style="width:200px;">
-                    <Option value="beijing">北京市</Option>
-                    <Option value="shanghai">上海市</Option>
-                    <Option value="shenzhen">深圳市</Option>
-                </Select>
+                <Cascader :data="data" change-on-select></Cascader>
             </FormItem>
             <FormItem class="btn-left">
                 <Button type="primary" v-on:click='downLoad()'>按下载热度排行</Button>
@@ -51,7 +45,54 @@ export default {
       return{
           filelist:[],
           filedid:'',
-          filecount:0
+          filecount:0,
+           data: [{
+                    value: 'beijing',
+                    label: '北京',
+                    children: [
+                        {
+                            value: 'gugong',
+                            label: '故宫'
+                        },
+                        {
+                            value: 'tiantan',
+                            label: '天坛'
+                        },
+                        {
+                            value: 'wangfujing',
+                            label: '王府井'
+                        }
+                    ]
+                }, {
+                    value: 'jiangsu',
+                    label: '江苏',
+                    children: [
+                        {
+                            value: 'nanjing',
+                            label: '南京',
+                            children: [
+                                {
+                                    value: 'fuzimiao',
+                                    label: '夫子庙',
+                                }
+                            ]
+                        },
+                        {
+                            value: 'suzhou',
+                            label: '苏州',
+                            children: [
+                                {
+                                    value: 'zhuozhengyuan',
+                                    label: '拙政园',
+                                },
+                                {
+                                    value: 'shizilin',
+                                    label: '狮子林',
+                                }
+                            ]
+                        }
+                    ],
+                }]
       }
   },
   created(){

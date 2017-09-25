@@ -27,7 +27,7 @@ export function getHistorydata(){
 }
 export function getMynews(){
     return fetch({
-        url:'mynews',
+        url:'getNoticeList',
         method:'get'
     })
 }
