@@ -3,29 +3,7 @@
 
   <div class='affiche'>
     <h2>公告推送</h2>
-    <div class='ModalAll'>
-    
-        <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
-      
-        <Modal
-            v-model="modal1"
-            title="添加公告"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
-            
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
-
-        <Modal
-            v-model="modal2"
-            title="批量删除"
-            @on-ok="ok"
-            @on-cancel="cancel">
-          <p class='del'>确认是否删除选中文件</p>
-            
-        </Modal>
-    </div>
+   
  
 
 
@@ -56,10 +34,38 @@
             
         </Row>
     </div>
-  
+   <div class='ModalAll'>
+    
+        <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
+      
+        <Modal
+            v-model="modal1"
+            title="添加公告"
+            @on-ok="ok"
+            @on-cancel="cancel">
+            
+            
+        </Modal>
+        <Button type="primary" @click="modal2 = true">批量删除</Button>
+
+        <Modal
+            v-model="modal2"
+            title="批量删除"
+            @on-ok="ok"
+            @on-cancel="cancel">
+          <p class='del'>确认是否删除选中文件</p>
+            
+        </Modal>
+    </div>
     <div>
     
-      <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
+      <Table :border="showBorder" 
+      :stripe="showStripe" 
+      :show-header="showHeader" 
+      :height="fixedHeader ? 250 : ''" 
+      :size="tableSize" 
+      :data="tableData3" 
+      :columns="tableColumns3" ></Table>
     </div>
     <div class="file-page">
       <Page :total="100" size="small" show-total ></Page>
@@ -67,6 +73,7 @@
 </div>
 </template>
 <script>
+import {getNoticeList} from '../../api/login'
         export default {
         data () {
             return {
@@ -135,6 +142,12 @@
 
             }
         },
+         created(){
+    //初始化数据，方法写在methods里面
+        this.initfiledata();
+   
+    
+  },
         computed: {
             tableColumns3 () {
                 let columns = [];
@@ -214,7 +227,16 @@
             },
             cancel () {
                 this.$Message.info('点击了取消');
+            },
+            initfiledata(){
+                getNoticeList().then(res=>{
+                    if(res.data.code == 0){
+                        this.content = res.data;
+                    console.log(this.content)
+                    }
+                })
             }
+            
         },
       
      

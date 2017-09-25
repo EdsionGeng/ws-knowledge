@@ -1,13 +1,16 @@
 <template>
+<Card dis-hover>
   <div>
     <h2>文档类型管理</h2>
-     <Button type="primary" v-on:click='add()'>add</Button>
+     <Button type="primary" v-on:click='adds()'>添加</Button>
     <div>
      <Tree :data="baseData" v-model='selected' @on-select-change="onslectchange"></Tree>
     </div>
   </div>
+</Card>  
 </template>
 <script>
+
     export default {
         data () {
             return {
@@ -44,7 +47,18 @@
             }
         },
         methods:{
-          add(){
+         
+         
+          onslectchange(arr){
+            console.log(arr[0].children);
+            if(arr[0].children != "undefined"){
+              this.adds();
+            }else{
+              
+            }
+          },
+          adds(){
+            add:{
           
             
               this.baseData[0].children.push(
@@ -58,16 +72,9 @@
             }
             )
             
-          },
-         
-          onslectchange(arr){
-            console.log(arr[0].id);
-            if(arr[0].id === "1"){
-              this.add();
-            }else{
-              
-            }
           }
+          }
+           
         }
     }
 </script>

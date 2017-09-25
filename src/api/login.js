@@ -27,7 +27,7 @@ export function getHistorydata(){
 }
 export function getMynews(){
     return fetch({
-        url:'getNoticeList',
+        url:'mynews',
         method:'get'
     })
 }
@@ -39,6 +39,17 @@ export function getMynews(){
 export function changePassword(data){
     return fetch({
         url:'/changePassword',
+        method:'post',
+        data:data
+    })
+}
+/**
+ * 公告推送的消息列表
+ * 
+ */
+export function getNoticeList(data){
+    return fetch({
+        url:'/getNoticeList',
         method:'post',
         data:data
     })

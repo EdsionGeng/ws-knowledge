@@ -20,7 +20,7 @@ const service = axios.create({
  */
 service.interceptors.request.use(config=>{
     //通过判断store状态，添加一些请求headers数据
-    config.headers['loginToken']=sessionStorage.getItem('loginToken') || null;  
+    config.headers['token']=sessionStorage.getItem('token') || null;  
      
     // config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     config.data=Qs.stringify(config.data);
