@@ -34,46 +34,73 @@
             
         </Row>
     </div>
-   <div class='ModalAll'>
+   <div class='ModalAll' >
     
-        <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
-      
-        <Modal
-            v-model="modal1"
-            title="添加公告"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
-            
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
+        <Button type="primary"  style='margin-right: 20px;' v-on:click='onChange'>添加公告</Button>
+        <Button type="primary"  >批量删除</Button> 
 
-        <Modal
-            v-model="modal2"
-            title="批量删除"
-            @on-ok="ok"
-            @on-cancel="cancel">
-          <p class='del'>确认是否删除选中文件</p>
+         
+   </div>
+     
+   
+    <Modal v-model="isShow">
+        <h2>添加公告</h2>
+        <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
+            <FormItem label="标题" prop='title'>
+                <Input v-model="formItem.title" placeholder="最多输入20个字"></Input>
+            </FormItem>
+        
+
+
+            <FormItem label="内容" prop='content'>
+                <Input v-model="formItem.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="限制500字以内"></Input>
+            </FormItem>
+             <FormItem label="发送部门" prop='deptname'>
+                <Select v-model="formItem.deptname" style="width:400px" multiple  >
+                    <OptionGroup :label="list.deptno" v-for='list in contents' :key='list.inex'>
+                        <!-- <Option v-for="item in element" :value="item.label" :key="item.index" >{{ item.label }}</Option> -->
+                        <Option  v-for="item in element"  :key="item.id" :value="item.deptno">{{ item.deptno }}</Option> 
+                    </OptionGroup>
+                   
+                </Select>
+              </FormItem>
+            <FormItem>
+                <Button type="primary" v-on:click="handleSubmit('formItem')">提交</Button>
+                
+            </FormItem>
             
-        </Modal>
-    </div>
+        </Form>
+        <div slot="footer">
+           
+        </div>
+    </Modal> 
     <div>
     
       <Table :columns="initcolumns"
-        :data="afficheList"
+        :data="afficheList" ref="selection" @on-select='onSelected' @on-select-cancel='delSelected'
       ></Table>
     </div>
     <div class="file-page">
-      <Page :total="100" size="small" show-total ></Page>
+      <Page :total="data.pageSize"  size="small" show-total @on-change='changePage' ></Page>
     </div>
 </div>
 </template>
 <script>
 import {getNoticeList} from '../../api/login'
+import {getDepartList} from '../../api/login'
         export default {
         data () {
             return {
-                initcolumns:[{
+            
+               isShow:false,
+                initcolumns:[
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                
+                    {
                     title:"标题",
                     key:'title'
                 },{
@@ -81,7 +108,13 @@ import {getNoticeList} from '../../api/login'
                     key:'content'
                 },{
                     title:"发送部门",
-                    key:''
+                    key:'deptname'
+                },{
+                    title:'发送人',
+                    key:'pubuserid'
+                },{
+                    title:"时间",
+                    key:'pubtime'
                 }],
                 data:{
                     pageSize:20,
@@ -89,8 +122,45 @@ import {getNoticeList} from '../../api/login'
                     type:'ddd'
                 },
                 afficheList:[],
-                modal1:null,
-                modal2:null
+               
+                
+               formItem: {
+                    title: '',
+                    content: '',
+                    deptname:[]
+                },
+                ruleValidate:{
+                   title: [
+                        { required: true, message: '最多输入20个字', trigger: 'blur' }
+                    ],
+                    content: [
+                        { required: true, message: '限制500字以内', trigger: 'blur' }
+                    ],
+                    // deptname:[{
+                    //      required: true, message: '不能为空', trigger: 'blur'
+                    // }]
+                },
+               
+                // cityList1: [
+                //     {
+                //         value: 'beijing',
+                //         label: '北京市'
+                //     },
+                //     {
+                //         value: 'shanghai',
+                //         label: '上海市'
+                //     },
+                //     {
+                //         value: 'shenzhen',
+                //         label: '深圳市'
+                //     }
+                // ],
+                contents:[],
+               element:[],
+               id:''
+           
+                
+            
 
             }
         },
@@ -98,28 +168,110 @@ import {getNoticeList} from '../../api/login'
             //初始化数据，方法写在methods里面
             this.initfiledata();
             // console.log(this.afficheList);
+            
         },
         methods: {
-            ok () {
-                this.$Message.info('点击了确定');
+        
+            onChange(){
+              
+                this.isShow = true;
+                // 部门渲染
+            getDepartList().then(res=>{
+                if(res.data.code == 0){
+                    this.contents = res.data.content;
+                    //  console.log(this.contents); 
+                    
+                     this.contents.forEach(function(element) {
+                           
+                           this.child = element.child
+                            // console.log(this.child); 
+                            this.child.forEach(function(element){
+
+                                console.log(element);
+                              
+                                // this.deptno = element.deptno;
+                                // this.id = element.id
+                               
+                                // console.log(this.deptno)
+                                
+                            },this)
+                            
+                     }, this);
+                     
+                }
+            })    
+             
             },
-            cancel () {
-                this.$Message.info('点击了取消');
+            handleSubmit(name){
+                
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                         
+                       getNoticeList(this.data).then(res=>{
+                            if(res.data.code == 0){
+                                this.$Message.success(res.data.message);
+                                res.data.content.forEach(function(element) {
+                                    this.afficheList = [];
+                                    this.afficheList.push({
+                                        title:element.title,
+                                        content:element.content,
+                                        deptname:element.deptname,
+                                        pubuserid:element.pubuserid,
+                                        pubtime:element.pubtime,
+
+                                    })
+                                }, this);
+                            }
+                       })
+                        // this.afficheList.push(this.formItem)
+                        this.isShow = false;
+                       
+                        this.$router.push({path:'affiche'});
+                        
+                    } else {
+                        this.$Message.error('表单验证失败!');
+                    }
+                    
+                })
+                
+                
             },
             initfiledata(){
+               
                 getNoticeList(this.data).then(res=>{
+                    // console.log(res);
                     if(res.data.code == 0){
-                        res.data.content.forEach(function(element) {
-                            this.afficheList.push({
-                                title:element.title,
-                                content:element.content,
+                                res.data.content.forEach(function(element) {
+                                    this.afficheList = [];
+                                    this.afficheList.push({
+                                        title:element.title,
+                                        content:element.content,
+                                        deptname:element.deptname,
+                                        pubuserid:element.pubuserid,
+                                        pubtime:element.pubtime,
 
-                            })
-                        }, this);
-                        console.log(this.afficheList);
-                        console.log(res)
+                                    })
+                                }, this);
+                      
+
+                        // console.log(this.afficheList);
+                        // console.log(res)
+                        
                     }
+                    
                 })
+               
+                
+            },
+            changePage(){
+                 this. initfiledata();
+            },
+            onSelected(arr){
+                // console.log(arr);
+                
+            },
+            delSelected(arr){
+                // console.log(arr)
             }
         },
       

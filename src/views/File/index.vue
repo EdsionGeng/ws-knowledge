@@ -4,33 +4,35 @@
     <h2>文档管理</h2>
     <div >
     
-        <Select v-model="model1" >
-          
-            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
+        <Cascader :data="data" change-on-select></Cascader>
     </div>
     <div class='title clearfix' >
             <Row class='fl'>
                 
-                <Col class='fl' style='margin-right: 80px;'>
+                <Col class='fl' style='margin-right: 50px;'>
                     <span >发布时间&nbsp;</span>
                     <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
                 </Col>
               
-                <Col class='fl'  style='margin-right:80px;'>
+                <Col class='fl'  style='margin-right:50px;'>
                 <span >截止时间&nbsp;</span>
                     <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
                 </Col>
-                <Col class='fr' >
+                <Col class='fl'style='margin-right:50px;' >
                     <Input v-model="value4" icon="ios-search" placeholder="请输入..." style="width: 200px"></Input>
 
+                </Col>
+                <Col class='fr'>
+                    <Button type="primary">查询</Button>
                 </Col>
                 
             </Row>
     </div>
     <div class='Modal'>
-        <Button type="primary" @click="modal1 = true">批量调整目录</Button>
-        <Modal
+        <Button type="primary" @click="modal1 = true" v-on:click='add'>批量调整目录</Button>
+        <Button type="primary" @click="modal2 = true" v-on:click='del'>批量删除</Button>
+    </div>    
+        <!-- <Modal
             v-model="modal1"
             title="批量调整目录"
             @on-ok="ok"
@@ -38,19 +40,23 @@
             <p>对话框内容</p>
             <p>对话框内容</p>
             <p>对话框内容</p>
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
-        <Modal
+        </Modal> -->
+        
+        <!-- <Modal
             v-model="modal2"
             title=""
             @on-ok="ok"
             @on-cancel="cancel">
            <p>确定删除选中的文件</p>
-        </Modal>
-    </div>   
+        </Modal> -->
+    <Modal v-model="isShow">
+        <h2>批量调整目录</h2>
+        <footer>
+
+        </footer>
+    </Modal>  
     <div>
-    
-      <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
+        <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
     </div>
     <div class="file-page">
             <Page :total="100" size="small" show-total ></Page>
@@ -62,9 +68,58 @@
     export default {
         data () {
             return {
+              isShow: false,
               value4:'',
               modal1: false,
               modal2: false,
+               data: [{
+                    value: 'beijing',
+                    label: '北京',
+                    children: [
+                        {
+                            value: 'gugong',
+                            label: '故宫'
+                        },
+                        {
+                            value: 'tiantan',
+                            label: '天坛'
+                        },
+                        {
+                            value: 'wangfujing',
+                            label: '王府井'
+                        }
+                    ]
+                }, {
+                    value: 'jiangsu',
+                    label: '江苏',
+                    children: [
+                        {
+                            value: 'nanjing',
+                            label: '南京',
+                            children: [
+                                {
+                                    value: 'fuzimiao',
+                                    label: '夫子庙',
+                                }
+                            ]
+                        },
+                        {
+                            value: 'suzhou',
+                            label: '苏州',
+                            children: [
+                                {
+                                    value: 'zhuozhengyuan',
+                                    label: '拙政园',
+                                },
+                                {
+                                    value: 'shizilin',
+                                    label: '狮子林',
+                                }
+                            ]
+                        }
+                    ],
+                }],
+            
                 cityList: [
                     {
                         value: 'beijing',
