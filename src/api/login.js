@@ -65,6 +65,18 @@ export function getDepartList(data){
         params:data
     })
 }
+/**
+ * 文档管理列表
+ * 
+ */
+export function getFileSysList(data){
+    return fetch({
+        url:'/getFileSysList',
+        method:'get',
+        params:data
+    })
+}
+
 
 
 

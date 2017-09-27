@@ -58,8 +58,8 @@
              <FormItem label="发送部门" prop='deptname'>
                 <Select v-model="formItem.deptname" style="width:400px" multiple  >
                     <OptionGroup :label="list.deptno" v-for='list in contents' :key='list.inex'>
-                        <!-- <Option v-for="item in element" :value="item.label" :key="item.index" >{{ item.label }}</Option> -->
-                        <Option  v-for="item in element"  :key="item.id" :value="item.deptno">{{ item.deptno }}</Option> 
+                  
+                        <Option  v-for="item in child"  :key="item.index" :value="item.deptno">{{ item.deptno }}</Option> 
                     </OptionGroup>
                    
                 </Select>
@@ -140,24 +140,11 @@ import {getDepartList} from '../../api/login'
                     //      required: true, message: '不能为空', trigger: 'blur'
                     // }]
                 },
-               
-                // cityList1: [
-                //     {
-                //         value: 'beijing',
-                //         label: '北京市'
-                //     },
-                //     {
-                //         value: 'shanghai',
-                //         label: '上海市'
-                //     },
-                //     {
-                //         value: 'shenzhen',
-                //         label: '深圳市'
-                //     }
-                // ],
+     
                 contents:[],
-               element:[],
-               id:''
+               
+                
+                child:[]
            
                 
             
@@ -179,22 +166,25 @@ import {getDepartList} from '../../api/login'
             getDepartList().then(res=>{
                 if(res.data.code == 0){
                     this.contents = res.data.content;
-                    //  console.log(this.contents); 
-                    
-                     this.contents.forEach(function(element) {
-                           
+                     console.log(this.contents); 
+                   
+                     this.contents.forEach(function(element,index) {
+                        //    console.log(element);
                            this.child = element.child
                             // console.log(this.child); 
-                            this.child.forEach(function(element){
+                           let childs = this.contents[index].child;
+                           console.log(childs);
+                            childs.forEach(function(element){
 
-                                console.log(element);
+                                // console.log(element.deptno);
+                               
                               
-                                // this.deptno = element.deptno;
-                                // this.id = element.id
                                
                                 // console.log(this.deptno)
-                                
+                            //  console.log(element);
                             },this)
+                           
+                          
                             
                      }, this);
                      

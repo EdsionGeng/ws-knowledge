@@ -43,6 +43,10 @@
                 <!-- <Icon type="heart-broken"></Icon> -->
                 历史上传
             </MenuItem>
+            <MenuItem name="修改文件">
+                <!-- <Icon type="heart"></Icon> -->
+                修改文件
+            </MenuItem>
         </MenuGroup>
         <MenuGroup title="个人中心" v-if="!isAdmin">
             <MenuItem name="我的消息">
@@ -57,6 +61,7 @@
                 <!-- <Icon type="heart"></Icon> -->
                 历史上传
             </MenuItem>
+         
         </MenuGroup>
     </Menu>
     </div>

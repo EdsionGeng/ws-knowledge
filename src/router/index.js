@@ -128,7 +128,7 @@ const constantRouteMap = [
       },
       {
         path:'/Modify',
-        name:'文件修改',
+        name:'修改文件',
         component:Modify
       }, {
         path:'/DocManage',
