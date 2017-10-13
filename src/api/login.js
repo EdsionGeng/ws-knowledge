@@ -54,6 +54,29 @@ export function getNoticeList(data){
         data:data
     })
 }
+/**
+ * 公告推送的部门
+ * 
+ */
+export function getDepartList(data){
+    return fetch({
+        url:'/getDepartList',
+        method:'get',
+        params:data
+    })
+}
+/**
+ * 文档管理列表
+ * 
+ */
+export function getFileSysList(data){
+    return fetch({
+        url:'/getFileSysList',
+        method:'get',
+        params:data
+    })
+}
+
 
 
 

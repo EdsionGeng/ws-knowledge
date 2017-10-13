@@ -4,67 +4,128 @@
     <h2>文档管理</h2>
     <div >
     
-        <Select v-model="model1" >
-          
-            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
+        <Cascader :data="datas" change-on-select style='width:340px;'></Cascader>
     </div>
     <div class='title clearfix' >
             <Row class='fl'>
                 
-                <Col class='fl' style='margin-right: 80px;'>
+                <Col class='fl' style='margin-right: 50px;'>
                     <span >发布时间&nbsp;</span>
                     <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
                 </Col>
               
-                <Col class='fl'  style='margin-right:80px;'>
+                <Col class='fl'  style='margin-right:50px;'>
                 <span >截止时间&nbsp;</span>
                     <DatePicker size="large" type="date" placeholder="选择日期"></DatePicker>
                 </Col>
-                <Col class='fr' >
+                <Col class='fl'style='margin-right:50px;' >
                     <Input v-model="value4" icon="ios-search" placeholder="请输入..." style="width: 200px"></Input>
 
+                </Col>
+                <Col class='fr'>
+                    <Button type="primary">查询</Button>
                 </Col>
                 
             </Row>
     </div>
     <div class='Modal'>
-        <Button type="primary" @click="modal1 = true">批量调整目录</Button>
-        <Modal
-            v-model="modal1"
-            title="批量调整目录"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            <p>对话框内容</p>
-            <p>对话框内容</p>
-            <p>对话框内容</p>
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
-        <Modal
-            v-model="modal2"
-            title=""
-            @on-ok="ok"
-            @on-cancel="cancel">
-           <p>确定删除选中的文件</p>
-        </Modal>
-    </div>   
+        <Button type="primary"  v-on:click='add'>批量调整目录</Button>
+        <Button type="primary" @click="isDel = true">批量删除</Button>
+    </div>    
+      
+        
+        
+    <Modal v-model="isShow">
+        <h2>批量调整目录</h2>
+         <Tree :data="baseData" show-checkbox></Tree>
+         <!-- <div slot="footer">
+           
+        </div> -->
+    </Modal>  
+    <Modal v-model="isDel" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>删除确认</span>
+        </p>
+        <div style="text-align:center">
+           
+            <p>是否继续删除？</p>
+        </div>
+        <div slot="footer">
+            <Button type="error" size="large" long :loading="modal_loading" @click="del">删除</Button>
+        </div>
+    </Modal>
     <div>
-    
-      <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
+        <Table :border="showBorder" :stripe="showStripe" :show-header="showHeader" :height="fixedHeader ? 250 : ''" :size="tableSize" :data="tableData3" :columns="tableColumns3"></Table>
     </div>
     <div class="file-page">
-            <Page :total="100" size="small" show-total ></Page>
+         <Page :total="100" size="small" show-total ></Page>
     </div>
    
   </div>
 </template>
 <script>
+import {getFileSysList} from '../../api/login'
     export default {
         data () {
             return {
+              isShow: false,
               value4:'',
-              modal1: false,
-              modal2: false,
+              isDel:false,
+              modal_loading: false,
+               data:{
+                    pageSize:20,
+                    pageIndex:1,
+                    type:'ddd'
+                },
+               datas: [{
+                    value: 'beijing',
+                    label: '北京',
+                    children: [
+                        {
+                            value: 'gugong',
+                            label: '故宫'
+                        },
+                        {
+                            value: 'tiantan',
+                            label: '天坛'
+                        },
+                        {
+                            value: 'wangfujing',
+                            label: '王府井'
+                        }
+                    ]
+                }, {
+                    value: 'jiangsu',
+                    label: '江苏',
+                    children: [
+                        {
+                            value: 'nanjing',
+                            label: '南京',
+                            children: [
+                                {
+                                    value: 'fuzimiao',
+                                    label: '夫子庙',
+                                }
+                            ]
+                        },
+                        {
+                            value: 'suzhou',
+                            label: '苏州',
+                            children: [
+                                {
+                                    value: 'zhuozhengyuan',
+                                    label: '拙政园',
+                                },
+                                {
+                                    value: 'shizilin',
+                                    label: '狮子林',
+                                }
+                            ]
+                        }
+                    ],
+                }],
+            
                 cityList: [
                     {
                         value: 'beijing',
@@ -148,8 +209,33 @@
                 showIndex: false,
                 showCheckbox: true,
                 fixedHeader: false,
-                tableSize: 'default'
+                tableSize: 'default',
+                 baseData: [{
+                    expand: true,
+                    title: 'parent 1',
+                    children: [{
+                        title: 'parent 1-0',
+                        expand: true,
+                        disabled: true,
+                        children: [{
+                            title: 'leaf',
+                            disableCheckbox: true
+                        }, {
+                            title: 'leaf',
+                        }]
+                    }, {
+                        title: 'parent 1-1',
+                        expand: true,
+                        checked: true,
+                        children: [{
+                            title: '<span style="color: red">leaf</span>',
+                        }]
+                    }]
+                }]
             }
+        },
+        created(){
+           this.initfiledata();
         },
         methods: {
             ok () {
@@ -157,6 +243,25 @@
             },
             cancel () {
                 this.$Message.info('点击了取消');
+            },
+            add(){
+                this.isShow = true;
+            },
+            del(){
+               
+                this.modal_loading = true;
+                setTimeout(() => {
+                    this.modal_loading = false;
+                    this.modal2 = false;
+                    this.$Message.success('删除成功');
+                }, 2000);
+            },
+            initfiledata(){
+                getFileSysList(this.data).then(res=>{
+                    if(res.data.code === 0){
+                        console.log(res)
+                    }
+                })
             }
         },
         computed: {

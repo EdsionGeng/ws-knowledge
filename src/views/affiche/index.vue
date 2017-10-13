@@ -34,214 +34,235 @@
             
         </Row>
     </div>
-   <div class='ModalAll'>
+   <div class='ModalAll' >
     
-        <Button type="primary" @click="modal1 = true" style='margin-right: 20px;'>添加公告</Button>
-      
-        <Modal
-            v-model="modal1"
-            title="添加公告"
-            @on-ok="ok"
-            @on-cancel="cancel">
-            
-            
-        </Modal>
-        <Button type="primary" @click="modal2 = true">批量删除</Button>
+        <Button type="primary"  style='margin-right: 20px;' v-on:click='onChange'>添加公告</Button>
+        <Button type="primary"  >批量删除</Button> 
 
-        <Modal
-            v-model="modal2"
-            title="批量删除"
-            @on-ok="ok"
-            @on-cancel="cancel">
-          <p class='del'>确认是否删除选中文件</p>
+         
+   </div>
+     
+   
+    <Modal v-model="isShow">
+        <h2>添加公告</h2>
+        <Form ref="formItem" :model="formItem" :label-width="80" :rules="ruleValidate">
+            <FormItem label="标题" prop='title'>
+                <Input v-model="formItem.title" placeholder="最多输入20个字"></Input>
+            </FormItem>
+        
+
+
+            <FormItem label="内容" prop='content'>
+                <Input v-model="formItem.content" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="限制500字以内"></Input>
+            </FormItem>
+             <FormItem label="发送部门" prop='deptname'>
+                <Select v-model="formItem.deptname" style="width:400px" multiple  >
+                    <OptionGroup :label="list.deptno" v-for='list in contents' :key='list.inex'>
+                  
+                        <Option  v-for="item in child"  :key="item.index" :value="item.deptno">{{ item.deptno }}</Option> 
+                    </OptionGroup>
+                   
+                </Select>
+              </FormItem>
+            <FormItem>
+                <Button type="primary" v-on:click="handleSubmit('formItem')">提交</Button>
+                
+            </FormItem>
             
-        </Modal>
-    </div>
+        </Form>
+        <div slot="footer">
+           
+        </div>
+    </Modal> 
     <div>
     
-      <Table :border="showBorder" 
-      :stripe="showStripe" 
-      :show-header="showHeader" 
-      :height="fixedHeader ? 250 : ''" 
-      :size="tableSize" 
-      :data="tableData3" 
-      :columns="tableColumns3" ></Table>
+      <Table :columns="initcolumns"
+        :data="afficheList" ref="selection" @on-select='onSelected' @on-select-cancel='delSelected'
+      ></Table>
     </div>
     <div class="file-page">
-      <Page :total="100" size="small" show-total ></Page>
+      <Page :total="data.pageSize"  size="small" show-total @on-change='changePage' ></Page>
     </div>
 </div>
 </template>
 <script>
 import {getNoticeList} from '../../api/login'
+import {getDepartList} from '../../api/login'
         export default {
         data () {
             return {
-                modal1: false,
-                modal2: false,
-                value1: '',
-                value2: '',
-                value3: '',
-                 tableData3: [
+            
+               isShow:false,
+                initcolumns:[
                     {
-                        name: '王小明',
-                        age: 18,
-                        address: '北京市朝阳区芍药居',
-                        date: '2016-10-03'
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
                     },
+                
                     {
-                        name: '张小刚',
-                        age: 24,
-                        address: '北京市海淀区西二旗',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: '李小红',
-                        age: 30,
-                        address: '上海市浦东新区世纪大道',
-                        date: '2016-10-02'
-                    },
-                    {
-                        name: '周小伟',
-                        age: 26,
-                        address: '深圳市南山区深南大道',
-                        date: '2016-10-04'
-                    },
-                    {
-                        name: '王小明',
-                        age: 18,
-                        address: '北京市朝阳区芍药居',
-                        date: '2016-10-03'
-                    },
-                    {
-                        name: '张小刚',
-                        age: 24,
-                        address: '北京市海淀区西二旗',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: '李小红',
-                        age: 30,
-                        address: '上海市浦东新区世纪大道',
-                        date: '2016-10-02'
-                    },
-                    {
-                        name: '周小伟',
-                        age: 26,
-                        address: '深圳市南山区深南大道',
-                        date: '2016-10-04'
-                    }
-                ],
-                showBorder: true,
-                showStripe: false,
-                showHeader: true,
-                showIndex: false,
-                showCheckbox: true,
-                fixedHeader: false,
-                tableSize: 'default',
+                    title:"标题",
+                    key:'title'
+                },{
+                    title:'描述',
+                    key:'content'
+                },{
+                    title:"发送部门",
+                    key:'deptname'
+                },{
+                    title:'发送人',
+                    key:'pubuserid'
+                },{
+                    title:"时间",
+                    key:'pubtime'
+                }],
                 data:{
                     pageSize:20,
                     pageIndex:1,
                     type:'ddd'
-                }
+                },
+                afficheList:[],
+               
+                
+               formItem: {
+                    title: '',
+                    content: '',
+                    deptname:[]
+                },
+                ruleValidate:{
+                   title: [
+                        { required: true, message: '最多输入20个字', trigger: 'blur' }
+                    ],
+                    content: [
+                        { required: true, message: '限制500字以内', trigger: 'blur' }
+                    ],
+                    // deptname:[{
+                    //      required: true, message: '不能为空', trigger: 'blur'
+                    // }]
+                },
+     
+                contents:[],
+               
+                
+                child:[]
+           
+                
+            
 
             }
         },
          created(){
             //初始化数据，方法写在methods里面
             this.initfiledata();
-   
-    
-  },
-        computed: {
-            tableColumns3 () {
-                let columns = [];
-                if (this.showCheckbox) {
-                    columns.push({
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    })
-                }
-                if (this.showIndex) {
-                    columns.push({
-                        type: 'index',
-                        width: 60,
-                        align: 'center'
-                    })
-                }
-                columns.push({
-                    title: '日期',
-                    key: 'date',
-                    sortable: true
-                });
-                columns.push({
-                    title: '姓名',
-                    key: 'name'
-                });
-                columns.push({
-                    title: '年龄',
-                    key: 'age',
-                    sortable: true,
-                    filters: [
-                        {
-                            label: '大于25岁',
-                            value: 1
-                        },
-                        {
-                            label: '小于25岁',
-                            value: 2
-                        }
-                    ],
-                    filterMultiple: false,
-                    filterMethod (value, row) {
-                        if (value === 1) {
-                            return row.age > 25;
-                        } else if (value === 2) {
-                            return row.age < 25;
-                        }
-                    }
-                });
-                columns.push({
-                    title: '地址',
-                    key: 'address',
-                    filters: [
-                        {
-                            label: '北京',
-                            value: '北京'
-                        },
-                        {
-                            label: '上海',
-                            value: '上海'
-                        },
-                        {
-                            label: '深圳',
-                            value: '深圳'
-                        }
-                    ],
-                    filterMethod (value, row) {
-                        return row.address.indexOf(value) > -1;
-                    }
-                });
-                return columns;
-            }
+            // console.log(this.afficheList);
+            
         },
         methods: {
-            ok () {
-                this.$Message.info('点击了确定');
+        
+            onChange(){
+              
+                this.isShow = true;
+                // 部门渲染
+            getDepartList().then(res=>{
+                if(res.data.code == 0){
+                    this.contents = res.data.content;
+                     console.log(this.contents); 
+                   
+                     this.contents.forEach(function(element,index) {
+                        //    console.log(element);
+                           this.child = element.child
+                            // console.log(this.child); 
+                           let childs = this.contents[index].child;
+                           console.log(childs);
+                            childs.forEach(function(element){
+
+                                // console.log(element.deptno);
+                               
+                              
+                               
+                                // console.log(this.deptno)
+                            //  console.log(element);
+                            },this)
+                           
+                          
+                            
+                     }, this);
+                     
+                }
+            })    
+             
             },
-            cancel () {
-                this.$Message.info('点击了取消');
+            handleSubmit(name){
+                
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                         
+                       getNoticeList(this.data).then(res=>{
+                            if(res.data.code == 0){
+                                this.$Message.success(res.data.message);
+                                res.data.content.forEach(function(element) {
+                                    this.afficheList = [];
+                                    this.afficheList.push({
+                                        title:element.title,
+                                        content:element.content,
+                                        deptname:element.deptname,
+                                        pubuserid:element.pubuserid,
+                                        pubtime:element.pubtime,
+
+                                    })
+                                }, this);
+                            }
+                       })
+                        // this.afficheList.push(this.formItem)
+                        this.isShow = false;
+                       
+                        this.$router.push({path:'affiche'});
+                        
+                    } else {
+                        this.$Message.error('表单验证失败!');
+                    }
+                    
+                })
+                
+                
             },
             initfiledata(){
+               
                 getNoticeList(this.data).then(res=>{
+                    // console.log(res);
                     if(res.data.code == 0){
-                        this.content = res.data;
-                    console.log(this.content)
+                                res.data.content.forEach(function(element) {
+                                    this.afficheList = [];
+                                    this.afficheList.push({
+                                        title:element.title,
+                                        content:element.content,
+                                        deptname:element.deptname,
+                                        pubuserid:element.pubuserid,
+                                        pubtime:element.pubtime,
+
+                                    })
+                                }, this);
+                      
+
+                        // console.log(this.afficheList);
+                        // console.log(res)
+                        
                     }
+                    
                 })
+               
+                
+            },
+            changePage(){
+                 this. initfiledata();
+            },
+            onSelected(arr){
+                // console.log(arr);
+                
+            },
+            delSelected(arr){
+                // console.log(arr)
             }
-            
         },
       
      
