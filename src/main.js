@@ -7,7 +7,7 @@ import iView  from 'iview'
 import 'iview/dist/styles/iview.css'
 import store from './store'
 // import AxiosPlugin from './utils/axios.js'
-import './mock/index.js'
+// import './mock/index.js'
 
 Vue.use(iView);
 // Vue.use(AxiosPlugin,'$axios');
