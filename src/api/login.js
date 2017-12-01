@@ -3,7 +3,7 @@ import fetch from '../utils/fetch.js'
 
 export function login(loginform){
     return fetch({
-        url:'/Login',
+        url:'/login.htmls',
         method:'post',
         data:loginform
     });
