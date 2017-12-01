@@ -22,62 +22,64 @@
     </div>
 </template>
 <script>
-import {mapActions} from 'vuex'
+import { login } from "../../api/login";
 export default {
-  data(){
-      return{
-          loginForm:{
-              userName:'',
-              password:'',
-          },
-          isLoading:false,
-          loginRules:{
-              userName:[
-                  {required:true,message:'请填写用户名',trigger:'blur'}
-                  ],
-              password:[
-                  {required:true,message:'请填写密码',trigger:'blue'},
-                  {type:'string',min:6,message:'密码长度不能少于6位',trigger:'blue'}
-              ]
-          }
+  data() {
+    return {
+      loginForm: {
+        userName: "",
+        password: ""
+      },
+      isLoading: false,
+      loginRules: {
+        userName: [{ required: true, message: "请填写用户名", trigger: "blur" }],
+        password: [
+          { required: true, message: "请填写密码", trigger: "blue" },
+          { type: "string", min: 6, message: "密码长度不能少于6位", trigger: "blue" }
+        ]
       }
+    };
   },
-  methods:{
-      ...mapActions([
-        'Login'
-      ]),
-      handleSubmit(name){
-          this.$refs[name].validate((valid)=>{
-              if(valid){
-                  this.isLoading=true;
-                  // 密码验证成功之后，路由重定向
-                  this.isLoading=false;
-                  this.$router.push('/');
-              }else{
-                  this.$Message.error('表单验证失败！');
-              }
-          })
-      }
+  methods: {
+    handleSubmit(name) {
+      this.$refs[name].validate(valid => {
+        if (valid) {
+          this.isLoading = true;
+          // 密码验证成功之后，路由重定向
+          login(this.loginForm)
+            .then(res => {
+              this.isLoading = false;
+              this.$router.push("/");
+            })
+            .catch(err => {
+              this.$Message.error("系统异常，请重试！");
+              this.isLoading = false;
+            });
+        } else {
+          this.$Message.error("表单验证失败！");
+        }
+      });
+    }
   }
-}
+};
 </script>
 <style scoped>
-.login-layout{
-    width: 100%;
-    height: 100%;
-    background-color: #495060;
+.login-layout {
+  width: 100%;
+  height: 100%;
+  background-color: #495060;
 }
-.login-form{
-    position: absolute;
-    width: 525px;
-    height: 120px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%)
+.login-form {
+  position: absolute;
+  width: 525px;
+  height: 120px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.login-title{
-    color: #fff;
-    font-size: 36px;
-    margin-bottom: 20px;
+.login-title {
+  color: #fff;
+  font-size: 36px;
+  margin-bottom: 20px;
 }
 </style>
