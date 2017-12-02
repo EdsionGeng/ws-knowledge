@@ -9,7 +9,7 @@ import store from './store'
 // import AxiosPlugin from './utils/axios.js'
 // import './mock/index.js'
 
-Vue.use(iView);
+ Vue.use(iView);
 // Vue.use(AxiosPlugin,'$axios');
 Vue.config.productionTip = false
 
