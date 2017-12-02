@@ -1,42 +1,35 @@
 <template>
   <div class="sidebar">
+      <div>
+        <search></search>
+      </div>
+  
     <Menu :theme="theme2" accordion @on-select="change">
-        <Submenu name="1">
-            <template slot="title">
-                <Icon type="ios-paper"></Icon>
-                内容管理
-            </template>
-            <Menu-item name="CRUD">文章管理</Menu-item>
-            <Menu-item name="1-2">评论管理</Menu-item>
-            <Menu-item name="1-3">举报管理</Menu-item>
-        </Submenu>
-        <Submenu name="2">
-            <template slot="title">
-                <Icon type="ios-people"></Icon>
-                用户管理
-            </template>
-            <Menu-item name="2-1">新增用户</Menu-item>
-            <Menu-item name="2-2">活跃用户</Menu-item>
-        </Submenu>
-        <Submenu name="3">
-            <template slot="title">
-                <Icon type="stats-bars"></Icon>
-                统计分析
-            </template>
-            <Menu-group >
-                <Menu-item name="3-1">新增和启动</Menu-item>
-                <Menu-item name="3-2">活跃分析</Menu-item>
-                <Menu-item name="3-3">时段分析</Menu-item>
-            </Menu-group>
-            <Menu-group title="留存">
-                <Menu-item name="3-4">用户留存</Menu-item>
-                <Menu-item name="3-5">流失用户</Menu-item>
-            </Menu-group>
-        </Submenu>
+         <MenuGroup title="首页" class='menuTitle'>
+            <Submenu name="1">
+                <template slot="title">
+                    文件管理
+                </template>
+                <Menu-item name="CRUD">全部文件</Menu-item>
+                <Menu-item name="1-2">历史上传</Menu-item>
+            </Submenu>
+            <Submenu name="2">
+                <template slot="title">
+                    管理中心
+                </template>
+                <Menu-item name="2-1">消息推送</Menu-item>
+                <Menu-item name="2-2">文档管理</Menu-item>
+                <Menu-item name="2-2">文档目录管理</Menu-item>
+            </Submenu>
+        </MenuGroup>
     </Menu>
   </div>
 </template>
 <script>
+import Search from '@/components/common/search';
+import Vue from 'vue'
+import { Menu } from 'iview';
+Vue.component('Menu', Menu);
 export default {
   data(){
       return{
@@ -48,18 +41,25 @@ export default {
           console.log(name);
           this.$router.push('/'+name);
       }
+  },
+  components:{
+      Search
   }
 }
 </script>
+
+
 <style scoped>
     .sidebar{
         display: block;
         position: absolute;
         width: 240px;
         left: 0;
-        top:66px;
+        top:0;
         bottom: 0;
         background: #495060;
         overflow-y: auto;
     }
+   
+   
 </style>
