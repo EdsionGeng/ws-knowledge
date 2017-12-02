@@ -1,6 +1,6 @@
 <template>
 <div class="home">
-    <vHeader></vHeader>
+    <!-- <vHeader></vHeader> -->
     <vSideBar></vSideBar>
     <div class="content">
         <router-view></router-view>
