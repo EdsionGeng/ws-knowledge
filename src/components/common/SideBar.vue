@@ -11,15 +11,15 @@
                     文件管理
                 </template>
                 <Menu-item name="CRUD">全部文件</Menu-item>
-                <Menu-item name="1-2">历史上传</Menu-item>
+                <Menu-item name="hisUpload">历史上传</Menu-item>
             </Submenu>
             <Submenu name="2">
                 <template slot="title">
                     管理中心
                 </template>
-                <Menu-item name="2-1">消息推送</Menu-item>
-                <Menu-item name="2-2">文档管理</Menu-item>
-                <Menu-item name="2-2">文档目录管理</Menu-item>
+                <Menu-item name="mespush">消息推送</Menu-item>
+                <Menu-item name="docoumentManger">文档管理</Menu-item>
+                <Menu-item name="documentlistManger">文档目录管理</Menu-item>
             </Submenu>
         </MenuGroup>
     </Menu>
