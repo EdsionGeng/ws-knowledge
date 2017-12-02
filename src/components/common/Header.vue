@@ -1,8 +1,5 @@
 <template>
 <div class="header">
-    <div class="header-logo">
-        <h1>VueAdmin</h1>
-    </div>
     <div class="header-right">
         <Dropdown @on-click="handleLogout()">
             <a href="javascript:void(0)">
