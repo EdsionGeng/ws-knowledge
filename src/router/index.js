@@ -16,6 +16,7 @@ import check from '@/views/allfiles/check'//全部文件/查看文件
 import log from '@/views/allfiles/logs'//全部文件/查看文件/文件日志
 import change from '@/views/allfiles/change'//全部文件/修改文件
 import Login from '@/views/login/index'
+import AdminHome from '@/views/home/admin'
 
 Vue.use(Router);
 
@@ -27,8 +28,13 @@ const constantRouteMap = [{
   {
     path: '/',
     component: Home,
-    redirect: '/DashBoard',
-    children: [{
+    redirect: '/admin',
+    children: [
+      {
+        path: 'admin',
+        component: AdminHome
+      }
+      ,{
       path: 'DashBoard',
       component: DashBoard
     }, {
@@ -71,7 +77,7 @@ const constantRouteMap = [{
   }, {
     path: '*',
     component: Home,
-    redirect: '/DashBoard'
+    redirect: '/admin'
   }
 ];
 
