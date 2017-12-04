@@ -5,7 +5,7 @@
       style="width: 200px"></Input>
   </div>
   <div class="creatFile">
-       <Button type='primary' size='large' icon="plus">新建文件</Button>
+       <Button type='primary' size='large' icon="plus" @click="changeRouter('newfile')">新建文件</Button>
   </div>
 </div>
  
@@ -15,6 +15,12 @@ export default {
    data(){
         return{
         }
+    },
+    methods:{
+        changeRouter(name){
+          console.log(name);
+          this.$router.push('/'+name);
+      }
     }
 }
 </script>
