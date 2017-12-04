@@ -13,6 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(config=>{
 
     //通过判断store状态，添加一些请求headers数据
+    // config.data = JSON.stringify(config.data);
     return config;
 },error=>{
     console.log(error);
@@ -20,7 +21,7 @@ service.interceptors.request.use(config=>{
 })
 
 /**
- * response 拦截器 
+ * response 拦截器
  */
 service.interceptors.response.use(
     response => response,
