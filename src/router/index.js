@@ -4,10 +4,17 @@ import Hello from '@/components/Hello'
 import Home from '@/components/common/Home'
 import DashBoard from '@/components/page/DashBoard'
 import CRUD from '@/components/page/demo1/CRUD'
-import hisUpload from '@/components/page/histroyUpload/histroyUpload'
-import mespush from '@/components/page/mespush/mespush'
-import documentlistManger from '@/components/page/documentlistManger/documentlistManger'
-import documentManger from '@/components/page/documentManger/documentManger'
+import hisupload from '@/views/historyupload/index' //历史上传
+import allfiles from '@/views/allfiles/index' //全部文件
+import docdirmanagement from '@/views/docdirmanagement/index'//文档目录管理
+import docmanagement from '@/views/docmanagement/index'//文档管理
+import keySearchPage from '@/views/keySearchPage/index'//关键词搜索结果页面
+import messagemanage from '@/views/messagemanage/index'//文件管理
+import mymessage from '@/views/mymessage/index'//个人中心
+import newfile from '@/views/newfile/index'//上传文件
+import check from '@/views/allfiles/check'//全部文件/查看文件
+import log from '@/views/allfiles/logs'//全部文件/查看文件/文件日志
+import change from '@/views/allfiles/change'//全部文件/修改文件
 import Login from '@/views/login/index'
 
 Vue.use(Router);
@@ -25,20 +32,41 @@ const constantRouteMap = [{
       path: 'DashBoard',
       component: DashBoard
     }, {
-      path: 'CRUD',
+      path: 'CRUD',//文件管理全部文件
       component: CRUD
     }, {
-      path: 'hisUpload',
-      component: hisUpload
+      path: 'hisupload',
+      component: hisupload
     }, {
-      path: 'mespush',
-      component: mespush
+      path: 'mymessage',
+      component: mymessage
     }, {
-      path: 'docoumentManger',
-      component: documentManger
+      path: 'docmanagement',
+      component: docmanagement
     }, {
-      path: 'documentlistManger',
-      component: documentlistManger
+      path: 'docdirmanagement',
+      component: docdirmanagement
+    },{
+      path: 'keySearchPage',
+      component: keySearchPage
+    },{
+      path: 'allfiles',
+      component: allfiles
+    },{
+      path: 'newfile',
+      component: newfile
+    },{
+      path: 'check',
+      component: check
+    },{
+      path: 'log',
+      component: log
+    },{
+      path: 'change',
+      component: change
+    },{
+      path: 'messagemanage',
+      component: messagemanage
     }]
   }, {
     path: '*',
