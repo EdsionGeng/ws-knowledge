@@ -11,7 +11,7 @@
                 <template slot="title">
                     文件管理
                 </template>
-                <Menu-item name="CRUD">全部文件</Menu-item>
+                <Menu-item name="allfiles">全部文件</Menu-item>
                 <Menu-item name="hisupload">历史上传</Menu-item>
             </Submenu>
             <Submenu name="2" v-if='active=="admin"'>
