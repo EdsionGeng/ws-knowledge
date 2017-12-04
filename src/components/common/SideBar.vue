@@ -5,21 +5,28 @@
       </div>
   
     <Menu :theme="theme2" accordion @on-select="change">
-         <MenuGroup title="首页" class='menuTitle'>
+            <MenuGroup title="" class='menuTitle'>
+            <Menu-item name=''>首页</Menu-item>
             <Submenu name="1">
                 <template slot="title">
                     文件管理
                 </template>
                 <Menu-item name="CRUD">全部文件</Menu-item>
-                <Menu-item name="hisUpload">历史上传</Menu-item>
+                <Menu-item name="hisupload">历史上传</Menu-item>
             </Submenu>
-            <Submenu name="2">
+            <Submenu name="2" v-if='active=="admin"'>
                 <template slot="title">
                     管理中心
                 </template>
-                <Menu-item name="mespush">消息推送</Menu-item>
-                <Menu-item name="docoumentManger">文档管理</Menu-item>
-                <Menu-item name="documentlistManger">文档目录管理</Menu-item>
+                <Menu-item name="messagemanage">消息推送</Menu-item>
+                <Menu-item name="docmanagement">文档管理</Menu-item>
+                <Menu-item name="docdirmanagement">文档目录管理</Menu-item>
+            </Submenu>
+            <Submenu name="3" v-if='active=="person"'>
+                <template slot="title">
+                    个人中心
+                </template>
+                <Menu-item name="mymessage">我的消息</Menu-item>
             </Submenu>
         </MenuGroup>
     </Menu>
@@ -33,7 +40,8 @@ Vue.component('Menu', Menu);
 export default {
   data(){
       return{
-          theme2:'dark'
+          theme2:'dark',
+          active:'admin'
       }
   },
   methods:{
