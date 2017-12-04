@@ -101,8 +101,8 @@ export function showAllAd(data) {
 export function showUserAd(data){
 return fetch({
   url:'/show/userrecad.htmls',
-  method:'get',
-  params:data
+  method:'post',
+  data:data
 })
 }
 
@@ -326,6 +326,5 @@ export function showFilePermission(data){
     url:'/show/usermission.htmls',
     method:'get',
     params:data
-
   })
 }

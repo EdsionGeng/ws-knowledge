@@ -4,7 +4,11 @@ import axios from 'axios'
 
 const service = axios.create({
     timeout:5000,
-    baseURL:'http://192.168.22.45:8011'
+    baseURL:'http://192.168.22.45:8011',
+  headers: {
+    'Content-Type': 'application/json;charset=utf-8',
+    // 'Accept': 'application/json'
+  }
 });
 
 /**
@@ -13,7 +17,7 @@ const service = axios.create({
 service.interceptors.request.use(config=>{
 
     //通过判断store状态，添加一些请求headers数据
-    // config.data = JSON.stringify(config.data);
+    config.data = JSON.stringify(config.data);
     return config;
 },error=>{
     console.log(error);
