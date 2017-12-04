@@ -19,7 +19,17 @@ body{
     top: 0;
     bottom: 0;
     width: auto;
-    padding:15px;
+    padding:0;
     box-sizing: border-box;
     overflow-y: auto;
+}
+.pagebox{
+    background: #fff;
+    flex:1;
+    margin:12px;
+
+}.page{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
