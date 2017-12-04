@@ -2,8 +2,8 @@
     <div class="login-layout">
         <Form ref="loginForm" :model="loginForm" :rules="loginRules"  class="login-form" inline>
             <h1 class="login-title">系统登录</h1>
-            <Form-item prop="userName">
-                <Input type="text" name="userName" v-model="loginForm.userName"  placeholder="Username" size="large">
+            <Form-item prop="username">
+                <Input type="text" name="username" v-model="loginForm.username"  placeholder="Username" size="large">
                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                 </Input>
             </Form-item>
@@ -18,7 +18,7 @@
                     <span v-else>Loading...</span>
                     </Button>
             </Form-item>
-        </Form>  
+        </Form>
     </div>
 </template>
 <script>
@@ -27,15 +27,15 @@ export default {
   data() {
     return {
       loginForm: {
-        userName: "",
+        username: "",
         password: ""
       },
       isLoading: false,
       loginRules: {
-        userName: [{ required: true, message: "请填写用户名", trigger: "blur" }],
+        username: [{ required: true, message: "请填写用户名", trigger: "blur" }],
         password: [
           { required: true, message: "请填写密码", trigger: "blue" },
-          { type: "string", min: 6, message: "密码长度不能少于6位", trigger: "blue" }
+          { type: "string", min: 5, message: "密码长度不能少于5位", trigger: "blue" }
         ]
       }
     };
@@ -44,6 +44,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
+
           this.isLoading = true;
           // 密码验证成功之后，路由重定向
           login(this.loginForm)
