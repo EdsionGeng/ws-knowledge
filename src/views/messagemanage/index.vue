@@ -1,6 +1,6 @@
 <template>
   <div>
-      这是消息管理页面
+      这是消息管理页面了
   </div>
 </template>
 <script>
