@@ -88,8 +88,8 @@ export function showAdPcs(data) {
 export function showAllAd(data) {
   return fetch({
     url: '/show/allad.htmls',
-    method: 'get',
-    params: data
+    method: 'post',
+   data: data
   })
 }
 
@@ -245,8 +245,8 @@ export function readFile(data){
 export function showAllFile(data){
   return fetch({
     url:'/show/allFile',
-    method:'get',
-    params:data
+    method:'post',
+    data:data
   })
 }
 
