@@ -1,23 +1,28 @@
 <template>
-  <div class="page">
-    <div>
-        <PageTitle :BreadTitle='BreadTitle'></PageTitle>
+   <div class="pagebox">  
+    <div class="addmin-title">
+      <ButtonGroup>
+        <Button type="ghost" @click='getDayData'>今日</Button>
+        <Button type="ghost" @click="getWeekData">本周</Button>
+        <Button type="ghost" @click="getMonthData">本月</Button>
+      </ButtonGroup>
     </div>
-    <div class="pagebox">
-        <div class="addmin-title">
-          <span :class="index=='today'?'active':''" @click="changClass('today')">今日</span>
-          <span :class="index=='week'?'active':''" @click="changClass('week')">本周</span>
-          <span :class="index=='month'?'active':''" @click="changClass('month')">本月</span>
-        </div>
-        <div id='echarts'>
-
-        </div>
-    </div>
+    <Row class="table-top">
+          <Col>
+            <Card dis-hover>
+               <div id='echarts'>
+                </div>
+            </Card>
+          </Col>
+    </Row>    
   </div>
 </template>
 <script>
-import PageTitle from '@/components/common/PageTitle';
- var echarts = require('echarts/lib/echarts');
+import ybar from "@/components/echarts/ybar";
+import { showDayData } from "@/api/all_interface";
+import { showWeekData } from "@/api/all_interface";
+import { showMonthData } from "@/api/all_interface";
+var echarts = require('echarts/lib/echarts');
         // 引入柱状图
         require('echarts/lib/chart/bar');
         // 引入提示框和标题组件
@@ -27,10 +32,26 @@ export default {
   data(){
       return{
        BreadTitle:['首页'],
-       index:'today'
+       index:'today',
+       m1date:null,
+       series:['上传','修改','删除'],
+       spinShow:false,
+       params:null
+
       }
   },
-  mounted:function(){
+  watch: {
+    series() {
+      this.makeEchart()
+    },
+    m1date() {
+      this.makeEchart()
+    }
+  },
+  created(){
+    this.getDayData()
+    },
+  mounted(){
     this.makeEchart()
   },
   methods:{
@@ -62,7 +83,7 @@ export default {
               xAxis : [
                   {
                       type : 'category',
-                      data : ['上传', '修改', '删除'],
+                      data : this.series,
                       axisTick: {
                           alignWithLabel: true
                       }
@@ -78,46 +99,54 @@ export default {
                       name:'直接访问',
                       type:'bar',
                       barWidth: '20%',
-                      data:[21, 14, 3, ]
+                      data:this.m1date
                   }
               ]
           })
       },
-      changClass(active){
-        this.index=active
+      getDayData(){
+         this.spinShow=true;
+        showDayData(this.params).then(res=>{
+            const data = res.data;
+            const bardata=data.data;
+            this.m1date =[],
+            this.m1date[0]=bardata.addpcs;
+            this.m1date[1]=bardata.updatepcs;
+            this.m1date[2]=bardata.deletepcs;
+             console.log(1)
+        })
+         this.spinShow=true;
+      },
+      getWeekData(){
+        showWeekData(this.params).then(res=>{
+            let data = res.data;
+            let bardata=data.data;
+            this.m1date =[],
+            this.m1date[0]=bardata.addpcs;
+            this.m1date[1]=bardata.updatepcs;
+            this.m1date[2]=bardata.deletepcs;
+             console.log(2)
+        })
+      },
+      getMonthData(){
+        showMonthData(this.params).then(res=>{
+            let data = res.data;
+            let bardata=data.data;
+            this.m1date =[],
+            this.m1date[0]=bardata.addpcs;
+            this.m1date[1]=bardata.updatepcs;
+            this.m1date[2]=bardata.deletepcs;
+        })
       }
-    },
-  components:{
-    PageTitle
-  }
- 
+    }
 }
 </script>
 <style scoped>
-  .addmin-title span{
-    display:inline-block;
-    text-align: center;
-    border:1px solid #ccc;
-    width: 100px;
-    height: 40px;
-    line-height: 40px;
-    font-size: 14px;
-    cursor: pointer; 
-  }
-   .addmin-title span.active{
-    font-size: 16px;
-    font-weight: 700;
-    color:#009688;
-  }
-   .addmin-title span:not(:first-child){
-     border-left:none;  
-     margin-left:-4px;
-  }
   .pagebox{
     padding:40px 20px;
   }
   #echarts{
-    margin-top:30px;
+    margin-top:10px;
     width: 60%;
     height: 600px;
   }
