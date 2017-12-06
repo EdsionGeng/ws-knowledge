@@ -3,10 +3,11 @@
       <div>
         <search></search>
       </div>
-  
     <Menu :theme="theme2" accordion @on-select="change">
-            <MenuGroup title="" class='menuTitle'>
+        <MenuGroup title="" class='menuTitle'>
+          
             <Menu-item name=''>首页</Menu-item>
+           
             <Submenu name="1">
                 <template slot="title">
                     文件管理
@@ -71,3 +72,9 @@ export default {
    
    
 </style>
+<style>
+    .ivu-menu-vertical .ivu-menu-item-group-title{
+        height: 20px;line-height: 20px;
+    }
+</style>
+
