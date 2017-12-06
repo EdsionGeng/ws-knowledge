@@ -2,10 +2,10 @@
 <div class="clearfix">
  <div class="search">
       <Input class='searchInput' size='large'  icon="search" placeholder="搜索" 
-      style="width: 200px"></Input>
+      style="width: 200px" @keyup.enter.native="changeRouter('keySearchPage')"></Input>
   </div>
   <div class="creatFile">
-       <Button  size='large' icon="plus" @click="changeRouter('newfile')">新建文件</Button>
+       <Button  size='large' icon="plus" type='primary' @click="changeRouter('newfile')">新建文件</Button>
   </div>
 </div>
  
@@ -40,7 +40,7 @@ export default {
 <style scoped>
     .search{
         text-align:center;
-        margin-top:10px;
+        margin-top:20px;
     }
     .creatFile{
         text-align:center;
@@ -50,11 +50,8 @@ export default {
         .creatFile button{
             height: 40px;
             width: 200px;
-           
             border-radius:5px;
             font-size: 16px;  
-            background: #009688;
             color:#fff;
-            border:1px solid #009688;
         }
 </style>
