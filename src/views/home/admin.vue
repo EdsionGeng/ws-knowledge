@@ -18,7 +18,6 @@
   </div>
 </template>
 <script>
-import ybar from "@/components/echarts/ybar";
 import { showDayData } from "@/api/all_interface";
 import { showWeekData } from "@/api/all_interface";
 import { showMonthData } from "@/api/all_interface";
