@@ -7,6 +7,12 @@ html,body,#app,.home{
     height: 100%;
     overflow: hidden;
 }
+.lf{
+    float: left;
+}
+.rt{
+    float: right;
+}
 body{
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     color:#777777;
@@ -27,7 +33,6 @@ body{
     background: #fff;
     flex:1;
     margin:12px;
-
 }.page{
     display: flex;
     flex-direction: column;
