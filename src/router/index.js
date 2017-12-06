@@ -16,7 +16,8 @@ import check from '@/views/allfiles/check'//全部文件/查看文件
 import log from '@/views/allfiles/logs'//全部文件/查看文件/文件日志
 import change from '@/views/allfiles/change'//全部文件/修改文件
 import Login from '@/views/login/index'
-import AdminHome from '@/views/home/admin'
+import AdminHome from '@/views/home/admin'                              //管理员主页
+import myHome from '@/views/home/index'                              //个人主页
 
 Vue.use(Router);
 
@@ -33,6 +34,12 @@ const constantRouteMap = [{
       {
         path: 'admin',
         component: AdminHome,
+        meta:{
+          pname: '首页'
+        }
+      },{
+        path: '/myhome',
+        component: myHome,
         meta:{
           pname: '首页'
         }
