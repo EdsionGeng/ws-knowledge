@@ -10,7 +10,7 @@
         <Card >
             <p slot="title"><span>最新上传</span><a class='rt' @click="changeRoute('allfiles')">查看更多&gt;&gt;</a> </p>
             <div>
-              <Table :columns="columns1"  :data="MyMessageList"  @on-row-click="onRowClick"></Table>
+              <Table :columns="columns1"  :data="newMessageList"  @on-row-click="showNewMessageList"></Table>
             </div>
         </Card>
         <Modal
@@ -40,6 +40,8 @@
                 noreaded:0
               },      
               MyMessageList: [{at:'123',re:'32432'},{at:'1234',re:'324325'}],
+              newMessageList: [{at:'66666',re:'89384'},{at:'888',re:'324345'}],
+            
                mesDetail: [],
                params:null,
                //modal信息
@@ -54,6 +56,12 @@
         //          yhjId: this.$route.query.yhjId,
         //          yhjType: this.$route.query.yhjType
                 },
+                newdata:{
+                  current: 1,
+                  pageSize:10,
+                  userId:145
+                }
+                ,
                 columns1: [
                     {
                         title: '标题',
@@ -63,8 +71,7 @@
                         title: '发布时间',
                         key: 're', 
                         sortType: 'desc',
-                        align:'right',
-                      
+                        align:'right',                   
                     }
                 ]
             }
@@ -77,8 +84,8 @@
           changeRoute(name){
              this.$router.push('/'+name);
           },
-          onRowClick(row,index){   
-            
+          
+          onRowClick(row,index){           
              this.params={
                commonId:row.commonId
              };
@@ -86,7 +93,7 @@
               showAdPcs(this.params).then(
               res => {
                 const data = res.data;
-                //  console.log(res.data);
+                  console.log(res.data);
                 if (data.code == 0) {                
                   this.mymessageDetail.MyMessageListTitle=row.at
                   this.mymessageDetail.MyMessageupdate=row.re
@@ -101,23 +108,23 @@
             .catch(err => {});  
            this.modal1=true;
           },//点击获取显示公告详情
-          show (index) {
-                
+          showNewMessageList(row,index) {
+                console.log(index)
             },
           //个人能看到的最新上传的文件后台获取
           initshowAdPcs(){
           
           },
          initUserLookFile(){
-            showUserLookFile(this.data).then(
+            showUserLookFile(this.newdata).then(
               res => {
                 const data = res.data;
                 console.log('this is a wo can show pic')
-                 console.log(res.data);
+                 console.log(res);
                 if (data.code == 0) {
                   console.log(this.MyMessageList)
-                  this.MyMessageList = data.data;
-                  console.log(this.MyMessageList)
+                  this.newMessageList = data.data;
+                  console.log(this.newMessageList)
                   this.page = data.rdPage;
                   console.log(data.rdPage)
                 }
@@ -135,9 +142,10 @@
                 if (data.code == 0) {
                   console.log(this.MyMessageList)
                   this.MyMessageList = data.data;
-                  console.log(this.MyMessageList)
-                  this.page = data.rdPage;
-                  console.log(data.rdPage)
+                  console.log('我的消息')
+                  console.log(this.MyMessageList.at)
+                  // this.page = data.rdPage;
+                  // console.log(data.rdPage)
                 }
               })
               .catch(err => {});            
