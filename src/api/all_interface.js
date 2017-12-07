@@ -75,8 +75,8 @@ export function sendAdToUser(data) {
 export function showAdPcs(data) {
   return fetch({
     url: '/show/adpcs.htmls',
-    method: 'get',
-    params: data
+    method: 'post',
+    data: data
   })
 }
 
@@ -114,8 +114,8 @@ return fetch({
 export function showUserUpload(data){
   return fetch ({
     url:'/show/allupload.htmls',
-    method:'get',
-    params:data
+    method:'post',
+    data:data
   })
 }
 
