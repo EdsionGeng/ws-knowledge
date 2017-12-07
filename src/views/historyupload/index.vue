@@ -16,6 +16,9 @@
     .demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active {
         border-color: #fff;
     }
+    .table-page {
+    float: right;
+    }
 </style>
 <template>
     <Row :gutter="32">
