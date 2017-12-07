@@ -258,8 +258,8 @@ export function showAllFile(data){
 export function showUserLookFile(data){
   return fetch({
     url:'/show/userlookfile',
-    method:'get',
-    params:data
+    method:'post',
+    data:data
   })
 }
 
@@ -324,7 +324,7 @@ export function updateFilePermission(data){
 export function showFilePermission(data){
   return fetch({
     url:'/show/usermission.htmls',
-    method:'get',
-    params:data
+    method:'post',
+    data:data
   })
 }
