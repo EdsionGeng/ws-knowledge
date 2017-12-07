@@ -32,7 +32,7 @@ export default {
       return{
        BreadTitle:['首页'],
        index:'today',
-       m1date:null,
+       m1date:[2,34,18],
        series:['上传','修改','删除'],
        spinShow:false,
        params:null
@@ -66,7 +66,7 @@ export default {
                   fontWeight:'bold'
                }
              },
-              color: ['#3398DB'],
+              color: ['#52C6EB'],
               tooltip : {
                   trigger: 'axis',
                   axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -112,7 +112,7 @@ export default {
             this.m1date[0]=bardata.addpcs;
             this.m1date[1]=bardata.updatepcs;
             this.m1date[2]=bardata.deletepcs;
-             console.log(1)
+             console.log(bardata)
         })
          this.spinShow=true;
       },
@@ -124,7 +124,6 @@ export default {
             this.m1date[0]=bardata.addpcs;
             this.m1date[1]=bardata.updatepcs;
             this.m1date[2]=bardata.deletepcs;
-             console.log(2)
         })
       },
       getMonthData(){
@@ -146,7 +145,7 @@ export default {
   }
   #echarts{
     margin-top:10px;
-    width: 60%;
+    width: 50%;
     height: 600px;
   }
 </style>
