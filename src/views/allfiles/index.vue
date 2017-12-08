@@ -3,14 +3,15 @@
    <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
         <Col span="1" offset=2  style='height:30px;line-height:30px'> 部门:</Col>
         <Col span="6">
-            <Select v-model="model7" style="width:200px" > {{model7}}     
-              <Tree :data="data1" @on-select-change='getChange' ></Tree>       
+            <Select v-model="model7" style="width:200px" >  
+              <Tree :data="deptlist"  multiple :render="renderContent" show-checkbox @on-check-change='getChange'></Tree>   
             </Select>
         </Col>
         <Col span="1"  style='height:30px;line-height:30px'> 类型:</Col>
         <Col span="6">
-            <Select v-model="model7" style="width:200px" > {{model7}}     
-              <Tree :data="data1" @on-select-change='getChange' ></Tree>       
+            <Select v-model="model7" style="width:200px" >   
+              <Tree :data="docTreeList"  :render="renderdocContent" show-checkbox @on-select-change='getChange'></Tree> 
+              <!-- <Tree :data="data1" @on-select-change='getChange' ></Tree>        -->
             </Select>
         </Col>
           </Col> <Button type='primary'>查询</Button></Col>
@@ -34,6 +35,7 @@
                               <img src="./bg.jpg" style='width:60%;height:150px;'>
                               <h2>{{list.title}}</h2>
                               <p>上传时间：{{list.addFileTime}}</p>
+                              <p>上传人：{{list.username}}</p>
                           </div>
                           
                         </Card>
@@ -55,11 +57,39 @@
 <script>
 import { getDepTree } from "../../api/all_interface";
 import { showUserUpload } from "../../api/all_interface";
+import { getDocTree } from "../../api/all_interface";
+
 export default {
   data() {
     return {
       imgUrl: "./bg.jpg",
-      deptreedata: null,
+       renderContent(h, {root, node, data}){
+          return h('span',data.name)
+        },
+        renderdocContent(h, {root, node, data}){
+          return h('span',data.fileKindName)
+        },
+      docTreedata:{
+          id: "",
+          deptno: "",
+          no: "",
+          pid: "",
+          type: "",
+          checked: "",
+          name: "",
+          department: ""
+        },
+      deptreedata:{
+          id: "",
+          deptno: "",
+          no: "",
+          pid: "",
+          type: "",
+          checked: "",
+          name: "",
+          department: ""
+        },
+      docTreeList:[],
       data1: [
         {
           title: "parent 1",
@@ -101,6 +131,7 @@ export default {
         pageSize: 20,
         userId: 145
       },
+      deptlist:[],
       fileparams: null,
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
       mymessageDetail: {
@@ -116,10 +147,16 @@ export default {
           title: "标题",
           key: "title"
         },
+        
         {
           title: "发布时间",
           key: "addFileTime",
           sortable: true,
+          
+        },
+        {
+          title: "上传人",
+          key: "username",
           align: "right"
         }
       ],
@@ -148,7 +185,9 @@ export default {
     };
   },
   created() {
-    this.showDepTree(), this.initList();
+    this.showDepTree();
+     this.initList();
+    this.showDocKind();
   },
   methods: {
     onRowClick(row) {
@@ -166,23 +205,25 @@ export default {
     showDepTree() {
       getDepTree(this.deptreedata)
         .then(res => {
-          console.log(".......");
-          console.log(res);
-          const data = res.data;
-
+          
           if (res.status == 200) {
             //this.deptlist=this.push(name)
-            this.deptlist = data[0].children;
+            this.deptlist = res.data;
             console.log(this.deptlist);
+            //console.log(res);
           }
         })
         .catch(err => {});
     },
-    getChange(data) {
+    showDocKind(){
+      getDocTree(this.docTreedata).then(res=>{
+        if(res.status==200){
+         this.docTreeList=res.data;
+        }
+      })
+    },
+    getChange(data) {  
       console.log(data);
-      console.log(data[0].title);
-      this.model7 = data[0].title;
-      console.log(this.model7);
     },
     initList() {
       showUserUpload(this.listparams)
