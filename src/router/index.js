@@ -29,8 +29,9 @@ const constantRouteMap = [{
   {
     path: '/',
     component: Home,
-    redirect: '/admin',
+    redirect: '/myhome',
     children: [
+      
       {
         path: 'admin',
         component: AdminHome,
@@ -99,7 +100,7 @@ const constantRouteMap = [{
         
       }
     },{
-      path: 'check',
+      path: 'allfiles/check/:id',
       component: check,
       meta:{
         pname: '文件管理',
@@ -107,7 +108,7 @@ const constantRouteMap = [{
         tname: '查看文件'
       }
     },{
-      path: 'log',
+      path: 'allfiles/log/:id',
       component: log,
       meta:{
         pname: '文件管理',
@@ -116,7 +117,7 @@ const constantRouteMap = [{
         lname: '查看日志'
       }
     },{
-      path: 'change',
+      path: 'allfiles/change/:id',
       component: change,
       meta:{
         pname: '文件管理',
