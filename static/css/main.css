@@ -38,3 +38,40 @@ body{
     flex-direction: column;
     height: 100%;
 }
+.clearfix { 
+    *zoom: 1; 
+  } 
+   
+  .clearfix:before, 
+  .clearfix:after { 
+    display: table; 
+    line-height: 0; 
+    content: ""; 
+  } 
+   
+  .clearfix:after { 
+    clear: both; 
+  } 
+  .table-page {
+    margin-top:10px;
+    float: right;
+  }
+ 
+  .demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-content {
+    height: 100%;
+    margin-top: -16px;
+  }
+  
+  .demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-content > .ivu-tabs-tabpane {
+    background: #fff;
+    padding: 16px;
+  }
+  
+  .demo-tabs-style1 > .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab {
+    border-color: transparent;
+  }
+  
+  .demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active {
+    border-color: #fff;
+  }
+  
