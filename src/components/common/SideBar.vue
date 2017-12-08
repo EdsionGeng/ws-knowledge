@@ -6,7 +6,7 @@
     <Menu :theme="theme2" accordion @on-select="change">
         <MenuGroup title="" class='menuTitle'>
           
-            <Menu-item name=''>首页</Menu-item>
+            <Menu-item name='admin'>首页</Menu-item>
            
             <Submenu name="1">
                 <template slot="title">
