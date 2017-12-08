@@ -1,59 +1,45 @@
-<style>
-.demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-content {
-  height: 100%;
-  margin-top: -16px;
-}
 
-.demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-content > .ivu-tabs-tabpane {
-  background: #fff;
-  padding: 16px;
-}
-
-.demo-tabs-style1 > .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab {
-  border-color: transparent;
-}
-
-.demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active {
-  border-color: #fff;
-}
-.table-page {
-  float: right;
-}
-</style>
 <template>
-<div>
-        <Row :gutter="32">
+<div class="page">
+        <Row>
         <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
             <Tabs type="card">
-                <TabPane label="列表">    
+                <TabPane label="列表" class="clearfix">    
                   <Row>
                     <Col>
                       <Table :columns="columns1" 	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
                     </Col>  
-                  </Row>               
-                  <Page :total="page.total" :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" class="table-page"></Page>
+                  </Row>                   
                 </TabPane>
                 <TabPane label="图文">
-                    <Row type="flex" justify="start" :gutter='16'>
-                      <Col  span="4" v-for='(list,index) in historyUploadMessageList' :key='index' style='margin-bottom:15px;'>
-                          <Card >
-                              <p slot="title">{{list.at}}</p>
-                              <p>{{list.re}}</p>
-                          </Card>
+                    <Row>
+                      <Col  span="5" offset=1  pull=1 v-for='(list,index) in historyUploadMessageList' :key='index' style='margin-bottom:15px;'>
+                        <a @click="onRowClick(list)">
+                        <Card style="">
+                          <div style="text-align:center">
+                              <img src="./bg.jpg" style='width:60%;height:150px;'>
+                              <h2>{{list.title}}</h2>
+                              <p>上传时间：{{list.addFileTime}}</p>
+                          </div>
+                          
+                        </Card>
+                        </a>
+                             
                       </Col>
                   </Row>
                 </TabPane>
+                
             </Tabs>
+           
         </Col>
+         
     </Row>
-      <Modal
-          :title="mymessageDetail.MyMessageListTitle"
-          v-model="modal1"
-          :mask-closable="false"
-          >
-          <p style='text-align:center'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：{{mymessageDetail.readed }}&nbsp;&nbsp;未读人：{{mymessageDetail.noreaded}}</p>
-          <p class="modal-content" style='color:#333;margin-top:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
-      </Modal>
+    <Row style='padding-top:10px,padding-right:5px'> 
+        <Col>            
+          <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+        </Col>  
+    </Row>
+     
 </div>
     
 </template>
@@ -62,61 +48,48 @@ import { showUserUpload } from "../../api/all_interface";
 export default {
   data() {
     return {
+      imgUrl:'./bg.jpg',
       modal1: false,
-      params: {
+      pageOpts:[20,40,60,100],  
+      listparams: {
         current: 1,
-        pageSize: 10,
+        pageSize: 20,
         userId: 145
       },
-      page: { total: 2, current: 1, pageSize: 5 },
-      mymessageDetail: {
-        MyMessageListTitle: "ewrwqre",
-        MyMessageupdate: "",
-        AddUser: "",
-        MyMessageMsg: "hello world hello you are welcome",
-        readed: 0,
-        noreaded: 0
-      },
+      fileparams:null,
+      page: { total: 100,pages:1, current: 1, pageSize: 20 },
       columns1: [
         {
           title: "标题",
-          key: "at"
+          key: "title"
         },
         {
           title: "发布时间",
-          key: "re",
+          key: "addFileTime",
           sortable: true,
           align: "right"
         }
       ],
       historyUploadMessageList: [
         {
-          at: "hello",
-          re: "2017-01-01"
+          title: "hello",
+          addFileTime: "2017-01-01"
         },
         {
-          at: "hello world",
-          re: "2017-01-02"
+          title: "hello",
+          addFileTime: "2017-01-01"
         },
         {
-          at: "hello world",
-          re: "2017-01-05"
+          title: "hello",
+          addFileTime: "2017-01-01"
         },
         {
-          at: "hello world",
-          re: "2017-01-05"
+          title: "hello world",
+          addFileTime: "2017-01-02"
         },
         {
-          at: "hello world",
-          re: "2017-01-05"
-        },
-        {
-          at: "hello world",
-          re: "2017-01-05"
-        },
-        {
-          at: "hello world",
-          re: "2017-01-05"
+          title: "hello world",
+          addFileTime: "2017-01-05"
         }
       ]
     };
@@ -125,21 +98,26 @@ export default {
     this.initList();
   },
   methods: {
-    onRowClick(row, index) {
-      this.params = {
-        commonId: row.commonId
-      };
-      this.$router.push('/allfiles/check/:id='+this.params.commonId);
-        
-      this.modal1 = true;
+    //显示文件详情的方法
+    onRowClick(row) {
+      this.$router.push('/allfiles/check/'+row.id);  
     },
-    onPageChange() {},
+    onPageChange(value) {    
+      console.log(value)
+     this.page.current = value;
+     this.initList();
+    },
+    onPageSizeChange(value){
+      console.log(value)
+      this.page.pageSize=value
+    },
     initList() {
-      showUserUpload(this.params)
+      showUserUpload(this.listparams)
         .then(res => {
           const showUserUpdata = res.data;
-          console.log(res.data);
-          if (data.code == 0) {
+          console.log(showUserUpdata);
+          if (res.data.code == 0) {
+            this.page=res.data.rdPage;
             this.historyUploadMessageList = showUserUpdata.data;
           }
         })
@@ -148,3 +126,12 @@ export default {
   }
 };
 </script>
+<style>
+  .ivu-select-single .ivu-select-selection{
+    width: 100px;
+  }
+  .page{
+    height: 100%;
+  }
+ 
+</style>
