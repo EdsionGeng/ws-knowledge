@@ -165,9 +165,9 @@ export function showMonthData(data){
  */
 export  function  getDocTree(data){
   return fetch({
-    url:'/gteKindByTree',
-    method:'get',
-    params:data
+    url:'/getKindByTree',
+    method:'post',
+    data:data
   })
 }
 
@@ -179,8 +179,8 @@ export  function  getDocTree(data){
 export function getDepTree(data){
   return fetch({
     url:'/getListByTree',
-    method:'get',
-    params:data
+    method:'post',
+    data:data
   })
 }
 
