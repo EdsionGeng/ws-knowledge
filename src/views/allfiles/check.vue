@@ -14,9 +14,9 @@
            {{fileDetails.msg+'3222222'+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg}}
         </Row>
       </Col>
-      <Col span='6' class="right-col">
+      <Col span='6' class="right-col" style='padding-top:30px'>
           <Row  type='flex' align='top' justify='center'>
-            <Col span="20"> 
+            <Col span="16"> 
               <img src="./bg.jpg" style='width:100%;height:150px;'>
             </Col>  
           </Row>
@@ -41,8 +41,8 @@
             </Col>
           </Row>
           <Row type='flex' justify='space-around' >
-            <Button type="primary">修改文件</Button>  
-            <Button type="primary">删除文件</Button>  
+            <Button v-if='canChange' type="primary" @click="changeRouter('/allfiles/change/')">修改文件</Button>  
+            <Button v-if='canDel' type="primary" @click='delFile'>删除文件</Button>  
           </Row> 
          
       </Col>
@@ -53,6 +53,8 @@
 export default {
   data() {
     return {
+      canChange:false,
+      canDel:true,
       fileDetails: {
         addUser: "张三",
         dep: "行政中心-行政部-行政组",
@@ -66,6 +68,16 @@ export default {
   methods: {
     goRouter() {
       this.$router.back();
+    },
+    changeRouter(name){
+      console.log(this.$route.params.id);
+      console.log(name);
+      this.$router.push(name+4)
+    },
+    delFile(){
+       this.$Modal.warning({
+                content:'<h3>确定要删除么！！！</h3>'
+        });
     }
   }
 };
