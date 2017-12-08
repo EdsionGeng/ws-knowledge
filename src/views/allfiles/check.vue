@@ -1,6 +1,6 @@
 <template>
   <div>
-      <PageTitle :BreadTitle='BreadTitle'></PageTitle>
+    
       这是所有文件、查看文件页面
   </div>
 </template>
