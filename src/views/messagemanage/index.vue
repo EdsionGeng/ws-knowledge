@@ -89,7 +89,7 @@
       title="选择人员"
       @on-ok="ok"
       @on-cancel="cancel">
-      <Tree :data="depTree" show-checkbox multiple :render="renderContent"></Tree>
+      <Tree :data="depTree" show-checkbox multiple :render="renderContent" @on-check-change="circleUser"></Tree>
     </Modal>
   </div>
 
@@ -98,6 +98,7 @@
   import {showAllAd} from "../../api/all_interface";
   import {deleteAd} from "../../api/all_interface";
   import {getDepTree} from "../../api/all_interface";
+  import {queryUserByGroup} from "../../api/all_interface";
 
   export default {
 
@@ -172,14 +173,19 @@
           userId: 1,
         },
         insertAd: false,
-        childData:[],
-        renderContent(h, {root, node, data}){
-          return h('span',data.name)
+        childData: [],
+        renderContent(h, {root, node, data}) {
+          return h('span', data.name)
+
         },
         depTree: [],
         chooseUser: false,
         delAdParams: {
           ids: ""
+        },
+
+        queryUserParams: {
+          userGroupId: ""
         },
         depTreeParams: {
           id: "",
@@ -193,6 +199,7 @@
         },
         page: {},
         ids: "",
+        chooseObject: "",
         selection: [],
         AllAdList: []
       };
@@ -216,6 +223,18 @@
         this.delAdParams.ids = fielIds;
         return fielIds
       },
+      circleUser(arr) {
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].children != null) {
+            queryUserByGroup().then(res=>{
+              const data =data.data;
+              if(data.code==0){
+
+              }
+            })
+          }
+        }
+      },
       dateOnChange(arr) {
         const rangedate = arr;
         this.params.startDate = rangedate[0];
@@ -226,34 +245,39 @@
         }
       },
       toDelAd() {
-        let _self = this;
-        deleteAd(this.delAdParams).then(res => {
-          const data = res.data;
-          if (data.code == 0) {
-            this.$Message.info(data.msg);
-            _self.showAllAdList();
-          }
-          else {
-            this.$Message.info(data.msg);
-          }
-        }).catch(err => {
-        });
+        if (this.delAdParams.ids == "") {
+          this.$Message.info('没有选中相应数据!');
+          return
+        }
+        else {
+          let _self = this;
+          deleteAd(this.delAdParams).then(res => {
+            const data = res.data;
+            if (data.code == 0) {
+              this.$Message.info(data.msg);
+              _self.showAllAdList();
+            }
+            else {
+              this.$Message.info(data.msg);
+            }
+          }).catch(err => {
+          });
+        }
       },
       handleSearch() {
         this.showAllAdList();
       },
       ok() {
-       // this.$Message.info('Clicked ok');
+        // this.$Message.info('Clicked ok');
       },
       cancel() {
         //this.$Message.info('Clicked cancel');
       },
 
       showDepTree() {
-        let _self=this
+        let _self = this
         getDepTree(_self.depTreeParams).then(res => {
           _self.depTree = res.data;
-
         })
       },
       showAllAdList() {

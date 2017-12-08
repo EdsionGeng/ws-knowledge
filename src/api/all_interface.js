@@ -315,7 +315,18 @@ export function updateFilePermission(data){
     data:data
   })
 }
-
+/**
+ * 查看部门下面的人员
+ * @param data
+ * @returns {*}
+ */
+export function queryUserByGroup(data) {
+  return fetch({
+    url: '/queryuser.htmls',
+    method: 'post',
+    data: data
+  })
+}
 /**
  * 查看用户对某一文件具体的操作权限
  * @param data
@@ -324,6 +335,18 @@ export function updateFilePermission(data){
 export function showFilePermission(data){
   return fetch({
     url:'/show/usermission.htmls',
+    method:'post',
+    data:data
+  })
+  }
+/**
+ * 修改文件类型
+ * @param data
+ * @returns {*}
+ */
+export function updateFileStyleDetail(data){
+  return fetch({
+    url:'/update/filestyle',
     method:'post',
     data:data
   })
