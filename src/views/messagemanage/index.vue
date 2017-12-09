@@ -174,10 +174,7 @@
         },
         insertAd: false,
         childData: [],
-        renderContent(h, {root, node, data}) {
-          return h('span', data.name)
 
-        },
         depTree: [],
         chooseUser: false,
         delAdParams: {
@@ -211,6 +208,10 @@
     methods: {
       onPageChange() {
         this.showAllAdList();
+      },
+      renderContent(h, {root, node, data}) {
+        return h('span', data.name)
+
       },
       delAdAction(arr) {
         let fielIds = "";

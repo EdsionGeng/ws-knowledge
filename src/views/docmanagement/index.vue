@@ -16,9 +16,13 @@
         <Form>
           <Col span="5">
           <FormItem label="文档类型:">
-            <Select v-model="data.fileStyleId" style="width:200px">
-              <Tree :data="docTree" show-checkbox :render="renderContent" @on-check-change="showKindName"></Tree>
-            </Select>
+            <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
+                   style="width: 200px">
+            </Input>
+            <div v-if='showMenu' class="showmenubox">
+              <Tree :data="docTree" :render="renderContent"></Tree>
+            </div>
+
           </FormItem>
           </Col>
           <Col span="6">
@@ -29,7 +33,7 @@
           </Col>
           <Col span="5">
           <FormItem label=" 文件标题：">
-            <Input v-model="data.title" placeholder="" style="width: 200px"></Input>
+            <Input v-model="dataParams.title" placeholder="" style="width: 200px"></Input>
           </FormItem>
           </Col>
           <Col span="3">
@@ -55,7 +59,7 @@
       @on-ok="ok"
       @on-cancel="cancel">
 
-      <Tree :data="docTree" show-checkbox :render="renderContent" @on-check-change="circleStyleId"></Tree>
+      <Tree :data="docTree" :render="renderContent1"></Tree>
       <!--@on-check-change="getCheckNode"-->
     </Modal>
   </div>
@@ -112,20 +116,20 @@
           checked: "",
           fileKind: ""
         },
+        showMenu: false,
         docTree: [],
-        renderContent(h, {root, node, data}) {
-          return h('span', data.fileKindName)
-        },
+
         deleteFileParams: {
           fileIds: "",
           userId: 1
         },
+        value4: "",
         updateFileParams: {
           fileIds: "",
           userId: 1,
           fileStyleId: ""
         },
-        data: {
+        dataParams: {
           current: 1,
           pageSize: 10,
           title: "",
@@ -142,11 +146,49 @@
     },
     created() {
       this.showAllFileList();
-      if (!this.updateFileStyle) {
-        this.showDocTree();
-      }
+
+      this.showDocTree();
     },
     methods: {
+      renderContent(h, {root, node, data}) {
+        return h('span',
+          {
+            style: {
+              cursor: "pointer",
+              marginLeft: "5px"
+            },
+            on: {
+              click: () => {
+                this.value4 = data.fileKindName;
+                this.dataParams.fileStyleId = data.id;
+
+                this.showMenu = false;
+              }
+            }
+          },
+          data.fileKindName)
+      },
+
+      renderContent1(h, {root, node, data}) {
+        return h('span',
+          {
+            style: {
+              cursor: "pointer",
+              marginLeft: "5px"
+            },
+            on: {
+              click: () => {
+                this.updateFileParams.fileStyleId = data.id;
+                console.info("tiaochen " + data.id)
+              }
+            }
+          },
+          data.fileKindName)
+      },
+      dropmenu(isshow) {
+        this.showMenu = isshow;
+        console.log(1212);
+      },
       /**
        * 分页
        */
@@ -189,22 +231,18 @@
           fielIds += arr[i].id
         }
         this.selection = fielIds
+        console.info("dh" + fielIds);
         this.deleteFileParams.fileIds = fielIds;
-        //  console.info(this.selection)
+        this.updateFileParams.fileIds = fielIds;
         return fielIds
-      },
-
-      showKindName(node,data) {
-        conosole.info(data)
       },
       /**
        * 删除文件
        */
-
       todelFile() {
         // console.log("222解决"+this.selection)
         let _self = this;
-//        console.info(_self.selection)
+//      console.info(_self.selection)
         if (_self.deleteFileParams.fileIds == "") {
           this.$Message.info('请勾选相应数据');
           return
@@ -221,30 +259,22 @@
           .catch(err => {
           });
       },
-      circleStyleId(arr) {
 
-//        if (arr.length > 1) {
-//          this.$Message.info("请选择其中一个或子节点！")
-//          return
-//        }
-//        console.info(arr.id);
-//        this.updateFileParams.fileStyleId = arr.id;
-
-      },
       /**
        * 确定修改文档类型
        */
       ok() {
-        let _self = this;
-        if (_self.selection == []) {
+        if (this.updateFileParams.fileIds == "") {
           this.$Message.info('请勾选相应数据');
           return
         }
-        this.deleteFileParams.fileIds = this.selection;
-        updateFileStyleDetail(this.deleteFileParams).then(res => {
+        this.updateFileParams.fileIds = this.selection;
+        let _self = this;
+        updateFileStyleDetail(this.updateFileParams).then(res => {
           const data = res.data;
           if (data.code == 0) {
             this.$Message.info('操作成功');
+            _self.showAllFileList();
           }
         })
           .catch(err => {
@@ -265,19 +295,18 @@
        */
       dateOnChange(arr) {
         const rangedate = arr;
-
-        this.data.startDate = rangedate[0];
+        this.dataParams.startDate = rangedate[0];
         if (rangedate[1] === undefined) {
-          this.data.endDate = "";
+          this.dataParams.endDate = "";
         } else {
-          this.data.endDate = rangedate[1];
+          this.dataParams.endDate = rangedate[1];
         }
       },
       /**
        * 初始所有文件
        */
       showAllFileList() {
-        showAllFile(this.data)
+        showAllFile(this.dataParams)
           .then(res => {
             const data = res.data;
             if (data.code == 0) {

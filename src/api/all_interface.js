@@ -351,3 +351,15 @@ export function updateFileStyleDetail(data){
     data:data
   })
 }
+/**
+ * 全局搜索
+ * @param data
+ * @returns {*}
+ */
+export function searchResult(data){
+  return fetch({
+    url:'/show/searchresult',
+    method:'post',
+    data:data
+  })
+}
