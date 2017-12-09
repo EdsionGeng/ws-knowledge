@@ -1,7 +1,7 @@
 <template>
 <div class="clearfix">
  <div class="search">
-      <Input class='searchInput' size='large'  icon="search" placeholder="搜索" 
+      <Input class='searchInput' size='large' v-model='inputValue'  icon="search" placeholder="搜索" 
       style="width: 200px" @keyup.enter.native="changeRouter('keySearchPage')"></Input>
   </div>
   <div class="creatFile">
@@ -14,12 +14,13 @@
 export default {
    data(){
         return{
+            inputValue:''
         }
     },
     methods:{
         changeRouter(name){
-          console.log(name);
-          this.$router.push('/'+name);
+          console.log(this.inputValue);
+          this.$router.push('/'+name+'/'+this.inputValue);
       }
     }
 }
