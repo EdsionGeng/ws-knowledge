@@ -3,18 +3,13 @@
    <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
         <Col span="1" offset=2  style='height:30px;line-height:30px'> 部门:</Col>
         <Col span="6">
-            <Select v-model="model7" style="width:200px" >  
-              <Tree :data="deptlist"  multiple :render="renderContent" show-checkbox @on-check-change='getChange'></Tree>   
-            </Select>
+            <SelectTree :deptlist='deptlist' :myvalue='depTypeKey'></SelectTree>
         </Col>
         <Col span="1"  style='height:30px;line-height:30px'> 类型:</Col>
         <Col span="6">
-            <Select v-model="model7" style="width:200px" >   
-              <Tree :data="docTreeList"  :render="renderdocContent" show-checkbox @on-select-change='getChange'></Tree> 
-              <!-- <Tree :data="data1" @on-select-change='getChange' ></Tree>        -->
-            </Select>
+          <docTree :deptlist='docTreeList' :myvalue='docTypeKey'></docTree>
         </Col>
-          </Col> <Button type='primary'>查询</Button></Col>
+          </Col> <Button type='primary' @click="selAllFile">查询</Button></Col>
     </Row>
       <Row>
           <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
@@ -56,12 +51,21 @@
 </template>
 <script>
 import { getDepTree } from "../../api/all_interface";
-import { showUserUpload } from "../../api/all_interface";
+import { showAllFile } from "../../api/all_interface";
 import { getDocTree } from "../../api/all_interface";
+import SelectTree from '@/components/common/selectTree'
+import docTree from '@/components/common/docTree'
 
 export default {
   data() {
     return {
+      //用对象就可以让子组件修改父组件的内容
+      docTypeKey:{
+        value:''
+      },
+      depTypeKey:{
+        value:''
+      },
       imgUrl: "./bg.jpg",
        renderContent(h, {root, node, data}){
           return h('span',data.name)
@@ -128,8 +132,7 @@ export default {
       pageOpts: [20, 40, 60, 100],
       listparams: {
         current: 1,
-        pageSize: 20,
-        userId: 145
+        pageSize: 20
       },
       deptlist:[],
       fileparams: null,
@@ -184,12 +187,19 @@ export default {
       ]
     };
   },
+  components:{
+    SelectTree,docTree
+  },
   created() {
     this.showDepTree();
      this.initList();
     this.showDocKind();
   },
   methods: {
+    selAllFile(){
+      console.log(this.docTypeKey.value)
+      console.log(this.depTypeKey.value)
+    },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
     },
@@ -219,6 +229,7 @@ export default {
       getDocTree(this.docTreedata).then(res=>{
         if(res.status==200){
          this.docTreeList=res.data;
+         console.log(res.data)
         }
       })
     },
@@ -226,7 +237,7 @@ export default {
       console.log(data);
     },
     initList() {
-      showUserUpload(this.listparams)
+      showAllFile(this.listparams)
         .then(res => {
           const showUserUpdata = res.data;
           console.log(showUserUpdata);
