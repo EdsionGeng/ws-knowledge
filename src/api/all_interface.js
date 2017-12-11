@@ -363,3 +363,29 @@ export function updateFileStyleDetail(data){
     data:data
   })
 }
+
+/**
+ * 修改文件类型
+ * @param data
+ * @returns {*}
+ */
+export function countFileStyle(data){
+  return fetch({
+    url:'/search/filestyleid',
+    method:'post',
+    data:data
+  })
+}
+
+/**
+ * 修改文件类型
+ * @param data
+ * @returns {*}
+ */
+export function deleteDocRule(data){
+  return fetch({
+    url:'/delete/rule.htmls',
+    method:'post',
+    data:data
+  })
+}

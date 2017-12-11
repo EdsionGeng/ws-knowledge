@@ -85,11 +85,22 @@
     </Modal>
     <Modal
       v-model="chooseUser"
-      width="700"
+      width="700px"
       title="选择人员"
       @on-ok="ok"
       @on-cancel="cancel">
-      <Tree :data="depTree" show-checkbox multiple :render="renderContent" @on-check-change="circleUser"></Tree>
+      <div class="clearfix">
+        <Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent" @on-check-change="circleUser"></Tree>
+
+        <div  class="user-detail rt">
+
+          <Table border ref="circleAdUsers" :columns="showUserGroupColumns"  :data="showUserGroup"
+                 @on-selection-change="" v-show="usershow"></Table>
+
+        </div>
+      </div>
+
+
     </Modal>
   </div>
 
@@ -104,6 +115,17 @@
 
     data() {
       return {
+        showUserGroupColumns:[
+          {
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          },
+          {
+            title: "姓名",
+            key:"username",
+            width: 100,
+          }],
         AllAdColumns: [
           {
             type: 'selection',
@@ -157,6 +179,7 @@
             },
           }
         ],
+        usershow:false,
         params: {
           current: 1,
           pageSize: 10,
@@ -180,10 +203,10 @@
         delAdParams: {
           ids: ""
         },
-
         queryUserParams: {
           userGroupId: ""
         },
+        showUserGroup:[],
         depTreeParams: {
           id: "",
           deptno: "",
@@ -198,6 +221,7 @@
         ids: "",
         chooseObject: "",
         selection: [],
+        circleAdUsers:[],
         AllAdList: []
       };
     },
@@ -210,7 +234,10 @@
         this.showAllAdList();
       },
       renderContent(h, {root, node, data}) {
-        return h('span', data.name)
+        return h('span',
+
+
+          data.name)
 
       },
       delAdAction(arr) {
@@ -226,14 +253,17 @@
       },
       circleUser(arr) {
         for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children != null) {
-            queryUserByGroup().then(res=>{
-              const data =data.data;
-              if(data.code==0){
-
+          if (arr[i].children === null) {
+           this.queryUserParams.userGroupId = arr[i].id;
+            queryUserByGroup(this.queryUserParams).then(res => {
+              const data = res.data;
+              if (data.code == 0) {
+                this.showUserGroup=data.data;
+                this.usershow=true;
               }
             })
           }
+
         }
       },
       dateOnChange(arr) {
@@ -274,7 +304,6 @@
       cancel() {
         //this.$Message.info('Clicked cancel');
       },
-
       showDepTree() {
         let _self = this
         getDepTree(_self.depTreeParams).then(res => {
@@ -294,8 +323,6 @@
           });
       }
     }
-
-
   }
 </script>
 <style scoped>
@@ -307,5 +334,8 @@
   .bodyarea {
     margin-left: 35px;
     margin-top: 40px;
+  }
+.user-detail{
+
   }
 </style>

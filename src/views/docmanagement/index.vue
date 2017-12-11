@@ -161,7 +161,6 @@
               click: () => {
                 this.value4 = data.fileKindName;
                 this.dataParams.fileStyleId = data.id;
-
                 this.showMenu = false;
               }
             }

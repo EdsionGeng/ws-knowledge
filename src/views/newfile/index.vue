@@ -29,7 +29,7 @@
              <Button @click="submits" type="primary">保存</Button>
              <Button @click="xieru" type="primary">写入</Button>
            </div>
-            
+
           </div>
         </FormItem>
         <FormItem label="上传附件：" >
@@ -40,18 +40,18 @@
         </FormItem>
         <FormItem label="权限设置：" prop='power' >
           <Tabs value="name1" type='card' class='newfileTab'  style="width:900px;">
-            <TabPane label="可查阅人员" name="name1"> 
+            <TabPane label="可查阅人员" name="name1">
               <div>
               <Tree :data="depTree" show-checkbox multiple :render="renderContentDep" @on-check-change='chooseCheckPeople'></Tree>
               </div>
             </TabPane>
-            <TabPane label="可编辑人员" name="name2"><div> 
-              <Tree :data="editdepTree" show-checkbox multiple :render="renderContentDep" @on-check-change='chooseEditPeople'>></Tree>
+            <TabPane label="可编辑人员" name="name2"><div>
+              <Tree :data="depTree" show-checkbox multiple :render="renderContentDep" @on-check-change='chooseEditPeople'>></Tree>
               </div>
             </TabPane>
             <TabPane label="可删除人员" name="name3">
-              <div> 
-                <Tree :data="deldepTree" show-checkbox multiple :render="renderContentDep"@on-check-change='chooseDelPeople'> ></Tree>
+              <div>
+                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"@on-check-change='chooseDelPeople'> ></Tree>
               </div>
             </TabPane>
           </Tabs>
@@ -187,6 +187,7 @@ export default {
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
     },
+
     /**
        * 获取文档树形结构
        */
