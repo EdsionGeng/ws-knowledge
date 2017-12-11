@@ -4,15 +4,15 @@
       <Col span='18' style='border-right:1px solid #ccc;padding-top:20px'>
        <Row  type='flex' align='middle' justify='space-between'>
           <Col  class="lf"><Button type='ghost' @click="goRouter">&lt; 返回</Button></Col> 
-          <Col ><h3>这是一个标题</h3> </Col>
+          <Col ><h3 style='margin-left:-64px'>这是一个标题</h3> </Col>
           <Col > </Col>
         </Row>
-         <Row style="padding-top:10px">
-           {{fileDetails.msg+'3222222'+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg}}
+         <Row style="padding-top:10px" class='filecontent'>
+           <div v-html='fileDetails.fileHtml' ></div>
         </Row>
-        <Row style="padding-top:10px">
-           {{fileDetails.msg+'3222222'+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg+fileDetails.msg}}
-        </Row>
+        <Row>
+          
+        </Row> 
       </Col>
       <Col span='6' class="right-col" style='padding-top:30px'>
           <Row  type='flex' align='top' justify='center'>
@@ -60,8 +60,8 @@ export default {
         dep: "行政中心-行政部-行政组",
         addfiletime: "2017-8-23",
         fileType: "规章制度",
-        msg:
-          "23891458接洽奈 进你好地是地地轩地灶果园校地村瓢泼大雨在柑顶替叶是村要查892343207234570345382502355555"
+       fileHtml:'<p>23891458接洽奈 进你好地是地地轩地灶果园校地村瓢泼大雨在柑顶替叶是村要查892343207234570345382502355555</p>'
+         
       }
     };
   },
@@ -75,8 +75,14 @@ export default {
       this.$router.push(name+4)
     },
     delFile(){
-       this.$Modal.warning({
-                content:'<h3>确定要删除么！！！</h3>'
+       this.$Modal.confirm({
+                content:'<h3>确定要删除么！！！</h3>',
+                  onOk: () => {
+                    this.$Message.info('Clicked ok');
+                },
+                onCancel: () => {
+                    this.$Message.info('Clicked cancel');
+                }
         });
     }
   }
@@ -90,5 +96,8 @@ export default {
 .right-col .ivu-row-flex-center:not(:first-child) {
   height: 40px;
   line-height: 40px;
+}
+.filecontent{
+  min-height: 400px;
 }
 </style>
