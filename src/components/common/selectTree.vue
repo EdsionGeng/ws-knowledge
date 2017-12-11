@@ -10,17 +10,36 @@
 <script>
 import { getDepTree } from "../../api/all_interface";
 export default {
-    props:["deptlist","myvalue"],
+    props:["myvalue"],
   data() {
     return {
-      showMenu: false
-     
+      showMenu: false,
+      deptlist:[],
+       deptreedata:{
+          id: "",
+          deptno: "",
+          no: "",
+          pid: "",
+          type: "",
+          checked: "",
+          name: "",
+          department: ""
+        },
     };
   },
   mounted(){
-      console.log(this.myvalue)
+      this.showDepTree();
   },
   methods: {
+     showDepTree() {
+      getDepTree(this.deptreedata)
+        .then(res => {        
+          if (res.status == 200) {
+            this.deptlist = res.data;         
+          }
+        })
+        .catch(err => {});
+    },
     renderContent(h, { root, node, data }) {
       return h(
         "span",
