@@ -10,7 +10,7 @@
         <Card >
             <p slot="title"><span>最新上传</span><a class='rt' @click="changeRoute('allfiles')">查看更多&gt;&gt;</a> </p>
             <div>
-              <Table :columns="columns1"  :data="newMessageList"  @on-row-click="showNewMessageList"></Table>
+              <Table :columns="columns2"  :data="newMessageList"  @on-row-click="showNewMessageList"></Table>
             </div>
         </Card>
         <Modal
@@ -39,8 +39,8 @@
                 readed:0,
                 noreaded:0
               },      
-              MyMessageList: [{at:'123',re:'32432'},{at:'1234',re:'324325'}],
-              newMessageList: [{at:'66666',re:'89384'},{at:'888',re:'324345'}],
+              MyMessageList: [],
+              newMessageList: [],
             
                mesDetail: [],
                params:null,
@@ -70,6 +70,18 @@
                     {
                         title: '发布时间',
                         key: 're', 
+                        sortType: 'desc',
+                        align:'right',                   
+                    }
+                ],
+                 columns2: [
+                    {
+                        title: '标题',
+                        key: 'title',
+                    },
+                    {
+                        title: '发布时间',
+                        key: 'addFileTime', 
                         sortType: 'desc',
                         align:'right',                   
                     }
@@ -109,7 +121,7 @@
            this.modal1=true;
           },//点击获取显示公告详情
           showNewMessageList(row,index) {
-                console.log(index)
+                this.$router.push('/allfiles/check/'+row.id);
             },
           //个人能看到的最新上传的文件后台获取
           initshowAdPcs(){
