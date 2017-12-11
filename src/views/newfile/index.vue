@@ -6,7 +6,7 @@
           <Input v-model="addFileParams.title" placeholder="" style="width: 200px"></Input>
         </FormItem>
         <FormItem label="文档类型：">
-          <docTree :deptlist='docTreeList' :myvalue='docTypeKey'></docTree>
+          <docTree  :myvalue='docTypeKey'></docTree>
         </FormItem>
         <FormItem label="封面:">
           <div class="back">
@@ -113,16 +113,7 @@
         filedoc: null,
         loadingStatus: false,
         fileloadingStatus: false,
-        docTreeParams: {
-          id: "",
-          fileKindName: "",
-          fileParentId: "",
-          operationTime: "",
-          checked: "",
-          fileKind: ""
-        },
-        docTreeList:[],
-        value4:"",
+      
         depTree: [],
         depTreeParams: {
           id: "",
@@ -137,7 +128,6 @@
         ue: '',
         uedata: [],
         xierudata: [],
-        docTree: [],
 
 
         uploadDoc: false,
@@ -147,37 +137,14 @@
       docTree
     },
     mounted() {
+      this.showDepTree;
       this.ue = UE.getEditor('editor', {
         BaseUrl: '',
         UEDITOR_HOME_URL: 'static/utf8-jsp/',
 // toolbars:[]
       });
     },
-
-    created() {
-      this.showDocTree();
-      this.showDepTree();
-    },
     methods: {
-
-      renderContent(h, {root, node, data}) {
-        return h('span',
-          {
-            style: {
-              cursor: "pointer",
-              marginLeft: "5px"
-            },
-            on: {
-              click: () => {
-                this.value4 = data.fileKindName;
-//                this.dataParams.fileStyleId = data.id;
-
-                this.showMenu = false;
-              }
-            }
-          },
-          data.fileKindName)
-      },
 
       renderContentDep(h, {root, node, data}) {
         return h('span', data.name)
@@ -185,12 +152,7 @@
       /**
        * 获取文档树形结构
        */
-      showDocTree() {
-        let _doc = this
-        getDocTree(this.docTreeParams).then(res => {
-          _doc.docTreeList = res.data;
-        })
-      },
+    
       showDepTree() {
         let _self = this
         getDepTree(_self.depTreeParams).then(res => {

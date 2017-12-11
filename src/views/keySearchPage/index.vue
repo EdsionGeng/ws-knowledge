@@ -3,11 +3,11 @@
       <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
         <Col span="1" offset=2  style='height:30px;line-height:30px'> 部门:</Col>
         <Col span="6">
-            <SelectTree :deptlist='deptlist' :myvalue='depTypeKey'></SelectTree>
+            <SelectTree  :myvalue='depTypeKey'></SelectTree>
         </Col>
         <Col span="1"  style='height:30px;line-height:30px'> 类型:</Col>
         <Col span="6">
-          <docTree :deptlist='docTreeList' :myvalue='docTypeKey'></docTree>
+          <docTree  :myvalue='docTypeKey'></docTree>
         </Col>
           </Col> <Button type='primary' @click="selAllFile">查询</Button></Col>
     </Row>
@@ -66,76 +66,7 @@ export default {
           value:''
         },
         selectValue:'',
-        imgUrl: "./bg.jpg",
-       renderContent(h, {root, node, data}){
-          return h('span',{
-              style:{
-                cursor:'pointer'
-              },
-              on:{
-                click:()=>{ this.selectValue=data.name;console.log(data.name)}
-              }
-          },data.name)
-        },
-        renderdocContent(h, {root, node, data}){
-          return h('span',data.fileKindName)
-        },
-      docTreedata:{
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
-      deptreedata:{
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
-      docTreeList:[],
-      data1: [
-        {
-          title: "parent 1",
-          value: "parent 1",
-          expand: true,
-          children: [
-            {
-              title: "parent 1-1",
-              value: "parent 1-1",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-1-1"
-                },
-                {
-                  title: "leaf 1-1-2"
-                }
-              ]
-            },
-            {
-              title: "parent 1-2",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-2-1"
-                },
-                {
-                  title: "leaf 1-2-1"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      model7: "",
+        imgUrl: "./bg.jpg",  
       pageOpts: [20, 40, 60, 100],
       listparams: {
         current: 1,
@@ -147,10 +78,10 @@ export default {
       fileparams: null,
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
       mymessageDetail: {
-        MyMessageListTitle: "ewrwqre",
+        MyMessageListTitle: "",
         MyMessageupdate: "",
         AddUser: "",
-        MyMessageMsg: "hello world hello you are welcome",
+        MyMessageMsg: "",
         readed: 0,
         noreaded: 0
       },
@@ -197,12 +128,10 @@ export default {
     };
   },
   mounted(){
-    // console.log(this.$route.params.key)
+   
   },
   created() {
-    this.showDepTree();
-     this.initList();
-    this.showDocKind();
+      this.initList();
   },
    components:{
     SelectTree,docTree
@@ -211,10 +140,6 @@ export default {
      selAllFile(){
       console.log(this.docTypeKey.value)
       console.log(this.depTypeKey.value)
-    },
-      getChange(name) {          
-         this.selectValue=name;     
-      console.log(this.selectValue);
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
@@ -227,26 +152,6 @@ export default {
     onPageSizeChange(value) {
       console.log(value);
       this.page.pageSize = value;
-    },
-    showDepTree() {
-      getDepTree(this.deptreedata)
-        .then(res => {
-          
-          if (res.status == 200) {
-            //this.deptlist=this.push(name)
-            this.deptlist = res.data;
-            console.log(this.deptlist);
-            //console.log(res);
-          }
-        })
-        .catch(err => {});
-    },
-    showDocKind(){
-      getDocTree(this.docTreedata).then(res=>{
-        if(res.status==200){
-         this.docTreeList=res.data;
-        }
-      })
     },
     initList() {
       searchResult(this.listparams)

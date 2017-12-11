@@ -3,11 +3,11 @@
    <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
         <Col span="1" offset=2  style='height:30px;line-height:30px'> 部门:</Col>
         <Col span="6">
-            <SelectTree :deptlist='deptlist' :myvalue='depTypeKey'></SelectTree>
+            <SelectTree  :myvalue='depTypeKey'></SelectTree>
         </Col>
         <Col span="1"  style='height:30px;line-height:30px'> 类型:</Col>
         <Col span="6">
-          <docTree :deptlist='docTreeList' :myvalue='docTypeKey'></docTree>
+          <docTree  :myvalue='docTypeKey'></docTree>
         </Col>
           </Col> <Button type='primary' @click="selAllFile">查询</Button></Col>
     </Row>
@@ -50,9 +50,7 @@
   </div>  
 </template>
 <script>
-import { getDepTree } from "../../api/all_interface";
 import { showAllFile } from "../../api/all_interface";
-import { getDocTree } from "../../api/all_interface";
 import SelectTree from '@/components/common/selectTree'
 import docTree from '@/components/common/docTree'
 
@@ -66,85 +64,12 @@ export default {
       depTypeKey:{
         value:''
       },
-      imgUrl: "./bg.jpg",
-       renderContent(h, {root, node, data}){
-          return h('span',data.name)
-        },
-        renderdocContent(h, {root, node, data}){
-          return h('span',data.fileKindName)
-        },
-      docTreedata:{
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
-      deptreedata:{
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
-      docTreeList:[],
-      data1: [
-        {
-          title: "parent 1",
-          value: "parent 1",
-          expand: true,
-          children: [
-            {
-              title: "parent 1-1",
-              value: "parent 1-1",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-1-1"
-                },
-                {
-                  title: "leaf 1-1-2"
-                }
-              ]
-            },
-            {
-              title: "parent 1-2",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-2-1"
-                },
-                {
-                  title: "leaf 1-2-1"
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      model7: "",
       pageOpts: [20, 40, 60, 100],
       listparams: {
         current: 1,
         pageSize: 20
       },
-      deptlist:[],
-      fileparams: null,
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
-      mymessageDetail: {
-        MyMessageListTitle: "ewrwqre",
-        MyMessageupdate: "",
-        AddUser: "",
-        MyMessageMsg: "hello world hello you are welcome",
-        readed: 0,
-        noreaded: 0
-      },
       columns1: [
         {
           title: "标题",
@@ -192,9 +117,7 @@ export default {
     SelectTree,docTree
   },
   created() {
-    this.showDepTree();
      this.initList();
-    this.showDocKind();
   },
   methods: {
     selAllFile(){
@@ -210,33 +133,8 @@ export default {
       this.initList();
     },
     onPageSizeChange(value) {
-      console.log(value);
       this.page.pageSize = value;
-    },
-    showDepTree() {
-      getDepTree(this.deptreedata)
-        .then(res => {
-          
-          if (res.status == 200) {
-            //this.deptlist=this.push(name)
-            this.deptlist = res.data;
-            console.log(this.deptlist);
-            //console.log(res);
-          }
-        })
-        .catch(err => {});
-    },
-    showDocKind(){
-      getDocTree(this.docTreedata).then(res=>{
-        if(res.status==200){
-         this.docTreeList=res.data;
-         console.log(res.data)
-        }
-      })
-    },
-    getChange(data) {  
-      console.log(data);
-    },
+    }, 
     initList() {
       showAllFile(this.listparams)
         .then(res => {
