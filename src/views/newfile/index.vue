@@ -1,19 +1,12 @@
 <template>
   <div>
-    这是新建文件页面
-
     <div class="body-area">
       <Form>
         <FormItem label=" 文件标题：">
           <Input v-model="addFileParams.title" placeholder="" style="width: 200px"></Input>
         </FormItem>
-        <FormItem label="文档类型:">
-          <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
-                 style="width: 200px">
-          </Input>
-          <div v-if='showMenu' class="showmenubox">
-            <Tree :data="docTree" :render="renderContent"></Tree>
-          </div>
+        <FormItem label="文档类型：">
+          <docTree :deptlist='docTreeList' :myvalue='docTypeKey'></docTree>
         </FormItem>
         <FormItem label="封面:">
           <div class="back">
@@ -100,12 +93,16 @@
   import '../../../static/utf8-jsp/ueditor.config'
   import '../../../static/utf8-jsp/ueditor.all';
   import '../../../static/utf8-jsp/lang/zh-cn/zh-cn';
+  import docTree from '@/components/common/docTree'
   import {getDocTree} from "../../api/all_interface";
   import {getDepTree} from "../../api/all_interface";
   import {queryUserByGroup} from "../../api/all_interface";
   export default {
     data() {
       return {
+         docTypeKey:{
+          value:''
+        },
         addFileParams: {
           title: "",
           describle: "",
@@ -124,6 +121,7 @@
           checked: "",
           fileKind: ""
         },
+        docTreeList:[],
         value4:"",
         depTree: [],
         depTreeParams: {
@@ -144,6 +142,9 @@
 
         uploadDoc: false,
       };
+    },
+    components:{
+      docTree
     },
     mounted() {
       this.ue = UE.getEditor('editor', {
@@ -187,7 +188,7 @@
       showDocTree() {
         let _doc = this
         getDocTree(this.docTreeParams).then(res => {
-          _doc.docTree = res.data;
+          _doc.docTreeList = res.data;
         })
       },
       showDepTree() {
