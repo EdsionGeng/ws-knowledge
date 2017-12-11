@@ -155,6 +155,7 @@ export default {
           title: "发布时间",
           key: "addFileTime",
           sortable: true,
+          align:'center'
           
         },
         {
@@ -239,6 +240,7 @@ export default {
     initList() {
       showAllFile(this.listparams)
         .then(res => {
+          console.log(res)
           const showUserUpdata = res.data;
           console.log(showUserUpdata);
           if (res.data.code == 0) {
