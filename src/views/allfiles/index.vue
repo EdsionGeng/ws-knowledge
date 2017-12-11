@@ -50,7 +50,7 @@
   </div>  
 </template>
 <script>
-import { showAllFile } from "../../api/all_interface";
+import { showUserLookFile } from "../../api/all_interface";
 import SelectTree from '@/components/common/selectTree'
 import docTree from '@/components/common/docTree'
 
@@ -66,6 +66,7 @@ export default {
       },
       pageOpts: [20, 40, 60, 100],
       listparams: {
+        userId:145,
         current: 1,
         pageSize: 20
       },
@@ -136,7 +137,7 @@ export default {
       this.page.pageSize = value;
     }, 
     initList() {
-      showAllFile(this.listparams)
+      showUserLookFile(this.listparams)
         .then(res => {
           console.log(res)
           const showUserUpdata = res.data;

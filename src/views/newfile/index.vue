@@ -122,7 +122,7 @@ export default {
           { required: true,message: '请填写文件标题', trigger: 'blur'},
           { type: "string", max: 20, message: "标题限制在20字以内"}
         ],
-        value : [{ required: true, message: '请选择文件类型', trigger: 'blur'}],
+        value : [{ required: true, message: '请选择文件类型', trigger: 'change'}],
         content: [{ required: true }],
         power: [{ required: true }],
       },
@@ -175,12 +175,18 @@ export default {
   },
   methods: {
     chooseCheckPeople(val){
-      console.log(val)
-      let checkval =val;
-      let editval =val;
+      if(val.length>0){
+      console.log(val[0])
+     
+      let checkval=val[0];
+      
+      let editval=val[0]
+      this.editdepTree=[];
+      this.deldepTree=[];
       this.uploadForm.power=val
-      this.editdepTree=checkval;
-      this.deldepTree=editval;
+      this.editdepTree.push(checkval);
+      this.deldepTree.push(editval);
+      }
       },
     chooseDelPeople(val){console.log(val)},
     chooseEditPeople(val){console.log(val)},
@@ -196,6 +202,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
+        console.log(res.data);
       });
     },
     handleUpload(file) {
@@ -241,6 +248,17 @@ export default {
     },
     handleSubmit(name) {
         // 将文件上传中所有输入的信息已保存在uploadForm中
+        if(this.uploadForm.title==''){
+          this.$Message.warning('请填写文件标题');
+        }else if(this.uploadForm.value==''){
+          this.$Message.warning('请选择文件类型');
+        }else if(this.uploadForm.content===''){
+          this.$Message.warning('请编辑文件内容');
+        }else if(this.uploadForm.power===''){
+           this.$Message.warning('请选择文件权限');
+        }else{
+          this.$Message.success('上传成功');
+        }
        console.log(this.uploadForm);
     }
   }
