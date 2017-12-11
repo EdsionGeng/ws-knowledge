@@ -25,8 +25,6 @@
 <script>
   import { showUserAd } from "../../api/all_interface";
   import { showAdPcs } from "../../api/all_interface";
-
-
   export default {
     data(){
       return {
@@ -35,6 +33,7 @@
           {
             title: "标题",
             key: "at",
+
           },
           {
             title: "时间",

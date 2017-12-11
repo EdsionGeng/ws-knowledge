@@ -12,7 +12,7 @@
       </Row>
     </div>
     <div class="doctree-sty ">
-        <Tree :data="docTree" show-checkbox  multiple :render="renderContent"  >  </Tree>
+      <Tree :data="docTree" show-checkbox  multiple :render="renderContent"  >  </Tree>
     </div>
 
 
@@ -40,7 +40,7 @@
       width="400"
       title="删除文件类型"
       @on-ok="sureDelete"
-     >
+    >
       <Form  :model="insertFileParams" :label-width="90">
         <FormItem prop="adStyle" label="类型：">
           <Select placeholder="请选择" :clearable="true" v-model="docTree">
@@ -77,7 +77,7 @@
         insertFileParams:{
           parentId:"",
           docName:"",
-      },
+        },
       };
     },
     created() {
