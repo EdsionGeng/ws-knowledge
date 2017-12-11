@@ -3,20 +3,41 @@
     <Input v-model="myvalue.value" icon="arrow-down-b" placeholder="类型" @on-click='dropmeun(!showMenu)' style="width: 200px">   
     </Input>
     <div v-show='showMenu' class="showmenubox">
-         <Tree :data="deptlist"  multiple   :render="renderContent"></Tree>   
+         <Tree :data="docTreeList"  multiple   :render="renderContent"></Tree>   
     </div> 
 </div>
 </template>
 <script>
-import { getDepTree } from "../../api/all_interface";
+import { getDocTree } from "../../api/all_interface";
 export default {
-    props:["deptlist","myvalue"],
+    props:["myvalue"],
   data() {
     return {
-      showMenu: false
+      showMenu: false,
+       docTreeList:[],
+        docTreedata:{
+          id: "",
+          deptno: "",
+          no: "",
+          pid: "",
+          type: "",
+          checked: "",
+          name: "",
+          department: ""
+        },
     };
   },
+  mounted(){
+    this.showDocKind();
+  },
   methods: {
+     showDocKind(){
+      getDocTree(this.docTreedata).then(res=>{
+        if(res.status==200){
+         this.docTreeList=res.data;
+        }
+      })
+    },
     renderContent(h, { root, node, data }) {
       return h(
         "span",
