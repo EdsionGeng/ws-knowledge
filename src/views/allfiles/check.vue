@@ -63,6 +63,7 @@
 import iconLine from "@/components/common/iconline";
 import {readFile} from '@/api/all_interface'
 import {showfilelog} from '@/api/all_interface'
+import {deleteFile} from '@/api/all_interface'
 
 export default {
   data() {
@@ -191,9 +192,21 @@ export default {
         content: "<h3>确定要删除么！！！</h3>",
         onOk: () => {
           this.$Message.info("Clicked ok");
-        },
+              deleteFile().
+              showfilelog(this.filelogParams)
+                .then(res => {
+                  console.log(res)
+                  const showUserUpdata = res.data;
+                  console.log(showUserUpdata);
+                  if (res.data.code == 0) {
+                    this.page = res.data.rdPage;
+                    this.historyUploadMessageList = showUserUpdata.data;
+                  }
+                }).catch(err => {});
+                },
+                
         onCancel: () => {
-          this.$Message.info("Clicked cancel");
+          this.$Message.info("");
         }
       });
     }
