@@ -11,7 +11,7 @@ import docmanagement from '@/views/docmanagement/index'//文档管理
 import keySearchPage from '@/views/keySearchPage/index'//关键词搜索结果页面
 import messagemanage from '@/views/messagemanage/index'//文件管理
 import mymessage from '@/views/mymessage/index'//个人中心
-import newfile from '@/views/newfile/index'//上传文件
+import newfile from '@/views/allfiles/add'//上传文件
 import check from '@/views/allfiles/check'//全部文件/查看文件
 import log from '@/views/allfiles/logs'//全部文件/查看文件/文件日志
 import change from '@/views/allfiles/change'//全部文件/修改文件
