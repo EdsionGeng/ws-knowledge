@@ -41,6 +41,19 @@ export function deleteAd(data) {
 }
 
 /**
+ * 查看单个文件操作日志接口
+ * @param data
+ * @returns {*}
+ */
+export function showfilelog(data) {
+ return fetch({
+   url: '/show/fileLog.htmls',
+   method: 'post',
+   data: data
+ })
+}
+
+/**
  * 添加公告
  * @param data
  * @returns {*}
