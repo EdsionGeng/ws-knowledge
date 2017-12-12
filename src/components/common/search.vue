@@ -2,7 +2,7 @@
 <div class="clearfix">
  <div class="search">
       <Input class='searchInput' size='large' v-model='inputValue'  icon="search" placeholder="搜索" 
-      style="width: 200px" @keyup.enter.native="changeRouter('keySearchPage')"></Input>
+      style="width: 200px" @on-enter="changeRouter('keySearchPage')" @on-click="changeRouter('keySearchPage')"></Input>
   </div>
   <div class="creatFile">
        <Button  size='large' icon="plus" type='primary' @click="changeRouter('newfile')">新建文件</Button>
