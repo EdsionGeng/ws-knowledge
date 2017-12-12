@@ -4,7 +4,7 @@ import axios from 'axios'
 
 const service = axios.create({
     timeout:5000,
-    baseURL:'http://192.168.22.45:8011',
+    baseURL:'http://192.168.3.26:8011',
   headers: {
     'Content-Type': 'application/json;charset=utf-8',
     // 'Accept': 'application/json'
