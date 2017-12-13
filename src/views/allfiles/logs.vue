@@ -24,18 +24,11 @@
             <Table :columns="columns1" 	:data="fileLogList" ></Table>
           </Col>           
     </Row>
-     <Row style='padding-top:10px,padding-right:5px'> 
-                <Col>            
-                  <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
-                </Col>  
-      </Row>
   </div>  
 </template>
 <script>
 import {showfilelog} from '@/api/all_interface';
 import SelectTree from '@/components/common/selectTree'
-import docTree from '@/components/common/docTree'
-
 export default {
   data() {
     return {
@@ -61,13 +54,12 @@ export default {
       depTypeKey:{
         value:''
       },
-      pageOpts: [20, 40, 60, 100],
+    
       listparams: {
         userId:145,
         current: 1,
         pageSize: 20
       },
-      page: { total: 10, pages: 1, current: 1, pageSize: 20 },
       columns1: [
         {
           title: "标题",
@@ -77,7 +69,7 @@ export default {
         {
           title: "发布时间",
           key: "addFileTime",
-          sortable: true,
+          sortType: 'desc',
           align:'center'
           
         },
@@ -90,29 +82,34 @@ export default {
         fileLogList: [
         {
           title: "hello",
-          addFileTime: "2017-01-01"
+          addFileTime: "2017-01-01",
+          username:"hello"
         },
         {
           title: "hello",
-          addFileTime: "2017-01-01"
+          addFileTime: "2017-01-01",
+          username:"hello1"
         },
         {
           title: "hello",
-          addFileTime: "2017-01-01"
+          addFileTime: "2017-01-01",
+          username:"hello2"
         },
         {
           title: "hello world",
-          addFileTime: "2017-01-02"
+          addFileTime: "2017-01-02",
+          username:"hello3"
         },
         {
           title: "hello world",
-          addFileTime: "2017-01-05"
+          addFileTime: "2017-01-05",
+          username:"hello4"
         }
       ]
     };
   },
   components:{
-    SelectTree,docTree
+    SelectTree
   },
   created() {
      this.initFileLog();
@@ -125,14 +122,6 @@ export default {
       console.log(this.depTypeKey.value)
       console.log(this.operationModel)
     },
-    onPageChange(value) {
-      console.log(value);
-      this.page.current = value;
-      this.initFileLog();
-    },
-    onPageSizeChange(value) {
-      this.page.pageSize = value;
-    }, 
     initFileLog(){
         showfilelog(this.filelogParams)
         .then(res => {
@@ -152,5 +141,4 @@ export default {
 .page {
   padding: 30px 10px;
 }
-
 </style>
