@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 import Home from '@/components/common/Home'
-import DashBoard from '@/components/page/DashBoard'
 import CRUD from '@/components/page/demo1/CRUD'
 import hisupload from '@/views/historyupload/index'                       //历史上传
 import allfiles from '@/views/allfiles/index'                             //全部文件
@@ -15,9 +13,10 @@ import newfile from '@/views/allfiles/add'//上传文件
 import check from '@/views/allfiles/check'//全部文件/查看文件
 import log from '@/views/allfiles/logs'//全部文件/查看文件/文件日志
 import change from '@/views/allfiles/change'//全部文件/修改文件
-import Login from '@/views/login/index'
-import AdminHome from '@/views/home/admin'                              //管理员主页
-import myHome from '@/views/home/index'                              //个人主页
+import Login from '@/views/login/index' //登录页面
+import homeIndex from '@/views/home/index'    //管理员主页或者个人首页
+import ueditor from '@/components/setUeditor'    //管理员主页或者个人首页
+
 
 Vue.use(Router);
 
@@ -29,26 +28,24 @@ const constantRouteMap = [{
   {
     path: '/',
     component: Home,
-    redirect: '/myhome',
+    redirect: '/home',
     children: [
-      
+     
       {
-        path: 'admin',
-        component: AdminHome,
+        path: '/ueditor',
+        component:ueditor,
         meta:{
           pname: '首页'
         }
-      },{
-        path: '/myhome',
-        component: myHome,
+      },
+      {
+        path: '/home',
+        component: homeIndex,
         meta:{
           pname: '首页'
         }
       }
-      ,{
-      path: 'DashBoard',
-      component: DashBoard
-    }, {
+     , {
       path: 'CRUD',//文件管理全部文件
       component: CRUD
     }, {
@@ -135,7 +132,7 @@ const constantRouteMap = [{
   }, {
     path: '*',
     component: Home,
-    redirect: '/admin'
+    redirect: '/home'
   }
 ];
 
