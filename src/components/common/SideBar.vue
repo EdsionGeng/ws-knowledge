@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar">
       <div>
-        <search></search>
+        <search></search>  
       </div>
     <Menu :theme="theme2" accordion @on-select="change">
         <MenuGroup title="" class='menuTitle'>
           
-            <Menu-item name='admin'>首页</Menu-item>
+            <Menu-item name='home'>首页</Menu-item>
            
             <Submenu name="1">
                 <template slot="title">
@@ -15,7 +15,7 @@
                 <Menu-item name="allfiles">全部文件</Menu-item>
                 <Menu-item name="hisupload">历史上传</Menu-item>
             </Submenu>
-            <Submenu name="2" v-if='active=="admin"'>
+            <Submenu name="2" v-if='active'>
                 <template slot="title">
                     管理中心
                 </template>
@@ -23,7 +23,7 @@
                 <Menu-item name="docmanagement">文档管理</Menu-item>
                 <Menu-item name="docdirmanagement">文档目录管理</Menu-item>
             </Submenu>
-            <Submenu name="3" v-if='active=="person"'>
+            <Submenu name="3" v-if='!active'>
                 <template slot="title">
                     个人中心
                 </template>
@@ -42,7 +42,7 @@ export default {
   data(){
       return{
           theme2:'dark',
-          active:'admin'
+          active:sessionStorage.getItem('isAdmin')
       }
   },
   methods:{

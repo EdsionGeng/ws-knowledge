@@ -27,8 +27,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: "admin",
+        password: "12345"
       },
       isLoading: false,
       loginRules: {
@@ -44,13 +44,29 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-
+          console.log(this.loginForm)
           this.isLoading = true;
           // 密码验证成功之后，路由重定向
           login(this.loginForm)
             .then(res => {
-              this.isLoading = false;
-              this.$router.push("/");
+              console.log(res)
+              if(res.data.code==0){
+                let username=res.data.username;
+                let isAdmin=res.data.data.isAdmin;
+                let id=res.data.data.id;
+                console.log(res.data.data);
+                this.isLoading = false;
+                this.$Message.success(res.data.msg);
+                sessionStorage.setItem("isLogin", true);
+                sessionStorage.setItem("isAdmin", isAdmin);
+                sessionStorage.setItem("username", username);
+                sessionStorage.setItem("id", id);
+                console.log(sessionStorage)
+                this.$router.push("/");
+              }else{
+                 this.$Message.error('用户名密码错误，请重新输入');
+                  this.isLoading = false;
+              }
             })
             .catch(err => {
               this.$Message.error("系统异常，请重试！");
