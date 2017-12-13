@@ -77,6 +77,10 @@ export default {
         page:1,
         limit:5
       },
+      delfileParams:{
+        fileId:this.$route.params.id,
+        userId:145
+      },
       columns5: [
         {
           title: "操作部门",
@@ -191,22 +195,20 @@ export default {
       this.$Modal.confirm({
         content: "<h3>确定要删除么！！！</h3>",
         onOk: () => {
-          this.$Message.info("Clicked ok");
-              deleteFile().
-              showfilelog(this.filelogParams)
+              
+              deleteFile(this.delfileParams)
                 .then(res => {
-                  console.log(res)
-                  const showUserUpdata = res.data;
-                  console.log(showUserUpdata);
-                  if (res.data.code == 0) {
-                    this.page = res.data.rdPage;
-                    this.historyUploadMessageList = showUserUpdata.data;
-                  }
+                  console.log(res.data)
+                 if(res.data.code===0){
+                  this.$Message.warning("您删除了该文件");
+                 }else{
+                  this.$Message.error("操作发生错误");
+                 }
                 }).catch(err => {});
                 },
                 
         onCancel: () => {
-          this.$Message.info("");
+          this.$Message.success("您取消了该操作");
         }
       });
     }
