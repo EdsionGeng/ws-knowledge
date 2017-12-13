@@ -177,9 +177,9 @@ export default {
     chooseCheckPeople(val){
       if(val.length>0){
       console.log(val[0])
-     
+
       let checkval=val[0];
-      
+
       let editval=val[0]
       this.editdepTree=[];
       this.deldepTree=[];

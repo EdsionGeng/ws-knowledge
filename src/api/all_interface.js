@@ -99,9 +99,9 @@ export function showAdPcs(data) {
  */
 export function showAllAd(data) {
   return fetch({
-    url: '/show/allad.htmls',
+    url: '/showallad.htmls',
     method: 'post',
-   data: data
+    data: data
   })
 }
 

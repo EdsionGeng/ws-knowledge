@@ -58,7 +58,6 @@
       title="调整文件类型"
       @on-ok="ok"
       @on-cancel="cancel">
-
       <Tree :data="docTree" :render="renderContent1"></Tree>
       <!--@on-check-change="getCheckNode"-->
     </Modal>

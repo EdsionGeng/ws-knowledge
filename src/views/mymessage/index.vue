@@ -43,10 +43,10 @@
 
           }],
         mymessageDetail:{
-          MyMessageListTitle:'ewrwqre',
+          MyMessageListTitle:'',
           MyMessageupdate:'',
           AddUser:'',
-          MyMessageMsg:'hello world hello you are welcome',
+          MyMessageMsg:'',
           readed:0,
           noreaded:0
         },
@@ -105,7 +105,6 @@
               this.mymessageDetail.readed=data.data.isRead
               this.mymessageDetail.noreaded=data.data.noRead
             }
-
           }
         )
           .catch(err => {});
