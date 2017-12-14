@@ -6,19 +6,23 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import store from './store'
-import {
-  login
-} from '@/api/login'
+import {login} from '@/api/login';
+
+
 // import AxiosPlugin from './utils/axios.js'
 // import './mock/index.js'
 
 Vue.use(iView);
 // Vue.use(AxiosPlugin,'$axios');
 Vue.config.productionTip = false
+//不需要自动登录的
+sessionStorage.setItem('isLogin',true);
+sessionStorage.setItem('isAdmin',true);
 
+let isAdmin=true;
 router.beforeEach((to, from, next) => {
-  console.log(to) //path:'login'
-  console.log(from) //path:'/'
+  // console.log(to) //path:'login'
+  // console.log(from) //path:'/'
   let params = {
     username: to.query.username,
     password: to.query.password
@@ -28,9 +32,8 @@ router.beforeEach((to, from, next) => {
     sessionStorage.clear();
   }
   console.log(sessionStorage)
+  
   if (sessionStorage.getItem('isLogin')) {
-    console.log(sessionStorage.getItem('isAdmin') !== 'undefined')
-    console.log(sessionStorage.getItem('isAdmin'))
     if (sessionStorage.getItem('isAdmin') !== 'undefined') {
       console.log(3333)
       // 这下面是什么意思
