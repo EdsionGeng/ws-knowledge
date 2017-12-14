@@ -22,7 +22,7 @@
           <a class='rt' style='margin-top:-25px' @click="changeRouter('/allfiles/log/')">查看更多&gt;&gt;</a>
         </Row> 
         <Row>
-             <Table border :columns="columns5" :data="data5"></Table>
+             <Table border :columns="columns5" :data="historyUploadMessageList"></Table>
         </Row>
       </Col>
       <Col span='6' class="right-col" style='padding-top:30px'>
