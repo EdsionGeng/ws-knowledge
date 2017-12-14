@@ -29406,6 +29406,7 @@ UE.ui = baidu.editor.ui = {};
                             opt.initialFrameWidth = styleWidth;
                         }
                     }
+                    console.log(opt.initialFrameHeight);
                     if (opt.initialFrameHeight) {
                         opt.minFrameHeight = opt.initialFrameHeight;
                     } else {
@@ -29416,9 +29417,10 @@ UE.ui = baidu.editor.ui = {};
                     }
                     //编辑器最外容器设置了高度，会导致，编辑器不占位
                     //todo 先去掉，没有找到原因
-                    if(holder.style.height){
-                        holder.style.height = ''
-                    }
+                    //console.log(holder)
+                    // if(holder.style.height){
+                    //     holder.style.height = ''
+                    // }
                     editor.container.style.width = opt.initialFrameWidth + (/%$/.test(opt.initialFrameWidth) ? '' : 'px');
                     editor.container.style.zIndex = opt.zIndex;
                     oldRender.call(editor, editor.ui.getDom('iframeholder'));
