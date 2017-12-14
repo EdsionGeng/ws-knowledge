@@ -1,8 +1,9 @@
 <template>
   <div class="set">
-    <div id="ueditor" type="text/plain" style="width:1024px;height:500px;"></div>
-    <Button @click="submits">保存</Button> 
-    <Button @click="xieru">写入</Button> 
+    <div type="text/plain" id="ueditor"></div>
+    <br>
+    <Button @click="submits" type='primary'>保存</Button> 
+    <!-- <Button @click="xieru" type='primary'>写入</Button>  -->
   </div>
 </template>
 <script>
@@ -10,17 +11,19 @@ import "../../static/utf8-jsp/ueditor.config";
 import "../../static/utf8-jsp/ueditor.all";
 import "../../static/utf8-jsp/lang/zh-cn/zh-cn";
 export default {
+  props:['ueditorContent',''],
   name: "set",
   data() {
     return {
-      ueditor: "",
-      ueditorContent: [],
+      ueditor1: "",
       ueditorText: "欢迎使用ueditor"
     };
   },
   mounted() {
-    this.ueditor = UE.getEditor("ueditor", {
+      this.ueditor1 = UE.getEditor("ueditor", {
       BaseUrl: "",
+      initialFrameWidth:900  // null表示宽度自动
+      ,initialFrameHeight:400,
       UEDITOR_HOME_URL: "static/utf8-jsp/"
       // toolbars: [
       //   ['fullscreen', 'source', 'undo', 'redo'],
@@ -28,14 +31,17 @@ export default {
       // ]
     });
   },
+  destroyed(){
+    this.ueditor1.destroy();
+  },
   methods: {
     submits() {
-      this.ueditorContent.push(UE.getEditor("ueditor").getContent());
-      console.log(this.ueditorContent.join("\n"));
+      this.ueditorContent.content=UE.getEditor("ueditor").getContent();
+      console.log(this.ueditorContent.content)
     },
-    xieru() {
-      UE.getEditor("ueditor").setContent(this.ueditorText);
-    }
+    // xieru() {
+    //   UE.getEditor("ueditor1").setContent(this.ueditorText);
+    // }
   }
 };
 </script>

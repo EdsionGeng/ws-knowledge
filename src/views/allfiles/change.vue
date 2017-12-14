@@ -24,12 +24,8 @@
 
         <FormItem label="内容：" prop='content'>
           <div class="hello">
-            <div id="editor" type="text/plain" style="width:900px;height:400px;"></div>
-           <div style='margin-top:10px;'>
-             <Button @click="submits" type="primary">保存</Button>
-             <Button @click="xieru" type="primary">写入</Button>
-           </div>
-
+            <Ueditor :ueditorContent='uploadForm'></Ueditor>
+            <!-- <div id="editor" type="text/plain" style="width:900px;height:400px;"></div> -->
           </div>
         </FormItem>
         <FormItem label="上传附件：" >
@@ -116,9 +112,7 @@
   </div>
 </template>
 <script>
-import "../../../static/utf8-jsp/ueditor.config";
-import "../../../static/utf8-jsp/ueditor.all";
-import "../../../static/utf8-jsp/lang/zh-cn/zh-cn";
+import Ueditor from "@/components/setUeditor"
 import docTree from "@/components/common/docTree";
 import { getDocTree } from "../../api/all_interface";
 import { getDepTree } from "../../api/all_interface";
@@ -190,7 +184,7 @@ export default {
     };
   },
   components: {
-    docTree
+    docTree,Ueditor
   },
   mounted() {
     this.showDepTree();
@@ -263,16 +257,6 @@ export default {
         desc: "文件  " + file.name + "过大,已超过10M！"
       });
     },
-    submits() {
-      this.uedata.push(UE.getEditor("editor").getContent());
-      console.log(this.uedata)
-      let html=this.uedata.join("\n");
-      console.log(this.uedata.join("\n"));
-      this.uploadForm.content=html;
-    },
-    xieru() {
-      UE.getEditor("editor").setContent("欢迎使用ueditor");
-    },
     handleSubmit(name) {
         // 将文件上传中所有输入的信息已保存在uploadForm中
         if(this.uploadForm.title==''){
@@ -302,10 +286,8 @@ export default {
   color:#333
 }
 </style>
-
 <style scoped>
 .body-area {
   padding: 20px;
 }
-
 </style>
