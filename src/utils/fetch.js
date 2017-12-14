@@ -3,7 +3,7 @@ import axios from 'axios'
 // 封装axios 创建基础实例以及axios拦截
 
 const service = axios.create({
-    timeout:5000,
+    timeout:60000,
     baseURL:'http://192.168.22.45:8011',
     headers: {
     'Content-Type': 'application/json;charset=utf-8',

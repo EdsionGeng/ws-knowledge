@@ -99,10 +99,9 @@
 
           <Table border ref="circleAdUsers" :columns="showUserGroupColumns" :data="showUserGroup"
                  @on-selection-change="chooseSingleUser" v-show="usershow"></Table>
-
         </div>
         <!--<div class="clearup">-->
-          <!--<Button type="primary" size="large" @click="">确定所勾选人员</Button>-->
+        <!--<Button type="primary" size="large" @click="">确定所勾选人员</Button>-->
         <!--</div>-->
       </div>
     </Modal>
@@ -130,6 +129,7 @@
   import {showAdPcs} from "../../api/all_interface";
   import {insertAd} from "../../api/all_interface";
   import {sendAdToUser} from "../../api/all_interface";
+
   export default {
 
     data() {
@@ -201,7 +201,7 @@
         usershow: false,
         params: {
           current: 1,
-          pageSize: 10,
+          pageSize: 5,
           startDate: "",
           endDate: "",
           title: "",
@@ -227,7 +227,8 @@
         childData: [],
         sendAdParams: {
           userIds: "",
-          commonId: ""
+          commonId:"",
+          groupIds:""
         },
 
         depTree: [],
@@ -271,7 +272,9 @@
       this.showDepTree();
     },
     methods: {
-      onPageChange() {
+      onPageChange(value) {
+        this.params.current = value;
+        console.info(this.page.current);
         this.showAllAdList();
       },
       renderContent(h, {root, node, data}) {
@@ -279,7 +282,6 @@
             style: {
               width: '52px'
             },
-
           },
           data.name)
       },
@@ -295,15 +297,14 @@
         return fielIds
       },
       showAdDetail(row, index) {
-
         this.showAdParams = {
           commonId: row.id,
         };
-//        console.info(this.showAdParams.commonId)
+//      console.info(this.showAdParams.commonId)
         showAdPcs(this.showAdParams).then(
           res => {
             const data = res.data;
-            console.log(res.data);
+            // console.log(res.data);
             if (data.code == 0) {
               this.singleMessageDetail.AdTitle = row.at;
               this.singleMessageDetail.addTime = row.sendTime;
@@ -320,9 +321,8 @@
         });
         this.modal1 = true;
       },
-
       chooseSingleUser(arr) {
-//        console.log('chooseSingleUser:', arr);
+//    console.log('chooseSingleUser:', arr);
         let userIds = "";
         let userNames = "";
         for (let i = 0; i < arr.length; i++) {
@@ -333,16 +333,15 @@
           userIds += arr[i].id;
           userNames += arr[i].username;
         }
-
-        this.insertAdParams.sendDepartmentName=userNames;
-        this.sendAdParams.userIds=userIds;
+        this.insertAdParams.sendDepartmentName = userNames;
+        // console.info(this.insertadParams.sendDepartmentName);
+        this.sendAdParams.userIds = userIds;
 //        sendAdParams: {
 //          userIds: "",
 //        console.info(userIds);
 //        console.info(userNames);
-
 //        this.Ci
-// rcleUserIds.push(userIds);
+//        rcleUserIds.push(userIds);
 //        console.info(this.CircleUserIds)
 //        this.CircleUserNames.push(userNames);
 //        console.info(this.CircleUserNames)
@@ -353,31 +352,30 @@
 //
 //      },
       circleUser(arr) {
-        console.log('circleUser:', arguments)
+        // console.log('circleUser:', arguments)
         let fetchs = []
+        let departmentName = "";
+        let groupIds="";
         for (let i = 0; i < arr.length; i++) {
           if (arr[i].children === null) {
-
             let o = {
               userGroupId: arr[i].id
             }
+            if(i>0){
+              departmentName +=",";
+              groupIds +=",";
+            }
+            departmentName += arr[i].name;
+            groupIds+=arr[i].id;
+            this.sendAdParams.groupIds=groupIds;
             fetchs.push(queryUserByGroup(o))
-//            queryUserByGroup(this.queryUserParams).then(res => {
-//              const data = res.data;
-//              if (data.code == 0) {
-////                this.showUserGroup = data.data;
-//                this.showUserGroup = [...this.showUserGroup, ...data.data];
-//                this.usershow = true;
-//              }
-//            })
-
           }
         }
+        this.insertAdParams.sendDepartmentName = departmentName;
         Promise.all(fetchs).then(ret => {
-          // console.log('总数据:', ret)
           let tmpa = []
           ret.forEach(item => {
-            console.log('item:', item)
+            // console.log('item:', item)
             tmpa = [...tmpa, ...item.data.data]
           })
           this.showUserGroup = tmpa;
@@ -395,7 +393,7 @@
       },
       toDelAd() {
         if (this.delAdParams.ids == "") {
-          this.$Message.info('没有选中相应数据!');
+          this.$Message.warning('没有选中相应数据!');
           return
         }
         else {
@@ -416,7 +414,7 @@
       handleSearch() {
         this.showAllAdList();
       },
-      sureSend(){
+      sureSend() {
         if (this.insertAdParams.title == "") {
           this.$Message.warning("标题不能为空！");
           return
@@ -435,18 +433,17 @@
         }
         insertAd(this.insertAdParams).then(res => {
           const data = res.data;
-          let _self=this;
+          let _self = this;
           if (data.code == 0) {
-            console.info(data);
-            _self.sendAdParams.commonId=data.data;
-            console.info( _self.sendAdParams);
-            sendAdToUser( _self.sendAdParams).then(res => {
+            // console.info(data);
+            _self.sendAdParams.commonId = data.data;
+            console.info(_self.sendAdParams);
+            sendAdToUser(_self.sendAdParams).then(res => {
                 const data = res.data;
-                if(data.code==0){
-
+                if (data.code == 0) {
                   this.$Message.success("操作成功!");
                   this.showAllAdList();
-                  this.insertAd=false;
+                  this.insertAd = false;
                 }
               }
             )
@@ -465,8 +462,8 @@
 // this.$Message.info('Clicked ok');
       },
       cancel() {
-       this.insertAdParams.sendDepartmentName="";
-       this.sendAdParams.userIds="";
+        this.insertAdParams.sendDepartmentName = "";
+        this.sendAdParams.userIds = "";
       },
       showDepTree() {
         let _self = this

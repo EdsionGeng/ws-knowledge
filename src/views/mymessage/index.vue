@@ -67,7 +67,11 @@
       this.initUserAd();
     },
     methods:{
-      onPageChange() {},
+      onPageChange(value) {
+        this.data.current=value;
+        this.initUserAd();
+
+      },
 //    ok () {
 //      this.$Message.info('Clicked ok');
 //    },

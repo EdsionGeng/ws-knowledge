@@ -14,12 +14,12 @@
       <Row>
           <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
               <Tabs type="card">
-                  <TabPane label="列表">    
+                  <TabPane label="列表">
                     <Row>
                       <Col>
                         <Table :columns="columns1" 	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
-                      </Col>  
-                    </Row>               
+                      </Col>
+                    </Row>
                   </TabPane>
                  <TabPane label="图文">
                     <Row>
@@ -32,22 +32,22 @@
                               <p>上传时间：{{list.addFileTime}}</p>
                               <p>上传人：{{list.username}}</p>
                           </div>
-                          
+
                         </Card>
                         </a>
-                             
+
                       </Col>
                   </Row>
                 </TabPane>
               </Tabs>
           </Col>
     </Row>
-     <Row style='padding-top:10px,padding-right:5px'> 
-                <Col>            
+     <Row style='padding-top:10px,padding-right:5px'>
+                <Col>
                   <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
-                </Col>  
+                </Col>
       </Row>
-  </div>  
+  </div>
 </template>
 <script>
 import { showUserLookFile } from "../../api/all_interface";
@@ -68,7 +68,7 @@ export default {
       listparams: {
         userId:145,
         current: 1,
-        pageSize: 20
+        pageSize: 2
       },
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
       columns1: [
@@ -76,13 +76,13 @@ export default {
           title: "标题",
           key: "title"
         },
-        
+
         {
           title: "发布时间",
           key: "addFileTime",
           sortable: true,
           align:'center'
-          
+
         },
         {
           title: "上传人",
@@ -122,20 +122,19 @@ export default {
   },
   methods: {
     selAllFile(){
-      console.log(this.docTypeKey.value)
-      console.log(this.depTypeKey.value)
+
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
     },
     onPageChange(value) {
-      console.log(value);
+
       this.page.current = value;
       this.initList();
     },
     onPageSizeChange(value) {
       this.page.pageSize = value;
-    }, 
+    },
     initList() {
       showUserLookFile(this.listparams)
         .then(res => {

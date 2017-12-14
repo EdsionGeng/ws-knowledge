@@ -195,8 +195,9 @@ export default {
     },
 
     /**
-       * 获取文档树形结构
-       */
+     *
+     * 获取文档树形结构
+     */
 
     showDepTree() {
       let _self = this;
