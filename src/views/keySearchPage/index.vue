@@ -60,7 +60,8 @@ export default {
   data() {
     return {
         docTypeKey:{
-          value:''
+          value:'',
+          id:0
         },
         depTypeKey:{
           value:''
@@ -72,7 +73,9 @@ export default {
         current: 1,
         pageSize: 20,
         userId: 145,
-        searchContent:this.$route.params.key
+        searchContent:this.$route.params.key,
+        // departmentName:this.depTypeKey.value,
+        // fileStyleId:this.docTypeKey.id
       },
       deptlist:[],
       fileparams: null,
@@ -138,8 +141,29 @@ export default {
   },
   methods: {
      selAllFile(){
-      console.log(this.docTypeKey.value)
-      console.log(this.depTypeKey.value)
+        let selListParams={
+            current: 1,
+            pageSize: 20,
+            userId: 145,
+            searchContent:this.$route.params.key,
+            departmentName:this.depTypeKey.value,
+            fileStyleId:this.docTypeKey.id
+       }
+       console.log(selListParams)
+       console.log(
+         this.docTypeKey.id,this.depTypeKey.value
+       )
+        searchResult(selListParams)
+        .then(res => {
+          const showUserUpdata = res.data;
+          console.log(showUserUpdata);
+          if (res.data.code == 0) {
+            console.log(res.data)
+            this.page = res.data.rdPage;
+            this.historyUploadMessageList = showUserUpdata.data;
+          }
+        })
+        .catch(err => {});
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
