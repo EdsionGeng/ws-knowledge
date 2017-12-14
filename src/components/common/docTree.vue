@@ -48,6 +48,8 @@ export default {
           },
           on: {
             click: () => {
+              console.log(data)
+              this.myvalue.id=data.id,
               this.myvalue.value = data.fileKindName;
               this.showMenu = false;
             }
