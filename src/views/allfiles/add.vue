@@ -12,7 +12,7 @@
           <div>
             <Upload
               :before-upload="handleUpload"
-              action="//jsonplaceholder.typicode.com/posts/">
+              action="http://192.168.22.45:8011/file/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
             <div v-if="file !== null"> 所选文件: {{ file.name }}
@@ -78,15 +78,17 @@
       <Form>
         <FormItem label="">
           <Upload
-            :show-upload-list="false"
-            multiple
+            :show-upload-list="true"
+             multiple
+            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
+            :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
             :before-upload="handleUpload"
             :on-success="handleSuccess"
             action="//jsonplaceholder.typicode.com/posts/">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
-          </Upload>
+          </Upload >
           <div v-if="filedoc!== null">Upload file: {{ filedoc.name }}
             <Button type="text" @click="docupload" :loading="fileloadingStatus">{{ fileloadingStatus ? '内容' : ' 确定上传？'}}
             </Button>
@@ -110,6 +112,7 @@
   export default {
     data() {
       return {
+        uploadList: [],
         ruleValidate: {
           title: [
             {required: true, message: '请填写文件标题', trigger: 'blur'},
@@ -149,7 +152,6 @@
           name: "",
           department: ""
         },
-        ue: "",
         uedata: [],
         xierudata: [],
         uploadDoc: false
@@ -159,14 +161,39 @@
       docTree, Ueditor
     },
     mounted() {
+      this.uploadList = this.$refs.upload.fileList;
       this.showDepTree();
-      this.ue = UE.getEditor("editor", {
-        BaseUrl: "",
-        UEDITOR_HOME_URL: "static/utf8-jsp/"
-        // toolbars:[]
-      });
     },
     methods: {
+      handleRemove (file) {
+        const fileList = this.$refs.upload.fileList;
+        this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+      },
+      handleSuccess (res, file) {
+        file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+        file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+      },
+      handleBeforeUpload () {
+        const check = this.uploadList.length < 5;
+        if (!check) {
+          this.$Notice.warning({
+            title: 'Up to five pictures can be uploaded.'
+          });
+        }
+        return check;
+      },
+      handleMaxSize (file) {
+        this.$Notice.warning({
+          title: 'Exceeding file size limit',
+          desc: 'File  ' + file.name + ' is too large, no more than 2M.'
+        });
+      },
+      handleFormatError (file) {
+        this.$Notice.warning({
+          title: 'The file format is incorrect',
+          desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+        });
+      },
       chooseCheckPeople(val) {
         if (val.length > 0) {
           console.log(val[0])
@@ -203,8 +230,10 @@
         });
       },
       handleUpload(file) {
+        console.log(1111111)
         this.file = file;
-        return false;
+        console.log(file)
+       // return false;
       },
       handleSuccess(res, file) {
         file.url =
