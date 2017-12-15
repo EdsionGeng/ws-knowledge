@@ -11,20 +11,25 @@
             <Option v-for="item in operatype" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </Col>
-        <Col span="9"> 
+        <Col span="9">
         <Button type='primary' @click="selAllFile">查询</Button>
         <Button class='rt' type="ghost" @click="gobackRouter()">
             <Icon type="chevron-left"></Icon>
             返回
-          </Button> 
+          </Button>
         </Col>
     </Row>
-    <Row style='margin-top:20px'>        
+    <Row style='margin-top:20px'>
           <Col>
             <Table :columns="columns1" 	:data="fileLogList" ></Table>
-          </Col>           
+          </Col>
     </Row>
-  </div>  
+  <Row style='padding-top:10px,padding-right:5px'>
+    <Col>
+    <Page :total="page.total"  show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+    </Col>
+  </Row>
+  </div>
 </template>
 <script>
 import {showfilelog} from '@/api/all_interface';
@@ -32,79 +37,49 @@ import SelectTree from '@/components/common/selectTree'
 export default {
   data() {
     return {
+      isSelFile:false,
+      page:[],
       operatype:[
         {
-        value:'上传文档',
-        label:'上传文档'
+        value:'1',
+        label:'添加文档'
       },{
-        value:'修改文档',
-        label:'修改文档'
+        value:'3',
+        label:'更改文档'
       },{
-        value:'查阅文档',
+        value:'4',
         label:'查阅文档'
-      }],
+      },{
+          value:'2',
+          label:'删除文档'
+        }],
       operationModel:'',
-      filelogParams:{
-        fileId:this.$route.params.id,
-        page:1,
-        limit:5
-      },
+
       //用对象就可以让子组件修改父组件的内容
-     
+
       depTypeKey:{
         value:''
       },
-    
-      listparams: {
-        userId:145,
-        current: 1,
-        pageSize: 20
-      },
       columns1: [
         {
-          title: "标题",
-          key: "title"
-        },
-        
-        {
-          title: "发布时间",
-          key: "addFileTime",
-          sortType: 'desc',
-          align:'center'
-          
+          title: "操作部门",
+          key: "departmentName"
         },
         {
-          title: "上传人",
-          key: "username",
-          align: "right"
+          title: "姓名",
+          key: "username"
+        },
+        {
+          title: "时间",
+          key: "operationTime",
+          sortType:'desc'
+        },
+        {
+          title: "操作类型",
+          key: "operation"
         }
       ],
         fileLogList: [
-        {
-          title: "hello",
-          addFileTime: "2017-01-01",
-          username:"hello"
-        },
-        {
-          title: "hello",
-          addFileTime: "2017-01-01",
-          username:"hello1"
-        },
-        {
-          title: "hello",
-          addFileTime: "2017-01-01",
-          username:"hello2"
-        },
-        {
-          title: "hello world",
-          addFileTime: "2017-01-02",
-          username:"hello3"
-        },
-        {
-          title: "hello world",
-          addFileTime: "2017-01-05",
-          username:"hello4"
-        }
       ]
     };
   },
@@ -119,11 +94,27 @@ export default {
       this.$router.back();
     },
     selAllFile(){
-      console.log(this.depTypeKey.value)
-      console.log(this.operationModel)
+      console.log(this.depTypeKey.value);
+      console.log(this.operationModel);
+      // this.filelogParams={
+      //   fileId:this.$route.params.id,
+      //   page:1,
+      //   limit:20,
+      //   operationStyle:this.depTypeKey.value,
+      //   departmentName:this.operationModel
+      // };
+      console.log(this.fileLogParams);
+      this.initFileLog();
     },
     initFileLog(){
-        showfilelog(this.filelogParams)
+      const filelogParams={
+        fileId:this.$route.params.id,
+          current:1,
+          pageSize:5,
+          operationStyle:this.operationModel,
+          departmentName:this.depTypeKey.value
+      };
+      showfilelog(filelogParams)
         .then(res => {
           console.log(res)
           const showfileLogList = res.data;
@@ -133,6 +124,15 @@ export default {
             this.fileLogList = showfileLogList.data;
           }
         }).catch(err => {});
+    },
+    onPageChange(value) {
+      this.page.current = value;
+
+      this.initFileLog();
+    },
+    onPageSizeChange(value) {
+      console.log(value);
+      this.page.pageSize = value;
     },
   }
 };
