@@ -60,7 +60,7 @@ export default {
                 sessionStorage.setItem("isLogin", true);
                 sessionStorage.setItem("isAdmin", isAdmin);
                 sessionStorage.setItem("username", username);
-                sessionStorage.setItem("id", id);
+                sessionStorage.setItem("userId", id);
                 console.log(sessionStorage)
                 this.$router.push("/");
               }else{

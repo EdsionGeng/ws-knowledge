@@ -11,8 +11,8 @@
         <FormItem label="封面：">
           <div >
             <Upload :show-upload-list='true'
-              :before-upload="handleUpload"
-              action="//jsonplaceholder.typicode.com/posts/">
+              :before-upload="handleBeforeUpload"
+              action="http://192.168.3.26:8011/file/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
             <div v-if="file !== null"> 所选文件: {{ file.name }}
@@ -33,10 +33,11 @@
           <div class="uploadBtn">
             <Button type="primary" size="small" @click="uploadDoc=true" :show-upload-list='true'>上传附件</Button>
           </div>
-        <Row v-for='(item,index) in fujainList' :key='index'>
+        <Row v-for='(item,index) in uploadList' :key='index'>
            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i>
            <span>{{item.title}} <span style='color:#ccc'>（{{item.fileSize}}）</span>  </span>
            <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
+           <span @click.native="handleRemove(item)" class="rt">删除</span>
         </Row>
         </FormItem>
         <div  v-if='canchangepower'>
@@ -57,11 +58,9 @@
                 </div>
               </TabPane>
             </Tabs>
-
           </FormItem>
-
         </div>
-      
+
         <!--<FormItem label="上传附件:">-->
         <!--<div class="back">-->
         <!--<Upload-->
@@ -86,13 +85,16 @@
       <Form>
         <FormItem label="">
           <Upload
-            :show-upload-list="false"
+            ref="upload"
+            :show-upload-list="true"
             multiple
+            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
+            :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
-            :before-upload="handleUpload"
+            :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
-            action="//jsonplaceholder.typicode.com/posts/">
+            action="http://192.168.3.26:8011/file/upload.htmls">
 
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
@@ -105,7 +107,6 @@
           <FormItem label=" 文件描述：">
             <Input v-model="addFileParams.describle" placeholder="" style="width: 200px"></Input>
           </FormItem>
-
       </Form>
     </Modal>
 
@@ -120,24 +121,23 @@ import { queryUserByGroup } from "../../api/all_interface";
 export default {
   data() {
     return {
-       canchangepower:true,
-       fujainList: [
-        {
-          fileSize: "100k",
-          title: "我的文档",
-          description: "sdfjsdfj osdafi sdf sdaf asdf sad"
-        },
-        {
-          fileSize: "100k",
-          title: "我的文档",
-          description: "sdfjsdfj osdafi sdf sdaf asdf sad"
-        },
-        {
-          fileSize: "100k",
-          title: "我的文档",
-          description: "sdfjsdfj osdafi sdf sdaf asdf sad"
-        }
-      ],
+       uploadList: [
+         {
+         fileSize: "100k",
+         title: "我的文档",
+         description: "sdfjsdfj osdafi sdf sdaf asdf sad"
+       },
+         {
+           fileSize: "100k",
+           title: "我的文档",
+           description: "sdfjsdfj osdafi sdf sdaf asdf sad"
+         },
+         {
+           fileSize: "100k",
+           title: "我的文档",
+           description: "sdfjsdfj osdafi sdf sdaf asdf sad"
+         }],
+      canchangepower:true,
       ruleValidate: {
         title: [
           { required: true,message: '请填写文件标题', trigger: 'blur'},
@@ -177,7 +177,6 @@ export default {
         name: "",
         department: ""
       },
-      ue: "",
       uedata: [],
       xierudata: [],
       uploadDoc: false
@@ -187,20 +186,50 @@ export default {
     docTree,Ueditor
   },
   mounted() {
+    console.log(this.$refs)
+    //this.uploadList = this.$refs.upload.fileList;
     this.showDepTree();
-    this.ue = UE.getEditor("editor", {
-      BaseUrl: "",
-      UEDITOR_HOME_URL: "static/utf8-jsp/"
-      // toolbars:[]
-    });
   },
   methods: {
+    handleRemove (file) {
+      const fileList = this.$refs.upload.fileList;
+      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+    },
+    handleSuccess (res, file) {
+      console.log(res);
+      console.log(file);
+      // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+      // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+    },
+    handleBeforeUpload (file) {
+      this.filedoc=file
+      console.log(file);
+      const check = this.uploadList.length < 10;
+      if (!check) {
+        this.$Notice.warning({
+          title: '附件上传已达上限'
+        });
+      }
+      return check;
+    },
+    handleMaxSize (file) {
+      this.$Notice.warning({
+        title: 'Exceeding file size limit',
+        desc: 'File  ' + file.name + ' is too large, no more than 2M.'
+      });
+    },
+    handleFormatError (file) {
+      this.$Notice.warning({
+        title: 'The file format is incorrect',
+        desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+      });
+    },
     chooseCheckPeople(val){
       if(val.length>0){
       console.log(val[0])
-     
+
       let checkval=val[0];
-      
+
       let editval=val[0]
       this.editdepTree=[];
       this.deldepTree=[];
