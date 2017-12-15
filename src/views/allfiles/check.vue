@@ -3,7 +3,7 @@
     <Row >
       <Col span='18' style='border-right:1px solid #ccc;padding:20px;'>
        <Row  type='flex' align='middle' justify='space-between'>
-          <Col  class="lf"><Button type='ghost' @click="goRouter">&lt; 返回</Button></Col> 
+          <Col  class="lf"><Button type='ghost' @click="goRouter">&lt; 返回</Button></Col>
           <Col ><h3 style='margin-left:-64px'>{{fileDetails.title}}</h3> </Col>
           <Col > </Col>
         </Row>
@@ -12,7 +12,7 @@
         </Row>
         <Row>
           <icon-line myclass="iconfont icon-jinlingyingcaiwangtubiao17" msg='附件'></icon-line>
-        </Row> 
+        </Row>
         <Row v-for='(item,index) in fujainList' :key='index'>
            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.title}} <span style='color:#ccc'>（{{item.fileSize}}）</span>  </span>
            <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
@@ -20,43 +20,43 @@
         <Row style='padding-top:30px;padding-bottom:25px;'>
           <icon-line myclass="iconfont icon-caozuorizhi" msg='操作日志'></icon-line>
           <a class='rt' style='margin-top:-25px' @click="changeRouter('/allfiles/log/')">查看更多&gt;&gt;</a>
-        </Row> 
+        </Row>
         <Row>
              <Table border :columns="columns5" :data="historyUploadMessageList"></Table>
         </Row>
       </Col>
       <Col span='6' class="right-col" style='padding-top:30px'>
           <Row  type='flex' align='top' justify='center'>
-            <Col span="16"> 
+            <Col span="16">
               <img src="./bg.jpg" style='width:100%;height:150px;border:8px solid #ccc'>
-            </Col>  
+            </Col>
           </Row>
           <Row type='flex' justify='center'>
-            <Col > 
+            <Col >
               文件上传者：{{fileDetails.username}}
             </Col>
-          </Row> 
+          </Row>
            <Row type='flex' justify='center'>
-            <Col> 
+            <Col>
               所属部门：{{fileDetails.departmentName}}
             </Col>
-          </Row> 
-           <Row type='flex' justify='center'>           
-             <Col > 
+          </Row>
+           <Row type='flex' justify='center'>
+             <Col >
               上传时间：{{fileDetails.addFileTime}}
             </Col>
           </Row>
-          <Row type='flex' justify='center'>           
-             <Col > 
+          <Row type='flex' justify='center'>
+             <Col >
               文件类型：{{fileDetails.fileStyle}}
             </Col>
           </Row>
           <Row type='flex' justify='center' >
-            <Button style='margin-right:10%;' v-if='canChange' type="primary" @click="changeRouter('/allfiles/change/')">修改文件</Button>  
-            <Button v-if='canDel' type="primary" @click='delFile'>删除文件</Button>  
-          </Row> 
+            <Button style='margin-right:10%;' v-if='canChange' type="primary" @click="changeRouter('/allfiles/change/')">修改文件</Button>
+            <Button v-if='canDel' type="primary" @click='delFile'>删除文件</Button>
+          </Row>
       </Col>
-    </Row> 
+    </Row>
   </div>
 </template>
 <script>
@@ -75,7 +75,7 @@ export default {
       filelogParams:{
         fileId:this.$route.params.id,
         page:1,
-        limit:5
+        limit:3
       },
       delfileParams:{
         fileId:this.$route.params.id,
@@ -84,48 +84,23 @@ export default {
       columns5: [
         {
           title: "操作部门",
-          key: "date"
+          key: "departmentName"
         },
         {
           title: "姓名",
-          key: "name"
+          key: "username"
         },
         {
           title: "时间",
-          key: "age",
+          key: "operationTime",
           sortType:'desc'
         },
         {
           title: "操作类型",
-          key: "address"
+          key: "operation"
         }
       ],
-      data5: [
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park",
-          date: "2016-10-03"
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-          date: "2016-10-01"
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park",
-          date: "2016-10-02"
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park",
-          date: "2016-10-04"
-        }
-      ],
+      historyUploadMessageList:[],
       fujainList: [
         {
           fileSize: "100k",
@@ -163,6 +138,7 @@ export default {
   mounted(){
     this.initreadFile();
     this.initFileLog();
+    console.log(this.$route.params.id)
   },
   methods: {
     initFileLog(){
@@ -170,6 +146,7 @@ export default {
         .then(res => {
           console.log(res)
           const showUserUpdata = res.data;
+          console.log('查看个人日志记录')
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
@@ -180,7 +157,8 @@ export default {
     initreadFile(){
       readFile(this.readFileparams)
         .then(res => {
-          console.log()
+          console.log('输出查看文件的信息');
+          console.log(res)
         })
     },
     goRouter() {
@@ -195,7 +173,7 @@ export default {
       this.$Modal.confirm({
         content: "<h3>确定要删除么！！！</h3>",
         onOk: () => {
-              
+
               deleteFile(this.delfileParams)
                 .then(res => {
                   console.log(res.data)
@@ -206,7 +184,7 @@ export default {
                  }
                 }).catch(err => {});
                 },
-                
+
         onCancel: () => {
           this.$Message.success("您取消了该操作");
         }
