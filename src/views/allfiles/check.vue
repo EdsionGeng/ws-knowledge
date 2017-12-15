@@ -75,7 +75,7 @@ export default {
       filelogParams:{
         fileId:this.$route.params.id,
         page:1,
-        limit:5
+        limit:3
       },
       delfileParams:{
         fileId:this.$route.params.id,
@@ -84,48 +84,23 @@ export default {
       columns5: [
         {
           title: "操作部门",
-          key: "date"
+          key: "departmentName"
         },
         {
           title: "姓名",
-          key: "name"
+          key: "username"
         },
         {
           title: "时间",
-          key: "age",
+          key: "operationTime",
           sortType:'desc'
         },
         {
           title: "操作类型",
-          key: "address"
+          key: "operation"
         }
       ],
-      data5: [
-        {
-          name: "John Brown",
-          age: 18,
-          address: "New York No. 1 Lake Park",
-          date: "2016-10-03"
-        },
-        {
-          name: "Jim Green",
-          age: 24,
-          address: "London No. 1 Lake Park",
-          date: "2016-10-01"
-        },
-        {
-          name: "Joe Black",
-          age: 30,
-          address: "Sydney No. 1 Lake Park",
-          date: "2016-10-02"
-        },
-        {
-          name: "Jon Snow",
-          age: 26,
-          address: "Ottawa No. 2 Lake Park",
-          date: "2016-10-04"
-        }
-      ],
+      historyUploadMessageList:[],
       fujainList: [
         {
           fileSize: "100k",
@@ -163,6 +138,7 @@ export default {
   mounted(){
     this.initreadFile();
     this.initFileLog();
+    console.log(this.$route.params.id)
   },
   methods: {
     initFileLog(){
@@ -170,6 +146,7 @@ export default {
         .then(res => {
           console.log(res)
           const showUserUpdata = res.data;
+          console.log('查看个人日志记录')
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
@@ -180,7 +157,8 @@ export default {
     initreadFile(){
       readFile(this.readFileparams)
         .then(res => {
-//          console.log("hjhjhjh"+"",res.data)
+          console.log('输出查看文件的信息');
+          console.log(res)
         })
     },
     goRouter() {

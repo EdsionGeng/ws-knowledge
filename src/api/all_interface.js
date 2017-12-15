@@ -10,8 +10,8 @@ import fetch from '../utils/fetch.js'
 export function getUserMenus(data) {
   return fetch({
     url: '/getMenus.htmls',
-    method: 'get',
-    params: data
+    method: 'data',
+    data: data
   })
 }
 /**
