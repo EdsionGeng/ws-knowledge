@@ -6,10 +6,10 @@
           <Input v-model="uploadForm.title" placeholder="请输入标题" style="width: 200px"></Input>
         </FormItem>
         <FormItem label="文档类型：" prop="value">
-          <docTree  :myvalue='uploadForm'></docTree>
+          <docTree :myvalue='uploadForm'></docTree>
         </FormItem>
         <FormItem label="封面：">
-          <div >
+          <div>
             <Upload
               :before-upload="handleUpload"
               action="//jsonplaceholder.typicode.com/posts/">
@@ -21,43 +21,41 @@
             </div>
           </div>
         </FormItem>
-
         <FormItem label="内容：" prop='content'>
           <div class="hello">
-            <div id="editor" type="text/plain" style="width:900px;height:400px;"></div>
-           <div style='margin-top:10px;'>
-             <Button @click="submits" type="primary">保存</Button>
-             <Button @click="xieru" type="primary">写入</Button>
-           </div>
-
+            <Ueditor :ueditorContent='uploadForm'></Ueditor>
+            <!--<div id="editor" type="text/plain" style="width:900px;height:400px;"></div>-->
           </div>
         </FormItem>
-        <FormItem label="上传附件：" >
-
+        <FormItem label="上传附件：">
           <div class="uploadBtn">
             <Button type="primary" size="small" @click="uploadDoc=true">上传附件</Button>
           </div>
         </FormItem>
-        <FormItem label="权限设置：" prop='power' >
-          <Tabs value="name1" type='card' class='newfileTab'  style="width:900px;">
+        <FormItem label="权限设置：" prop='power'>
+          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;">
             <TabPane label="可查阅人员" name="name1">
               <div>
-              <Tree :data="depTree" show-checkbox multiple :render="renderContentDep" @on-check-change='chooseCheckPeople'></Tree>
+                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                      @on-check-change='chooseCheckPeople'></Tree>
               </div>
             </TabPane>
-            <TabPane label="可编辑人员" name="name2"><div>
-              <Tree :data="depTree" show-checkbox multiple :render="renderContentDep" @on-check-change='chooseEditPeople'>></Tree>
+            <TabPane label="可编辑人员" name="name2">
+              <div>
+                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                      @on-check-change='chooseEditPeople'>>
+                </Tree>
               </div>
             </TabPane>
             <TabPane label="可删除人员" name="name3">
               <div>
-                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"@on-check-change='chooseDelPeople'> ></Tree>
+                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                      @on-check-change='chooseDelPeople'> >
+                </Tree>
               </div>
             </TabPane>
           </Tabs>
-
         </FormItem>
-
         <!--<FormItem label="上传附件:">-->
         <!--<div class="back">-->
         <!--<Upload-->
@@ -72,7 +70,6 @@
           <Button type='primary' size='large' @click="handleSubmit('formInline')">确定上传</Button>
         </FormItem>
       </Form>
-
     </div>
     <Modal
       v-model="uploadDoc"
@@ -88,7 +85,6 @@
             :before-upload="handleUpload"
             :on-success="handleSuccess"
             action="//jsonplaceholder.typicode.com/posts/">
-
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
           <div v-if="filedoc!== null">Upload file: {{ filedoc.name }}
@@ -96,194 +92,196 @@
             </Button>
           </div>
         </FormItem>
-
-          <FormItem label=" 文件描述：">
-            <Input v-model="addFileParams.describle" placeholder="" style="width: 200px"></Input>
-          </FormItem>
-
+        <FormItem label=" 文件描述：">
+          <Input v-model="addFileParams.describle" placeholder="" style="width: 200px"></Input>
+        </FormItem>
       </Form>
     </Modal>
 
   </div>
 </template>
 <script>
-import "../../../static/utf8-jsp/ueditor.config";
-import "../../../static/utf8-jsp/ueditor.all";
-import "../../../static/utf8-jsp/lang/zh-cn/zh-cn";
-import docTree from "@/components/common/docTree";
-import { getDocTree } from "../../api/all_interface";
-import { getDepTree } from "../../api/all_interface";
-import { queryUserByGroup } from "../../api/all_interface";
-export default {
-  data() {
-    return {
-      ruleValidate: {
-        title: [
-          { required: true,message: '请填写文件标题', trigger: 'blur'},
-          { type: "string", max: 20, message: "标题限制在20字以内"}
-        ],
-        value : [{ required: true, message: '请选择文件类型', trigger: 'change'}],
-        content: [{ required: true }],
-        power: [{ required: true }],
-      },
-      uploadForm:{
-        title:'',
-        value:'',
-        content:'',
-        power:''
-      },
-      addFileParams: {
-        title: "",
-        describle: ""
-      },
-      showMenu: false,
-      file: null,
-      filedoc: null,
-      loadingStatus: false,
-      fileloadingStatus: false,
-      // 编辑是根据查看人员进行筛选的
-      depTree: [],
-      editdepTree:[],
-      deldepTree:[],
+  import Ueditor from "@/components/setUeditor"
+  import docTree from "@/components/common/docTree";
+  import {getDocTree} from "../../api/all_interface";
+  import {getDepTree} from "../../api/all_interface";
+  import {queryUserByGroup} from "../../api/all_interface";
 
-      depTreeParams: {
-        id: "",
-        deptno: "",
-        no: "",
-        pid: "",
-        type: "",
-        checked: "",
-        name: "",
-        department: ""
-      },
-      ue: "",
-      uedata: [],
-      xierudata: [],
-      uploadDoc: false
-    };
-  },
-  components: {
-    docTree
-  },
-  mounted() {
-    this.showDepTree();
-    this.ue = UE.getEditor("editor", {
-      BaseUrl: "",
-      UEDITOR_HOME_URL: "static/utf8-jsp/"
-      // toolbars:[]
-    });
-  },
-  methods: {
-    chooseCheckPeople(val){
-      if(val.length>0){
-      console.log(val[0])
-     
-      let checkval=val[0];
-      
-      let editval=val[0]
-      this.editdepTree=[];
-      this.deldepTree=[];
-      this.uploadForm.power=val
-      this.editdepTree.push(checkval);
-      this.deldepTree.push(editval);
-      }
-      },
-    chooseDelPeople(val){console.log(val)},
-    chooseEditPeople(val){console.log(val)},
-    renderContentDep(h, { root, node, data }) {
-      return h("span", data.name);
+  export default {
+    data() {
+      return {
+        ruleValidate: {
+          title: [
+            {required: true, message: '请填写文件标题', trigger: 'blur'},
+            {type: "string", max: 20, message: "标题限制在20字以内"}
+          ],
+          value: [{required: true, message: '请选择文件类型', trigger: 'change'}],
+          content: [{required: true}],
+          power: [{required: true}],
+        },
+        uploadForm: {
+          title: '',
+          value: '',
+          content: '',
+          power: ''
+        },
+        addFileParams: {
+          title: "",
+          describle: ""
+        },
+        showMenu: false,
+        file: null,
+        filedoc: null,
+        loadingStatus: false,
+        fileloadingStatus: false,
+        // 编辑是根据查看人员进行筛选的
+        depTree: [],
+        editdepTree: [],
+        deldepTree: [],
+
+        depTreeParams: {
+          id: "",
+          deptno: "",
+          no: "",
+          pid: "",
+          type: "",
+          checked: "",
+          name: "",
+          department: ""
+        },
+        ue: "",
+        uedata: [],
+        xierudata: [],
+        uploadDoc: false
+      };
     },
+    components: {
+      docTree, Ueditor
+    },
+    mounted() {
+      this.showDepTree();
+      this.ue = UE.getEditor("editor", {
+        BaseUrl: "",
+        UEDITOR_HOME_URL: "static/utf8-jsp/"
+        // toolbars:[]
+      });
+    },
+    methods: {
+      chooseCheckPeople(val) {
+        if (val.length > 0) {
+          console.log(val[0])
 
-    /**
+          let checkval = val[0];
+
+          let editval = val[0]
+          this.editdepTree = [];
+          this.deldepTree = [];
+          this.uploadForm.power = val
+          this.editdepTree.push(checkval);
+          this.deldepTree.push(editval);
+        }
+      },
+      chooseDelPeople(val) {
+        console.log(val)
+      },
+      chooseEditPeople(val) {
+        console.log(val)
+      },
+      renderContentDep(h, {root, node, data}) {
+        return h("span", data.name);
+      },
+
+      /**
        * 获取文档树形结构
        */
 
-    showDepTree() {
-      let _self = this;
-      getDepTree(_self.depTreeParams).then(res => {
-        _self.depTree = res.data;
-        console.log(res.data);
-      });
-    },
-    handleUpload(file) {
-      this.file = file;
-      return false;
-    },
-    handleSuccess(res, file) {
-      file.url =
-        "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-      file.name = "7eb99afb9d5f317c912f08b5212fd69a";
-    },
-    upload() {
-      this.loadingStatus = true;
-      setTimeout(() => {
-        this.file = null;
-        this.loadingStatus = false;
-        this.$Message.success("上传成功");
-      }, 1500);
-    },
-    docupload() {
-      this.fileloadingStatus = true;
-      setTimeout(() => {
-        this.filedoc = null;
-        this.fileloadingStatus = false;
-        this.$Message.success("上传成功");
-      }, 1500);
-    },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "友情提醒",
-        desc: "文件  " + file.name + "过大,已超过10M！"
-      });
-    },
-    submits() {
-      this.uedata.push(UE.getEditor("editor").getContent());
-      console.log(this.uedata)
-      let html=this.uedata.join("\n");
-      console.log(this.uedata.join("\n"));
-      this.uploadForm.content=html;
-    },
-    xieru() {
-      UE.getEditor("editor").setContent("欢迎使用ueditor");
-    },
-    handleSubmit(name) {
+      showDepTree() {
+        let _self = this;
+        getDepTree(_self.depTreeParams).then(res => {
+          _self.depTree = res.data;
+          console.log(res.data);
+        });
+      },
+      handleUpload(file) {
+        this.file = file;
+        return false;
+      },
+      handleSuccess(res, file) {
+        file.url =
+          "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+        file.name = "7eb99afb9d5f317c912f08b5212fd69a";
+      },
+      upload() {
+        this.loadingStatus = true;
+        setTimeout(() => {
+          this.file = null;
+          this.loadingStatus = false;
+          this.$Message.success("上传成功");
+        }, 1500);
+      },
+      docupload() {
+        this.fileloadingStatus = true;
+        setTimeout(() => {
+          this.filedoc = null;
+          this.fileloadingStatus = false;
+          this.$Message.success("上传成功");
+        }, 1500);
+      },
+      handleMaxSize(file) {
+        this.$Notice.warning({
+          title: "友情提醒",
+          desc: "文件  " + file.name + "过大,已超过10M！"
+        });
+      },
+      submits() {
+        this.uedata.push(UE.getEditor("editor").getContent());
+        console.log(this.uedata)
+        let html = this.uedata.join("\n");
+        console.log(this.uedata.join("\n"));
+        this.uploadForm.content = html;
+      },
+      xieru() {
+        UE.getEditor("editor").setContent("欢迎使用ueditor");
+      },
+      handleSubmit(name) {
         // 将文件上传中所有输入的信息已保存在uploadForm中
-        if(this.uploadForm.title==''){
+        if (this.uploadForm.title == '') {
           this.$Message.warning('请填写文件标题');
-        }else if(this.uploadForm.value==''){
+        } else if (this.uploadForm.value == '') {
           this.$Message.warning('请选择文件类型');
-        }else if(this.uploadForm.content===''){
+        } else if (this.uploadForm.content === '') {
           this.$Message.warning('请编辑文件内容');
-        }else if(this.uploadForm.power===''){
-           this.$Message.warning('请选择文件权限');
-        }else{
+        } else if (this.uploadForm.power === '') {
+          this.$Message.warning('请选择文件权限');
+        } else {
           this.$Message.success('上传成功');
         }
-       console.log(this.uploadForm);
+        console.log(this.uploadForm);
+      }
     }
-  }
-};
+  };
 </script>
 <style>
-.ivu-tabs-tabpane {
-  border: 1px solid #eee;
-}
-.newfileTab .ivu-tabs-bar {
-  margin-bottom: 0;
-}
+  .ivu-tabs-tabpane {
+    border: 1px solid #eee;
+  }
+
+  .newfileTab .ivu-tabs-bar {
+    margin-bottom: 0;
+  }
 </style>
 
 <style scoped>
-.body-area {
-  padding: 20px;
-}
+  .body-area {
+    padding: 20px;
+  }
 
-.body-area .hello {
-}
+  .body-area .hello {
+  }
 
-.body-area .back {
-}
+  .body-area .back {
+  }
 
-.body-area .uploadBtn {
-}
+  .body-area .uploadBtn {
+  }
 </style>
