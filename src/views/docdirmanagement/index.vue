@@ -42,7 +42,6 @@
       v-model="open "
       width="400"
       title="删除文件类型"
-
     >
       <p v-show="fileStyleShow">此文档类型对应的文件数量为<strong style="color:red">{{filePcs}}</strong>，请先删除相应的文件再进行操作！</p>
       <p v-show="pShow">此文档类型对应的文件数量为0，可以进行删除！</p>

@@ -30,7 +30,7 @@ const constantRouteMap = [{
     component: Home,
     redirect: '/home',
     children: [
-     
+
       {
         path: '/ueditor',
         component:ueditor,
@@ -94,7 +94,7 @@ const constantRouteMap = [{
       component: newfile,
       meta:{
         pname: '新建文件'
-        
+
       }
     },{
       path: 'allfiles/check/:id',
@@ -141,6 +141,6 @@ const constantRouteMap = [{
 
 
 export default new Router({
-  mode:'history',
+
   routes: constantRouteMap
 })

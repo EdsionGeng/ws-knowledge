@@ -49,19 +49,19 @@ export default {
           // 密码验证成功之后，路由重定向
           login(this.loginForm)
             .then(res => {
-              console.log(res)
+//              console.log(res)
               if(res.data.code==0){
                 let username=res.data.username;
                 let isAdmin=res.data.data.isAdmin;
                 let id=res.data.data.id;
-                console.log(res.data.data);
+//                console.log(res.data.data);
                 this.isLoading = false;
                 this.$Message.success(res.data.msg);
                 sessionStorage.setItem("isLogin", true);
                 sessionStorage.setItem("isAdmin", isAdmin);
                 sessionStorage.setItem("username", username);
-                sessionStorage.setItem("id", id);
-                console.log(sessionStorage)
+                sessionStorage.setItem("userId", id);
+               // console.log(sessionStorage)
                 this.$router.push("/");
               }else{
                  this.$Message.error('用户名密码错误，请重新输入');

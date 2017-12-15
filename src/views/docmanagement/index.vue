@@ -177,7 +177,6 @@
             on: {
               click: () => {
                 this.updateFileParams.fileStyleId = data.id;
-                console.info("tiaochen " + data.id)
               }
             }
           },
@@ -185,7 +184,7 @@
       },
       dropmenu(isshow) {
         this.showMenu = isshow;
-        console.log(1212);
+
       },
       /**
        * 分页

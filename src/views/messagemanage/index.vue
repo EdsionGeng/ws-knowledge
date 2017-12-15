@@ -67,6 +67,7 @@
             <Option value="">请选择类型</Option>
             <Option value="通知">通知</Option>
             <Option value="公告">公告</Option>
+            <Option value="温馨提示">温馨提示</Option>
           </Select>
         </FormItem>
         <FormItem prop="" label="标题：">
@@ -76,7 +77,7 @@
           <Input type="textarea" :rows="4" placeholder="请输入内容！" v-model="insertAdParams.content"></Input>
         </FormItem>
         <FormItem prop="sendDepartmentName" label="接收人员：">
-          <Input type="text" :rows="4" placeholder="请点击下方按钮选择人员" v-model="insertAdParams.sendDepartmentName"></Input>
+          <Input type="textarea" :rows="4" placeholder="请点击下方按钮选择人员" v-model="insertAdParams.sendDepartmentName"></Input>
         </FormItem>
 
         <Button type="primary" size="small" @click="chooseUser=true">选择人员</Button>
@@ -93,12 +94,12 @@
       @on-cancel="cancel">
       <div class="clearfix" style="height:600px;overflow: scroll">
         <Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"
-              @on-check-change="circleUser"></Tree>
+            @on-check-change="circleUser"></Tree>
         <!--<Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"></Tree>-->
         <div class="user-detail rt">
 
-          <Table border ref="circleAdUsers" :columns="showUserGroupColumns" :data="showUserGroup"
-                 @on-selection-change="chooseSingleUser" v-show="usershow"></Table>
+          <!--<Table border ref="circleAdUsers" :columns="showUserGroupColumns" :data="showUserGroup"-->
+                 <!--@on-selection-change="chooseSingleUser" v-show="usershow"></Table>-->
         </div>
         <!--<div class="clearup">-->
         <!--<Button type="primary" size="large" @click="">确定所勾选人员</Button>-->
@@ -117,21 +118,16 @@
       <p class="modal-content" style='color:#333;margin-top:30px;'>{{singleMessageDetail.Content}}</p>
     </Modal>
   </div>
-
 </template>
-
-
 <script>
-  import {showAllAd} from "../../api/all_interface";
-  import {deleteAd} from "../../api/all_interface";
+  import {showAllAd}  from "../../api/all_interface";
+  import {deleteAd}   from "../../api/all_interface";
   import {getDepTree} from "../../api/all_interface";
   import {queryUserByGroup} from "../../api/all_interface";
   import {showAdPcs} from "../../api/all_interface";
-  import {insertAd} from "../../api/all_interface";
+  import {insertAd}  from "../../api/all_interface";
   import {sendAdToUser} from "../../api/all_interface";
-
   export default {
-
     data() {
       return {
         showUserGroupColumns: [
@@ -226,11 +222,9 @@
         insertAd: false,
         childData: [],
         sendAdParams: {
-          userIds: "",
+          userIds:"",
           commonId:"",
-          groupIds:""
         },
-
         depTree: [],
         chooseUser: false,
         delAdParams: {
@@ -240,6 +234,7 @@
           userGroupId: ""
         },
         showUserGroup: [],
+
         depTreeParams: {
           id: "",
           deptno: "",
@@ -255,7 +250,7 @@
         },
         readAdParams: {
           commonId: "",
-          userId: 145,
+          userId: sessionStorage.getItem("userId"),
         },
         page: {},
         ids: "",
@@ -274,7 +269,7 @@
     methods: {
       onPageChange(value) {
         this.params.current = value;
-        console.info(this.page.current);
+
         this.showAllAdList();
       },
       renderContent(h, {root, node, data}) {
@@ -322,7 +317,6 @@
         this.modal1 = true;
       },
       chooseSingleUser(arr) {
-//    console.log('chooseSingleUser:', arr);
         let userIds = "";
         let userNames = "";
         for (let i = 0; i < arr.length; i++) {
@@ -334,54 +328,61 @@
           userNames += arr[i].username;
         }
         this.insertAdParams.sendDepartmentName = userNames;
-        // console.info(this.insertadParams.sendDepartmentName);
         this.sendAdParams.userIds = userIds;
-//        sendAdParams: {
-//          userIds: "",
-//        console.info(userIds);
-//        console.info(userNames);
-//        this.Ci
-//        rcleUserIds.push(userIds);
-//        console.info(this.CircleUserIds)
-//        this.CircleUserNames.push(userNames);
-//        console.info(this.CircleUserNames)
-
       },
-//      test3: function () {
-//        let result = this.chooseSingleUser();//在test3中调用test2的方法
-//
-//      },
-      circleUser(arr) {
-        // console.log('circleUser:', arguments)
-        let fetchs = []
+        circleUser(arr) {
         let departmentName = "";
-        let groupIds="";
+        let  userIds="";
         for (let i = 0; i < arr.length; i++) {
+
           if (arr[i].children === null) {
-            let o = {
-              userGroupId: arr[i].id
-            }
             if(i>0){
               departmentName +=",";
-              groupIds +=",";
+              userIds +=",";
             }
-            departmentName += arr[i].name;
-            groupIds+=arr[i].id;
-            this.sendAdParams.groupIds=groupIds;
-            fetchs.push(queryUserByGroup(o))
+            if(arr[i].id==0){
+              departmentName="全公司";
+            }else{
+              departmentName += arr[i].name;
+            }
+            userIds+=arr[i].id;
           }
         }
+        this.sendAdParams.groupIds=userIds;
         this.insertAdParams.sendDepartmentName = departmentName;
-        Promise.all(fetchs).then(ret => {
-          let tmpa = []
-          ret.forEach(item => {
-            // console.log('item:', item)
-            tmpa = [...tmpa, ...item.data.data]
-          })
-          this.showUserGroup = tmpa;
-          this.usershow = true;
-        })
+
       },
+//      circleUser(arr) {
+//        // console.log('circleUser:', arguments)
+//        let fetchs = []
+//        let departmentName = "";
+//        let groupIds="";
+//        for (let i = 0; i < arr.length; i++) {
+//          if (arr[i].children === null) {
+//            let o = {
+//              userGroupId: arr[i].id
+//            }
+//            if(i>0){
+//              departmentName + =",";
+//              groupIds +=",";
+//            }
+//            departmentName += arr[i].name;
+//            groupIds+=arr[i].id;
+//            this.sendAdParams.groupIds=groupIds;
+//            fetchs.push(queryUserByGroup(o))
+//          }
+//        }
+//        this.insertAdParams.sendDepartmentName = departmentName;
+//        Promise.all(fetchs).then(ret => {
+//          let tmpa = []
+//          ret.forEach(item => {
+//            // console.log('item:', item)
+//            tmpa = [...tmpa, ...item.data.data]
+//          })
+//          this.showUserGroup = tmpa;
+//          this.usershow = true;
+//        })
+//      },
       dateOnChange(arr) {
         const rangedate = arr;
         this.params.startDate = rangedate[0];
@@ -419,6 +420,7 @@
           this.$Message.warning("标题不能为空！");
           return
         }
+
         if (this.insertAdParams.adStyle == "") {
           this.$Message.warning("公告类型不能为空！");
           return
@@ -435,9 +437,8 @@
           const data = res.data;
           let _self = this;
           if (data.code == 0) {
-            // console.info(data);
             _self.sendAdParams.commonId = data.data;
-            console.info(_self.sendAdParams);
+//            console.info(_self.sendAdParams);
             sendAdToUser(_self.sendAdParams).then(res => {
                 const data = res.data;
                 if (data.code == 0) {
@@ -453,13 +454,6 @@
           });
       },
       ok() {
-
-//        title: "",
-//          adStyle: "",
-//          content: "",
-//          sendDepartmentName: "",
-//          userId: 1,
-// this.$Message.info('Clicked ok');
       },
       cancel() {
         this.insertAdParams.sendDepartmentName = "";
@@ -469,6 +463,7 @@
         let _self = this
         getDepTree(_self.depTreeParams).then(res => {
           _self.depTree = res.data;
+          console.info("ddd" +_self._depTree);
         })
       },
       showAllAdList() {
