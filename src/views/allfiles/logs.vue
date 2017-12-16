@@ -56,7 +56,11 @@ export default {
       operationModel:'',
 
       //用对象就可以让子组件修改父组件的内容
-
+      filelogParams:{
+        fileId:this.$route.params.id,
+        current:1,
+        pageSize:10
+      },
       depTypeKey:{
         value:''
       },
@@ -86,7 +90,7 @@ export default {
   components:{
     SelectTree
   },
-  created() {
+  mounted() {
      this.initFileLog();
   },
   methods: {
@@ -94,27 +98,25 @@ export default {
       this.$router.back();
     },
     selAllFile(){
-      console.log(this.depTypeKey.value);
-      console.log(this.operationModel);
-      // this.filelogParams={
-      //   fileId:this.$route.params.id,
-      //   page:1,
-      //   limit:20,
-      //   operationStyle:this.depTypeKey.value,
-      //   departmentName:this.operationModel
-      // };
-      console.log(this.fileLogParams);
+      this.filelogParams.operationStyle=this.operationModel;
+      this.filelogParams.departmentName=this.depTypeKey.value;
+      console.log(this.filelogParams);
       this.initFileLog();
     },
     initFileLog(){
-      const filelogParams={
-        fileId:this.$route.params.id,
-          current:1,
-          pageSize:5,
-          operationStyle:this.operationModel,
-          departmentName:this.depTypeKey.value
-      };
-      showfilelog(filelogParams)
+      // showfilelog(this.filelogParams)
+      //   .then(res => {
+      //     console.log(res)
+      //     const showUserUpdata = res.data;
+      //     console.log('查看个人日志记录')
+      //     console.log(showUserUpdata);
+      //     if (res.data.code == 0) {
+      //       this.page = res.data.rdPage;
+      //       this.historyUploadMessageList = showUserUpdata.data;
+      //     }
+      //   }).catch(err => {});
+      console.log(this.filelogParams)
+      showfilelog(this.filelogParams)
         .then(res => {
           console.log(res)
           const showfileLogList = res.data;
@@ -126,13 +128,12 @@ export default {
         }).catch(err => {});
     },
     onPageChange(value) {
-      this.page.current = value;
-
+      this.filelogParams.current=value;
       this.initFileLog();
     },
     onPageSizeChange(value) {
-      console.log(value);
-      this.page.pageSize = value;
+      this.filelogParams.pageSize =value;
+      this.initFileLog();
     },
   }
 };
