@@ -61,6 +61,7 @@
 </template>
 <script>
 import iconLine from "@/components/common/iconline";
+import {getFileDetail} from '@/api/all_interface'
 import {readFile} from '@/api/all_interface'
 import {showfilelog} from '@/api/all_interface'
 import {deleteFile} from '@/api/all_interface'
@@ -74,8 +75,11 @@ export default {
       },
       filelogParams:{
         fileId:this.$route.params.id,
-        page:1,
-        limit:3
+        current:1,
+        pageSize:3
+      },
+      fileDetailParams:{
+        fileId:this.$route.params.id
       },
       delfileParams:{
         fileId:this.$route.params.id,
@@ -138,9 +142,19 @@ export default {
   mounted(){
     this.initreadFile();
     this.initFileLog();
+    this.initFileDetail();
     console.log(this.$route.params.id)
   },
   methods: {
+    initFileDetail(){
+      getFileDetail(this.fileDetailParams)
+        .then(res => {
+          console.log(res)
+
+          if (res.data.code == 0) {
+          }
+        }).catch(err => {});
+    },
     initFileLog(){
         showfilelog(this.filelogParams)
         .then(res => {
