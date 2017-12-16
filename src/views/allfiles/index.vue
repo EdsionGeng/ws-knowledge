@@ -51,7 +51,6 @@
 </template>
 <script>
 import { showUserLookFile } from "../../api/all_interface";
-import { searchResult } from "../../api/all_interface";
 import SelectTree from '@/components/common/selectTree'
 import docTree from '@/components/common/docTree'
 
@@ -96,23 +95,28 @@ export default {
       historyUploadMessageList: [
         {
           title: "hello",
-          addFileTime: "2017-01-01"
+          addFileTime: "2017-01-01",
+          id:1
         },
         {
           title: "hello",
-          addFileTime: "2017-01-01"
+          addFileTime: "2017-01-01",
+          id:2
         },
         {
           title: "hello",
-          addFileTime: "2017-01-01"
+          addFileTime: "2017-01-01",
+          id:3
         },
         {
           title: "hello world",
-          addFileTime: "2017-01-02"
+          addFileTime: "2017-01-02",
+          id:4
         },
         {
           title: "hello world",
-          addFileTime: "2017-01-05"
+          addFileTime: "2017-01-05",
+          id:5
         }
       ]
     };
@@ -125,56 +129,27 @@ export default {
   },
   methods: {
     selAllFile(){
-      let selListParams={
-            current: 1,
-            pageSize: 20,
-            userId: 145,
-            departmentName:this.depTypeKey.value,
-            fileStyleId:this.docTypeKey.id
-       }
-       console.log(selListParams)
-       console.log(
-         this.docTypeKey.id,this.depTypeKey.value
-       )
-      this.initSelList(selListParams)
-      // console.log(this.docTypeKey.id)
-      // console.log(this.depTypeKey.value)
-    },
-    initSelList(selListParams){
-        console.log('执行了搜索页面')
-        searchResult(selListParams)
-        .then(res => {
-          const showUserUpdata = res.data;
-          console.log(showUserUpdata);
-          if (res.data.code == 0) {
-            console.log(res.data)
-            this.page = res.data.rdPage;
-            this.historyUploadMessageList = showUserUpdata.data;
-          }
-        })
-        .catch(err => {});
+      this.active='searchFile';
+      this.listparams.departmentName=this.depTypeKey.value;
+      this.listparams.fileStyleId=this.docTypeKey.id;
+      this.initList()
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
     },
     onPageChange(value) {
-      console.log(value);
-      this.page.current = value;
-      if(this.active=='showUserLookFile'){
+      this.listparams.current = value;
         this.initList();
-      }else{
-        this.selAllFile();
-      }
     },
     onPageSizeChange(value) {
-      this.page.pageSize = value;
+      this.listparams.pageSize = value;
+      this.initList();
     },
     initList() {
         console.log('个人能看到的文件展示列表')
+      console.log(this.listparams);
       showUserLookFile(this.listparams)
         .then(res => {
-          console.log('个人能看到的文件展示列表')
-          console.log(res)
           const showUserUpdata = res.data;
           console.log(showUserUpdata);
           if (res.data.code == 0) {
