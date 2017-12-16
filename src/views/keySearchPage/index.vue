@@ -73,9 +73,7 @@ export default {
         current: 1,
         pageSize: 20,
         userId: 145,
-        searchContent:this.$route.params.key,
-        // departmentName:this.depTypeKey.value,
-        // fileStyleId:this.docTypeKey.id
+        searchContent:this.$route.params.key
       },
       deptlist:[],
       fileparams: null,
@@ -141,43 +139,26 @@ export default {
   },
   methods: {
      selAllFile(){
-        let selListParams={
-            current: 1,
-            pageSize: 20,
-            userId: 145,
-            searchContent:this.$route.params.key,
-            departmentName:this.depTypeKey.value,
-            fileStyleId:this.docTypeKey.id
-       }
-       console.log(selListParams)
-       console.log(
-         this.docTypeKey.id,this.depTypeKey.value
-       )
-        searchResult(selListParams)
-        .then(res => {
-          const showUserUpdata = res.data;
-          console.log(showUserUpdata);
-          if (res.data.code == 0) {
-            console.log(res.data)
-            this.page = res.data.rdPage;
-            this.historyUploadMessageList = showUserUpdata.data;
-          }
-        })
-        .catch(err => {});
+       this.listparams.departmentName=this.depTypeKey.value;
+       this.listparams.fileStyleId=this.docTypeKey.id;
+       console.log(this.listparams);
+       this.initList();
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
     },
     onPageChange(value) {
      // console.log(value);
-      this.page.current = value;
+      this.listparams.current = value;
       this.initList();
     },
     onPageSizeChange(value) {
       //console.log(value);
-      this.page.pageSize = value;
+      this.listparams.pageSize = value;
+      this.initList();
     },
     initList() {
+      console.log(this.listparams);
       searchResult(this.listparams)
         .then(res => {
           const showUserUpdata = res.data;
