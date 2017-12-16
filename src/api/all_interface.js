@@ -1,7 +1,13 @@
 import fetch from '../utils/fetch.js'
 
 //接口封装方法
-
+export function getFileDetail(data) {
+  return fetch({
+    url: '/query/singlefile',
+    method: 'data',
+    data: data
+  })
+}
 /**
  *  得到用户菜单
  * @param data
