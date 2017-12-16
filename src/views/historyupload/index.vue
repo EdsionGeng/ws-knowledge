@@ -4,12 +4,12 @@
         <Row>
         <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
             <Tabs type="card">
-                <TabPane label="列表" class="clearfix">    
+                <TabPane label="列表" class="clearfix">
                   <Row>
                     <Col>
                       <Table :columns="columns1" 	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
-                    </Col>  
-                  </Row>                   
+                    </Col>
+                  </Row>
                 </TabPane>
                 <TabPane label="图文">
                     <Row>
@@ -21,27 +21,27 @@
                               <h2>{{list.title}}</h2>
                               <p>上传时间：{{list.addFileTime}}</p>
                           </div>
-                          
+
                         </Card>
                         </a>
-                             
+
                       </Col>
                   </Row>
                 </TabPane>
-                
+
             </Tabs>
-           
+
         </Col>
-         
+
     </Row>
-    <Row style='padding-top:10px,padding-right:5px'> 
-        <Col>            
+    <Row style='padding-top:10px,padding-right:5px'>
+        <Col>
           <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
-        </Col>  
+        </Col>
     </Row>
-     
+
 </div>
-    
+
 </template>
 <script>
 import { showUserUpload } from "../../api/all_interface";
@@ -50,13 +50,12 @@ export default {
     return {
       imgUrl:'./bg.jpg',
       modal1: false,
-      pageOpts:[20,40,60,100],  
+      pageOpts:[20,40,60,100],
       listparams: {
         current: 1,
         pageSize: 20,
         userId: 145
       },
-      fileparams:null,
       page: { total: 100,pages:1, current: 1, pageSize: 20 },
       columns1: [
         {
@@ -100,16 +99,15 @@ export default {
   methods: {
     //显示文件详情的方法
     onRowClick(row) {
-      this.$router.push('/allfiles/check/'+row.id);  
+      this.$router.push('/allfiles/check/'+row.id);
     },
-    onPageChange(value) {    
-      console.log(value)
-     this.page.current = value;
+    onPageChange(value) {
+     this.listparams.current = value;
      this.initList();
     },
     onPageSizeChange(value){
-      console.log(value)
-      this.page.pageSize=value
+      this.listparams.pageSize=value;
+      this.initList();
     },
     initList() {
       showUserUpload(this.listparams)
@@ -133,5 +131,5 @@ export default {
   .page{
     height: 100%;
   }
- 
+
 </style>
