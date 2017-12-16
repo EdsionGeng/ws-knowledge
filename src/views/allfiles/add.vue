@@ -11,8 +11,13 @@
         <FormItem label="封面：">
           <div>
             <Upload
-              :before-upload="handleUpload"
-              action="http://192.168.22.45:8011/file/upload.htmls">
+              ref="upload"
+              :format="['jpg','jpeg','png']"
+              :on-exceeded-size="pichandleMaxSize"
+              :max-size="2048"
+              :on-format-error="pichandleFormatError"
+              :on-success="pichandleSuccess"
+              action="http://192.168.22.45:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
             <div v-if="file !== null"> 所选文件: {{ file.name }}
@@ -78,6 +83,7 @@
       <Form>
         <FormItem label="">
           <Upload
+            ref="fujianupload"
             :show-upload-list="true"
              multiple
             :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
@@ -123,6 +129,7 @@
           power: [{required: true}],
         },
         uploadForm: {
+
           title: '',
           value: '',
           content: '',
@@ -170,14 +177,35 @@
         this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
       },
       handleSuccess (res, file) {
-        file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-        file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+        console.log('上传成功返回的信息');
+        console.log(res);
+        console.log(file)
+        // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+        // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
       },
-      handleBeforeUpload () {
-        const check = this.uploadList.length < 5;
+      pichandleSuccess (res, file) {
+        console.log('上传成功返回的信息');
+        console.log(res);
+        console.log(file);
+
+        // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+        // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+      },
+      pichandleBeforeUpload () {
+        console.log(this.$refs.upload);
+        const check = this.uploadList.length <1;
         if (!check) {
           this.$Notice.warning({
-            title: 'Up to five pictures can be uploaded.'
+            title: '封面最多只能上传一个图片'
+          });
+        }
+        return check;
+      },
+      handleBeforeUpload () {
+        const check = this.uploadList.length < 10;
+        if (!check) {
+          this.$Notice.warning({
+            title: '附件上传已达上限'
           });
         }
         return check;
@@ -188,10 +216,22 @@
           desc: 'File  ' + file.name + ' is too large, no more than 2M.'
         });
       },
+      pichandleMaxSize (file) {
+        this.$Notice.warning({
+          title: '大小限制',
+          desc: 'File  ' + file.name + ' 头像大小不能超过2M'
+        });
+      },
       handleFormatError (file) {
         this.$Notice.warning({
           title: 'The file format is incorrect',
           desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+        });
+      },
+      pichandleFormatError (file) {
+        this.$Notice.warning({
+          title: '文件类型限制',
+          desc:   file.name + ' 不是图片类型'
         });
       },
       chooseCheckPeople(val) {
@@ -233,12 +273,7 @@
         console.log(1111111)
         this.file = file;
         console.log(file)
-       // return false;
-      },
-      handleSuccess(res, file) {
-        file.url =
-          "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-        file.name = "7eb99afb9d5f317c912f08b5212fd69a";
+        //return false;
       },
       upload() {
         this.loadingStatus = true;
