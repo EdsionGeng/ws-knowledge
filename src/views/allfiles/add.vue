@@ -12,12 +12,14 @@
           <div>
             <Upload
               ref="upload"
+              :show-upload-list="true"
+              :before-upload='pichandleBeforeUpload'
               :format="['jpg','jpeg','png']"
               :on-exceeded-size="pichandleMaxSize"
               :max-size="2048"
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
-              action="http://192.168.22.45:8011/photo/upload.htmls">
+              action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
             <div v-if="file !== null"> 所选文件: {{ file.name }}
@@ -36,10 +38,14 @@
           <div class="uploadBtn">
             <Button type="primary" size="small" @click="uploadDoc=true">上传附件</Button>
           </div>
+        <Row v-for='(item,index) in fujainList' :key='index'>
+           <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+           <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
+        </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power'>
-          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;">
-            <TabPane label="可查阅人员" name="name1">
+          <Tabs @on-click='changeTab' value="name1" type='card' class='newfileTab' style="width:900px;">
+             <TabPane label="可查阅人员" name="name1">
               <div>
                 <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
                       @on-check-change='chooseCheckPeople'></Tree>
@@ -47,19 +53,37 @@
             </TabPane>
             <TabPane label="可编辑人员" name="name2">
               <div>
-                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                <Tree :data="editdepTree" show-checkbox multiple :render="renderContentDep1"
                       @on-check-change='chooseEditPeople'>>
                 </Tree>
               </div>
             </TabPane>
             <TabPane label="可删除人员" name="name3">
               <div>
-                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                <Tree :data="deldepTree" show-checkbox multiple :render="renderContentDep2"
                       @on-check-change='chooseDelPeople'> >
                 </Tree>
               </div>
             </TabPane>
           </Tabs>
+          
+        </FormItem>
+        <FormItem>
+          <RadioGroup v-model="uploadForm.fileType">
+            <Radio label="普通文件"></Radio>
+            <Radio label="部门文件"></Radio>
+            <Radio label="公司文件"></Radio>
+          </RadioGroup>
+
+          <div v-if="uploadForm.fileType=='普通文件'">
+            仅当前设置的查阅人员可以查看此文件，新入职的人员看不到，如果需要设置某一新入职人员查看该文件，可通过修改查阅人员实现
+          </div>
+          <div v-if="uploadForm.fileType=='部门文件'">
+            当前可查阅人员对应的部门有新入职的人员均能看到此文件
+          </div>
+          <div v-if="uploadForm.fileType=='公司文件'">
+           公司有新入职的人员均能看到此文件
+          </div>
         </FormItem>
         <!--<FormItem label="上传附件:">-->
         <!--<div class="back">-->
@@ -90,9 +114,9 @@
             :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
-            :before-upload="handleUpload"
+            :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
-            action="//jsonplaceholder.typicode.com/posts/">
+            action="http://192.168.3.26:8011/photo/upload.htmls">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload >
           <div v-if="filedoc!== null">Upload file: {{ filedoc.name }}
@@ -101,7 +125,8 @@
           </div>
         </FormItem>
         <FormItem label=" 文件描述：">
-          <Input v-model="addFileParams.describle" placeholder="" style="width: 200px"></Input>
+          <Input v-model="uploadForm.describle" placeholder="" style="width: 200px" placeholder='请先写描述，再上传'></Input>
+          
         </FormItem>
       </Form>
     </Modal>
@@ -109,243 +134,374 @@
   </div>
 </template>
 <script>
-  import Ueditor from "@/components/setUeditor"
-  import docTree from "@/components/common/docTree";
-  import {getDocTree} from "../../api/all_interface";
-  import {getDepTree} from "../../api/all_interface";
-  import {queryUserByGroup} from "../../api/all_interface";
+import Ueditor from "@/components/setUeditor";
+import docTree from "@/components/common/docTree";
+import { getDepTree } from "../../api/all_interface";
+import { queryUserByGroup } from "../../api/all_interface";
+import { insertFile } from "../../api/all_interface";
 
-  export default {
-    data() {
-      return {
-        uploadList: [],
-        ruleValidate: {
-          title: [
-            {required: true, message: '请填写文件标题', trigger: 'blur'},
-            {type: "string", max: 20, message: "标题限制在20字以内"}
-          ],
-          value: [{required: true, message: '请选择文件类型', trigger: 'change'}],
-          content: [{required: true}],
-          power: [{required: true}],
-        },
-        uploadForm: {
+export default {
+  data() {
+    return {
+     insertFileList:{},
+      isSave:false,
+      fujainList: [],
+      uploadList: [],
+      ruleValidate: {
+        title: [
+          { required: true, message: "请填写文件标题", trigger: "blur" },
+          { type: "string", max: 20, message: "标题限制在20字以内" }
+        ],
+        value: [{ required: true, message: "请选择文件类型", trigger: "change" }],
+        content: [{ required: true }],
+        power: [{ required: true }]
+      },
 
-          title: '',
-          value: '',
-          content: '',
-          power: ''
-        },
-        addFileParams: {
-          title: "",
-          describle: ""
-        },
-        showMenu: false,
-        file: null,
-        filedoc: null,
-        loadingStatus: false,
-        fileloadingStatus: false,
-        // 编辑是根据查看人员进行筛选的
-        depTree: [],
-        editdepTree: [],
-        deldepTree: [],
+      uploadForm: {
+        userId:sessionStorage.getItem('userId'),
+        fileType:'普通文件',
+        title: "",
+        value: "",
+        content: "请输入编辑内容",
+        power: "",
+        fileurl:'',
+        photourl:'./bg.jpg',
+        filesize:0,
+        describle:''
+      },
+      lookFileParams: {
+        userIds: "",
+        userId: "",
+        fileId: ""
+      },
+      updateFileParams: {
+        userIds: "",
+        userId: "",
+        fileId: ""
+      },
+      deleteFileParams: {
+        userIds: "",
+        userId: "",
+        fileId: ""
+      },
+      showMenu: false,
+      file: null,
+      filedoc: null,
+      loadingStatus: false,
+      fileloadingStatus: false,
+      // 编辑是根据查看人员进行筛选的
+      depTree: [],
+      editdepTree: [],
+      deldepTree: [],
+      canMove:false,
 
-        depTreeParams: {
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
-        uedata: [],
-        xierudata: [],
-        uploadDoc: false
-      };
+      depTreeParams: {
+        id: "",
+        deptno: "",
+        no: "",
+        pid: "",
+        type: "",
+        checked: "",
+        name: "",
+        department: ""
+      },
+      uedata: [],
+      xierudata: [],
+      uploadDoc: false
+    };
+  },
+  components: {
+    docTree,
+    Ueditor
+  },
+  mounted() {
+    this.uploadList = this.$refs.upload.fileList;
+    this.showDepTree();
+    if(sessionStorage.getItem('title')){
+      this.uploadForm.title=sessionStorage.getItem('title');
+      this.uploadForm.value=sessionStorage.getItem('value');
+      this.uploadForm.content=sessionStorage.getItem('content');
+      this.uploadForm.power=sessionStorage.getItem('power');
+      this.uploadForm.photourl=sessionStorage.getItem('photourl');
+    }
+  },
+  // beforeDestroy(){
+  //   this.isSave=true;
+  //   console.log(this.isSave)
+  // },
+  beforeRouteLeave(to,from,next){
+    console.log(111);
+    console.log(this.uploadForm);
+    if(this.uploadForm.title!==''||this.uploadForm.value!==''||this.uploadForm.content!==''||this.uploadForm.power!==''){
+      next(false);
+      console.log(11111)
+      this.$Modal.confirm({
+                    title: '保存当前内容',
+                    content: '<p>是否保存当前编辑的内容</p>',
+                    onOk: () => {
+                        sessionStorage.setItem('title',this.uploadForm.title)
+                        sessionStorage.setItem('value',this.uploadForm.value)
+                        sessionStorage.setItem('content',this.uploadForm.content)
+                        sessionStorage.setItem('power',this.uploadForm.power)
+                        sessionStorage.setItem('photourl',this.uploadForm.photourl)
+                        sessionStorage.setItem('fileUrlUrl',this.fujainList)
+                        next();
+                    },
+                    onCancel: () => {
+                       next();
+                    }
+                });
+    }else{
+      next();
+    }
+    console.log(sessionStorage)
+  },
+  methods: {
+    changeTab(name){
+      console.log(name)
+      if(name==='name2'){
+        const editData=this.depTree;
+        this.editdepTree=editData;
+      }else if(name==='name3'){
+        
+      }else{
+
+      }
     },
-    components: {
-      docTree, Ueditor
+    handleRemove(file) {
+      const fileList = this.$refs.upload.fileList;
+      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
     },
-    mounted() {
-      this.uploadList = this.$refs.upload.fileList;
-      this.showDepTree();
+    handleSuccess(res, file) {
+      console.log("上传成功返回的信息");
+      if(res.code===2){
+         this.$Notice.warning({
+          title: res.msg
+        });
+      }else{
+      file.description = this.uploadForm.describle;
+      console.log(file);
+      console.log(this.$refs.fujianupload);
+      this.fujainList = this.$refs.fujianupload.fileList;
+      }
+      // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+      // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
     },
-    methods: {
-      handleRemove (file) {
-        const fileList = this.$refs.upload.fileList;
-        this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-      },
-      handleSuccess (res, file) {
-        console.log('上传成功返回的信息');
-        console.log(res);
-        console.log(file)
-        // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-        // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-      },
-      pichandleSuccess (res, file) {
-        console.log('上传成功返回的信息');
-        console.log(res);
-        console.log(file);
+    pichandleSuccess(res, file) {
+      console.log("上传成功返回的信息");
+      this.uploadForm.photourl=res.data;
+      console.log(res);
+      console.log(res.data);
 
-        // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-        // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-      },
-      pichandleBeforeUpload () {
-        console.log(this.$refs.upload);
-        const check = this.uploadList.length <1;
-        if (!check) {
-          this.$Notice.warning({
-            title: '封面最多只能上传一个图片'
-          });
+      // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+      // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+    },
+    pichandleBeforeUpload() {
+      console.log(this.$refs.upload);
+      const check = this.uploadList.length < 1;
+      if (!check) {
+        this.$Notice.warning({
+          title: "封面最多只能上传一个图片"
+        });
+      }
+      return check;
+    },
+    handleBeforeUpload() {
+      const check = this.uploadList.length < 10;
+      if (!check) {
+        this.$Notice.warning({
+          title: "附件上传已达上限"
+        });
+      }
+      return check;
+      // return false;
+    },
+    handleMaxSize(file) {
+      this.$Notice.warning({
+        title: "Exceeding file size limit",
+        desc: "File  " + file.name + " is too large, no more than 2M."
+      });
+    },
+    pichandleMaxSize(file) {
+      this.$Notice.warning({
+        title: "大小限制",
+        desc: "File  " + file.name + " 头像大小不能超过2M"
+      });
+    },
+    handleFormatError(file) {
+      this.$Notice.warning({
+        title: "The file format is incorrect",
+        desc:
+          "File format of " +
+          file.name +
+          " is incorrect, please select jpg or png."
+      });
+    },
+    pichandleFormatError(file) {
+      this.$Notice.warning({
+        title: "文件类型限制",
+        desc: file.name + " 不是图片类型"
+      });
+    },
+    chooseCheckPeople(arr) {
+      const editdepTree=depTree;
+      console.log(arr)
+      let userIds = "";
+      let departmentName = "";
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          if (i > 0) {
+            userIds += ",";
+          }
+          userIds += arr[i].id;
         }
-        return check;
-      },
-      handleBeforeUpload () {
-        const check = this.uploadList.length < 10;
-        if (!check) {
-          this.$Notice.warning({
-            title: '附件上传已达上限'
-          });
+      }
+    },
+    chooseDelPeople(arr) {
+      console.log(arr)
+      let userIds = "";
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          if (i > 0) {
+            userIds += ",";
+          }
+          userIds += arr[i].id;
         }
-        return check;
-      },
-      handleMaxSize (file) {
-        this.$Notice.warning({
-          title: 'Exceeding file size limit',
-          desc: 'File  ' + file.name + ' is too large, no more than 2M.'
-        });
-      },
-      pichandleMaxSize (file) {
-        this.$Notice.warning({
-          title: '大小限制',
-          desc: 'File  ' + file.name + ' 头像大小不能超过2M'
-        });
-      },
-      handleFormatError (file) {
-        this.$Notice.warning({
-          title: 'The file format is incorrect',
-          desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-        });
-      },
-      pichandleFormatError (file) {
-        this.$Notice.warning({
-          title: '文件类型限制',
-          desc:   file.name + ' 不是图片类型'
-        });
-      },
-      chooseCheckPeople(val) {
-        if (val.length > 0) {
-          console.log(val[0])
-
-          let checkval = val[0];
-
-          let editval = val[0]
-          this.editdepTree = [];
-          this.deldepTree = [];
-          this.uploadForm.power = val
-          this.editdepTree.push(checkval);
-          this.deldepTree.push(editval);
+      }
+      console.log(userIds)
+    },
+    chooseEditPeople(arr) {
+      console.log(arr)
+      let userIds = "";
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          if (i > 0) {
+            userIds += ",";
+          }
+          userIds += arr[i].id;
         }
-      },
-      chooseDelPeople(val) {
-        console.log(val)
-      },
-      chooseEditPeople(val) {
-        console.log(val)
-      },
-      renderContentDep(h, {root, node, data}) {
-        return h("span", data.name);
-      },
-
-      /**
+      }
+    },
+    renderContentDep(h, { root, node, data }) {
+      return h("span", data.name);
+    },
+renderContentDep1(h, { root, node, data }) {
+      return h("span", data.name);
+    },
+    renderContentDep2(h, { root, node, data }) {
+      return h("span", data.name);
+    },
+    /**
        * 获取文档树形结构
        */
 
-      showDepTree() {
-        let _self = this;
-        getDepTree(_self.depTreeParams).then(res => {
-          _self.depTree = res.data;
-          console.log(res.data);
-        });
-      },
-      handleUpload(file) {
-        console.log(1111111)
-        this.file = file;
-        console.log(file)
-        //return false;
-      },
-      upload() {
-        this.loadingStatus = true;
-        setTimeout(() => {
-          this.file = null;
-          this.loadingStatus = false;
-          this.$Message.success("上传成功");
-        }, 1500);
-      },
-      docupload() {
-        this.fileloadingStatus = true;
-        setTimeout(() => {
-          this.filedoc = null;
-          this.fileloadingStatus = false;
-          this.$Message.success("上传成功");
-        }, 1500);
-      },
-      handleMaxSize(file) {
-        this.$Notice.warning({
-          title: "友情提醒",
-          desc: "文件  " + file.name + "过大,已超过10M！"
-        });
-      },
-      submits() {
-        this.uedata.push(UE.getEditor("editor").getContent());
-        console.log(this.uedata)
-        let html = this.uedata.join("\n");
-        console.log(this.uedata.join("\n"));
-        this.uploadForm.content = html;
-      },
-      xieru() {
-        UE.getEditor("editor").setContent("欢迎使用ueditor");
-      },
-      handleSubmit(name) {
-        // 将文件上传中所有输入的信息已保存在uploadForm中
-        if (this.uploadForm.title == '') {
-          this.$Message.warning('请填写文件标题');
-        } else if (this.uploadForm.value == '') {
-          this.$Message.warning('请选择文件类型');
-        } else if (this.uploadForm.content === '') {
-          this.$Message.warning('请编辑文件内容');
-        } else if (this.uploadForm.power === '') {
-          this.$Message.warning('请选择文件权限');
-        } else {
-          this.$Message.success('上传成功');
-        }
+    showDepTree() {
+      let _self = this;
+      getDepTree(_self.depTreeParams).then(res => {
+        _self.depTree = res.data;
+        console.log(res.data);
+      });
+    },
+    handleUpload(file) {
+      console.log(1111111);
+      this.file = file;
+      console.log(file);
+      //return false;
+    },
+    upload() {
+      this.loadingStatus = true;
+      setTimeout(() => {
+        this.file = null;
+        this.loadingStatus = false;
+        this.$Message.success("上传成功");
+      }, 1500);
+    },
+    docupload() {
+      this.fileloadingStatus = true;
+      setTimeout(() => {
+        this.filedoc = null;
+        this.fileloadingStatus = false;
+        this.$Message.success("上传成功");
+      }, 1500);
+    },
+    handleMaxSize(file) {
+      this.$Notice.warning({
+        title: "友情提醒",
+        desc: "文件  " + file.name + "过大,已超过10M！"
+      });
+    },
+    handleSubmit(name) {
+      // 将文件上传中所有输入的信息已保存在uploadForm中
+      if (this.uploadForm.title == "") {
+        this.$Message.warning("请填写文件标题");
+        return;
+      } else if (this.uploadForm.fileStyleId == "") {
+        this.$Message.warning("请选择文件类型");
+        return;
+      } else if (this.uploadForm.content === "") {
+        this.$Message.warning("请编辑文件内容");
+        return;
+       }
+      //else if (this.lookFileParams.userIds === "") {
+      //   this.$Message.warning("请选择可以查看文件的人！");
+      //   return;
+      // } else if (
+      //   this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
+      // ) {
+      //   this.$Message.warning("修改文件权限的人超过查看文件权限的人");
+      //   return;
+      // } else if (
+      //   this.lookFileParams.userIds.indexOf(this.deleteFileParams.userIds) == -1
+      // ) {
+      //   this.$Message.warning("删除文件权限的人超过查看文件权限的人");
+      //   return;
+      // } 
+      else { 
+        this.insertFileList.title=this.uploadForm.title;
+        this.insertFileList.content=this.uploadForm.content;
+        this.insertFileList.photourl=this.uploadForm.photourl;
+        this.insertFileList.fileurl=this.uploadForm.fileurl;
+        this.insertFileList.userId=this.uploadForm.userId;
+        this.insertFileList.fileStyleId=this.uploadForm.value;
+        this.insertFileList.filesize=this.uploadForm.filesize;
+        this.insertFileList.fileSpecies=this.uploadForm.fileType;
+        //   insertFile(this.insertFileList)
+        // .then(res => {
+        //   const showUserUpdata = res.data;
+        //   console.log(showUserUpdata);
+        //   if (res.data.code == 0) {
+        //     this.page=res.data.rdPage;
+        //     this.historyUploadMessageList = showUserUpdata.data;
+        //   }
+        // })
+        // .catch(err => {});
         console.log(this.uploadForm);
+      
       }
     }
-  };
+  }
+};
 </script>
 <style>
-  .ivu-tabs-tabpane {
-    border: 1px solid #eee;
-  }
-
-  .newfileTab .ivu-tabs-bar {
-    margin-bottom: 0;
-  }
+.ivu-tabs-tabpane {
+  border: 1px solid #eee;
+}
+.newfileTab .ivu-tabs-bar {
+  margin-bottom: 0;
+}
 </style>
 
 <style scoped>
-  .body-area {
-    padding: 20px;
-  }
+.body-area {
+  padding: 20px;
+}
 
-  .body-area .hello {
-  }
+.body-area .hello {
+}
 
-  .body-area .back {
-  }
+.body-area .back {
+}
 
-  .body-area .uploadBtn {
-  }
+.body-area .uploadBtn {
+}
 </style>
