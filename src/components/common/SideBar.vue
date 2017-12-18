@@ -39,7 +39,7 @@
   import {Menu} from 'iview';
 
   Vue.component('Menu', Menu);
-  import {getUserMenus} from '../../api/all_interface'
+//  import {getUserMenus} from '../../api/all_interface'
 
   export default {
     data() {
@@ -50,28 +50,28 @@
       }
     },
     mounted(){
-      this.initMenuList()
+//      this.initMenuList()
     },
     methods: {
       change(name) {
-        console.log(name);
+        //console.log(name);
         this.$router.push('/' + name);
-      },
-      initMenuList() {
-        getUserMenus(this.menuListParams).then(res => {
-          console.log('用户菜单');
-          console.log(res)
-          const meunData = res.data;
-          if (meunData.data === 0) {
-          }
-        }).catch(err => {
-        });
       }
-    },
-    components: {
-      Search
+//      initMenuList() {
+//        getUserMenus(this.menuListParams).then(res => {
+//          console.log('用户菜单');
+//          console.log(res)
+//          const meunData = res.data;
+//          if (meunData.data === 0) {
+//          }
+//        }).catch(err => {
+//        });
+//      }
+   },
+      components: {
+        Search
+      }
     }
-  }
 </script>
 
 

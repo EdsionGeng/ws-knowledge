@@ -3,7 +3,7 @@ import fetch from '../utils/fetch.js'
 //接口封装方法
 export function getFileDetail(data) {
   return fetch({
-    url: '/query/singlefile',
+    url: '/singledetail',
     method: 'data',
     data: data
   })
@@ -13,13 +13,13 @@ export function getFileDetail(data) {
  * @param data
  * @returns {*}
  */
-export function getUserMenus(data) {
-  return fetch({
-    url: '/getMenus.htmls',
-    method: 'data',
-    data: data
-  })
-}
+// export function getUserMenus(data) {
+//   return fetch({
+//     url: '/getMenus',
+//     method: 'data',
+//     data: data
+//   })
+// }
 /**
  * 全局搜索
  * @param data
@@ -384,7 +384,7 @@ export function updateFileStyleDetail(data){
 }
 
 /**
- * 修改文件类型
+ * 查看文件类型对应的文件数量
  * @param data
  * @returns {*}
  */
@@ -397,7 +397,7 @@ export function countFileStyle(data){
 }
 
 /**
- * 修改文件类型
+ * 删除文档类型
  * @param data
  * @returns {*}
  */

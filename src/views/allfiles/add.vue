@@ -202,7 +202,7 @@
         return check;
       },
       handleBeforeUpload () {
-        const check = this.uploadList.length < 10;
+        const check = this.uploadList.length < 11;
         if (!check) {
           this.$Notice.warning({
             title: '附件上传已达上限'

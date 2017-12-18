@@ -29,10 +29,11 @@
           </Col>
           <Col span="4">
           <FormItem>
-            <Select placeholder="请选择类型" style="width:200px">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+            <Select placeholder="请选择类型" style="width:200px" v-model=" params.adStyle">
+              <Option value="">请选择类型</Option>
+              <Option value="通知">通知</Option>
+              <Option value="公告">公告</Option>
+              <Option value="温馨提示">温馨提示</Option>
             </Select>
           </FormItem>
           </Col>
@@ -77,7 +78,8 @@
           <Input type="textarea" :rows="4" placeholder="请输入内容！" v-model="insertAdParams.content"></Input>
         </FormItem>
         <FormItem prop="sendDepartmentName" label="接收人员：">
-          <Input type="textarea" :rows="4" placeholder="请点击下方按钮选择人员" v-model="insertAdParams.sendDepartmentName"></Input>
+          <Input type="textarea" :rows="4" placeholder="请点击下方按钮选择人员" disabled
+                 v-model="insertAdParams.sendDepartmentName"></Input>
         </FormItem>
 
         <Button type="primary" size="small" @click="chooseUser=true">选择人员</Button>
@@ -94,12 +96,12 @@
       @on-cancel="cancel">
       <div class="clearfix" style="height:600px;overflow: scroll">
         <Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"
-            @on-check-change="circleUser"></Tree>
+              @on-check-change="circleUser"></Tree>
         <!--<Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"></Tree>-->
         <div class="user-detail rt">
 
           <!--<Table border ref="circleAdUsers" :columns="showUserGroupColumns" :data="showUserGroup"-->
-                 <!--@on-selection-change="chooseSingleUser" v-show="usershow"></Table>-->
+          <!--@on-selection-change="chooseSingleUser" v-show="usershow"></Table>-->
         </div>
         <!--<div class="clearup">-->
         <!--<Button type="primary" size="large" @click="">确定所勾选人员</Button>-->
@@ -120,27 +122,28 @@
   </div>
 </template>
 <script>
-  import {showAllAd}  from "../../api/all_interface";
-  import {deleteAd}   from "../../api/all_interface";
+  import {showAllAd} from "../../api/all_interface";
+  import {deleteAd} from "../../api/all_interface";
   import {getDepTree} from "../../api/all_interface";
   import {queryUserByGroup} from "../../api/all_interface";
   import {showAdPcs} from "../../api/all_interface";
-  import {insertAd}  from "../../api/all_interface";
+  import {insertAd} from "../../api/all_interface";
   import {sendAdToUser} from "../../api/all_interface";
+
   export default {
     data() {
       return {
-        showUserGroupColumns: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: "姓名",
-            key: "username",
-            width: 100,
-          }],
+//        showUserGroupColumns: [
+//          {
+//            type: 'selection',
+//            width: 60,
+//            align: 'center'
+//          },
+//          {
+//            title: "姓名",
+//            key: "username",
+//            width: 100,
+//          }],
         AllAdColumns: [
           {
             type: 'selection',
@@ -153,16 +156,17 @@
             key: "adTitle",
           },
           {
-            title: "内容",
-            key: "adContent",
+            title: "公告类型",
+            key: "adStyle",
           },
           {
             title: "发送人",
             key: "addUser",
           },
           {
-            title: "发送部门",
+            title: "发送人员",
             key: "sendObject",
+
           },
           {
             title: "发送时间",
@@ -212,7 +216,8 @@
           noreaded: 0
         },
         insertAdParams: {
-          title: "",
+          title: [{required: true, message: '请填写通知标题', trigger: 'blur'},
+            {type: "string", max: 20, message: "标题限制在20字以内"}],
           adStyle: "",
           content: "",
           sendDepartmentName: "",
@@ -222,8 +227,8 @@
         insertAd: false,
         childData: [],
         sendAdParams: {
-          userIds:"",
-          commonId:"",
+          userIds: "",
+          commonId: "",
         },
         depTree: [],
         chooseUser: false,
@@ -269,7 +274,6 @@
     methods: {
       onPageChange(value) {
         this.params.current = value;
-
         this.showAllAdList();
       },
       renderContent(h, {root, node, data}) {
@@ -301,7 +305,9 @@
             const data = res.data;
             // console.log(res.data);
             if (data.code == 0) {
-              this.singleMessageDetail.AdTitle = row.at;
+              console.info("hjhjhj");
+              console.info(row);
+              this.singleMessageDetail.AdTitle = row.adTitle;
               this.singleMessageDetail.addTime = row.sendTime;
               this.singleMessageDetail.AddUser = row.addUser;
               this.singleMessageDetail.Content = row.adContent;
@@ -316,41 +322,39 @@
         });
         this.modal1 = true;
       },
-      chooseSingleUser(arr) {
-        let userIds = "";
-        let userNames = "";
-        for (let i = 0; i < arr.length; i++) {
-          if (i > 0) {
-            userIds += ",";
-            userNames += ",";
-          }
-          userIds += arr[i].id;
-          userNames += arr[i].username;
-        }
-        this.insertAdParams.sendDepartmentName = userNames;
-        this.sendAdParams.userIds = userIds;
-      },
-        circleUser(arr) {
+//      chooseSingleUser(arr) {
+//        let userIds = "";
+//        let userNames = "";
+//        for (let i = 0; i < arr.length; i++) {
+//          if (i > 0) {
+//            userIds += ",";
+//            userNames += ",";
+//          }
+//          userIds += arr[i].id;
+//          userNames += arr[i].username;
+//        }
+//        this.insertAdParams.sendDepartmentName = userNames;
+//        this.sendAdParams.userIds = userIds;
+//      },
+      circleUser(arr) {
         let departmentName = "";
-        let  userIds="";
+        let userIds = "";
         for (let i = 0; i < arr.length; i++) {
 
           if (arr[i].children === null) {
-            if(i>0){
-              departmentName +=",";
-              userIds +=",";
+            if (i > 0) {
+              departmentName += ",";
+              userIds += ",";
             }
-            if(arr[i].id==0){
-              departmentName="全公司";
-            }else{
-              departmentName += arr[i].name;
-            }
-            userIds+=arr[i].id;
+            departmentName += arr[i].name;
+            userIds += arr[i].id;
           }
         }
-        this.sendAdParams.groupIds=userIds;
+        this.sendAdParams.userIds = userIds;
+        if (departmentName.length > 1000) {
+          departmentName = "全公司";
+        }
         this.insertAdParams.sendDepartmentName = departmentName;
-
       },
 //      circleUser(arr) {
 //        // console.log('circleUser:', arguments)
@@ -413,6 +417,7 @@
         }
       },
       handleSearch() {
+        console.info(this.params);
         this.showAllAdList();
       },
       sureSend() {
@@ -435,16 +440,19 @@
         }
         insertAd(this.insertAdParams).then(res => {
           const data = res.data;
+
           let _self = this;
           if (data.code == 0) {
             _self.sendAdParams.commonId = data.data;
-//            console.info(_self.sendAdParams);
+            console.info(_self.sendAdParams);
+
             sendAdToUser(_self.sendAdParams).then(res => {
                 const data = res.data;
-                if (data.code == 0) {
-                  this.$Message.success("操作成功!");
-                  this.showAllAdList();
-                  this.insertAd = false;
+                console.info(data);
+                if (data.code === 0) {
+                  _self.$Message.success("操作成功!");
+                  _self.insertAd = false;
+                  _self.showAllAdList();
                 }
               }
             )
@@ -463,7 +471,6 @@
         let _self = this
         getDepTree(_self.depTreeParams).then(res => {
           _self.depTree = res.data;
-          console.info("ddd" +_self._depTree);
         })
       },
       showAllAdList() {

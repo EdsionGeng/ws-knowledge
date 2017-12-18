@@ -202,14 +202,18 @@
         for (let i = 0; i < arr.length; i++) {
           if (arr[i].children === null) {
             if (i > 0) {
-               userIds += ",";
+              userIds += ",";
             }
             userIds += arr[i].id;
+
+            if (arr[i].children != null) {
+              departmentName += arr[i].name;
+            }
+
           }
-          if(arr[i].children!=null){
-            departmentName +=arr[i].name;
-          }
+
         }
+        this.lookFileParams.userIds=userIds;
       },
       chooseDelPeople(arr) {
         let  userIds="";
@@ -242,9 +246,14 @@
        */
 
       showDepTree() {
-        let _self = this;
+          let _self = this;
           getDepTree(_self.depTreeParams).then(res => {
-          _self.depTree = res.data;
+           const data=res.data;
+           if(data.code==0){
+             _self.depTree =data.data;
+             console.info("jj"+"",+data.data);
+           }
+
         });
       },
       handleUpload(file) {

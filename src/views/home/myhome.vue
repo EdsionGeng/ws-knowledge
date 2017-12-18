@@ -1,5 +1,5 @@
 <template>
-     <div class="mycenter">    
+     <div class="mycenter">
         <Card >
             <p slot="title"><span>我的消息</span><a class='rt' @click="changeRoute('mymessage')">查看更多&gt;&gt;</a> </p>
             <div>
@@ -38,10 +38,10 @@
                 MyMessageMsg:'hello world hello you are welcome',
                 readed:0,
                 noreaded:0
-              },      
+              },
               MyMessageList: [],
               newMessageList: [],
-            
+
                mesDetail: [],
                params:null,
                //modal信息
@@ -69,9 +69,9 @@
                     },
                     {
                         title: '发布时间',
-                        key: 're', 
+                        key: 're',
                         sortType: 'desc',
-                        align:'right',                   
+                        align:'right',
                     }
                 ],
                  columns2: [
@@ -81,9 +81,9 @@
                     },
                     {
                         title: '发布时间',
-                        key: 'addFileTime', 
+                        key: 'addFileTime',
                         sortType: 'desc',
-                        align:'right',                   
+                        align:'right',
                     }
                 ]
             }
@@ -96,8 +96,8 @@
           changeRoute(name){
              this.$router.push('/'+name);
           },
-          
-          onRowClick(row,index){           
+
+          onRowClick(row,index){
              this.params={
                commonId:row.commonId
              };
@@ -106,18 +106,18 @@
               res => {
                 const data = res.data;
                   console.log(res.data);
-                if (data.code == 0) {                
+                if (data.code == 0) {
                   this.mymessageDetail.MyMessageListTitle=row.at
                   this.mymessageDetail.MyMessageupdate=row.re
                   this.mymessageDetail.AddUser=row.AddUser
                   this.mymessageDetail.MyMessageMsg=row.ad
                   this.mymessageDetail.readed=data.data.isRead
-                  this.mymessageDetail.noreaded=data.data.noRead           
-                  }                
-                                
+                  this.mymessageDetail.noreaded=data.data.noRead
+                  }
+
               }
-            )  
-            .catch(err => {});  
+            )
+            .catch(err => {});
            this.modal1=true;
           },//点击获取显示公告详情
           showNewMessageList(row,index) {
@@ -125,7 +125,7 @@
             },
           //个人能看到的最新上传的文件后台获取
           initshowAdPcs(){
-          
+
           },
          initUserLookFile(){
             showUserLookFile(this.newdata).then(
@@ -134,15 +134,15 @@
                 console.log('this is a wo can show pic')
                  console.log(res);
                 if (data.code == 0) {
-                  console.log(this.MyMessageList)
+                 // console.log(this.MyMessageList)
                   this.newMessageList = data.data;
-                  console.log(this.newMessageList)
+                  //console.log(this.newMessageList)
                   this.page = data.rdPage;
-                  console.log(data.rdPage)
+                  //console.log(data.rdPage)
                 }
               }
-            )  
-            .catch(err => {});  
+            )
+            .catch(err => {});
           },
           // 我的消息初始化函数
           initUserAd() {
@@ -160,7 +160,7 @@
                   // console.log(data.rdPage)
                 }
               })
-              .catch(err => {});            
+              .catch(err => {});
           },
           //改变未读行的数据的color （row,index）是获取当前行的row的信息和当前行的index下标
           rowClassName(row,index){
