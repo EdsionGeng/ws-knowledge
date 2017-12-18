@@ -96,6 +96,7 @@ export default {
           title: "发布时间",
           key: "addFileTime",
           sortable: true,
+          align:'center'
 
         },
         {

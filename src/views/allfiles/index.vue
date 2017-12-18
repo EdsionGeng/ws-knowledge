@@ -68,10 +68,10 @@ export default {
       },
       pageOpts: [20, 40, 60, 100],
       listparams: {
-        userId:sessionStorage.getItem("userId"),
+        userId:145,
         current: 1,
         pageSize: 20,
-        userGroupId:3,
+        userGroupId: 3
 
       },
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
@@ -148,10 +148,8 @@ export default {
       this.initList();
     },
     initList() {
-        //console.log('个人能看到的文件展示列表')
-      //console.log(this.listparams);
-
-      console.info(this.listparams);
+        console.log('个人能看到的文件展示列表')
+      console.log(this.listparams);
       showUserLookFile(this.listparams)
         .then(res => {
           const showUserUpdata = res.data;
