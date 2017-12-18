@@ -50,20 +50,19 @@
             </TabPane>
             <TabPane label="可编辑人员" name="name2">
               <div>
-                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                <Tree :data="depTree1" show-checkbox multiple :render="renderContentDep"
                       @on-check-change='chooseEditPeople'>>
                 </Tree>
               </div>
             </TabPane>
             <TabPane label="可删除人员" name="name3">
               <div>
-                <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
+                <Tree :data="depTree2" show-checkbox multiple :render="renderContentDep"
                       @on-check-change='chooseDelPeople'> >
                 </Tree>
               </div>
             </TabPane>
           </Tabs>
-
         </FormItem>
 
         <!--<FormItem label="上传附件:">-->
