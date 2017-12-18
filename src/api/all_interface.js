@@ -3,7 +3,7 @@ import fetch from '../utils/fetch.js'
 //接口封装方法
 export function getFileDetail(data) {
   return fetch({
-    url: '/query/singlefile',
+    url: 'singledetail',
     method: 'data',
     data: data
   })
