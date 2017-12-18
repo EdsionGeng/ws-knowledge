@@ -70,7 +70,9 @@ export default {
       listparams: {
         userId:145,
         current: 1,
-        pageSize: 20
+        pageSize: 20,
+        userGroupId: 3
+
       },
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
       columns1: [
