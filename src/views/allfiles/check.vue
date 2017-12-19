@@ -28,7 +28,7 @@
       <Col span='6' class="right-col" style='padding-top:30px'>
           <Row  type='flex' align='top' justify='center'>
             <Col span="16">
-              <img src="./bg.jpg" style='width:100%;height:150px;border:8px solid #ccc'>
+              <img :src="'./'+fileDetails.photoUrl" style='width:100%;height:150px;border:8px solid #ccc'>
             </Col>
           </Row>
           <Row type='flex' justify='center'>
@@ -65,6 +65,7 @@ import {getFileDetail} from '@/api/all_interface'
 import {readFile} from '@/api/all_interface'
 import {showfilelog} from '@/api/all_interface'
 import {deleteFile} from '@/api/all_interface'
+import {showFilePermission} from '@/api/all_interface'
 
 export default {
   data() {
@@ -122,8 +123,8 @@ export default {
           description: "sdfjsdfj osdafi sdf sdaf asdf sad"
         }
       ],
-      canChange: true,
-      canDel: true,
+      canChange: false,
+      canDel: false,
       fileDetails: {
         photoUrl:'',
         title:'my title',
@@ -143,15 +144,39 @@ export default {
     this.initreadFile();
     this.initFileLog();
     this.initFileDetail();
+    this.showFilePower();
     console.log(this.$route.params.id)
   },
   methods: {
-    initFileDetail(){
+    showFilePower(){
+        showFilePermission(this.readFileparams)
+          .then(res => {
+            console.log('用户id对文件的权限')
+            console.log(res)
+
+            if (res.data.code == 0) {
+              const data=res.data.data;
+              if(data.updateFile===0){
+                this.canChange=false;
+              }else if(data.updateFile===1){
+                 this.canChange=true;
+              } 
+              if(data.deleteFile===0){
+                this.canDel=false;
+              } else if(data.deleteFile===1){
+                 this.canDel=true;
+              }     
+          }
+        }).catch(err => {});
+    },
+    initFileDetail(){     
       getFileDetail(this.fileDetailParams)
         .then(res => {
+          console.log('文件的详情');
           console.log(res)
 
           if (res.data.code == 0) {
+            this.fileDetails=res.data.data
           }
         }).catch(err => {});
     },
@@ -171,7 +196,7 @@ export default {
     initreadFile(){
       readFile(this.readFileparams)
         .then(res => {
-          console.log('输出查看文件的信息');
+          console.log('文件的阅读');
           console.log(res)
         })
     },
