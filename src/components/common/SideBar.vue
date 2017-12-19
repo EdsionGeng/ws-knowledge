@@ -15,7 +15,7 @@
           <Menu-item name="allfiles">全部文件</Menu-item>
           <Menu-item name="hisupload">历史上传</Menu-item>
         </Submenu>
-        <Submenu name="2" v-if='active'>
+        <Submenu name="2" v-if="active==='true'">
           <template slot="title">
             管理中心
           </template>
@@ -23,7 +23,7 @@
           <Menu-item name="docmanagement">文档管理</Menu-item>
           <Menu-item name="docdirmanagement">文档目录管理</Menu-item>
         </Submenu>
-        <Submenu name="3" v-if='!active'>
+        <Submenu name="3" v-if="active==='false'">
           <template slot="title">
             个人中心
           </template>
