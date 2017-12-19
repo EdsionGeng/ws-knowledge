@@ -44,7 +44,7 @@
         </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power'>
-          <Tabs @on-click='changeTab' value="name1" type='card' class='newfileTab' style="width:900px;">
+          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;">
              <TabPane label="可查阅人员" name="name1">
               <div>
                 <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
@@ -53,35 +53,35 @@
             </TabPane>
             <TabPane label="可编辑人员" name="name2">
               <div>
-                <Tree :data="editdepTree" show-checkbox multiple :render="renderContentDep1"
+                <Tree :data="editdepTree" show-checkbox multiple :render="renderContentDep"
                       @on-check-change='chooseEditPeople'>>
                 </Tree>
               </div>
             </TabPane>
             <TabPane label="可删除人员" name="name3">
               <div>
-                <Tree :data="deldepTree" show-checkbox multiple :render="renderContentDep2"
+                <Tree :data="deldepTree" show-checkbox multiple :render="renderContentDep"
                       @on-check-change='chooseDelPeople'> >
                 </Tree>
               </div>
             </TabPane>
           </Tabs>
-          
+
         </FormItem>
         <FormItem>
           <RadioGroup v-model="uploadForm.fileType">
-            <Radio label="普通文件"></Radio>
-            <Radio label="部门文件"></Radio>
-            <Radio label="公司文件"></Radio>
+            <Radio label="0" >普通文件</Radio>
+            <Radio label="1" >部门文件</Radio>
+            <Radio label="2" >公司文件</Radio>
           </RadioGroup>
 
-          <div v-if="uploadForm.fileType=='普通文件'">
+          <div v-if="uploadForm.fileType=='0'">
             仅当前设置的查阅人员可以查看此文件，新入职的人员看不到，如果需要设置某一新入职人员查看该文件，可通过修改查阅人员实现
           </div>
-          <div v-if="uploadForm.fileType=='部门文件'">
+          <div v-if="uploadForm.fileType=='1'">
             当前可查阅人员对应的部门有新入职的人员均能看到此文件
           </div>
-          <div v-if="uploadForm.fileType=='公司文件'">
+          <div v-if="uploadForm.fileType=='2'">
            公司有新入职的人员均能看到此文件
           </div>
         </FormItem>
@@ -126,7 +126,7 @@
         </FormItem>
         <FormItem label=" 文件描述：">
           <Input v-model="uploadForm.describle" placeholder="" style="width: 200px" placeholder='请先写描述，再上传'></Input>
-          
+
         </FormItem>
       </Form>
     </Modal>
@@ -139,6 +139,10 @@ import docTree from "@/components/common/docTree";
 import { getDepTree } from "../../api/all_interface";
 import { queryUserByGroup } from "../../api/all_interface";
 import { insertFile } from "../../api/all_interface";
+import { lookFileUser } from "../../api/all_interface";
+import { updateFilePermission } from "../../api/all_interface";
+import { deleteFilePermission } from "../../api/all_interface";
+import { queryadmin } from "../../api/all_interface";
 
 export default {
   data() {
@@ -159,11 +163,10 @@ export default {
 
       uploadForm: {
         userId:sessionStorage.getItem('userId'),
-        fileType:'普通文件',
+        fileType:'0',
         title: "",
-        value: "",
-        content: "请输入编辑内容",
-        power: "",
+        id: "",
+        content: "",
         fileurl:'',
         photourl:'./bg.jpg',
         filesize:0,
@@ -171,17 +174,17 @@ export default {
       },
       lookFileParams: {
         userIds: "",
-        userId: "",
-        fileId: ""
+        fileId: "",
+        operationStyleId:1
       },
       updateFileParams: {
         userIds: "",
-        userId: "",
+        operationStyleId:1,
         fileId: ""
       },
       deleteFileParams: {
         userIds: "",
-        userId: "",
+        operationStyleId:1,
         fileId: ""
       },
       showMenu: false,
@@ -194,7 +197,7 @@ export default {
       editdepTree: [],
       deldepTree: [],
       canMove:false,
-
+      adminIds:'',
       depTreeParams: {
         id: "",
         deptno: "",
@@ -215,11 +218,14 @@ export default {
     Ueditor
   },
   mounted() {
+    this.adminPower();
     this.uploadList = this.$refs.upload.fileList;
     this.showDepTree();
+    this.showeditDepTree();
+    this.showdelDepTree();
     if(sessionStorage.getItem('title')){
       this.uploadForm.title=sessionStorage.getItem('title');
-      this.uploadForm.value=sessionStorage.getItem('value');
+      this.uploadForm.id=sessionStorage.getItem('fileId');
       this.uploadForm.content=sessionStorage.getItem('content');
       this.uploadForm.power=sessionStorage.getItem('power');
       this.uploadForm.photourl=sessionStorage.getItem('photourl');
@@ -230,19 +236,16 @@ export default {
   //   console.log(this.isSave)
   // },
   beforeRouteLeave(to,from,next){
-    console.log(111);
     console.log(this.uploadForm);
-    if(this.uploadForm.title!==''||this.uploadForm.value!==''||this.uploadForm.content!==''||this.uploadForm.power!==''){
+    if(this.uploadForm.title!==''||this.uploadForm.id!==''||this.uploadForm.content!==''){
       next(false);
-      console.log(11111)
       this.$Modal.confirm({
                     title: '保存当前内容',
                     content: '<p>是否保存当前编辑的内容</p>',
                     onOk: () => {
                         sessionStorage.setItem('title',this.uploadForm.title)
-                        sessionStorage.setItem('value',this.uploadForm.value)
+                        sessionStorage.setItem('fileId',this.uploadForm.id)
                         sessionStorage.setItem('content',this.uploadForm.content)
-                        sessionStorage.setItem('power',this.uploadForm.power)
                         sessionStorage.setItem('photourl',this.uploadForm.photourl)
                         sessionStorage.setItem('fileUrlUrl',this.fujainList)
                         next();
@@ -257,44 +260,33 @@ export default {
     console.log(sessionStorage)
   },
   methods: {
-    changeTab(name){
-      console.log(name)
-      if(name==='name2'){
-        const editData=this.depTree;
-        this.editdepTree=editData;
-      }else if(name==='name3'){
-        
-      }else{
-
-      }
-    },
     handleRemove(file) {
       const fileList = this.$refs.upload.fileList;
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
     },
     handleSuccess(res, file) {
       console.log("上传成功返回的信息");
+      const fileList = this.$refs.fujianupload.fileList;
       if(res.code===2){
+        this.$refs.fujianupload.fileList.splice(fileList.indexOf(file), 1);
          this.$Notice.warning({
           title: res.msg
         });
       }else{
       file.description = this.uploadForm.describle;
-      console.log(file);
-      console.log(this.$refs.fujianupload);
-      this.fujainList = this.$refs.fujianupload.fileList;
+      console.log(fileList)
+      this.fujainList=fileList;
+      var newArry=[];
+      for (let i=0;i<fileList;i++){
+        console.log(this.fujainList[i].response)   
+        newArry.push(this.fujainList[i].response.data);
       }
-      // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-      // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+      this.uploadForm.fileurl=newArry.join(',');
+    }
     },
     pichandleSuccess(res, file) {
       console.log("上传成功返回的信息");
       this.uploadForm.photourl=res.data;
-      console.log(res);
-      console.log(res.data);
-
-      // file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-      // file.name = '7eb99afb9d5f317c912f08b5212fd69a';
     },
     pichandleBeforeUpload() {
       console.log(this.$refs.upload);
@@ -337,6 +329,10 @@ export default {
           " is incorrect, please select jpg or png."
       });
     },
+    toBold($el){
+      console.log(1111111)
+      console.log($el)
+    },
     pichandleFormatError(file) {
       this.$Notice.warning({
         title: "文件类型限制",
@@ -344,51 +340,34 @@ export default {
       });
     },
     chooseCheckPeople(arr) {
-      const editdepTree=depTree;
-      console.log(arr)
-      let userIds = "";
-      let departmentName = "";
+       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          if (i > 0) {
-            userIds += ",";
-          }
-          userIds += arr[i].id;
+          userIds.push(arr[i].id)
         }
       }
+    this.lookFileParams.userIds=userIds.join(',')
     },
-    chooseDelPeople(arr) {
-      console.log(arr)
-      let userIds = "";
+    chooseDelPeople(arr) {   
+      var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          if (i > 0) {
-            userIds += ",";
-          }
-          userIds += arr[i].id;
+          userIds.push(arr[i].id)
         }
       }
-      console.log(userIds)
+ this.deleteFileParams.userIds=userIds.join(',')          
     },
     chooseEditPeople(arr) {
-      console.log(arr)
-      let userIds = "";
+       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          if (i > 0) {
-            userIds += ",";
-          }
-          userIds += arr[i].id;
+          userIds.push(arr[i].id)
         }
       }
+     this.updateFileParams.userIds=userIds.join(',')
+     console.log(this.deleteFileParams.userIds)
     },
     renderContentDep(h, { root, node, data }) {
-      return h("span", data.name);
-    },
-renderContentDep1(h, { root, node, data }) {
-      return h("span", data.name);
-    },
-    renderContentDep2(h, { root, node, data }) {
       return h("span", data.name);
     },
     /**
@@ -399,6 +378,20 @@ renderContentDep1(h, { root, node, data }) {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
+        console.log(res.data);
+      });
+    },
+      showeditDepTree() {
+      let _self = this;
+      getDepTree(_self.depTreeParams).then(res => {
+        _self.editdepTree=res.data;
+        console.log(res.data);
+      });
+    },
+      showdelDepTree() {
+      let _self = this;
+      getDepTree(_self.depTreeParams).then(res => {
+        _self.deldepTree=res.data;
         console.log(res.data);
       });
     },
@@ -430,53 +423,111 @@ renderContentDep1(h, { root, node, data }) {
         desc: "文件  " + file.name + "过大,已超过10M！"
       });
     },
-    handleSubmit(name) {
-      // 将文件上传中所有输入的信息已保存在uploadForm中
-      if (this.uploadForm.title == "") {
-        this.$Message.warning("请填写文件标题");
-        return;
-      } else if (this.uploadForm.fileStyleId == "") {
-        this.$Message.warning("请选择文件类型");
-        return;
-      } else if (this.uploadForm.content === "") {
-        this.$Message.warning("请编辑文件内容");
-        return;
-       }
-      //else if (this.lookFileParams.userIds === "") {
-      //   this.$Message.warning("请选择可以查看文件的人！");
-      //   return;
-      // } else if (
-      //   this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
-      // ) {
-      //   this.$Message.warning("修改文件权限的人超过查看文件权限的人");
-      //   return;
-      // } else if (
-      //   this.lookFileParams.userIds.indexOf(this.deleteFileParams.userIds) == -1
-      // ) {
-      //   this.$Message.warning("删除文件权限的人超过查看文件权限的人");
-      //   return;
-      // } 
-      else { 
+    upFileloadSuccess(){
         this.insertFileList.title=this.uploadForm.title;
         this.insertFileList.content=this.uploadForm.content;
         this.insertFileList.photourl=this.uploadForm.photourl;
         this.insertFileList.fileurl=this.uploadForm.fileurl;
         this.insertFileList.userId=this.uploadForm.userId;
-        this.insertFileList.fileStyleId=this.uploadForm.value;
+        this.insertFileList.fileStyleId=this.uploadForm.id;
         this.insertFileList.filesize=this.uploadForm.filesize;
         this.insertFileList.fileSpecies=this.uploadForm.fileType;
-        //   insertFile(this.insertFileList)
-        // .then(res => {
-        //   const showUserUpdata = res.data;
-        //   console.log(showUserUpdata);
-        //   if (res.data.code == 0) {
-        //     this.page=res.data.rdPage;
-        //     this.historyUploadMessageList = showUserUpdata.data;
-        //   }
-        // })
-        // .catch(err => {});
+        insertFile(this.insertFileList)
+        .then(res => {
+          if (res.data.code == 0) {
+            console.log('新建文件成功');
+            this.lookFileParams.fileId=res.data.data;
+            this.updateFileParams.fileId=res.data.data;
+            this.deleteFileParams.fileId=res.data.data;
+            console.log(res.data.data);
+            if(this.lookFileParams.userIds===''){
+                this.lookFileParams.userIds=','+this.adminIds;
+            }
+            console.log(this.lookFileParams.userIds);
+            lookFileUser(this.lookFileParams)
+            .then(res => {
+              console.log(res.data); 
+              if (res.data.code == 0) {
+                console.log('设置权限成功');
+                if(this.updateFileParams.userIds===''){
+                 
+                     this.updateFileParams.userIds=','+this.adminIds;
+                     console.log(this.updateFileParams.userIds)
+                  }
+                  updateFilePermission(this.updateFileParams)
+                    .then(res => {
+                      console.log(res.data); 
+                      if (res.data.code == 0) {
+                        console.log('设置修改权限成功');   
+                         if(this.deleteFileParams.userIds===''){
+                           
+                             this.deleteFileParams.userIds=','+this.adminIds;
+                          }
+                          deleteFilePermission(this.deleteFileParams)
+                          .then(res => {
+                            console.log(res.data); 
+                            if (res.data.code == 0) {
+                              console.log('设置删除权限成功');
+                                this.$Message.success("上传成功,2s后少跳转到历史上传界面");
+                              setTimeout(()=>{
+                                this.$router.push('/hisupload')
+                              })
+                            }
+                          })
+                          .catch(err => {});
+                      }
+                    })
+                    .catch(err => {});     
+              }
+            })
+            .catch(err => {});
+          }
+        })
+        .catch(err => {});
+        console.log(this.insertFileList)
         console.log(this.uploadForm);
       
+    },
+    adminPower(){
+       queryadmin().then(res => {
+            console.log('管理员账户');
+            console.log(res.data); 
+              if (res.data.code == 0) {    
+                var newArr=[];
+                for (let val of res.data.data){
+                  console.log(val)
+                    newArr.push(val);
+                }
+                  this.adminIds=newArr.join(',')
+                  console.log(this.adminIds)
+              }
+            })
+      .catch(err => {});
+    },
+    handleSubmit(name) {
+      // 将文件上传中所有输入的信息已保存在uploadForm中
+      if (this.uploadForm.title == "") {
+        this.$Message.warning("请填写文件标题");
+        return;
+      } else if (this.uploadForm.id == "") {
+        this.$Message.warning("请选择文件类型");
+        return;
+      } else if (this.uploadForm.content === "") {
+        this.$Message.warning("请编辑文件内容");
+        return;
+       }else if (
+        this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
+      ) {
+        this.$Message.warning("修改文件权限的人超过查看文件权限的人");
+        return;
+      } else if (
+        this.lookFileParams.userIds.indexOf(this.deleteFileParams.userIds) == -1
+      ) {
+        this.$Message.warning("删除文件权限的人超过查看文件权限的人");
+        return;
+      }
+      else {
+        this.upFileloadSuccess();
       }
     }
   }
