@@ -216,8 +216,7 @@
           noreaded: 0
         },
         insertAdParams: {
-          title: [{required: true, message: '请填写通知标题', trigger: 'blur'},
-            {type: "string", max: 20, message: "标题限制在20字以内"}],
+          title:"",
           adStyle: "",
           content: "",
           sendDepartmentName: "",
@@ -239,7 +238,6 @@
           userGroupId: ""
         },
         showUserGroup: [],
-
         depTreeParams: {
           id: "",
           deptno: "",
