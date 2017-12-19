@@ -4,7 +4,7 @@ import fetch from '../utils/fetch.js'
 export function getFileDetail(data) {
   return fetch({
     url: '/singledetail',
-    method: 'data',
+    method: 'post',
     data: data
   })
 }
@@ -354,6 +354,13 @@ export function updateFilePermission(data){
 export function queryUserByGroup(data) {
   return fetch({
     url: '/queryuser.htmls',
+    method: 'post',
+    data: data
+  })
+}
+export function queryadmin(data) {
+  return fetch({
+    url: '/queryadmin.htmls',
     method: 'post',
     data: data
   })
