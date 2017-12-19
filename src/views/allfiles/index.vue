@@ -57,7 +57,6 @@ import docTree from '@/components/common/docTree'
 export default {
   data() {
     return {
-      active:'showUserLookFile',
       //用对象就可以让子组件修改父组件的内容
       docTypeKey:{
         value:'',
@@ -131,7 +130,6 @@ export default {
   },
   methods: {
     selAllFile(){
-      this.active='searchFile';
       this.listparams.departmentName=this.depTypeKey.value;
       this.listparams.fileStyleId=this.docTypeKey.id;
       this.initList()
