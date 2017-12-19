@@ -2,8 +2,7 @@
   <div class="set">
     <div type="text/plain" id="ueditor"></div>
     <br>
-    <Button @click="submits" type='primary'>保存</Button> 
-    <Button @click="xieru" type='primary'>加载已保存的文件内容</Button> 
+    <Button @click="submits" type='primary'>保存</Button>
   </div>
 </template>
 <script>
@@ -15,11 +14,11 @@ export default {
   name: "set",
   data() {
     return {
-      ueditor1: "",
-      ueditorText: "欢迎使用ueditor"
+      ueditor1: ""
     };
   },
   mounted() {
+    console.log(sessionStorage)
       this.ueditor1 = UE.getEditor("ueditor", {
       serverUrl:'/static/',
       BaseUrl: "",
@@ -33,7 +32,7 @@ export default {
     });
    setTimeout(() => {
      this.xieru();
-   }, 1000); 
+   }, 1000);
   },
   destroyed(){
     this.ueditor1.destroy();
@@ -44,7 +43,13 @@ export default {
       console.log(this.ueditorContent.content)
     },
     xieru() {
-      UE.getEditor("ueditor").setContent(sessionStorage.getItem('content'));
+      if(sessionStorage.getItem('content')!==null){
+        UE.getEditor("ueditor").setContent(sessionStorage.getItem('content'));
+      }else{
+        UE.getEditor("ueditor").setContent('请编辑文件内容');
+      }
+
+     
     }
   }
 };
