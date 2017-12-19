@@ -169,8 +169,10 @@ export default {
         content: "",
         fileurl:'',
         photourl:'./bg.jpg',
-        filesize:0,
-        describle:''
+        describle:'',
+        filesize:'',
+        value:'',
+        filedescrible:''
       },
       lookFileParams: {
         userIds: "",
@@ -277,11 +279,17 @@ export default {
       console.log(fileList)
       this.fujainList=fileList;
       var newArry=[];
+      var filesizeArry=[];
+      var filedescribleArry=[];
       for (let i=0;i<fileList;i++){
         console.log(this.fujainList[i].response)   
         newArry.push(this.fujainList[i].response.data);
+        filesizeArry.push(this.fujainList[i].size);
+        filedescribleArry.push(this.fujainList[i].description);
       }
       this.uploadForm.fileurl=newArry.join(',');
+      this.uploadForm.filesize=filesizeArry.join(',');
+      this.uploadForm.filedescrible=filedescribleArry.join(',');
     }
     },
     pichandleSuccess(res, file) {
