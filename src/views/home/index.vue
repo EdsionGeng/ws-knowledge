@@ -1,9 +1,9 @@
 <template>
 <div>
-    <div v-if='isAdmin'>
+    <div v-if="isAdmin==='true'">
         <admin></admin>
     </div>
-    <div v-if='!isAdmin'>
+    <div v-if="isAdmin==='false'">
         <my-home></my-home>
     </div>
 </div>
@@ -20,6 +20,9 @@ export default {
       return{
           isAdmin:sessionStorage.getItem('isAdmin')
       }
+  },
+  mounted(){
+      console.log(!(this.isAdmin))
   },
   components:{
       admin,myHome
