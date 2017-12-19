@@ -54,7 +54,7 @@
                   let username = data.data.username;
                   let isAdmin=false;
                  // 判断是否是管理员
-                  if(res.data.count==0) {
+                  if(res.data.count===0) {
                      isAdmin=false;
                   }else {
                      isAdmin=true;
