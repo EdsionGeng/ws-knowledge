@@ -1,20 +1,25 @@
 <template>
   <div class="checkpage">
     <Row >
-      <Col span='18' style='border-right:1px solid #ccc;padding:20px;'>
+      <Col span='20' style='border-right:1px solid #ccc;padding:20px;'>
        <Row  type='flex' align='middle' justify='space-between'>
           <Col  class="lf"><Button type='ghost' @click="goRouter">&lt; 返回</Button></Col>
           <Col ><h3 style='margin-left:-64px'>{{fileDetails.title}}</h3> </Col>
           <Col > </Col>
         </Row>
          <Row class='filecontent'>
-           <div v-html='fileDetails.fileContent' ></div>
+           <div v-html='fileDetails.fileContent' >
+              <!-- 文件的详情显示 -->
+           </div>
         </Row>
         <Row>
           <icon-line myclass="iconfont icon-jinlingyingcaiwangtubiao17" msg='附件'></icon-line>
         </Row>
-        <Row v-for='(item,index) in fujainList' :key='index'>
-           <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.title}} <span style='color:#ccc'>（{{item.fileSize}}）</span>  </span>
+        <Row v-for='(item,index) in fujainList' :key='index' style='padding:3px 0;'>
+           <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i>
+            <span>  <a :href="item.url">{{item.title}} </a>
+              <span style='color:#ccc'>（{{parseInt(item.fileSize/1024)+'k'}}）</span> 
+            </span>
            <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
         </Row>
         <Row style='padding-top:30px;padding-bottom:25px;'>
@@ -25,10 +30,10 @@
              <Table border :columns="columns5" :data="historyUploadMessageList"></Table>
         </Row>
       </Col>
-      <Col span='6' class="right-col" style='padding-top:30px'>
+      <Col span='4' class="right-col" style='padding-top:30px'>
           <Row  type='flex' align='top' justify='center'>
             <Col span="16">
-              <img :src="'./'+fileDetails.photoUrl" style='width:100%;height:150px;border:8px solid #ccc'>
+              <img :src="fileDetails.photoUrl"  style='width:100%;height:150px;border:8px solid #ccc'>
             </Col>
           </Row>
           <Row type='flex' justify='center'>
@@ -61,30 +66,30 @@
 </template>
 <script>
 import iconLine from "@/components/common/iconline";
-import {getFileDetail} from '@/api/all_interface'
-import {readFile} from '@/api/all_interface'
-import {showfilelog} from '@/api/all_interface'
-import {deleteFile} from '@/api/all_interface'
-import {showFilePermission} from '@/api/all_interface'
+import { getFileDetail } from "@/api/all_interface";
+import { readFile } from "@/api/all_interface";
+import { showfilelog } from "@/api/all_interface";
+import { deleteFile } from "@/api/all_interface";
+import { showFilePermission } from "@/api/all_interface";
 
 export default {
   data() {
     return {
-      readFileparams:{
-          fileId:this.$route.params.id,
-          userId:145
+      readFileparams: {
+        fileId: this.$route.params.id,
+        userId: sessionStorage.getItem("userId")
       },
-      filelogParams:{
-        fileId:this.$route.params.id,
-        current:1,
-        pageSize:3
+      filelogParams: {
+        fileId: this.$route.params.id,
+        current: 1,
+        pageSize: 3
       },
-      fileDetailParams:{
-        fileId:this.$route.params.id
+      fileDetailParams: {
+        fileId: this.$route.params.id
       },
-      delfileParams:{
-        fileId:this.$route.params.id,
-        userId:145
+      delfileParams: {
+        fileId: this.$route.params.id,
+        userId: sessionStorage.getItem("userId")
       },
       columns5: [
         {
@@ -98,14 +103,14 @@ export default {
         {
           title: "时间",
           key: "operationTime",
-          sortType:'desc'
+          sortType: "desc"
         },
         {
           title: "操作类型",
           key: "operation"
         }
       ],
-      historyUploadMessageList:[],
+      historyUploadMessageList: [],
       fujainList: [
         {
           fileSize: "100k",
@@ -123,82 +128,101 @@ export default {
           description: "sdfjsdfj osdafi sdf sdaf asdf sad"
         }
       ],
+      fujainDetail: null,
       canChange: false,
       canDel: false,
+      fileDetailUrl: "",
+      fileDetailSize: "",
+      fileDetaildescible: "",
       fileDetails: {
-        photoUrl:'',
-        title:'my title',
+        photoUrl: "",
+        title: "my title",
         username: "张三",
         departmentName: "行政中心-行政部-行政组",
         addFileTime: "2017-8-23",
         fileStyle: "规章制度",
         fileContent:
-          "<p>23891458接洽奈 进你好地是地地轩地灶果园校地村瓢泼大雨在柑顶替叶是村要查892343207234570345382502355555</p>"
+          "<p>2389sessionStorage.getItem('userId')8接洽奈 进你好地是地地轩地灶果园校地村瓢泼大雨在柑顶替叶是村要查892343207234570345382502355555</p>"
       }
     };
   },
   components: {
     iconLine
   },
-  mounted(){
+  mounted() {
     this.initreadFile();
     this.initFileLog();
     this.initFileDetail();
     this.showFilePower();
-    console.log(this.$route.params.id)
+    console.log(this.$route.params.id);
   },
   methods: {
-    showFilePower(){
-        showFilePermission(this.readFileparams)
-          .then(res => {
-            console.log('用户id对文件的权限')
-            console.log(res)
-
-            if (res.data.code == 0) {
-              const data=res.data.data;
-              if(data.updateFile===0){
-                this.canChange=false;
-              }else if(data.updateFile===1){
-                 this.canChange=true;
-              } 
-              if(data.deleteFile===0){
-                this.canDel=false;
-              } else if(data.deleteFile===1){
-                 this.canDel=true;
-              }     
-          }
-        }).catch(err => {});
-    },
-    initFileDetail(){     
-      getFileDetail(this.fileDetailParams)
+    showFilePower() {
+      showFilePermission(this.readFileparams)
         .then(res => {
-          console.log('文件的详情');
-          console.log(res)
+          console.log("用户id对文件的权限");
+          console.log(res);
 
           if (res.data.code == 0) {
-            this.fileDetails=res.data.data
+            const data = res.data.data;
+            if (data.updateFile === 0) {
+              this.canChange = false;
+            } else if (data.updateFile === 1) {
+              this.canChange = true;
+            }
+            if (data.deleteFile === 0) {
+              this.canDel = false;
+            } else if (data.deleteFile === 1) {
+              this.canDel = true;
+            }
           }
-        }).catch(err => {});
+        })
+        .catch(err => {});
     },
-    initFileLog(){
-        showfilelog(this.filelogParams)
+    initFileDetail() {
+      getFileDetail(this.fileDetailParams)
         .then(res => {
-          console.log(res)
+          console.log("文件的详情");
+          console.log(res.data.code == 0);
+          if (res.data.code == 0) {
+            this.fileDetails = res.data.data;
+            console.log(this.fileDetails);
+            this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
+            this.fileDetailSize = this.fileDetails.fileSize.split(",");
+            this.fileDetaildescible = this.fileDetails.enclosureInfo.split(",");
+            this.fujainList = [];
+            for (let i = 0; i < this.fileDetailUrl.length; i++) {
+              console.log(111);
+              this.fujainDetail = {};
+              this.fujainDetail.fileSize = this.fileDetailSize[i];
+              this.fujainDetail.title = this.fileDetailUrl[i].slice(13);
+              this.fujainDetail.url = this.fileDetailUrl[i];
+              this.fujainDetail.description = this.fileDetaildescible[i];
+              this.fujainList.push(this.fujainDetail);
+            }
+          }
+        })
+        .catch(err => {});
+    },
+    initFileLog() {
+      showfilelog(this.filelogParams)
+        .then(res => {
+          console.log(res);
           const showUserUpdata = res.data;
-          console.log('查看个人日志记录')
+          console.log("查看个人日志记录");
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
             this.historyUploadMessageList = showUserUpdata.data;
           }
-        }).catch(err => {});
-    },
-    initreadFile(){
-      readFile(this.readFileparams)
-        .then(res => {
-          console.log('文件的阅读');
-          console.log(res)
         })
+        .catch(err => {});
+    },
+    initreadFile() {
+      readFile(this.readFileparams).then(res => {
+        console.log("文件的阅读");
+        console.log(res);
+      });
     },
     goRouter() {
       this.$router.back();
@@ -212,17 +236,17 @@ export default {
       this.$Modal.confirm({
         content: "<h3>确定要删除么！！！</h3>",
         onOk: () => {
-
-              deleteFile(this.delfileParams)
-                .then(res => {
-                  console.log(res.data)
-                 if(res.data.code===0){
-                  this.$Message.warning("您删除了该文件");
-                 }else{
-                  this.$Message.error("操作发生错误");
-                 }
-                }).catch(err => {});
-                },
+          deleteFile(this.delfileParams)
+            .then(res => {
+              console.log(res.data);
+              if (res.data.code === 0) {
+                this.$Message.warning("您删除了该文件");
+              } else {
+                this.$Message.error("操作发生错误");
+              }
+            })
+            .catch(err => {});
+        },
 
         onCancel: () => {
           this.$Message.success("您取消了该操作");
@@ -242,7 +266,7 @@ export default {
   line-height: 40px;
 }
 .filecontent {
-  min-height: 400px;
-  padding-top: 20px;
+  min-height: 160px;
+  padding: 30px 0px;
 }
 </style>
