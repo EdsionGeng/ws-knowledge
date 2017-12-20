@@ -1,6 +1,6 @@
 <template>
   <div class="set">
-    <div type="text/plain" id="ueditor"></div>
+    <script type="text/plain" id="ueditor"></script>
     <br>
     <Button @click="submits" type='primary'>保存</Button>
   </div>
@@ -40,12 +40,14 @@ export default {
   methods: {
     submits() {
       this.ueditorContent.content=UE.getEditor("ueditor").getContent();
-      console.log(this.ueditorContent.content)
     },
     xieru() {
-      if(sessionStorage.getItem('content')!==null){
-        UE.getEditor("ueditor").setContent(sessionStorage.getItem('content'));
+      console.log(this.ueditorContent)
+      if(this.ueditorContent.content!==''){
+        console.log(111)   
+        UE.getEditor("ueditor").setContent(this.ueditorContent.content);
       }else{
+        console.log(222)
         UE.getEditor("ueditor").setContent('请编辑文件内容');
       }
 

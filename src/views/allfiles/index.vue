@@ -17,13 +17,13 @@
                   <TabPane label="列表">
                     <Row>
                       <Col>
-                        <Table :columns="columns1" 	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
+                        <Table :columns="columns1" 	:data="userLookFileList" @on-row-click="onRowClick"></Table>
                       </Col>
                     </Row>
                   </TabPane>
                  <TabPane label="图文">
                     <Row>
-                      <Col  span="5" offset=1  pull=1 v-for='(list,index) in historyUploadMessageList' :key='index' style='margin-bottom:15px;'>
+                      <Col  span="5" offset=1  pull=1 v-for='(list,index) in userLookFileList' :key='index' style='margin-bottom:15px;'>
                         <a @click="onRowClick(list)">
                         <Card style="">
                           <div style="text-align:center">
@@ -32,10 +32,8 @@
                               <p>上传时间：{{list.addFileTime}}</p>
                               <p>上传人：{{list.username}}</p>
                           </div>
-
                         </Card>
                         </a>
-
                       </Col>
                   </Row>
                 </TabPane>
@@ -51,27 +49,26 @@
 </template>
 <script>
 import { showUserLookFile } from "../../api/all_interface";
-import SelectTree from '@/components/common/selectTree'
-import docTree from '@/components/common/docTree'
+import SelectTree from "@/components/common/selectTree";
+import docTree from "@/components/common/docTree";
 
 export default {
   data() {
     return {
       //用对象就可以让子组件修改父组件的内容
-      docTypeKey:{
-        value:'',
-        id:0
+      docTypeKey: {
+        value: "",
+        id: 0
       },
-      depTypeKey:{
-        value:''
+      depTypeKey: {
+        value: ""
       },
       pageOpts: [20, 40, 60, 100],
       listparams: {
-        userId:145,
+        userId: sessionStorage.getItem("userId"),
         current: 1,
         pageSize: 20,
         userGroupId: 3
-
       },
       page: { total: 100, pages: 1, current: 1, pageSize: 20 },
       columns1: [
@@ -84,8 +81,7 @@ export default {
           title: "发布时间",
           key: "addFileTime",
           sortable: true,
-          align:'center'
-
+          align: "center"
         },
         {
           title: "上传人",
@@ -93,60 +89,61 @@ export default {
           align: "right"
         }
       ],
-      historyUploadMessageList: [
+      userLookFileList: [
         {
           title: "hello",
           addFileTime: "2017-01-01",
-          id:1
+          id: 1
         },
         {
           title: "hello",
           addFileTime: "2017-01-01",
-          id:2
+          id: 2
         },
         {
           title: "hello",
           addFileTime: "2017-01-01",
-          id:3
+          id: 3
         },
         {
           title: "hello world",
           addFileTime: "2017-01-02",
-          id:4
+          id: 4
         },
         {
           title: "hello world",
           addFileTime: "2017-01-05",
-          id:5
+          id: 5
         }
       ]
     };
   },
-  components:{
-    SelectTree,docTree
+  components: {
+    SelectTree,
+    docTree
   },
   created() {
-     this.initList();
+    this.initList();
   },
   methods: {
-    selAllFile(){
-      this.listparams.departmentName=this.depTypeKey.value;
-      this.listparams.fileStyleId=this.docTypeKey.id;
-      this.initList()
+    selAllFile() {
+      this.listparams.departmentName = this.depTypeKey.value;
+      this.listparams.fileStyleId = this.docTypeKey.id;
+      this.initList();
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
     },
     onPageChange(value) {
       this.listparams.current = value;
-        this.initList();
+      this.initList();
     },
     onPageSizeChange(value) {
       this.listparams.pageSize = value;
       this.initList();
     },
     initList() {
-        console.log('个人能看到的文件展示列表')
+      console.log("个人能看到的文件展示列表");
       console.log(this.listparams);
       showUserLookFile(this.listparams)
         .then(res => {
@@ -154,7 +151,7 @@ export default {
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
-            this.historyUploadMessageList = showUserUpdata.data;
+            this.userLookFileList = showUserUpdata.data;
           }
         })
         .catch(err => {});
@@ -166,5 +163,4 @@ export default {
 .page {
   padding: 30px 10px;
 }
-
 </style>

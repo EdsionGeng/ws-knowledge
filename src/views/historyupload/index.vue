@@ -54,7 +54,7 @@ export default {
       listparams: {
         current: 1,
         pageSize: 20,
-        userId: 145
+        userId: sessionStorage.getItem('userId')
       },
       page: { total: 100,pages:1, current: 1, pageSize: 20 },
       columns1: [

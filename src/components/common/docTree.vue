@@ -1,5 +1,5 @@
 <template>
-<div style='display:inline-block;position:relative'>
+<div style='display:inline-block;position:relative' @click="clearmeun">
     <Input v-model="myvalue.value" icon="arrow-down-b" placeholder="类型" @on-click='dropmeun(!showMenu)' style="width: 200px">   
     </Input>
     <div v-show='showMenu' class="showmenubox">
@@ -31,6 +31,11 @@ export default {
     this.showDocKind();
   },
   methods: {
+     clearmeun(event){
+      if(event.target.tagName==='INPUT'){
+       this.showMenu = !this.showMenu
+      }
+    },
      showDocKind(){
       getDocTree(this.docTreedata).then(res=>{
         if(res.status==200){
@@ -44,7 +49,7 @@ export default {
         {
           style: {
             cursor: "pointer",
-            marginLeft: "5px"
+            paddingRight:'10px'
           },
           on: {
             click: () => {

@@ -6,23 +6,13 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import store from './store'
-import {login} from '@/api/login';
-
-
-// import AxiosPlugin from './utils/axios.js'
-// import './mock/index.js'
-
+import {
+  login
+} from '@/api/login';
 Vue.use(iView);
-// Vue.use(AxiosPlugin,'$axios');
 Vue.config.productionTip = false
-// //不需要自动登录的
-// sessionStorage.setItem('isLogin',true);
-// sessionStorage.setItem('isAdmin',true);
-
-let isAdmin=true;
+let isAdmin = true;
 router.beforeEach((to, from, next) => {
-  // console.log(to) //path:'login'
-  // console.log(from) //path:'/'
   let params = {
     username: to.query.username,
     password: to.query.password
@@ -35,24 +25,16 @@ router.beforeEach((to, from, next) => {
 
   if (sessionStorage.getItem('isLogin')) {
     if (sessionStorage.getItem('isAdmin') !== 'undefined') {
-      console.log(3333)
-      // 这下面是什么意思
       if (to.path == "/login") { //判断下一个是不是跳login
-        console.log(4444)
         next('/') //跳转到一个不同的地址，当前导航被中断，然后进行一个新的民航
       } else {
-        console.log(5555)
         next();
       }
     } else {
-      console.log(6666)
       if (to.path == "/login") {
-        console.log(7777)
         next();
       } else {
-        console.log(8888)
         next('/login');
-        // window.location.href="http://report.wsloan.com:8888/wsdm/login";
       }
     }
   } else {
@@ -69,7 +51,6 @@ router.beforeEach((to, from, next) => {
           next();
         } else if (data.code === 500) {
           next('/login');
-          // window.location.href="http://report.wsloan.com:8888/wsdm/login";
         }
       })
     } else {
@@ -77,7 +58,6 @@ router.beforeEach((to, from, next) => {
         next();
       } else {
         next('/login');
-        // window.location.href="http://report.wsloan.com:8888/wsdm/login";
       }
     }
   }

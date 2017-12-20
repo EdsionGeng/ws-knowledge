@@ -72,7 +72,7 @@ export default {
       listparams: {
         current: 1,
         pageSize: 20,
-        userId: 145,
+        userId: sessionStorage.getItem('userId'),
         searchContent:this.$route.params.key
       },
       deptlist:[],

@@ -51,7 +51,7 @@
                data: {
                   current: 1,
                   pageSize:5,
-                  userId:145
+                  userId:sessionStorage.getItem('userId')
         //          id: this.$route.query.id,
         //          yhjId: this.$route.query.yhjId,
         //          yhjType: this.$route.query.yhjType
@@ -59,7 +59,7 @@
                 newdata:{
                   current: 1,
                   pageSize:10,
-                  userId:145
+                  userId:sessionStorage.getItem('userId')
                 }
                 ,
                 columns1: [

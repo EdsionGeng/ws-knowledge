@@ -7,19 +7,17 @@
 </template>
 <script>
 export default {
-    props:['BreadData']
-}
+  props: ["BreadData"]
+};
 </script>
 <style scoped>
-.pagetitle{
-    clear: both;
+.pagetitle {
+  clear: both;
 }
-.ivu-breadcrumb{
-    height: 46px;
-    line-height: 46px;
-    font-size: 14px;
-    padding-left:20px;
+.ivu-breadcrumb {
+  height: 46px;
+  line-height: 46px;
+  font-size: 14px;
+  padding-left: 20px;
 }
-
-
 </style>
