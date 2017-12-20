@@ -42,11 +42,11 @@
             key: "re",
             width: 150,
             align: 'center',
-
+            sortable: true
           }],
         mymessageDetail:{
           MyMessageListTitle:'',
-          MyMessageupdate:'',
+          MyMessagetime:'',
           AddUser:'',
           MyMessageMsg:'',
           readed:0,
@@ -93,6 +93,7 @@
               this.MyMessageList = data.data;
               //console.log(this.MyMessageList)
               this.page = data.rdPage;
+              console.info(data.rdPage)
               //console.log(data.rdPage)
             }
           })
@@ -103,19 +104,20 @@
           commonId:row.commonId
         };
         //console.log(this.params.commonId)
+        let _self=this;
         showAdPcs(this.params).then(
           res => {
             const data = res.data;
 
             if (data.code == 0) {
-              this.mymessageDetail.MyMessageListTitle=row.at;
-              this.mymessageDetail.MyMessageupdate=row.re;
-              this.mymessageDetail.AddUser=row.AddUser;
-              this.mymessageDetail.MyMessageMsg=row.ad;
-              this.mymessageDetail.readed=data.data.isRead;
-              this.mymessageDetail.noreaded=data.data.noRead;
-
-              this.readAdParams.commonId=row.commonId;
+              console.info(row);
+              _self.mymessageDetail.MyMessageListTitle=row.at;
+              _self.mymessageDetail.MyMessagetime=row.re;
+              _self.mymessageDetail.AddUser=row.addUser;
+              _self.mymessageDetail.MyMessageMsg=row.ad;
+              _self.mymessageDetail.readed=data.data.isRead;
+              _self.mymessageDetail.noreaded=data.data.noRead;
+              _self.readAdParams.commonId=row.commonId;
               readAd(this.readAdParams).then(res=>{
                 const data=res.data;
               if(data.code==0){

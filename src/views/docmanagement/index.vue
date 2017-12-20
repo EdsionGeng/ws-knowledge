@@ -7,7 +7,7 @@
         <Button type="primary" size="large" @click="updateFileStyle=true">调整文件类型</Button>
         </Col>
         <Col span="2">
-        <Button type="primary" size="large" @click="todelFile">删除</Button>
+        <Button type="primary" size="large" @click="openDelWindow=true">删除</Button>
         </Col>
       </Row>
     </div>
@@ -59,6 +59,15 @@
       @on-ok="ok"
       @on-cancel="cancel">
       <Tree :data="docTree" :render="renderContent1"></Tree>
+      <!--@on-check-change="getCheckNode"-->
+    </Modal>
+    <Modal
+      v-model="openDelWindow"
+      width="500"
+      title="删除文件"
+      @on-ok="todelFile"
+      @on-cancel="toDelCancel">
+      <p>确定删除所选文件</p>
       <!--@on-check-change="getCheckNode"-->
     </Modal>
   </div>
@@ -136,6 +145,7 @@
           endDate: "",
           fileStyleId: ""
         },
+        openDelWindow:false,
         updateFileStyle: false,
         selection: [],
         date: "",
@@ -145,7 +155,6 @@
     },
     created() {
       this.showAllFileList();
-
       this.showDocTree();
     },
     methods: {
@@ -256,7 +265,9 @@
           .catch(err => {
           });
       },
-
+      toDelCancel(){
+        this.deleteFileParams.fileIds="";
+      },
       /**
        * 确定修改文档类型
        */
@@ -322,7 +333,6 @@
     margin-top: 30px;
     margin-left: 35px;
   }
-
   .bodyarea {
     margin-left: 35px;
     margin-top: 40px;
