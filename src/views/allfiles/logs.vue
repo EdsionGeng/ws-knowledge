@@ -1,11 +1,11 @@
 <template>
 <div class="page">
    <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
-        <Col span="1" offset=1  style='height:30px;line-height:30px'> 部门:</Col>
+        <Col span="1" offset=1  style='height:30px;line-height:30px;padding-left:20px;'> 部门:</Col>
         <Col span="6">
             <SelectTree  :myvalue='depTypeKey'></SelectTree>
         </Col>
-        <Col span="1"  style='height:30px;line-height:30px'> 类型:</Col>
+        <Col span="1"  style='height:30px;line-height:30px;padding-left:20px;'> 类型:</Col>
         <Col span="6">
           <Select v-model="operationModel" style="width:200px">
             <Option v-for="item in operatype" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -21,12 +21,12 @@
     </Row>
     <Row style='margin-top:20px'>
           <Col>
-            <Table :columns="columns1" 	:data="fileLogList" ></Table>
+            <Table :columns="columns1"  stripe 	:data="fileLogList" ></Table>
           </Col>
     </Row>
-  <Row style='padding-top:10px,padding-right:5px'>
+  <Row >
     <Col>
-    <Page :total="page.total"  show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+    <Page :total="page.total"  placement='top' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </Col>
   </Row>
   </div>
