@@ -132,7 +132,6 @@ import { updateFilePermission } from "../../api/all_interface";
 import { deleteFilePermission } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
 import { mapState, mapMutations } from "vuex";
-
 export default {
   data() {
     return {
@@ -179,7 +178,6 @@ export default {
       filedoc: null,
       loadingStatus: false,
       fileloadingStatus: false,
-      // 编辑是根据查看人员进行筛选的
       depTree: [],
       editdepTree: [],
       deldepTree: [],
@@ -221,7 +219,9 @@ export default {
       this.uploadForm.describle = storeState.addFileListParams.describle;
       this.uploadForm.filesize = storeState.addFileListParams.filesize;
       this.uploadForm.fileType = storeState.addFileListParams.fileType;
-      console.log(this.uploadForm);
+      this.fujainList=storeState.fujainList;
+      this.$refs.fujianupload.fileList=storeState.fujainList;
+      this.$refs.upload.fileList=storeState.photoUrlList;
       this.depTree = storeState.lookFilePower;
       this.editdepTree = storeState.editFilePower;
       this.deldepTree = storeState.delFilePower;
@@ -261,6 +261,7 @@ export default {
             this.getFilesize(this.uploadForm.filesize);
             this.getDescrible(this.uploadForm.describle);
             this.getFileType(this.uploadForm.fileType);
+            this.getPhotoUrlList(this.uploadList);
             next();
           },
           onCancel: () => {
@@ -289,9 +290,11 @@ export default {
       "setHasSaveContent",
       "getFilesize",
       "getDescrible",
-      "getFileType"
+      "getFileType",
+      "getPhotoUrlList"
     ]),
     handleRemove(file) {
+      console.log(222)
       const fileList = this.$refs.upload.fileList;
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
     },
@@ -326,7 +329,6 @@ export default {
       this.uploadForm.photourl = res.data;
     },
     pichandleBeforeUpload() {
-      console.log(this.$refs.upload);
       const check = this.uploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
@@ -336,7 +338,7 @@ export default {
       return check;
     },
     handleBeforeUpload() {
-      const check = this.uploadList.length < 10;
+      const check = this.fujainList.length < 10;
       if (!check) {
         this.$Notice.warning({
           title: "附件上传已达上限"
@@ -347,29 +349,28 @@ export default {
     },
     handleMaxSize(file) {
       this.$Notice.warning({
-        title: "Exceeding file size limit",
-        desc: "File  " + file.name + " is too large, no more than 2M."
+        title: "文件大小限制",
+        desc:  file.name + "： 该文件大小超过2M."
       });
     },
     pichandleMaxSize(file) {
       this.$Notice.warning({
         title: "大小限制",
-        desc: "File  " + file.name + " 头像大小不能超过2M"
+        desc: "" + file.name + "：头像大小不能超过2M"
       });
     },
     handleFormatError(file) {
       this.$Notice.warning({
-        title: "The file format is incorrect",
+        title: "文件上传类型限制",
         desc:
-          "File format of " +
           file.name +
-          " is incorrect, please select jpg or png."
+          " ：该文件类型不支持上传"
       });
     },
     pichandleFormatError(file) {
       this.$Notice.warning({
         title: "文件类型限制",
-        desc: file.name + " 不是图片类型"
+        desc: file.name + " 该文件不是图片类型"
       });
     },
     chooseCheckPeople(arr) {
@@ -506,11 +507,11 @@ export default {
                             if (res.data.code == 0) {
                               console.log("设置删除权限成功");
 
-                              this.$Message.success("上传成功,2s后少跳转到历史上传界面");
+                              this.$Message.success("上传成功,1s后少跳转到历史上传界面");
                               this.isBanDuan = false;
                               setTimeout(() => {
                                 this.$router.push("/hisupload");
-                              });
+                              },1000);
                             }
                           })
                           .catch(err => {});
