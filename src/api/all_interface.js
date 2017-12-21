@@ -8,6 +8,14 @@ export function getFileDetail(data) {
     data: data
   })
 }
+export function deletesinglefile(data) {
+  return fetch({
+    url: 'delete/singlefile',
+    method: 'post',
+    data: data
+  })
+}
+
 /**
  *  得到用户菜单
  * @param data
