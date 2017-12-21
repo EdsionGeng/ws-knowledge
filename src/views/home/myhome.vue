@@ -3,23 +3,24 @@
         <Card >
             <p slot="title"><span>我的消息</span><a class='rt' @click="changeRoute('mymessage')">查看更多&gt;&gt;</a> </p>
             <div>
-              <Table :columns="columns1" 	:row-class-name='rowClassName'  :data="MyMessageList" @on-row-click="onRowClick"></Table>
+              <Table stripe :columns="columns1"  class="myTable"	:row-class-name='rowClassName'  :data="MyMessageList" @on-row-click="onRowClick"></Table>
             </div>
         </Card>
         <br>
         <Card >
             <p slot="title"><span>最新上传</span><a class='rt' @click="changeRoute('allfiles')">查看更多&gt;&gt;</a> </p>
             <div>
-              <Table :columns="columns2"  :data="newMessageList"  @on-row-click="showNewMessageList"></Table>
+              <Table stripe :columns="columns2" class='myTable' :data="newMessageList"  @on-row-click="showNewMessageList"></Table>
             </div>
         </Card>
         <Modal
-          :title="mymessageDetail.MyMessageListTitle"
+          title="查看消息"
           v-model="modal1"
           :mask-closable="false"
           >
-          <p style='text-align:center'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：{{mymessageDetail.readed }}&nbsp;&nbsp;未读人：{{mymessageDetail.noreaded}}</p>
-          <p class="modal-content" style='color:#333;margin-top:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
+          <div style='text-align:center;font-size:20px;color:#222;font-weight:700'>{{mymessageDetail.MyMessageListTitle}}</div>
+          <p style='text-align:center;color:#ccc;padding:5px 0'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：{{mymessageDetail.readed }}&nbsp;&nbsp;未读人：{{mymessageDetail.noreaded}}</p>
+          <p class="modal-content" style='color:#333;'>{{mymessageDetail.MyMessageMsg}}</p>
       </Modal>
     </div>
 </template>
@@ -52,14 +53,12 @@
                   current: 1,
                   pageSize:5,
                   userId:sessionStorage.getItem('userId')
-        //          id: this.$route.query.id,
-        //          yhjId: this.$route.query.yhjId,
-        //          yhjType: this.$route.query.yhjType
                 },
                 newdata:{
                   current: 1,
                   pageSize:10,
-                  userId:sessionStorage.getItem('userId')
+                  userId:sessionStorage.getItem('userId'),
+                  userGroupId:sessionStorage.getItem('userGroupId')
                 }
                 ,
                 columns1: [
@@ -154,10 +153,6 @@
                 if (data.code == 0) {
                   console.log(this.MyMessageList)
                   this.MyMessageList = data.data;
-                  console.log('我的消息')
-                  console.log(this.MyMessageList.at)
-                  // this.page = data.rdPage;
-                  // console.log(data.rdPage)
                 }
               })
               .catch(err => {});
@@ -174,6 +169,9 @@
 <style >
 .ivu-table .demo-table-info-row td {
   color: #2d8cf0;
+}
+.myTable .ivu-table-body tr{
+  cursor: pointer;
 }
 </style>
 
