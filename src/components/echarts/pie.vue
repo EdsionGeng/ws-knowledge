@@ -18,7 +18,7 @@ require("echarts/lib/component/title");
 import walden from "../echarts/theme/walden.json";
 echarts.registerTheme("walden", walden);
 export default {
-  name: "echarts-bar",
+  name: "myPie",
   props: {
     title: {
       type: String,
@@ -70,6 +70,7 @@ export default {
   },
   methods: {
     drawBar() {
+      console.log(this.seriesData);
       // 基于准备好的dom，初始化echarts实例
       this.barchart = echarts.init(document.getElementById(this.id), "walden");
       // 绘制图表
