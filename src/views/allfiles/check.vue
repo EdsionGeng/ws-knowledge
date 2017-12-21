@@ -69,7 +69,7 @@ import iconLine from "@/components/common/iconline";
 import { getFileDetail } from "@/api/all_interface";
 import { readFile } from "@/api/all_interface";
 import { showfilelog } from "@/api/all_interface";
-import { deleteFile } from "@/api/all_interface";
+import { deletesinglefile } from "@/api/all_interface";
 import { showFilePermission } from "@/api/all_interface";
 
 export default {
@@ -147,6 +147,7 @@ export default {
           console.log("用户id对文件的权限");      
           if (res.data.code == 0) {
             const data = res.data.data;
+            console.log(data)
             if (data.updateFile === 0) {
               this.canChange = false;
             } else if (data.updateFile === 1) {
@@ -218,11 +219,12 @@ export default {
       this.$Modal.confirm({
         content: "<h3>确定要删除么！！！</h3>",
         onOk: () => {
-          deleteFile(this.delfileParams)
+          deletesinglefile(this.delfileParams)
             .then(res => {
               console.log(res.data);
               if (res.data.code === 0) {
                 this.$Message.warning("您删除了该文件");
+                this.$router.push('/')
               } else {
                 this.$Message.error("操作发生错误");
               }
