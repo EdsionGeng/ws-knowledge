@@ -1,11 +1,11 @@
 <template>
 <div class="page">
       <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
-        <Col span="1" offset=2  style='height:30px;line-height:30px'> 部门:</Col>
+        <Col span="1" offset=2  style='height:30px;line-height:30px;padding-left:20px;'> 部门:</Col>
         <Col span="6">
             <SelectTree  :myvalue='depTypeKey'></SelectTree>
         </Col>
-        <Col span="1"  style='height:30px;line-height:30px'> 类型:</Col>
+        <Col span="1"  style='height:30px;line-height:30px;padding-left:20px;'> 类型:</Col>
         <Col span="6">
           <docTree  :myvalue='docTypeKey'></docTree>
         </Col>
@@ -13,24 +13,24 @@
     </Row>
       <Row>
           <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
-              <Tabs type="card">
-                  <TabPane label="列表">
+              <Tabs type="card" @on-click='changePic'>
+                  <TabPane label="列表" name='table'>
                     <Row>
                       <Col>
-                        <Table :columns="columns1" 	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
+                        <Table :columns="columns1"  class="myTable"  stripe	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
                       </Col>
                     </Row>
                   </TabPane>
-                 <TabPane label="图文">
+                 <TabPane label="图文" name='pic'>
                     <Row>
-                      <Col  span="5" offset=1  pull=1 v-for='(list,index) in historyUploadMessageList' :key='index' style='margin-bottom:15px;'>
+                      <Col  span="5" offset=1  pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index' style='margin-bottom:8px;'>
                         <a @click="onRowClick(list)">
                         <Card style="">
                           <div style="text-align:center">
-                              <img src="./bg.jpg" style='width:60%;height:150px;'>
-                              <h2>{{list.title}}</h2>
-                              <p>上传时间：{{list.addFileTime}}</p>
-                              <p>上传人：{{list.username}}</p>
+                              <img src="./bg.jpg" style='width:50%;height:90px;'>
+                              <h2 style='color:#000;font-size:19px;' class="nowrap">{{list.title}}</h2>
+                              <p style='color:#ccc'>上传时间：{{list.addFileTime}}</p>
+                              <p style='color:#ccc'>上传人：{{list.username}}</p>
                           </div>
 
                         </Card>
@@ -41,10 +41,10 @@
                 </TabPane>
               </Tabs>
           </Col>
-    </Row>
-     <Row style='padding-top:10px,padding-right:5px'>
+    </Row> 
+     <Row>
                 <Col>
-                  <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+                  <Page placement='top' :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
                 </Col>
       </Row>
   </div>
@@ -105,6 +105,7 @@ export default {
           align: "right"
         }
       ],
+      historyUploadpicMessageList:[],
       historyUploadMessageList: [
         {
           title: "hello",
@@ -139,6 +140,14 @@ export default {
     SelectTree,docTree
   },
   methods: {
+     changePic(name){
+      console.log(name)
+      if(name==='pic'){
+        this.historyUploadpicMessageList=this.historyUploadMessageList;
+      }else{
+        this.historyUploadpicMessageList=[]
+      }
+    },
      selAllFile(){
        this.listparams.departmentName=this.depTypeKey.value;
        this.listparams.fileStyleId=this.docTypeKey.id;
