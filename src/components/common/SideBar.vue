@@ -3,10 +3,10 @@
     <div>
       <search></search>
     </div>
-    <Menu :theme="theme2" accordion @on-select="change">
+    <Menu :theme="theme2" accordion @on-select="change" active-name="home">
       <MenuGroup title="" class='menuTitle'>
 
-        <Menu-item name='home'>首页</Menu-item>
+        <Menu-item name='home' >首页</Menu-item>
 
         <Submenu name="1">
           <template slot="title">
