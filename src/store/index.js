@@ -20,12 +20,19 @@ const store = new Vuex.Store({
                 describle:'',
                 fileType:''
             }, 
-            fujainList:[]
+            fujainList:[],
+            photoUrlList:[]
         } 
     },
     mutations:{
         setHasSaveContent(state,val){
             state.hasSaveContent=val;
+        },
+        getPhotoUrlList(state,powers){
+            if(powers.length>0){
+                state.addFileSaveList.photoUrlList=powers;
+                console.log(state.addFileSaveList.photoUrlList)
+            }
         },
         getLookpower(state,powers){
             if(powers.length>0){
