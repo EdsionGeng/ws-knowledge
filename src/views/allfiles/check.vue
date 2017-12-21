@@ -8,8 +8,8 @@
           <Col > </Col>
         </Row>
          <Row class='filecontent'>
-           <div v-html='fileDetails.fileContent' >
-              <!-- 文件的详情显示 -->
+           <div v-html='fileDetails.fileContent' > <!-- 文件的详情显示 -->
+             
            </div>
         </Row>
         <Row>
@@ -112,21 +112,6 @@ export default {
       ],
       historyUploadMessageList: [],
       fujainList: [
-        {
-          fileSize: "100k",
-          title: "我的文档",
-          description: "sdfjsdfj osdafi sdf sdaf asdf sad"
-        },
-        {
-          fileSize: "100k",
-          title: "我的文档",
-          description: "sdfjsdfj osdafi sdf sdaf asdf sad"
-        },
-        {
-          fileSize: "100k",
-          title: "我的文档",
-          description: "sdfjsdfj osdafi sdf sdaf asdf sad"
-        }
       ],
       fujainDetail: null,
       canChange: false,
@@ -136,13 +121,12 @@ export default {
       fileDetaildescible: "",
       fileDetails: {
         photoUrl: "",
-        title: "my title",
-        username: "张三",
-        departmentName: "行政中心-行政部-行政组",
-        addFileTime: "2017-8-23",
-        fileStyle: "规章制度",
-        fileContent:
-          "<p>2389sessionStorage.getItem('userId')8接洽奈 进你好地是地地轩地灶果园校地村瓢泼大雨在柑顶替叶是村要查892343207234570345382502355555</p>"
+        title: "",
+        username: "",
+        departmentName: "",
+        addFileTime: "",
+        fileStyle: "",
+        fileContent:""
       }
     };
   },
@@ -160,9 +144,7 @@ export default {
     showFilePower() {
       showFilePermission(this.readFileparams)
         .then(res => {
-          console.log("用户id对文件的权限");
-          console.log(res);
-
+          console.log("用户id对文件的权限");      
           if (res.data.code == 0) {
             const data = res.data.data;
             if (data.updateFile === 0) {
