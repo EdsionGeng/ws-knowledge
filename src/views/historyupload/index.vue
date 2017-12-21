@@ -46,13 +46,13 @@ export default {
     return {
       imgUrl:'./bg.jpg',
       modal1: false,
-      pageOpts:[10,20,30,40,50],
+      pageOpts:[10,20,30,40],
       listparams: {
         current: 1,
         pageSize: 20,
         userId: sessionStorage.getItem("userId")
       },
-      page: { total: 100,pages:1, current: 1, pageSize: 20 },
+      page: { total: 10,pages:1, current: 1, pageSize: 20 },
       columns1: [
         {
           title: "标题",
@@ -121,6 +121,7 @@ export default {
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page=res.data.rdPage;
+            console.log(this.page)
             this.historyUploadMessageList = showUserUpdata.data;
           }
         })
