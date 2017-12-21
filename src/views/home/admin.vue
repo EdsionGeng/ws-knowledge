@@ -1,5 +1,5 @@
 <template>
-   <div class="pagebox">  
+   <div class="pagebox">
     <div class="addmin-title" style="padding-bottom:10px">
       <ButtonGroup>
         <Button  @click='getDayData("day")' :type="index=='day'?'primary':'ghost'">今日</Button>
@@ -13,7 +13,7 @@
                 <myPie title="文件编辑信息" :legendData='legend' :seriesData="seriesCash"></myPie>
             </Card>
           </Col>
-    </Row>    
+    </Row>
   </div>
 </template>
 <script>
@@ -24,7 +24,6 @@ import { showMonthData } from "@/api/all_interface";
   export default {
   data(){
       return{
-       seriesCash:[],
        BreadTitle:['首页'],
        index:'day',
        seriescash:[],
@@ -39,7 +38,7 @@ import { showMonthData } from "@/api/all_interface";
     this.getDayData()
     },
   mounted(){
-    
+
     //this.makeEchart()
   },
   methods:{
@@ -53,7 +52,7 @@ import { showMonthData } from "@/api/all_interface";
         }
         return serires;
       },
-     
+
       getDayData(val){
           if(val!=undefined){
              this.index=val;
@@ -61,7 +60,7 @@ import { showMonthData } from "@/api/all_interface";
         showDayData(this.params).then(res=>{
           let data = res.data;
             if(data.code==0){
-              let bardata=data.data;    
+              let bardata=data.data;
               this.seriesCash=[
                   {
                     value:bardata.addpcs,
@@ -79,12 +78,12 @@ import { showMonthData } from "@/api/all_interface";
             }
         })
       },
-      getWeekData(val){   
+      getWeekData(val){
            this.index=val;
         showWeekData(this.params).then(res=>{
            let data = res.data;
             if(data.code==0){
-              let bardata=data.data;    
+              let bardata=data.data;
               this.seriesCash=[
                   {
                     value:bardata.addpcs,
@@ -107,7 +106,7 @@ import { showMonthData } from "@/api/all_interface";
         showMonthData(this.params).then(res=>{
             let data = res.data;
             if(data.code==0){
-              let bardata=data.data;    
+              let bardata=data.data;
               this.seriesCash=[
                   {
                     value:bardata.addpcs,

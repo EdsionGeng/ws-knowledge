@@ -143,8 +143,6 @@
             showUserAd(this.data)
               .then(res => {
                 const data = res.data;
-                console.log('----');
-                console.log(res);
                 if (data.code == 0) {
                   console.log(this.MyMessageList)
                   this.MyMessageList = data.data;
@@ -163,7 +161,7 @@
 </script>
 <style >
 .ivu-table .demo-table-info-row td {
-  color: #2d8cf0;
+  color: red;
 }
 .myTable .ivu-table-body tr{
   cursor: pointer;

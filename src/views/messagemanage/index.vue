@@ -49,11 +49,11 @@
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
-        <Table border ref="selection" :columns="AllAdColumns" :data="AllAdList" stripe
+        <Table border ref="selection" :columns="AllAdColumns"  :data="AllAdList" stripe
                @on-selection-change="delAdAction" @on-row-click="showAdDetail"></Table>
         </Col>
       </Row>
-      <Page :total="page.total"  :page-size-opts='pageOpts'show-sizer   :current="page.current" :page-size="page.pageSize" :show-total="true"
+      <Page :total="page.total"  :page-size-opts='pageOpts' show-sizer   :current="page.current" :page-size="page.pageSize" :show-total="true"
             @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
 
@@ -478,6 +478,7 @@
           _self.depTree = res.data;
         })
       },
+
       showAllAdList() {
         showAllAd(this.params)
           .then(res => {
@@ -490,20 +491,22 @@
           .catch(err => {
           });
       },
+
     }
+
   }
 </script>
 <style scoped>
+  .myTable .demo-table-info-row td{
+    color:red
+  }
   .buttonarea {
-
     margin-left: 20px;
   }
-
   .bodyarea {
     margin-left: 30px;
     margin-top: 30px;
   }
-
   .user-detail {
   }
 </style>
