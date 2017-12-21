@@ -46,10 +46,10 @@ export default {
       if(sessionStorage.getItem('content')!==null){
         UE.getEditor("ueditor").setContent(sessionStorage.getItem('content'));
       }else{
-        UE.getEditor("ueditor").setContent('请编辑文件内容');
+        UE.getEditor("ueditor").setContent('');
       }
 
-     
+
     }
   }
 };

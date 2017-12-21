@@ -36,7 +36,7 @@
     </Row>
     <Row style='padding-top:10px,padding-right:5px'>
         <Col>
-          <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+          <Page :total="page.total" :page-size-opts='pageOpts' show-sizer  :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
         </Col>
     </Row>
 
@@ -50,11 +50,11 @@ export default {
     return {
       imgUrl:'./bg.jpg',
       modal1: false,
-      pageOpts:[20,40,60,100],
+      pageOpts:[10,20,30,40,50],
       listparams: {
         current: 1,
         pageSize: 20,
-        userId: 145
+        userId: sessionStorage.getItem("userId")
       },
       page: { total: 100,pages:1, current: 1, pageSize: 20 },
       columns1: [
