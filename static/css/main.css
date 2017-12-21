@@ -13,9 +13,10 @@ html,body,#app,.home{
 .rt{
     float: right;
 }
-body{
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-    color:#777777;
+.nowrap{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .content{
     background: none repeat scroll 0 0 #f0f3f4;
@@ -60,7 +61,7 @@ body{
     clear: both;
   }
   .table-page {
-    margin-top:10px;
+    padding:5px 10px;
     float: right;
   }
 
