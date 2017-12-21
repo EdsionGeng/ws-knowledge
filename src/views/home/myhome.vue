@@ -51,7 +51,7 @@
                data: {
                   current: 1,
                   pageSize:5,
-                  userId:145
+                  userId:sessionStorage.getItem("userId")
         //          id: this.$route.query.id,
         //          yhjId: this.$route.query.yhjId,
         //          yhjType: this.$route.query.yhjType
@@ -59,7 +59,8 @@
                 newdata:{
                   current: 1,
                   pageSize:10,
-                  userId:145
+                  userId:sessionStorage.getItem("userId"),
+                  userGroupId:sessionStorage.getItem("userGroupId")
                 }
                 ,
                 columns1: [
@@ -101,7 +102,7 @@
              this.params={
                commonId:row.commonId
              };
-             console.log(this.params.commonId)
+
               showAdPcs(this.params).then(
               res => {
                 const data = res.data;
@@ -124,15 +125,10 @@
                 this.$router.push('/allfiles/check/'+row.id);
             },
           //个人能看到的最新上传的文件后台获取
-          initshowAdPcs(){
-
-          },
          initUserLookFile(){
             showUserLookFile(this.newdata).then(
               res => {
                 const data = res.data;
-                console.log('this is a wo can show pic')
-                 console.log(res);
                 if (data.code == 0) {
                  // console.log(this.MyMessageList)
                   this.newMessageList = data.data;

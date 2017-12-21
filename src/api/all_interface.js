@@ -415,3 +415,15 @@ export function deleteDocRule(data){
     data:data
   })
 }
+/**
+ * 修改文档目录名称
+ * @param data
+ * @returns {*}
+ */
+export function updateDocRule(data){
+  return fetch({
+    url:'/update/docname.htmls',
+    method:'post',
+    data:data
+  })
+}
