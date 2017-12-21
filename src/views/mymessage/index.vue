@@ -9,7 +9,7 @@
         <Table :columns="MyMsgColumns" :data="MyMessageList" showStripe  @on-row-click="onRowClick"></Table>
         </Col>
       </Row>
-      <Page :total="page.total" :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" class="table-page"></Page>
+      <Page :total="page.total" :page-size-opts='pageOpts'show-sizer  :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
     <Modal
       :title="mymessageDetail.MyMessageListTitle"
@@ -17,7 +17,7 @@
       :mask-closable="false"
       style="margin-left: 160px"
     >
-      <p style='text-align:center'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong style="color:red">{{mymessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
+      <p style='text-align:center'>发布时间：{{ mymessageDetail.MyMessagetime}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong style="color:red">{{mymessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
       <p class="modal-content" style='color:#333;margin-top:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
     </Modal>
   </div>
@@ -52,6 +52,7 @@
           readed:0,
           noreaded:0
         },
+        pageOpts:[10,20,30,40,50],
         showStripe:true,
         MyMessageList: [],
         page: {},
@@ -59,13 +60,10 @@
           userId:sessionStorage.getItem("userId"),
           commonId:""
         },
-        data: {
+        dataParams: {
           current: 1,
           pageSize:10,
           userId:sessionStorage.getItem("userId")
-//          id: this.$route.query.id,
-//          yhjId: this.$route.query.yhjId,
-//          yhjType: this.$route.query.yhjType
         }
       };
     },
@@ -74,26 +72,24 @@
     },
     methods:{
       onPageChange(value) {
-        this.data.current=value;
+        this.dataParams.current=value;
         this.initUserAd();
-
       },
-//    ok () {
-//      this.$Message.info('Clicked ok');
-//    },
-//    cancel () {
-//      this.$Message.info('Clicked cancel');
-//    },
+
+      onPageSizeChange(value){
+        this.dataParams.pageSize=value;
+        this.initUserAd();
+      },
       initUserAd() {
-        showUserAd(this.data)
+        showUserAd(this. dataParams)
           .then(res => {
             const data = res.data;
-//          console.log(res.data);
-            if (data.code == 0) {
+              // console.log(res.data);
+              if (data.code == 0) {
               this.MyMessageList = data.data;
               //console.log(this.MyMessageList)
               this.page = data.rdPage;
-              console.info(data.rdPage)
+              //console.info(data.rdPage)
               //console.log(data.rdPage)
             }
           })
@@ -103,6 +99,7 @@
         this.params={
           commonId:row.commonId
         };
+
         //console.log(this.params.commonId)
         let _self=this;
         showAdPcs(this.params).then(
@@ -121,7 +118,7 @@
               readAd(this.readAdParams).then(res=>{
                 const data=res.data;
               if(data.code==0){
-                console.info("wanmei");
+
               }
             })
               .catch(err =>{});

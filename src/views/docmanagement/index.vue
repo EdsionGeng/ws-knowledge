@@ -1,6 +1,37 @@
 <template>
   <div>
 
+    <div class="bodyarea">
+      <Row>
+        <Form>
+          <Col span="5">
+          <FormItem label="文档类型:">
+            <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
+                   style="width: 250px">
+            </Input>
+            <div v-if='showMenu' class="showmenubox">
+              <Tree :data="docTree" :render="renderContent"></Tree>
+            </div>
+
+          </FormItem>
+          </Col>
+          <Col span="5">
+          <FormItem label="发布时间：">
+            <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
+                        placeholder="Select date" @on-change="dateOnChange" style="width: 250px"></DatePicker>
+          </FormItem>
+          </Col>
+          <Col span="5">
+          <FormItem label=" 文件标题：">
+            <Input v-model="dataParams.title" placeholder="" style="width: 250px"></Input>
+          </FormItem>
+          </Col>
+          <Col span="3">
+          <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
+          </Col>
+        </Form>
+      </Row>
+    </div>
     <div class="buttonarea">
       <Row>
         <Col span="2">
@@ -11,37 +42,6 @@
         </Col>
       </Row>
     </div>
-    <div class="bodyarea">
-      <Row>
-        <Form>
-          <Col span="5">
-          <FormItem label="文档类型:">
-            <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
-                   style="width: 200px">
-            </Input>
-            <div v-if='showMenu' class="showmenubox">
-              <Tree :data="docTree" :render="renderContent"></Tree>
-            </div>
-
-          </FormItem>
-          </Col>
-          <Col span="6">
-          <FormItem label="发布时间：">
-            <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
-                        placeholder="Select date" @on-change="dateOnChange" style="width: 275px"></DatePicker>
-          </FormItem>
-          </Col>
-          <Col span="5">
-          <FormItem label=" 文件标题：">
-            <Input v-model="dataParams.title" placeholder="" style="width: 200px"></Input>
-          </FormItem>
-          </Col>
-          <Col span="3">
-          <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
-          </Col>
-        </Form>
-      </Row>
-    </div>
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
@@ -49,8 +49,8 @@
                @on-selection-change="delFileAction"></Table>
         </Col>
       </Row>
-      <Page :total="page.total" :current="page.current" :page-size="page.pageSize" show-sizer :show-total="true"
-            @on-change="onPageChange" class="table-page"></Page>
+      <Page :total="page.total"   :page-size-opts='pageOpts':current="page.current" :page-size="page.pageSize" show-sizer :show-total="true"
+            @on-change="onPageChange" @on-page-size-change='onPageSizeChange'  class="table-page"></Page>
     </div>
     <Modal
       v-model="updateFileStyle"
@@ -137,6 +137,7 @@
           userId: 1,
           fileStyleId: ""
         },
+        pageOpts:[10,20,30,40,50],
         dataParams: {
           current: 1,
           pageSize: 10,
@@ -193,25 +194,17 @@
       },
       dropmenu(isshow) {
         this.showMenu = isshow;
-
       },
       /**
        * 分页
        */
-      onPageChange() {
-//      this.params.current = value;
+      onPageChange(value) {
+        this.dataParams.current = value;
         this.showAllFileList();
       },
-      /**
-       * 操作树
-       * @param arr
-       */
-      getCheckNode(arr) {
-        if (arr.length > 1) {
-          this.$Message.info("只能选取一种类型");
-          return
-        }
-
+      onPageSizeChange(value){
+        this.dataParams.pageSize=value;
+        this.showAllFileList();
       },
       /**
        * 获取文档树形结构
@@ -330,11 +323,10 @@
 </script>
 <style scoped>
   .buttonarea {
-    margin-top: 30px;
     margin-left: 35px;
   }
   .bodyarea {
-    margin-left: 35px;
-    margin-top: 40px;
+    margin-left: 30px;
+    margin-top: 30px;
   }
 </style>

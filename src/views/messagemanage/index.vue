@@ -1,47 +1,50 @@
 <template>
   <div>
-
-
-    <div class="buttonarea">
-      <Row>
-        <Col span="1">
-        <Button type="primary" size="large" @click="insertAd=true">添加</Button>
-        </Col>
-        <Col span="2">
-        <Button type="primary" size="large" @click="toDelAd">删除</Button>
-        </Col>
-      </Row>
-    </div>
     <div class="bodyarea">
       <Row>
         <Form>
-          <Col span="4">
+          <Col span="5">
           <FormItem label=" 标题：">
-            <Input v-model="params.title" placeholder="请输入标题名称" style="width: 200px"></Input>
+            <Input v-model="params.title" placeholder="请输入标题名称" style="width: 250px"></Input>
           </FormItem>
           </Col>
 
-          <Col span="6">
+          <Col span="5">
           <FormItem label="发送时间：">
             <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
-                        placeholder="Select date" @on-change="dateOnChange" style="width: 275px"></DatePicker>
+                        placeholder="Select date" @on-change="dateOnChange" style="width: 250px"></DatePicker>
           </FormItem>
           </Col>
           <Col span="4">
           <FormItem>
-            <Select placeholder="请选择类型" style="width:200px" v-model=" params.adStyle">
-              <Option value="">请选择类型</Option>
-              <Option value="通知">通知</Option>
-              <Option value="公告">公告</Option>
-              <Option value="温馨提示">温馨提示</Option>
-            </Select>
+          <Select   placeholder="请选择公告类型" style="width:250px" v-model="params.adStyle">
+            <Option value="">请选择类型</Option>
+            <Option value="通知">通知</Option>
+            <Option value="公告">公告</Option>
+            <Option value="温馨提示">温馨提示</Option>
+          </Select>
+
           </FormItem>
           </Col>
-          <Col span="1">
-          <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
           </Col>
+          <Col span="1">
+            <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
+          </FormItem>
+          </Col>
+
+
         </Form>
       </Row>
+      <div class="buttonarea">
+        <Row>
+          <Col span="1">
+          <Button type="primary" size="large" @click="insertAd=true">添加</Button>
+          </Col>
+          <Col span="2">
+          <Button type="primary" size="large" @click="toDelAd">删除</Button>
+          </Col>
+        </Row>
+      </div>
     </div>
     <div style="margin:40px">
       <Row class="table-top">
@@ -50,8 +53,8 @@
                @on-selection-change="delAdAction" @on-row-click="showAdDetail"></Table>
         </Col>
       </Row>
-      <Page :total="page.total" :current="page.current" :page-size="page.pageSize" :show-total="true"
-            @on-change="onPageChange" class="table-page"></Page>
+      <Page :total="page.total"  :page-size-opts='pageOpts'show-sizer   :current="page.current" :page-size="page.pageSize" :show-total="true"
+            @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
 
 
@@ -59,7 +62,7 @@
       v-model="insertAd"
       width="700"
       title="添加公告"
-      @on-ok="ok"
+      @on-ok="sureSend"
       @on-cancel="cancel">
       <Form ref="insertAdParams" :model="insertAdParams" :label-width="90">
 
@@ -84,7 +87,7 @@
 
         <Button type="primary" size="small" @click="chooseUser=true">选择人员</Button>
 
-        <Button type="primary" size="large" @click="sureSend">确定发送</Button>
+        <!--<Button type="primary" size="large" @click="sureSend">确定发送</Button>-->
       </Form>
 
     </Modal>
@@ -110,14 +113,15 @@
     </Modal>
 
     <Modal
-      :title="singleMessageDetail.AdTitle"
+      title=""
       v-model="modal1"
       :mask-closable="false"
     >
+     <p style="font-size: 30px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
       <p style='text-align:center'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{ singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
         style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
         style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#333;margin-top:30px;'>{{singleMessageDetail.Content}}</p>
+      <p class="modal-content" style='color:#333;text-align: center;margin-top:30px;'>{{singleMessageDetail.Content}}</p>
     </Modal>
   </div>
 </template>
@@ -201,7 +205,7 @@
         usershow: false,
         params: {
           current: 1,
-          pageSize: 5,
+          pageSize: 10,
           startDate: "",
           endDate: "",
           title: "",
@@ -229,6 +233,7 @@
           userIds: "",
           commonId: "",
         },
+        pageOpts:[10,20,30,40,50],
         depTree: [],
         chooseUser: false,
         delAdParams: {
@@ -272,6 +277,10 @@
     methods: {
       onPageChange(value) {
         this.params.current = value;
+        this.showAllAdList();
+      },
+      onPageSizeChange(value){
+        this.params.pageSize=value;
         this.showAllAdList();
       },
       renderContent(h, {root, node, data}) {
@@ -338,8 +347,7 @@
         let departmentName = "";
         let userIds = "";
         for (let i = 0; i < arr.length; i++) {
-
-          if (arr[i].children === null) {
+          if (arr[i].children ==null) {
             if (i > 0) {
               departmentName += ",";
               userIds += ",";
@@ -438,7 +446,6 @@
         }
         insertAd(this.insertAdParams).then(res => {
           const data = res.data;
-
           let _self = this;
           if (data.code == 0) {
             _self.sendAdParams.commonId = data.data;
@@ -488,13 +495,13 @@
 </script>
 <style scoped>
   .buttonarea {
-    margin-top: 30px;
-    margin-left: 35px;
+
+    margin-left: 20px;
   }
 
   .bodyarea {
-    margin-left: 35px;
-    margin-top: 40px;
+    margin-left: 30px;
+    margin-top: 30px;
   }
 
   .user-detail {

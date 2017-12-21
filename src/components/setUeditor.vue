@@ -47,11 +47,8 @@ export default {
         console.log(111)   
         UE.getEditor("ueditor").setContent(this.ueditorContent.content);
       }else{
-        console.log(222)
-        UE.getEditor("ueditor").setContent('请编辑文件内容');
+        UE.getEditor("ueditor").setContent('');
       }
-
-     
     }
   }
 };

@@ -135,11 +135,6 @@ const constantRouteMap = [{
     redirect: '/home'
   }
 ];
-
-
-
-
-
 export default new Router({
 
   routes: constantRouteMap
