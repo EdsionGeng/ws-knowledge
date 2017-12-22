@@ -140,7 +140,7 @@
   export default {
     data() {
       return {
-        submitText: '确定上传?',
+        submitText: '确定上传',
         submitLoading: false,
         insertFileList: {},
         fujainList: [],
@@ -166,7 +166,6 @@
           filesize: "",
           value: ""
         },
-
         lookFileParams: {
           userIds: "",
           fileId: "",
@@ -230,9 +229,24 @@
         this.fujainList = storeState.fujainList;
         this.$refs.fujianupload.fileList = storeState.fujainList;
         this.$refs.upload.fileList = storeState.photoUrlList;
-        this.depTree = storeState.lookFilePower;
-        this.editdepTree = storeState.editFilePower;
-        this.deldepTree = storeState.delFilePower;
+        if(storeState.lookFilePower.length===0){
+           this.showDepTree();
+        }else{
+            this.lookFileParams=storeState.lookFileParams;
+           this.depTree = storeState.lookFilePower;
+        }
+        if(storeState.editFilePower.length===0){
+            this.showeditDepTree();
+        }else{
+            this.updateFileParams=storeState.updateFileParams;
+            this.editdepTree = storeState.editFilePower;
+        }
+        if(storeState.delFilePower.length===0){
+            this.showdelDepTree();
+        }else{
+            this.deleteFileParams=storeState.deleteFileParams;          
+            this.deldepTree = storeState.delFilePower;
+        }
       } else {
         this.showDepTree();
         this.showeditDepTree();
@@ -256,9 +270,12 @@
             content: "<p>是否保存当前编辑的内容</p>",
             onOk: () => {
               this.setHasSaveContent(true);
-              this.getDelpower(this.deldepTreeList);
-              this.getEditpower(this.editdepTreeList);
+              this.getDelpower(this.deldepTreeList,this.deleteFileParams);
+              this.getdeleteFileParams(this.deleteFileParams);
+              this.getEditpower(this.editdepTreeList,this.updateFileParams);
+              this.getupdateFileParams(this.updateFileParams);
               this.getLookpower(this.depTreeList);
+              this.getlookFileParams(this.lookFileParams);
               this.getTitle(this.uploadForm.title);
               this.getFileStyle(this.uploadForm.value);
               this.getFileStyleId(this.uploadForm.id),
@@ -269,7 +286,7 @@
               this.getFilesize(this.uploadForm.filesize);
               this.getDescrible(this.uploadForm.describle);
               this.getFileType(this.uploadForm.fileType);
-              this.getPhotoUrlList(this.uploadList);
+              this.getPhotoUrlList(this.picuploadList);
               next();
             },
             onCancel: () => {
@@ -285,6 +302,9 @@
     },
     methods: {
       ...mapMutations([
+        "getdeleteFileParams",
+        "getupdateFileParams",
+        "getlookFileParams",
         "getEditpower",
         "getLookpower",
         "getDelpower",
@@ -359,7 +379,6 @@
       },
       chooseCheckPeople(arr) {
         this.depTreeList = arr;
-        console.log(arr);
         var userIds = [];
         for (let i = 0; i < arr.length; i++) {
           if (arr[i].children === null) {
