@@ -1,7 +1,7 @@
 <template>
   <div>
     <div  style="color:blue">
-      全部消息
+
     </div>
     <div style="margin:10px">
       <Row class="table-top">
@@ -12,11 +12,12 @@
       <Page :total="page.total" :page-size-opts='pageOpts'show-sizer  :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
     <Modal
-      :title="mymessageDetail.MyMessageListTitle"
       v-model="modal1"
       :mask-closable="false"
+      :closable="false"
       style="margin-left: 160px"
     >
+      <p style="font-size: 20px;margin;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
       <p style='text-align:center'>发布时间：{{ mymessageDetail.MyMessagetime}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong style="color:red">{{mymessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
       <p class="modal-content" style='color:#333;margin-top:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
     </Modal>
@@ -26,7 +27,7 @@
 <script>
   import { showUserAd } from "../../api/all_interface";
   import { showAdPcs } from "../../api/all_interface";
-  import {readAd } from "../../api/all_interface";
+  import { readAd } from "../../api/all_interface";
   export default {
     data(){
       return {
@@ -87,7 +88,7 @@
               // console.log(res.data);
               if (data.code == 0) {
               this.MyMessageList = data.data;
-              //console.log(this.MyMessageList)
+
               this.page = data.rdPage;
               //console.info(data.rdPage)
               //console.log(data.rdPage)

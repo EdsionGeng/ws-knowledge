@@ -230,7 +230,6 @@
           fielIds += arr[i].id
         }
         this.selection = fielIds
-        console.info("dh" + fielIds);
         this.deleteFileParams.fileIds = fielIds;
         this.updateFileParams.fileIds = fielIds;
         return fielIds

@@ -66,7 +66,7 @@
       <Form ref="insertAdParams" :model="insertAdParams" :label-width="90">
 
         <FormItem prop="adStyle" label="类型：">
-          <Select placeholder="请选择" :clearable="true" v-model="insertAdParams.adStyle">
+          <Select placeholder="请选择" :clearable="true" :rows="4" v-model="insertAdParams.adStyle">
             <Option value="">请选择类型</Option>
             <Option value="通知">通知</Option>
             <Option value="公告">公告</Option>
@@ -95,6 +95,7 @@
       width="700px"
       title="选择人员"
       @on-ok="ok"
+      :closable="false"
       @on-cancel="cancel">
       <div class="clearfix" style="height:600px;overflow: scroll">
         <Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"
@@ -115,13 +116,14 @@
       title=""
       v-model="modal1"
       :mask-closable="false"
+      :closable="false"
     >
-      <p style="font-size: 30px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
+      <p style="font-size: 20px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
       <p style='text-align:center'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
           style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#333;text-align: center;margin-top:30px;'>
+      <p class="modal-content" style='color:#333;text-align: center;margin-top:10px;'>
         {{singleMessageDetail.Content}}</p>
     </Modal>
   </div>
@@ -177,34 +179,34 @@ export default {
           sortable: true
         },
 
-        {
-          title: "操作",
-          key: "action",
-          width: 150,
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.modal1 = true;
-                    }
-                  }
-                },
-                "查看"
-              )
-            ]);
-          }
-        }
+//        {
+//          title: "操作",
+//          key: "action",
+//          width: 150,
+//          align: "center",
+//          render: (h, params) => {
+//            return h("div", [
+//              h(
+//                "Button",
+//                {
+//                  props: {
+//                    type: "primary",
+//                    size: "small"
+//                  },
+//                  style: {
+//                    marginRight: "5px"
+//                  },
+//                  on: {
+//                    click: () => {
+//                      this.modal1 = true;
+//                    }
+//                  }
+//                },
+//                "查看"
+//              )
+//            ]);
+//          }
+//        }
       ],
       usershow: false,
       params: {
@@ -319,8 +321,8 @@ export default {
           const data = res.data;
           // console.log(res.data);
           if (data.code == 0) {
-            console.info("hjhjhj");
-            console.info(row);
+//            console.info("hjhjhj");
+//            console.info(row);
             this.singleMessageDetail.AdTitle = row.adTitle;
             this.singleMessageDetail.addTime = row.sendTime;
             this.singleMessageDetail.AddUser = row.addUser;
@@ -454,7 +456,7 @@ export default {
           let _self = this;
           if (data.code == 0) {
             _self.sendAdParams.commonId = data.data;
-            console.info(_self.sendAdParams);
+//            console.info(_self.sendAdParams);
 
             sendAdToUser(_self.sendAdParams).then(res => {
               const data = res.data;
