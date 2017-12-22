@@ -5,6 +5,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state:{
         hasSaveContent:false,
+        searchKey:'',
         addFileSaveList:{
             lookFilePower:[] ,
             editFilePower:[] ,
@@ -19,12 +20,15 @@ const store = new Vuex.Store({
                 filesize:'',
                 describle:'',
                 fileType:''
-            }, 
+            },
             fujainList:[],
             photoUrlList:[]
-        } 
+        }
     },
     mutations:{
+        getSearchKey(state,val){
+          state.searchKey=val;
+        },
         setHasSaveContent(state,val){
             state.hasSaveContent=val;
         },
@@ -49,7 +53,7 @@ const store = new Vuex.Store({
             if(powers.length>0){
                 state.addFileSaveList.lookFilePower.push(powers[0]);
             }
-            console.log(state.addFileSaveList.delFilePower)    
+            console.log(state.addFileSaveList.delFilePower)
         },
         getFujainList(state,list){
             state.addFileSaveList.fujainList=list;
