@@ -19,9 +19,9 @@
       <Row>
         <icon-line myclass="iconfont icon-jinlingyingcaiwangtubiao17" msg='附件'></icon-line>
       </Row>
-      <Row v-for='(item,index) in fujainList' :key='index' style='padding:3px 0;'>
+      <Row v-if='fujainList.length!==0' v-for='(item,index) in fujainList' :key='index' style='padding:3px 0;'>
         <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i>
-        <span>  <a :href="item.url">{{item.title}} </a>
+        <span>  <a :href="'http://192.168.3.26:8011/'+item.url">{{item.title}} </a>
               <span style='color:#ccc'>（{{parseInt(item.fileSize/1024)+'k'}}）</span>
             </span>
         <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
@@ -37,7 +37,7 @@
       <Col span='4' class="right-col" style='padding-top:30px;color:#888'>
       <Row type='flex' align='top' justify='center'>
         <Col span="16">
-        <img :src="'./'+fileDetails.photoUrl" style='width:100%;height:150px;border:8px solid #ccc'>
+        <img :src="'http://192.168.3.26:8011/'+fileDetails.photoUrl" style='width:100%;height:150px;border:8px solid #ccc'>
         </Col>
       </Row>
       <Row type='flex' justify='center'>
@@ -152,7 +152,7 @@
             console.log("用户id对文件的权限");
             if (res.data.code == 0) {
               const data = res.data.data;
-              console.log(data)
+              console.log(res)
               if (data.updateFile === 0) {
                 this.canChange = false;
               } else if (data.updateFile === 1) {
@@ -175,20 +175,22 @@
             console.log(res.data.code == 0);
             if (res.data.code == 0) {
               this.fileDetails = res.data.data;
-              console.log(this.fileDetails);
-              this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
-              this.fileDetailSize = this.fileDetails.fileSize.split(",");
-              this.fileDetaildescible = this.fileDetails.enclosureInfo.split(",");
-              this.fujainList = [];
-              for (let i = 0; i < this.fileDetailUrl.length; i++) {
-                console.log(111);
-                this.fujainDetail = {};
-                this.fujainDetail.fileSize = this.fileDetailSize[i];
-                this.fujainDetail.title = this.fileDetailUrl[i].slice(13);
-                this.fujainDetail.url = this.fileDetailUrl[i];
-                this.fujainDetail.description = this.fileDetaildescible[i];
-                this.fujainList.push(this.fujainDetail);
-              }
+              if(this.fileDetails.fileUrl!==''){
+                    this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
+                    this.fileDetailSize = this.fileDetails.fileSize.split(",");
+                    this.fileDetaildescible = this.fileDetails.enclosureInfo.split(",");
+                    this.fujainList = [];
+                    console.log(this.fileDetailUrl)
+                    for (let i = 0; i < this.fileDetailUrl.length; i++) {
+                        let fujainDetail = {};
+                        fujainDetail.fileSize = this.fileDetailSize[i];
+                        fujainDetail.title = this.fileDetailUrl[i].slice(15);
+                        fujainDetail.url = this.fileDetailUrl[i];
+                        fujainDetail.description = this.fileDetaildescible[i];
+                        this.fujainList.push(fujainDetail);
+                        console.log(this.fujainList);
+                  }
+              }             
             }
           })
           .catch(err => {
