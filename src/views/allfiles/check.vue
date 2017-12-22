@@ -34,10 +34,10 @@
         <Table border :columns="columns5" :data="historyUploadMessageList"></Table>
       </Row>
       </Col>
-      <Col span='4' class="right-col" style='padding-top:30px'>
+      <Col span='4' class="right-col" style='padding-top:30px;color:#888'>
       <Row type='flex' align='top' justify='center'>
         <Col span="16">
-        <img :src="fileDetails.photoUrl" style='width:100%;height:150px;border:8px solid #ccc'>
+        <img :src="'./'+fileDetails.photoUrl" style='width:100%;height:150px;border:8px solid #ccc'>
         </Col>
       </Row>
       <Row type='flex' justify='center'>
