@@ -428,14 +428,6 @@
           _self.deldepTree = res.data;
         });
       },
-      // upload() {
-      //   this.loadingStatus = true;
-      //   setTimeout(() => {
-      //     this.file = null;
-      //     this.loadingStatus = false;
-      //     this.$Message.success("上传成功");
-      //   }, 1500);
-      // },
       docupload() {
         console.log(this.$refs.fujianupload);
         for (let val of this.fujainList) {
