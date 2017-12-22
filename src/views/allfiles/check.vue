@@ -77,7 +77,6 @@
   import {showfilelog} from "@/api/all_interface";
   import {deletesinglefile} from "@/api/all_interface";
   import {showFilePermission} from "@/api/all_interface";
-
   export default {
     data() {
       return {
@@ -175,6 +174,7 @@
             console.log(res.data.code == 0);
             if (res.data.code == 0) {
               this.fileDetails = res.data.data;
+              console.log(this.fileDetails)
               if(this.fileDetails.fileUrl!==''){
                     this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
                     this.fileDetailSize = this.fileDetails.fileSize.split(",");
