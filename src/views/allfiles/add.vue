@@ -19,7 +19,7 @@
               :max-size="2048"
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
-              action="http://192.168.3.26:5026/photo/upload.htmls">
+              action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
             <div v-if="file !== null"> 所选文件: {{ file.name }}
@@ -110,7 +110,7 @@
             :on-exceeded-size="handleMaxSize"
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
-            action="http://192.168.3.26:5026/file/upload.htmls">
+            action="http://192.168.3.26:8011/file/upload.htmls">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
           <!--<div v-if="filedoc!== null" v-for="(val,index) in filedoc" :key='index'>-->
