@@ -2,7 +2,6 @@
   <div class="set">
     <script type="text/plain" id="ueditor"></script>
     <br>
-    <Button @click="submits" type='primary'>保存</Button>
   </div>
 </template>
 <script>
@@ -42,9 +41,7 @@ export default {
       this.ueditorContent.content=UE.getEditor("ueditor").getContent();
     },
     xieru() {
-      console.log(this.ueditorContent)
       if(this.ueditorContent.content!==''){
-        console.log(111)   
         UE.getEditor("ueditor").setContent(this.ueditorContent.content);
       }else{
         UE.getEditor("ueditor").setContent('');
