@@ -38,21 +38,10 @@
             <Button type="primary" size="small" @click="uploadDoc=true">上传附件</Button>
           </div>
 
-          <Row v-for='(item,index) in fujainList' :key='index'>
-            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'>
-            </i>
-                <a :href="item.url">
-                  <span style='color:#ccc'>{{item.name}} 
-                  </span>
-                  <span>
-                  {{parseInt((item.size)/1024)+'k'}}       
-              </span>
-                </a>
-                
+       <Row v-for='(item,index) in fujainList' :key='index'>
+            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
+            style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
-            <Button type="text" size="small" @click="handleRemove(item)">
-              <Icon type="android-cancel" ></Icon>
-            </Button>
           </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power'>
@@ -98,7 +87,7 @@
           </div>
         </FormItem>
         <FormItem label="">
-          <Button type='primary' size='large' @click="handleSubmit('formInline')">{{submitText}}</Button>
+          <Button type='primary' size='large' @click="handleSubmit()">{{submitText}}</Button>
         </FormItem>
       </Form>
     </div>
@@ -140,11 +129,11 @@ import { updateFilePermission } from "../../api/all_interface";
 import { deleteFilePermission } from "../../api/all_interface";
 import { getFileDetail } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
-
+ import Vue from 'vue'
 export default {
   data() {
     return {
-      submitText: "确定修改",
+      submitText: "确认修改",
       submitLoading: false,
       chooseUser: false,
       insertFileList: {},
@@ -464,7 +453,7 @@ export default {
             this.submitLoading = false;                              
             this.$Message.success("修改成功,1s后少跳转到文件详情页面");
             setTimeout(() => {
-              this.$router.push('/allfiles/check/'+this.$route.params.id);
+              //this.$router.push('/allfiles/check/'+this.$route.params.id);
             }, 1000);   
           }
         })
@@ -503,10 +492,9 @@ export default {
       this.uploadForm.filesize = filesizeArry.join(",");
       this.uploadForm.filedescrible = filedescribleArry.join(",");
     },
-    handleSubmit(name) {
-      console.log(this.$refs.myUeditor);
-
-      // this.$refs.myUeditor.submits();
+    handleSubmit() {
+      console.log(this.$refs);
+       //this.$refs.myUeditor.submits();
       // 将文件上传中所有输入的信息已保存在uploadForm中
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
