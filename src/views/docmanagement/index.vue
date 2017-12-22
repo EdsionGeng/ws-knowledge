@@ -18,12 +18,12 @@
           <Col span="5">
           <FormItem label="发布时间：">
             <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
-                        placeholder="Select date" @on-change="dateOnChange" style="width: 250px"></DatePicker>
+                        placeholder="请选择时间" @on-change="dateOnChange" style="width: 250px"></DatePicker>
           </FormItem>
           </Col>
           <Col span="5">
           <FormItem label=" 文件标题：">
-            <Input v-model="dataParams.title" placeholder="" style="width: 250px"></Input>
+            <Input v-model="dataParams.title" placeholder="请输入标题" style="width: 250px"></Input>
           </FormItem>
           </Col>
           <Col span="3">
