@@ -19,7 +19,7 @@
               :max-size="2048"
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
-              action="http://192.168.22.45:8011/photo/upload.htmls">
+              action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
             <div v-if="file !== null"> 所选文件: {{ file.name }}
@@ -95,7 +95,9 @@
     <Modal
       v-model="uploadDoc"
       width="400"
+      @on-ok='docupload'
       title="选择附件">
+      
       <Form>
         <FormItem label="">
           <Upload
@@ -108,8 +110,7 @@
             :on-exceeded-size="handleMaxSize"
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
-            @on-ok='docupload'
-            action="http://192.168.3.26:8011/photo/upload.htmls">
+            action="http://192.168.3.26:8011/file/upload.htmls">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
           <!--<div v-if="filedoc!== null" v-for="(val,index) in filedoc" :key='index'>-->
@@ -135,7 +136,7 @@
   import {deleteFilePermission} from "../../api/all_interface";
   import {queryadmin} from "../../api/all_interface";
   import {mapState, mapMutations} from "vuex";
-
+  import Vue from 'vue'
   export default {
     data() {
       return {
@@ -212,7 +213,8 @@
     computed: mapState(["addFileSaveList", "hasSaveContent"]),
     mounted() {
       this.adminPower();
-      this.uploadList = this.$refs.upload.fileList;
+      this.uploadList = this.$refs.fujianupload.fileList;
+      this.picuploadList = this.$refs.upload.fileList;
       if (this.hasSaveContent) {
         const storeState = this.addFileSaveList;
         console.log(storeState)
@@ -300,6 +302,7 @@
         "getPhotoUrlList"
       ]),
       handleSuccess(res, file) {
+        console.log(11111,file)
         const fileList = this.$refs.fujianupload.fileList;
         if (res.code === 2) {
           this.$refs.fujianupload.fileList.splice(fileList.indexOf(file), 1);
@@ -316,7 +319,7 @@
         this.uploadForm.photourl = res.data;
       },
       pichandleBeforeUpload(file) {
-        const check = this.uploadList.length < 1;
+        const check = this.picuploadList.length < 1;
         if (!check) {
           this.$Notice.warning({
             title: "封面最多只能上传一个图片"
@@ -326,6 +329,7 @@
       },
       handleBeforeUpload(file) {
         const check = this.uploadList.length < 10;
+        console.log(this.uploadList.length);
         if (!check) {
           this.$Notice.warning({
             title: "附件上传已达上限"
@@ -414,9 +418,13 @@
       //   }, 1500);
       // },
       docupload() {
-        for (let val in this.fujainList) {
+        console.log(this.$refs.fujianupload);
+        for (let val of this.fujainList) {
           if (!val.hasOwnProperty("description")) {
             Vue.set(val, 'description', this.uploadForm.describle)
+            if(val.description===''){
+              Vue.set(val, 'description', '无')
+            }
           }
         }
       },
