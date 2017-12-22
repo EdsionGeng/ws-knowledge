@@ -1,31 +1,31 @@
 <template>
-<div>
+  <div>
     <div v-if="isAdmin==='true'">
-        <admin></admin>
+      <admin></admin>
     </div>
     <div v-if="isAdmin==='false'">
-        <my-home></my-home>
+      <my-home></my-home>
     </div>
-</div>
-    
+  </div>
+
 </template>
 <style scoped>
 
 </style>
 <script>
-import admin from './admin.vue';
-import myHome from './myhome.vue';
-export default {
-  data(){
-      return{
-          isAdmin:sessionStorage.getItem('isAdmin')
+  import admin from './admin.vue';
+  import myHome from './myhome.vue';
+  export default {
+    data() {
+      return {
+        isAdmin: sessionStorage.getItem('isAdmin')
       }
-  },
-  mounted(){
+    },
+    mounted() {
       console.log(!(this.isAdmin))
-  },
-  components:{
-      admin,myHome
+    },
+    components: {
+      admin, myHome
+    }
   }
-}
 </script>

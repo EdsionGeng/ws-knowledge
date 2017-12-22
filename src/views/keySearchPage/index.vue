@@ -1,192 +1,183 @@
 <template>
-<div class="page">
-      <Row align='middle'   class='clearfix'  style='margin-bottom:20px'	>
-        <Col span="1" offset=2  style='height:30px;line-height:30px;padding-left:20px;'> 部门:</Col>
-        <Col span="6">
-            <SelectTree  :myvalue='depTypeKey'></SelectTree>
-        </Col>
-        <Col span="1"  style='height:30px;line-height:30px;padding-left:20px;'> 类型:</Col>
-        <Col span="6">
-          <docTree  :myvalue='docTypeKey'></docTree>
-        </Col>
-          </Col> <Button type='primary' @click="selAllFile">查询</Button></Col>
+  <div class="page">
+    <Row align='middle' class='clearfix' style='margin-bottom:20px'>
+      <Col span="1" offset=2 style='height:30px;line-height:30px;padding-left:20px;'>
+      部门:</Col>
+      <Col span="6">
+      <SelectTree :myvalue='depTypeKey'></SelectTree>
+      </Col>
+      <Col span="1" style='height:30px;line-height:30px;padding-left:20px;'>
+      类型:</Col>
+      <Col span="6">
+      <docTree :myvalue='docTypeKey'></docTree>
+      </Col>
+      </Col>
+      <Button type='primary' @click="selAllFile">查询</Button>
+      </Col>
     </Row>
-      <Row>
-          <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
-              <Tabs type="card" @on-click='changePic'>
-                  <TabPane label="列表" name='table'>
-                    <Row>
-                      <Col>
-                        <Table :columns="columns1"  class="myTable"  stripe	:data="historyUploadMessageList" @on-row-click="onRowClick"></Table>
-                      </Col>
-                    </Row>
-                  </TabPane>
-                 <TabPane label="图文" name='pic'>
-                    <Row>
-                      <Col  span="5" offset=1  pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index' style='margin-bottom:8px;'>
-                        <a @click="onRowClick(list)">
-                        <Card style="">
-                          <div style="text-align:center">
-                              <img src="./bg.jpg" style='width:50%;height:90px;'>
-                              <h2 style='color:#000;font-size:19px;' class="nowrap">{{list.title}}</h2>
-                              <p style='color:#ccc'>上传时间：{{list.addFileTime}}</p>
-                              <p style='color:#ccc'>上传人：{{list.username}}</p>
-                          </div>
-
-                        </Card>
-                        </a>
-
-                      </Col>
-                  </Row>
-                </TabPane>
-              </Tabs>
-          </Col>
-    </Row> 
-     <Row>
-                <Col>
-                  <Page placement='top' :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
-                </Col>
-      </Row>
+    <Row>
+      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
+      <Tabs type="card" @on-click='changePic'>
+        <TabPane label="列表" name='table'>
+          <Row>
+            <Col>
+            <Table :columns="columns1" class="myTable" stripe :data="historyUploadMessageList"
+                   @on-row-click="onRowClick"></Table>
+            </Col>
+          </Row>
+        </TabPane>
+        <TabPane label="图文" name='pic'>
+          <Row>
+            <Col span="5" offset=1 pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index'
+                 style='margin-bottom:8px;'>
+            <a @click="onRowClick(list)">
+              <Card style="">
+                <div style="text-align:center">
+                  <img src="./bg.jpg" style='width:50%;height:90px;'>
+                  <h2 style='color:#000;font-size:19px;' class="nowrap">{{list.title}}</h2>
+                  <p style='color:#ccc'>上传时间：{{list.addFileTime}}</p>
+                  <p style='color:#ccc'>上传人：{{list.username}}</p>
+                </div>
+              </Card>
+            </a>
+            </Col>
+          </Row>
+        </TabPane>
+      </Tabs>
+      </Col>
+    </Row>
+    <Row>
+      <Col>
+      <Page placement='top' :total="page.total" :page-size-opts='pageOpts' show-sizer
+            :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange"
+            @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+      </Col>
+    </Row>
   </div>
 </template>
 <script>
-import SelectTree from '@/components/common/selectTree'
-import docTree from '@/components/common/docTree'
-import { getDepTree } from "../../api/all_interface";
-import { searchResult } from "../../api/all_interface";
-import { getDocTree } from "../../api/all_interface";
+  import SelectTree from '@/components/common/selectTree'
+  import docTree from '@/components/common/docTree'
+  import {searchResult} from "../../api/all_interface";
+  import {mapState} from 'vuex';
 
-export default {
-  data() {
-    return {
-        docTypeKey:{
-          value:'',
-          id:0
+  export default {
+    data() {
+      return {
+        docTypeKey: {
+          value: '',
+          id: 0
         },
-        depTypeKey:{
-          value:''
+        depTypeKey: {
+          value: ''
         },
-        selectValue:'',
+        selectValue: '',
         imgUrl: "./bg.jpg",
-      pageOpts: [20, 40, 60, 100],
-      listparams: {
-        current: 1,
-        pageSize: 20,
-        userId: sessionStorage.getItem('userId'),
-        searchContent:this.$route.params.key
-      },
-      deptlist:[],
-      fileparams: null,
-      page: { total: 100, pages: 1, current: 1, pageSize: 20 },
-      mymessageDetail: {
-        MyMessageListTitle: "",
-        MyMessageupdate: "",
-        AddUser: "",
-        MyMessageMsg: "",
-        readed: 0,
-        noreaded: 0
-      },
-      columns1: [
-        {
-          title: "标题",
-          key: "title"
+        pageOpts: [20, 40, 60, 100],
+        listparams: {
+          current: 1,
+          pageSize: 20,
+          userId: sessionStorage.getItem('userId'),
+          searchContent: this.searchKey
         },
+        num: 0,
+        deptlist: [],
+        fileparams: null,
+        page: {total: 20, pages: 1, current: 1, pageSize: 20},
+        mymessageDetail: {
+          MyMessageListTitle: "",
+          MyMessageupdate: "",
+          AddUser: "",
+          MyMessageMsg: "",
+          readed: 0,
+          noreaded: 0
+        },
+        columns1: [
+          {
+            title: "标题",
+            key: "title"
+          },
 
-        {
-          title: "发布时间",
-          key: "addFileTime",
-          sortable: true,
-          align:'center'
+          {
+            title: "发布时间",
+            key: "addFileTime",
+            sortable: true,
+            align: 'center'
 
-        },
-        {
-          title: "上传人",
-          key: "username",
-          align: "right"
-        }
-      ],
-      historyUploadpicMessageList:[],
-      historyUploadMessageList: [
-        {
-          title: "hello",
-          addFileTime: "2017-01-01"
-        },
-        {
-          title: "hello",
-          addFileTime: "2017-01-01"
-        },
-        {
-          title: "hello",
-          addFileTime: "2017-01-01"
-        },
-        {
-          title: "hello world",
-          addFileTime: "2017-01-02"
-        },
-        {
-          title: "hello world",
-          addFileTime: "2017-01-05"
-        }
-      ]
-    };
-  },
-  mounted(){
-
-  },
-  created() {
-      this.initList();
-  },
-   components:{
-    SelectTree,docTree
-  },
-  methods: {
-     changePic(name){
-      console.log(name)
-      if(name==='pic'){
-        this.historyUploadpicMessageList=this.historyUploadMessageList;
-      }else{
-        this.historyUploadpicMessageList=[]
+          },
+          {
+            title: "上传人",
+            key: "username",
+            align: "right"
+          }
+        ],
+        historyUploadpicMessageList: [],
+        historyUploadMessageList: []
+      };
+    },
+    watch: {
+      searchKey() {
+        this.initList();
       }
     },
-     selAllFile(){
-       this.listparams.departmentName=this.depTypeKey.value;
-       this.listparams.fileStyleId=this.docTypeKey.id;
-       console.log(this.listparams);
-       this.initList();
+    computed: {
+      ...mapState(['searchKey'])
     },
-    onRowClick(row) {
-      this.$router.push("/allfiles/check/" + row.id);
-    },
-    onPageChange(value) {
-     // console.log(value);
-      this.listparams.current = value;
+    mounted() {
       this.initList();
     },
-    onPageSizeChange(value) {
-      //console.log(value);
-      this.listparams.pageSize = value;
-      this.initList();
+    components: {
+      SelectTree, docTree
     },
-    initList() {
-      console.log(this.listparams);
-      searchResult(this.listparams)
-        .then(res => {
-          const showUserUpdata = res.data;
-          //console.log(showUserUpdata);
-          if (res.data.code == 0) {
-            console.log(res.data)
-            this.page = res.data.rdPage;
-            this.historyUploadMessageList = showUserUpdata.data;
-          }
-        })
-        .catch(err => {});
+    methods: {
+      changePic(name) {
+        console.log(name)
+        if (name === 'pic') {
+          this.historyUploadpicMessageList = this.historyUploadMessageList;
+        } else {
+          this.historyUploadpicMessageList = []
+        }
+      },
+      selAllFile() {
+        this.listparams.departmentName = this.depTypeKey.value;
+        this.listparams.fileStyleId = this.docTypeKey.id;
+        console.log(this.listparams);
+        this.initList();
+      },
+      onRowClick(row) {
+        this.$router.push("/allfiles/check/" + row.id);
+      },
+      onPageChange(value) {
+        // console.log(value);
+        this.listparams.current = value;
+        this.initList();
+      },
+      onPageSizeChange(value) {
+        //console.log(value);
+        this.listparams.pageSize = value;
+        this.initList();
+      },
+      initList() {
+        console.log(this.listparams);
+        searchResult(this.listparams)
+          .then(res => {
+            const showUserUpdata = res.data;
+            //console.log(showUserUpdata);
+            if (res.data.code == 0) {
+              console.log(res.data)
+              this.page = res.data.rdPage;
+              this.historyUploadMessageList = showUserUpdata.data;
+            }
+          })
+          .catch(err => {
+          });
+      }
     }
-  }
-};
+  };
 </script>
 <style scoped>
-.page {
-  padding: 30px 10px;
-}
+  .page {
+    padding: 20px 10px;
+  }
 
 </style>

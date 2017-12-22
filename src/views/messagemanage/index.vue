@@ -17,18 +17,18 @@
           </Col>
           <Col span="4">
           <FormItem>
-          <Select   placeholder="请选择公告类型" style="width:250px" v-model="params.adStyle">
-            <Option value="">请选择类型</Option>
-            <Option value="通知">通知</Option>
-            <Option value="公告">公告</Option>
-            <Option value="温馨提示">温馨提示</Option>
-          </Select>
+            <Select placeholder="请选择公告类型" style="width:250px" v-model="params.adStyle">
+              <Option value="">请选择类型</Option>
+              <Option value="通知">通知</Option>
+              <Option value="公告">公告</Option>
+              <Option value="温馨提示">温馨提示</Option>
+            </Select>
 
           </FormItem>
           </Col>
           </Col>
           <Col span="1">
-            <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
+          <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
           </FormItem>
           </Col>
 
@@ -53,7 +53,8 @@
                @on-selection-change="delAdAction" @on-row-click="showAdDetail"></Table>
         </Col>
       </Row>
-      <Page :total="page.total"  :page-size-opts='pageOpts'show-sizer   :current="page.current" :page-size="page.pageSize" :show-total="true"
+      <Page :total="page.total" :page-size-opts='pageOpts' show-sizer :current="page.current" :page-size="page.pageSize"
+            :show-total="true"
             @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
 
@@ -117,11 +118,13 @@
       v-model="modal1"
       :mask-closable="false"
     >
-     <p style="font-size: 30px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
-      <p style='text-align:center'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{ singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
-        style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
-        style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#333;text-align: center;margin-top:30px;'>{{singleMessageDetail.Content}}</p>
+      <p style="font-size: 30px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
+      <p style='text-align:center'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
+        singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
+          style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
+          style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
+      <p class="modal-content" style='color:#333;text-align: center;margin-top:30px;'>
+        {{singleMessageDetail.Content}}</p>
     </Modal>
   </div>
 </template>
@@ -220,7 +223,7 @@
           noreaded: 0
         },
         insertAdParams: {
-          title:"",
+          title: "",
           adStyle: "",
           content: "",
           sendDepartmentName: "",
@@ -233,7 +236,7 @@
           userIds: "",
           commonId: "",
         },
-        pageOpts:[10,20,30,40,50],
+        pageOpts: [10, 20, 30, 40, 50],
         depTree: [],
         chooseUser: false,
         delAdParams: {
@@ -279,8 +282,8 @@
         this.params.current = value;
         this.showAllAdList();
       },
-      onPageSizeChange(value){
-        this.params.pageSize=value;
+      onPageSizeChange(value) {
+        this.params.pageSize = value;
         this.showAllAdList();
       },
       renderContent(h, {root, node, data}) {
@@ -347,7 +350,7 @@
         let departmentName = "";
         let userIds = "";
         for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children ==null) {
+          if (arr[i].children == null) {
             if (i > 0) {
               departmentName += ",";
               userIds += ",";
