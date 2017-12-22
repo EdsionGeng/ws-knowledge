@@ -11,6 +11,7 @@
 
 </template>
 <script>
+  import {mapMutations} from 'vuex';
 export default {
   data() {
     return {
@@ -18,11 +19,13 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['getSearchKey']),
     changekeyRouter(name) {
       console.log(this.inputValue);
       if (this.inputValue === "") {
         this.$Message.warning("请输入关键字进行搜索");
       }
+      this.getSearchKey(this.inputValue);
       this.$router.push("/" + name + "/" + this.inputValue);
     },
     changeRouter(name) {
