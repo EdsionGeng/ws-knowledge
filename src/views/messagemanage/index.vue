@@ -124,7 +124,7 @@
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
           style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
       <p class="modal-content" style='color:#333;text-align: center;margin-top:10px;'>
-        {{singleMessageDetail.Content}}</p>
+       <pre> {{singleMessageDetail.Content}}</pre></p>
     </Modal>
   </div>
 </template>
@@ -326,8 +326,10 @@ export default {
             this.singleMessageDetail.AdTitle = row.adTitle;
             this.singleMessageDetail.addTime = row.sendTime;
             this.singleMessageDetail.AddUser = row.addUser;
-            this.singleMessageDetail.Content = row.adContent;
-            this.singleMessageDetail.readed = data.data.isRead;
+            var reg = new RegExp("<br>","g");
+            console.info(row.adContent.replace(reg,"\n"))
+            this.singleMessageDetail.Content =  row.adContent.replace(reg,"\n");
+            this.singleMessageDetail.readed  = data.data.isRead;
             this.singleMessageDetail.noreaded = data.data.noRead;
           } else {
             this.$Message.warning("网络异常！");
@@ -363,7 +365,9 @@ export default {
           userIds += arr[i].id;
         }
       }
+
       this.sendAdParams.userIds = userIds;
+      //console.info(this.sendAdParams.userIds);
       if (departmentName.length > 1000) {
         departmentName = "全公司";
       }
@@ -450,6 +454,10 @@ export default {
         this.$Message.warning("发送对象不能为空！");
         return;
       }
+      let newcontent=this.insertAdParams.content.replace(/\n|\r\n/g,"<br>");
+      this.insertAdParams.content=newcontent;
+//      console.info(this.insertAdParams.content);
+//      debugger
       insertAd(this.insertAdParams)
         .then(res => {
           const data = res.data;
@@ -457,14 +465,19 @@ export default {
           if (data.code == 0) {
             _self.sendAdParams.commonId = data.data;
 //            console.info(_self.sendAdParams);
-
             sendAdToUser(_self.sendAdParams).then(res => {
               const data = res.data;
-              console.info(data);
+//              console.info(data);
               if (data.code === 0) {
-                _self.$Message.success("操作成功!");
-                _self.insertAd = false;
-                _self.showAllAdList();
+               this.$Message.success("操作成功!");
+                this.insertAd = false;
+                this.insertAdParams.title="";
+                this.insertAdParams.content="";
+                this.insertAdParams.sendDepartmentName="";
+                this.insertAdParams.adStyle="";
+                this.sendAdParams.userIds="";
+                this.sendAdParams.commonId="";
+                this.showAllAdList();
               }
             });
           }
