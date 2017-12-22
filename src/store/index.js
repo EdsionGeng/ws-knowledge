@@ -7,6 +7,21 @@ const store = new Vuex.Store({
         hasSaveContent:false,
         searchKey:'',
         addFileSaveList:{
+            lookFileParams: {
+                userIds: "",
+                fileId: "",
+                operationStyleId: 1
+              },
+              updateFileParams: {
+                userIds: "",
+                operationStyleId: 1,
+                fileId: ""
+              },
+              deleteFileParams: {
+                userIds: "",
+                operationStyleId: 1,
+                fileId: ""
+              },
             lookFilePower:[] ,
             editFilePower:[] ,
             delFilePower:[] ,
@@ -38,22 +53,32 @@ const store = new Vuex.Store({
                 console.log(state.addFileSaveList.photoUrlList)
             }
         },
+        getlookFileParams(state,pramas){
+            state.addFileSaveList.lookFileParams=pramas;
+            console.log(state.addFileSaveList.lookFileParams)
+        },
         getLookpower(state,powers){
-            if(powers.length>0){
+            if(powers.length>0){           
                 state.addFileSaveList.lookFilePower.push(powers[0]);
             }
+        },
+        getupdateFileParams(state,pramas){
+            state.addFileSaveList.updateFileParams=pramas;
         },
         getEditpower(state,powers){
             if(powers.length>0){
-                state.addFileSaveList.lookFilePower.push(powers[0]);
+                state.addFileSaveList.editFilePower.push(powers[0]);
             }
-            console.log(state.addFileSaveList.editFilePower)
+        },
+        getdeleteFileParams(state,pramas){
+            state.addFileSaveList.deleteFileParams=pramas;
         },
         getDelpower(state,powers){
-            if(powers.length>0){
-                state.addFileSaveList.lookFilePower.push(powers[0]);
+            if(powers.length>0){          
+                state.addFileSaveList.delFilePower.push(powers[0]);
             }
-            console.log(state.addFileSaveList.delFilePower)
+            console.log(powers)
+            console.log(3,state.addFileSaveList.deleteFileParams)
         },
         getFujainList(state,list){
             state.addFileSaveList.fujainList=list;
