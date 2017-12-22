@@ -6,7 +6,7 @@
     <div style="margin:10px">
       <Row class="table-top">
         <Col>
-        <Table :columns="MyMsgColumns" :data="MyMessageList" showStripe  @on-row-click="onRowClick"></Table>
+        <Table :columns="MyMsgColumns" :data="MyMessageList" :row-class-name='rowClassName' showStripe  @on-row-click="onRowClick"></Table>
         </Col>
       </Row>
       <Page :total="page.total" :page-size-opts='pageOpts'show-sizer  :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
@@ -94,12 +94,15 @@
             }
           })
           .catch(err => {});
+      },   rowClassName(row,index){
+        if(row.ifRead===0){
+          return 'demo-table-info-row';
+        }
       },
       onRowClick(row,index){
         this.params={
           commonId:row.commonId
         };
-
         //console.log(this.params.commonId)
         let _self=this;
         showAdPcs(this.params).then(

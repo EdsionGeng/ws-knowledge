@@ -55,15 +55,15 @@
       @on-ok="sureUpdate"
     >
       <Form :model="updateParams" :label-width="90">
-        <FormItem label="文档类型：">
-          <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
+        <FormItem label="修改目录：">
+          <Input v-model="value4" icon="arrow-down-b" placeholder="请选择" @on-click='dropmenu(!showMenu)'
                  style="width: 200px">
           </Input>
           <div v-if='showMenu' class="showmenubox">
             <Tree :data="docTree" :render="renderContent"></Tree>
           </div>
         </FormItem>
-        <FormItem prop="content" label="新目录名称：">
+        <FormItem prop="content" label="目录名称：">
           <Input type="text" :rows="4" placeholder="请输入内容！"style="width: 200px" v-model="updateParams.fileName"></Input>
         </FormItem>
       </Form>
