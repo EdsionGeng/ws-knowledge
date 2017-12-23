@@ -225,16 +225,19 @@
         if(storeState.lookFileParams.userIds===''){
            this.showDepTree();
         }else{
+            this.showDepTree();
             this.selectDate(storeState.lookFileParams.userIds,this.depTree);
         }
         if(storeState.editFilePower.length===0){
             this.showeditDepTree();
         }else{
+            this.showeditDepTree();
             this.selectDate(storeState.updateFileParams.userIds,this.editdepTree);
         }
         if(storeState.delFilePower.length===0){
             this.showdelDepTree();
         }else{
+            this.showdelDepTree();
            this.selectDate(storeState.deleteFileParams.userIds,this.deldepTree);       
         }
       } else {
