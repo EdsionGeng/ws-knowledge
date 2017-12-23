@@ -30,12 +30,15 @@
           <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
                  style="width: 200px">
           </Input>
-          <div v-if='showMenu' class="showmenubox">
-            <Tree :data="docTree" :render="renderContent"></Tree>
+          <div  v-if='showMenu' style='border:1px solid #ccc;margin-top:2px;width:200px;max-height:200px;overflow:auto;' >
+            <div class="showmenubox">
+              <Tree :data="docTree" :render="renderContent"></Tree>
+            </div>
           </div>
+         
         </FormItem>
         <FormItem prop="content" label="新增类型：">
-          <Input type="text" :rows="4" placeholder="请输入内容！" v-model="insertFileParams.docName"></Input>
+          <Input type="text" :rows="4" placeholder="请输入内容！" v-model="insertFileParams.docName" style='width:200px;'></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -64,8 +67,10 @@
           <Input v-model="value4" icon="arrow-down-b" placeholder="请选择" @on-click='dropmenu(!showMenu)'
                  style="width: 200px">
           </Input>
-          <div v-if='showMenu' class="showmenubox">
-            <Tree :data="docTree" :render="renderContent"></Tree>
+           <div  v-if='showMenu' style='border:1px solid #ccc;margin-top:2px;width:200px;max-height:200px;overflow:auto;' >
+            <div class="showmenubox">
+              <Tree :data="docTree" :render="renderContent"></Tree>
+            </div>
           </div>
         </FormItem>
         <FormItem prop="content" label="目录名称：">

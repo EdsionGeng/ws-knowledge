@@ -30,7 +30,10 @@
         </FormItem>
         <FormItem label="内容：" prop='content'>
           <div class="hello">
-            <Ueditor :ueditorContent='uploadForm'></Ueditor>
+            <!-- <Ueditor :ueditorContent='uploadForm'></Ueditor> -->
+             <div id="editorElem1" style="text-align:left;width:700px"></div>
+              <Button v-on:click="getEditorContent" type="primary">保存内容</Button>
+              
           </div>
         </FormItem>
         <FormItem label="上传附件：">
@@ -139,7 +142,8 @@ import { updateFilePermission } from "../../api/all_interface";
 import { deleteFilePermission } from "../../api/all_interface";
 import { getFileDetail } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
- import Vue from 'vue'
+import Vue from 'vue'
+var E=require('wangeditor')
 export default {
   data() {
     return {
@@ -213,10 +217,26 @@ export default {
     };
   },
   components: {
-    docTree,
-    Ueditor
+    docTree
+    // Ueditor
   },
   mounted() {
+    
+    var editor=new E('#editorElem1')
+    editor.customConfig.onchange = (html) => {
+          this.editorContent = html
+      };
+    editor.customConfig.zIndex = 100
+    editor.customConfig.showLinkImg = false
+    editor.customConfig.uploadImgHeaders = {
+      'Accept' : 'multipart/form-data'
+    }
+   editor.customConfig.uploadImgServer = 'http://192.168.22.45:8011/file/upload.htmls'
+   editor.create();
+    setTimeout(()=>{
+    editor.txt.html(this.uploadForm.content);
+  },1000)
+   
     this.initFileDetail();
     this.adminPower();
     this.showDepTree();
@@ -224,6 +244,10 @@ export default {
     this.showdelDepTree();
   },
   methods: {
+     getEditorContent(){
+          this.uploadForm.content=this.editorContent;
+          console.log(this.editorContent)
+      },
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
         .then(res => {
@@ -426,6 +450,7 @@ export default {
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
+              console.log(this.lookFileParams.userIds)
               lookFileUser(this.lookFileParams)
                 .then(res => {
                   console.log(res.data);

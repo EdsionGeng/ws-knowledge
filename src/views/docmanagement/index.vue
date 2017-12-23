@@ -6,12 +6,14 @@
         <Form>
           <Col span="5">
           <FormItem label="文档类型:">
-            <Input v-model="value4" icon="arrow-down-b"  class="treestyle" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
+              <docTree :myvalue='docTypeKey'></docTree>         
+            <!-- <Input v-model="value4" icon="arrow-down-b"  class="treestyle" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
                    style="width: 250px">
-            </Input>
-            <div v-if='showMenu' class="showmenubox">
-              <Tree :data="docTree" :render="renderContent"></Tree>
-            </div>
+                   
+            </Input> -->
+            <!-- <div v-if='showMenu' class="showmenubox">
+                  <Tree :data="docTree" :render="renderContent"></Tree>
+            </div> -->
 
           </FormItem>
           </Col>
@@ -77,10 +79,14 @@
   import {deleteFile} from "../../api/all_interface";
   import {getDocTree} from "../../api/all_interface";
   import {updateFileStyleDetail} from "../../api/all_interface";
-
+  import docTree from '@/components/common/docTree'
   export default {
     data() {
       return {
+         docTypeKey: {
+          value: "",
+          id: 0
+        },
         AllFileColumns: [
           {
             type: 'selection',
@@ -153,6 +159,9 @@
         page: {},
         AllFileList: [],
       };
+    },
+    components:{
+      docTree
     },
     created() {
       this.showAllFileList();
@@ -287,6 +296,7 @@
        * 搜索
        */
       handleSearch() {
+        this.dataParams.fileStyleId = this.docTypeKey.id;
         this.showAllFileList();
       },
       /**
@@ -306,6 +316,8 @@
        * 初始所有文件
        */
       showAllFileList() {
+        // this.listparams.departmentName = this.depTypeKey.value;
+        // this.dataParams.fileStyleId = this.docTypeKey.id;
         showAllFile(this.dataParams)
           .then(res => {
             const data = res.data;

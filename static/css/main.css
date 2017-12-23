@@ -8,6 +8,9 @@ html,body,#app,.home{
     overflow: hidden;
     font-family: '微软雅黑'
   }
+  .myTable{
+    cursor: pointer;
+  }
 .lf{
     float: left;
 }

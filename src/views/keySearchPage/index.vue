@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Row align='middle' class='clearfix' style='margin-bottom:20px'>
+    <!-- <Row align='middle' class='clearfix' style='margin-bottom:20px'>
       <Col span="1" offset=2 style='height:30px;line-height:30px;padding-left:20px;'>
       部门:</Col>
       <Col span="6">
@@ -14,7 +14,7 @@
       </Col>
       <Button type='primary' @click="selAllFile">查询</Button>
       </Col>
-    </Row>
+    </Row> -->
     <Row>
       <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
       <Tabs type="card" @on-click='changePic'>
