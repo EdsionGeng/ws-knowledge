@@ -6,7 +6,7 @@
         <Form>
           <Col span="5">
           <FormItem label="文档类型:">
-            <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
+            <Input v-model="value4" icon="arrow-down-b"  class="treestyle" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
                    style="width: 250px">
             </Input>
             <div v-if='showMenu' class="showmenubox">
@@ -328,4 +328,11 @@
     margin-left: 30px;
     margin-top: 30px;
   }
+
+  .bodyarea .treestyle{
+    max-height:200px;
+    overflow: auto;
+  }
+
+
 </style>

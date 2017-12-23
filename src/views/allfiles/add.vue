@@ -29,9 +29,12 @@
           </div>
         </FormItem>
         <FormItem label="内容：" prop='content'>
-          <div class="hello">
-            <Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor>
-          </div>
+          <!--<div class="hello">-->
+            <!--<Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor>-->
+          <!--</div>-->
+          <div id="editorElem" style="text-align:left;width:700px"></div>
+          <Button v-on:click="getContent" type="primary">保存内容</Button>
+
         </FormItem>
         <FormItem label="上传附件：">
           <div class="uploadBtn">
@@ -39,7 +42,7 @@
           </div>
           <Row v-for='(item,index) in fujainList' :key='index'>
             <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
-            style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+            style='color:#ccc'>（{{parseInt((item.size) / 1024) + 'k'}}）</span>  </span>
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
           </Row>
         </FormItem>
@@ -97,7 +100,7 @@
       width="400"
       @on-ok='docupload'
       title="选择附件">
-      
+
       <Form>
         <FormItem label="">
           <Upload
@@ -127,7 +130,7 @@
   </div>
 </template>
 <script>
-  import Ueditor from "@/components/setUeditor";
+//  import Ueditor from "@/components/setUeditor";
   import docTree from "@/components/common/docTree";
   import {getDepTree} from "../../api/all_interface";
   import {insertFile} from "../../api/all_interface";
@@ -136,7 +139,9 @@
   import {deleteFilePermission} from "../../api/all_interface";
   import {queryadmin} from "../../api/all_interface";
   import {mapState, mapMutations} from "vuex";
-  import Vue from 'vue'
+  import Vue from 'vue';
+   import E from 'wangeditor'
+
   export default {
     data() {
       return {
@@ -208,10 +213,15 @@
     },
     components: {
       docTree,
-      Ueditor
+//      Ueditor
     },
     computed: mapState(["addFileSaveList", "hasSaveContent"]),
     mounted() {
+      var editor = new E('#editorElem')
+      editor.customConfig.onchange = (html) => {
+        this.editorContent = html
+      };
+      editor.create();
       this.adminPower();
       this.uploadList = this.$refs.fujianupload.fileList;
       this.picuploadList = this.$refs.upload.fileList;
@@ -284,6 +294,9 @@
       }
     },
     methods: {
+      getContent: function () {
+        alert(this.editorContent)
+      },
       ...mapMutations([
         "getEditpower",
         "getLookpower",
@@ -302,7 +315,7 @@
         "getPhotoUrlList"
       ]),
       handleSuccess(res, file) {
-        console.log(11111,file)
+        console.log(11111, file)
         const fileList = this.$refs.fujianupload.fileList;
         if (res.code === 2) {
           this.$refs.fujianupload.fileList.splice(fileList.indexOf(file), 1);
@@ -422,7 +435,7 @@
         for (let val of this.fujainList) {
           if (!val.hasOwnProperty("description")) {
             Vue.set(val, 'description', this.uploadForm.describle)
-            if(val.description===''){
+            if (val.description === '') {
               Vue.set(val, 'description', '无')
             }
           }
@@ -452,7 +465,7 @@
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
-              console.log(res.data.data);
+              //console.log(res.data.data);
               if (this.lookFileParams.userIds === "") {
                 this.lookFileParams.userIds = this.adminIds;
               }
@@ -482,7 +495,7 @@
                                 console.log("设置删除权限成功");
                                 this.submitLoading = false;
                                 this.isBanDuan = false;
-                                this.$Message.success("上传成功,1s后少跳转到历史上传界面");
+                                this.$Message.success("上传成功,1s后跳转到历史上传界面");
                                 setTimeout(() => {
                                   this.$router.push("/hisupload");
                                 }, 1000);

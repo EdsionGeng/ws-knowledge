@@ -17,9 +17,9 @@
       :closable="false"
       style="margin-left: 160px"
     >
-      <p style="font-size: 20px;margin;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
-      <p style='text-align:center'>发布时间：{{ mymessageDetail.MyMessagetime}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong style="color:red">{{mymessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#333;margin-top:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
+      <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
+      <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ mymessageDetail.MyMessagetime}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong style="color:red">{{mymessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
+      <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'><pre>{{mymessageDetail.MyMessageMsg}}</pre></p>
     </Modal>
   </div>
 
@@ -109,13 +109,13 @@
         showAdPcs(this.params).then(
           res => {
             const data = res.data;
-
             if (data.code == 0) {
-              console.info(row);
+              //console.info(row);
               _self.mymessageDetail.MyMessageListTitle=row.at;
               _self.mymessageDetail.MyMessagetime=row.re;
               _self.mymessageDetail.AddUser=row.addUser;
-              _self.mymessageDetail.MyMessageMsg=row.ad;
+              var reg = new RegExp("<br>","g");
+              _self.mymessageDetail.MyMessageMsg=row.ad.replace(reg,"\n");
               _self.mymessageDetail.readed=data.data.isRead;
               _self.mymessageDetail.noreaded=data.data.noRead;
               _self.readAdParams.commonId=row.commonId;

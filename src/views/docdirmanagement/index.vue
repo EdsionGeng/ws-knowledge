@@ -140,7 +140,7 @@
             on: {
               click: () => {
                 this.deleteDocParams.fileStyleId = data.id;
-               // console.info(this.deleteDocParams.fileStyleId)
+                //console.info(this.deleteDocParams.fileStyleId)
                 this.filekindname = data.fileKindName;
               }
             }

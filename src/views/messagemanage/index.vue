@@ -49,8 +49,10 @@
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
-        <Table border ref="selection" :columns="AllAdColumns"  :data="AllAdList" stripe
-               @on-selection-change="delAdAction" @on-row-click="showAdDetail"></Table>
+        <Table border ref="selection" :columns="AllAdColumns"   :data="AllAdList" stripe
+               @on-selection-change="delAdAction" @on-row-dblclick="showAdDetail"></Table>
+        <!--<Table border ref="selection" :columns="AllAdColumns"   :data="AllAdList" stripe-->
+               <!--@on-selection-change="delAdAction" ></Table>-->
         </Col>
       </Row>
       <Page :total="page.total" :page-size-opts='pageOpts' show-sizer :current="page.current" :page-size="page.pageSize"
@@ -117,16 +119,18 @@
       v-model="modal1"
       :mask-closable="false"
       :closable="false"
+      width="700"
     >
-      <p style="font-size: 20px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
-      <p style='text-align:center'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
+      <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{singleMessageDetail.AdTitle}}</p>
+      <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
           style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#333;text-align: center;margin-top:10px;'>
+      <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px; '>
        <pre> {{singleMessageDetail.Content}}</pre></p>
     </Modal>
-  </div>
+</div>
+
 </template>
 <script>
 import { showAllAd } from "../../api/all_interface";
@@ -167,11 +171,27 @@ export default {
         },
         {
           title: "发送人",
-          key: "addUser"
+          key: "addUser",
+
         },
         {
           title: "发送人员",
-          key: "sendObject"
+          key: "sendObject",
+          ellipsis:true,
+//          render: (h, params) => {
+//            return h('Poptip', {
+//              props: {
+//                trigger: 'hover',
+////                title: params.row.people.length + 'customers',
+//                placement: 'bottom'
+//              }
+//            }, [
+////              h('Tag', params.row.people.length),
+//              h('div', {
+//                slot: 'sendObject'
+//              })
+//            ]);
+//          }
         },
         {
           title: "发送时间",
@@ -179,34 +199,34 @@ export default {
           sortable: true
         },
 
-//        {
-//          title: "操作",
-//          key: "action",
-//          width: 150,
-//          align: "center",
-//          render: (h, params) => {
-//            return h("div", [
-//              h(
-//                "Button",
-//                {
-//                  props: {
-//                    type: "primary",
-//                    size: "small"
-//                  },
-//                  style: {
-//                    marginRight: "5px"
-//                  },
-//                  on: {
-//                    click: () => {
-//                      this.modal1 = true;
-//                    }
-//                  }
-//                },
-//                "查看"
-//              )
-//            ]);
-//          }
-//        }
+        {
+          title: "操作",
+          key: "action",
+          width: 150,
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "primary",
+                    size: "small"
+                  },
+                  style: {
+                    marginRight: "5px"
+                  },
+                  on: {
+                    click: () => {
+                      this.modal1 = true;
+                    }
+                  }
+                },
+                "查看"
+              )
+            ]);
+          }
+        }
       ],
       usershow: false,
       params: {

@@ -16,16 +16,15 @@
       </div>
     </Card>
     <Modal
-      title="查看消息"
       v-model="modal1"
       :mask-closable="false"
     >
-      <div style='text-align:center;font-size:20px;color:#222;font-weight:700'>{{mymessageDetail.MyMessageListTitle}}
+      <div style='font-size: 16px;color:#444444;margin-top:10px;text-align: center'>{{mymessageDetail.MyMessageListTitle}}
       </div>
-      <p style='text-align:center;color:#ccc;padding:5px 0'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{
-        mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：{{mymessageDetail.readed
-        }}&nbsp;&nbsp;未读人：{{mymessageDetail.noreaded}}</p>
-      <p class="modal-content" style='color:#333;'>{{mymessageDetail.MyMessageMsg}}</p>
+      <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{
+        mymessageDetail.AddUser}}已读人：<strong style="color:red">{{mymessageDetail.readed
+        }}</strong> 未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
+      <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
     </Modal>
   </div>
 </template>
@@ -114,12 +113,14 @@
             if (data.code == 0) {
               this.mymessageDetail.MyMessageListTitle = row.at
               this.mymessageDetail.MyMessageupdate = row.re
-              this.mymessageDetail.AddUser = row.AddUser
-              this.mymessageDetail.MyMessageMsg = row.ad
+              this.mymessageDetail.AddUser = row.AddUser;
+              var reg = new RegExp("<br>","g");
+              //console.info(row.adContent.replace(reg,"\n"))
+              //this.singleMessageDetail.Content =  row.adContent.replace(reg,"\n");
+              this.mymessageDetail.MyMessageMsg = row.ad.replace(reg,"\n");
               this.mymessageDetail.readed = data.data.isRead
               this.mymessageDetail.noreaded = data.data.noRead
             }
-
           }
         )
           .catch(err => {
@@ -151,10 +152,10 @@
         showUserAd(this.data)
           .then(res => {
             const data = res.data;
-            console.log('----');
-            console.log(res);
+//            console.log('----');
+//            console.log(res);
             if (data.code == 0) {
-              console.log(this.MyMessageList)
+              console.log(this.MyMessageList);
               this.MyMessageList = data.data;
             }
           })
