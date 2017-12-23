@@ -22,9 +22,6 @@ const store = new Vuex.Store({
                 operationStyleId: 1,
                 fileId: ""
               },
-            lookFilePower:[] ,
-            editFilePower:[] ,
-            delFilePower:[] ,
             addFileListParams:{
                 title:'',
                 fileStyle:'',
@@ -57,28 +54,11 @@ const store = new Vuex.Store({
             state.addFileSaveList.lookFileParams=pramas;
             console.log(state.addFileSaveList.lookFileParams)
         },
-        getLookpower(state,powers){
-            if(powers.length>0){           
-                state.addFileSaveList.lookFilePower.push(powers[0]);
-            }
-        },
         getupdateFileParams(state,pramas){
             state.addFileSaveList.updateFileParams=pramas;
         },
-        getEditpower(state,powers){
-            if(powers.length>0){
-                state.addFileSaveList.editFilePower.push(powers[0]);
-            }
-        },
         getdeleteFileParams(state,pramas){
             state.addFileSaveList.deleteFileParams=pramas;
-        },
-        getDelpower(state,powers){
-            if(powers.length>0){          
-                state.addFileSaveList.delFilePower.push(powers[0]);
-            }
-            console.log(powers)
-            console.log(3,state.addFileSaveList.deleteFileParams)
         },
         getFujainList(state,list){
             state.addFileSaveList.fujainList=list;
