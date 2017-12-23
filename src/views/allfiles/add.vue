@@ -96,8 +96,7 @@
       v-model="uploadDoc"
       width="400"
       @on-ok='docupload'
-      title="选择附件">
-      
+      title="选择附件">   
       <Form>
         <FormItem label="">
           <Upload
@@ -113,11 +112,6 @@
             action="http://192.168.3.26:8011/file/upload.htmls">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
-          <!--<div v-if="filedoc!== null" v-for="(val,index) in filedoc" :key='index'>-->
-          <!--{{ val.name }}-->
-          <!--&lt;!&ndash; <Button type="text" @click="fileup" :loading="fileloadingStatus">{{ fileloadingStatus ? '内容' : ' 确定上传？'}} &ndash;&gt;-->
-          <!--&lt;!&ndash;</Button>&ndash;&gt;-->
-          <!--</div>-->
         </FormItem>
         <FormItem label=" 文件描述：">
           <Input v-model="uploadForm.describle" placeholder="" style="width: 200px" placeholder='描述内容'></Input>
@@ -216,7 +210,6 @@
       this.picuploadList = this.$refs.upload.fileList;
       if (this.hasSaveContent) {
         const storeState = this.addFileSaveList;
-        console.log(storeState)
         this.uploadForm.title = storeState.addFileListParams.title;
         this.uploadForm.id = storeState.addFileListParams.fileStyleId;
         this.uploadForm.content = storeState.addFileListParams.content;
@@ -229,23 +222,20 @@
         this.fujainList = storeState.fujainList;
         this.$refs.fujianupload.fileList = storeState.fujainList;
         this.$refs.upload.fileList = storeState.photoUrlList;
-        if(storeState.lookFilePower.length===0){
+        if(storeState.lookFileParams.userIds===''){
            this.showDepTree();
         }else{
-            this.lookFileParams=storeState.lookFileParams;
-           this.depTree = storeState.lookFilePower;
+            this.selectDate(storeState.lookFileParams.userIds,this.depTree);
         }
         if(storeState.editFilePower.length===0){
             this.showeditDepTree();
         }else{
-            this.updateFileParams=storeState.updateFileParams;
-            this.editdepTree = storeState.editFilePower;
+            this.selectDate(storeState.updateFileParams.userIds,this.editdepTree);
         }
         if(storeState.delFilePower.length===0){
             this.showdelDepTree();
         }else{
-            this.deleteFileParams=storeState.deleteFileParams;          
-            this.deldepTree = storeState.delFilePower;
+           this.selectDate(storeState.deleteFileParams.userIds,this.deldepTree);       
         }
       } else {
         this.showDepTree();
@@ -270,19 +260,16 @@
             content: "<p>是否保存当前编辑的内容</p>",
             onOk: () => {
               this.setHasSaveContent(true);
-              this.getDelpower(this.deldepTreeList,this.deleteFileParams);
-              this.getdeleteFileParams(this.deleteFileParams);
-              this.getEditpower(this.editdepTreeList,this.updateFileParams);
+              this.getdeleteFileParams(this.deleteFileParams);         
               this.getupdateFileParams(this.updateFileParams);
-              this.getLookpower(this.depTreeList);
               this.getlookFileParams(this.lookFileParams);
               this.getTitle(this.uploadForm.title);
               this.getFileStyle(this.uploadForm.value);
               this.getFileStyleId(this.uploadForm.id),
-                this.getPhotoUrl(this.uploadForm.photourl),
-                this.getFileUrl(this.uploadForm.fileurl),
-                this.getContent(this.uploadForm.content),
-                this.getFujainList(this.fujainList);
+              this.getPhotoUrl(this.uploadForm.photourl),
+              this.getFileUrl(this.uploadForm.fileurl),
+              this.getContent(this.uploadForm.content),
+              this.getFujainList(this.fujainList);
               this.getFilesize(this.uploadForm.filesize);
               this.getDescrible(this.uploadForm.describle);
               this.getFileType(this.uploadForm.fileType);
@@ -531,6 +518,21 @@
           .catch(err => {
           });
       },
+      selectDate(ids,data){
+          const prams=ids.split(',');
+          function funSelect(data,prams){
+            for(let val of data){
+              const dataId=String(val.id);
+              if(prams.indexOf(dataId)!==-1){
+                val.checked=true;
+              }
+              if(val.children!==null){
+                funSelect(val.children,prams)
+              }
+            }
+          }
+            funSelect(data,prams)
+      },
       getFileData() {
         // 获得文件大小，名字，和描述
         var newArry = [];
@@ -547,6 +549,7 @@
         this.uploadForm.filedescrible = filedescribleArry.join(",");
       },
       handleSubmit(name) {
+        console.log(this.$refs.myUeditor)
         this.$refs.myUeditor.submits();
         // 将文件上传中所有输入的信息已保存在uploadForm中
         if (this.uploadForm.title == "") {
