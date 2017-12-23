@@ -78,7 +78,7 @@
           current: 1,
           pageSize: 20,
           userId: sessionStorage.getItem('userId'),
-          searchContent: this.searchKey
+          searchContent: this.$route.params.key
         },
         num: 0,
         deptlist: [],
@@ -148,21 +148,19 @@
         this.$router.push("/allfiles/check/" + row.id);
       },
       onPageChange(value) {
-        // console.log(value);
         this.listparams.current = value;
         this.initList();
       },
       onPageSizeChange(value) {
-        //console.log(value);
         this.listparams.pageSize = value;
         this.initList();
       },
       initList() {
         console.log(this.listparams);
+        this.listparams.searchContent=this.$route.params.key;
         searchResult(this.listparams)
           .then(res => {
             const showUserUpdata = res.data;
-            //console.log(showUserUpdata);
             if (res.data.code == 0) {
               console.log(res.data)
               this.page = res.data.rdPage;

@@ -7,9 +7,24 @@ const store = new Vuex.Store({
         hasSaveContent:false,
         searchKey:'',
         addFileSaveList:{
-            lookFilePower:[] ,
-            editFilePower:[] ,
-            delFilePower:[] ,
+            powerTreeEditList:[],
+            powerTreeLookList:[],
+            powerTreeDelList:[],
+            lookFileParams: {
+                userIds: "",
+                fileId: "",
+                operationStyleId: 1
+              },
+              updateFileParams: {
+                userIds: "",
+                operationStyleId: 1,
+                fileId: ""
+              },
+              deleteFileParams: {
+                userIds: "",
+                operationStyleId: 1,
+                fileId: ""
+              },
             addFileListParams:{
                 title:'',
                 fileStyle:'',
@@ -35,65 +50,55 @@ const store = new Vuex.Store({
         getPhotoUrlList(state,powers){
             if(powers.length>0){
                 state.addFileSaveList.photoUrlList=powers;
-                console.log(state.addFileSaveList.photoUrlList)
             }
         },
-        getLookpower(state,powers){
-            if(powers.length>0){
-                state.addFileSaveList.lookFilePower.push(powers[0]);
-            }
+        getlookFileParams(state,pramas){
+            state.addFileSaveList.lookFileParams=pramas;
         },
-        getEditpower(state,powers){
-            if(powers.length>0){
-                state.addFileSaveList.lookFilePower.push(powers[0]);
-            }
-            console.log(state.addFileSaveList.editFilePower)
+        getupdateFileParams(state,pramas){
+            state.addFileSaveList.updateFileParams=pramas;
         },
-        getDelpower(state,powers){
-            if(powers.length>0){
-                state.addFileSaveList.lookFilePower.push(powers[0]);
-            }
-            console.log(state.addFileSaveList.delFilePower)
+        getdeleteFileParams(state,pramas){
+            state.addFileSaveList.deleteFileParams=pramas;
+        },
+        getLookTreeList(state,list){
+            state.addFileSaveList.powerTreeLookList=list;
+        },
+        getEditTreeList(state,list){
+            state.addFileSaveList.powerTreeEditList=list;
+        },
+        getDelTreeList(state,list){
+            state.addFileSaveList.powerTreeDelList=list;
         },
         getFujainList(state,list){
             state.addFileSaveList.fujainList=list;
-            console.log(state.addFileSaveList.fujainList)
         },
         getTitle(state,val){
             state.addFileSaveList.addFileListParams.title=val;
-            console.log(state.addFileSaveList.addFileListParams.title)
         },
         getFileStyle(state,val){
             state.addFileSaveList.addFileListParams.fileStyle=val;
-            console.log(state.addFileSaveList.addFileListParams.fileStyle)
         },
         getFileStyleId(state,val){
             state.addFileSaveList.addFileListParams.fileStyleId=val;
-            console.log(state.addFileSaveList.addFileListParams.fileStyleId)
         },
         getPhotoUrl(state,val){
             state.addFileSaveList.addFileListParams.photoUrl=val;
-            console.log(state.addFileSaveList.addFileListParams.photoUrl)
         },
         getFileUrl(state,val){
             state.addFileSaveList.addFileListParams.fileUrl=val;
-            console.log(state.addFileSaveList.addFileListParams.fileUrl)
         },
         getContent(state,val){
             state.addFileSaveList.addFileListParams.content=val;
-            console.log(state.addFileSaveList.addFileListParams.content)
         },
         getFilesize(state,val){
             state.addFileSaveList.addFileListParams.filesize=val;
-            console.log(state.addFileSaveList.addFileListParams.filesize)
         },
         getDescrible(state,val){
             state.addFileSaveList.addFileListParams.describle=val;
-            console.log(state.addFileSaveList.addFileListParams.describle)
         },
         getFileType(state,val){
             state.addFileSaveList.addFileListParams.fileType=val;
-            console.log(state.addFileSaveList.addFileListParams.fileType)
         }
     },
     actions:{

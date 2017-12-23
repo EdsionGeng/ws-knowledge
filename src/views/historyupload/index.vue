@@ -17,14 +17,13 @@
                  style='margin-bottom:10px;'>
             <a @click="onRowClick(list)">
               <Card style="">
-                <div style="text-align:center">
-                  <img src="./bg.jpg" style='width:50%;height:100px;'>
-                  <h2 class="nowrap" style='color:#000;font-size:19px;'>{{list.title}}</h2>
-                  <p style='color:#ccc'>上传时间：{{list.addFileTime}}</p>
+                 <div style="text-align:center">
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
+                  <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
+                  <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>   
                 </div>
               </Card>
             </a>
-
             </Col>
           </Row>
         </TabPane>
