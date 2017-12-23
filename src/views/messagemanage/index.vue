@@ -12,7 +12,7 @@
           <Col span="5">
           <FormItem label="发送时间：">
             <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
-                        placeholder="Select date" @on-change="dateOnChange" style="width: 250px"></DatePicker>
+                        placeholder="请选择时间" @on-change="dateOnChange" style="width: 250px"></DatePicker>
           </FormItem>
           </Col>
           <Col span="4">
@@ -66,7 +66,7 @@
       <Form ref="insertAdParams" :model="insertAdParams" :label-width="90">
 
         <FormItem prop="adStyle" label="类型：">
-          <Select placeholder="请选择" :clearable="true" v-model="insertAdParams.adStyle">
+          <Select placeholder="请选择" :clearable="true" :rows="4" v-model="insertAdParams.adStyle">
             <Option value="">请选择类型</Option>
             <Option value="通知">通知</Option>
             <Option value="公告">公告</Option>
@@ -95,6 +95,7 @@
       width="700px"
       title="选择人员"
       @on-ok="ok"
+      :closable="false"
       @on-cancel="cancel">
       <div class="clearfix" style="height:600px;overflow: scroll">
         <Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"
@@ -115,14 +116,15 @@
       title=""
       v-model="modal1"
       :mask-closable="false"
+      :closable="false"
     >
-      <p style="font-size: 30px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
+      <p style="font-size: 20px;margin;text-align: center">{{singleMessageDetail.AdTitle}}</p>
       <p style='text-align:center'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
           style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#333;text-align: center;margin-top:30px;'>
-        {{singleMessageDetail.Content}}</p>
+      <p class="modal-content" style='color:#333;text-align: center;margin-top:10px;'>
+       <pre> {{singleMessageDetail.Content}}</pre></p>
     </Modal>
   </div>
 </template>
@@ -177,34 +179,34 @@ export default {
           sortable: true
         },
 
-        {
-          title: "操作",
-          key: "action",
-          width: 150,
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.modal1 = true;
-                    }
-                  }
-                },
-                "查看"
-              )
-            ]);
-          }
-        }
+//        {
+//          title: "操作",
+//          key: "action",
+//          width: 150,
+//          align: "center",
+//          render: (h, params) => {
+//            return h("div", [
+//              h(
+//                "Button",
+//                {
+//                  props: {
+//                    type: "primary",
+//                    size: "small"
+//                  },
+//                  style: {
+//                    marginRight: "5px"
+//                  },
+//                  on: {
+//                    click: () => {
+//                      this.modal1 = true;
+//                    }
+//                  }
+//                },
+//                "查看"
+//              )
+//            ]);
+//          }
+//        }
       ],
       usershow: false,
       params: {
@@ -319,13 +321,15 @@ export default {
           const data = res.data;
           // console.log(res.data);
           if (data.code == 0) {
-            console.info("hjhjhj");
-            console.info(row);
+//            console.info("hjhjhj");
+//            console.info(row);
             this.singleMessageDetail.AdTitle = row.adTitle;
             this.singleMessageDetail.addTime = row.sendTime;
             this.singleMessageDetail.AddUser = row.addUser;
-            this.singleMessageDetail.Content = row.adContent;
-            this.singleMessageDetail.readed = data.data.isRead;
+            var reg = new RegExp("<br>","g");
+            console.info(row.adContent.replace(reg,"\n"))
+            this.singleMessageDetail.Content =  row.adContent.replace(reg,"\n");
+            this.singleMessageDetail.readed  = data.data.isRead;
             this.singleMessageDetail.noreaded = data.data.noRead;
           } else {
             this.$Message.warning("网络异常！");
@@ -361,7 +365,9 @@ export default {
           userIds += arr[i].id;
         }
       }
+
       this.sendAdParams.userIds = userIds;
+      //console.info(this.sendAdParams.userIds);
       if (departmentName.length > 1000) {
         departmentName = "全公司";
       }
@@ -448,21 +454,30 @@ export default {
         this.$Message.warning("发送对象不能为空！");
         return;
       }
+      let newcontent=this.insertAdParams.content.replace(/\n|\r\n/g,"<br>");
+      this.insertAdParams.content=newcontent;
+//      console.info(this.insertAdParams.content);
+//      debugger
       insertAd(this.insertAdParams)
         .then(res => {
           const data = res.data;
           let _self = this;
           if (data.code == 0) {
             _self.sendAdParams.commonId = data.data;
-            console.info(_self.sendAdParams);
-
+//            console.info(_self.sendAdParams);
             sendAdToUser(_self.sendAdParams).then(res => {
               const data = res.data;
-              console.info(data);
+//              console.info(data);
               if (data.code === 0) {
-                _self.$Message.success("操作成功!");
-                _self.insertAd = false;
-                _self.showAllAdList();
+               this.$Message.success("操作成功!");
+                this.insertAd = false;
+                this.insertAdParams.title="";
+                this.insertAdParams.content="";
+                this.insertAdParams.sendDepartmentName="";
+                this.insertAdParams.adStyle="";
+                this.sendAdParams.userIds="";
+                this.sendAdParams.commonId="";
+                this.showAllAdList();
               }
             });
           }

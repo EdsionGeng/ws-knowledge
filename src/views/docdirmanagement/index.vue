@@ -22,6 +22,7 @@
       width="400"
       title="添加文件类型"
       @on-ok="ok"
+      :closable="false"
       @on-cancel="cancel">
       <Form :model="insertFileParams" :label-width="90">
 
@@ -42,16 +43,20 @@
       v-model="open "
       width="400"
       title="删除文件类型"
+      :closable="false"
+      @on-ok="sureDelete"
+      @on-cancel="delcancel"
     >
       <p>您选择删除的文件类型为<strong style="color:red">{{filekindname}}</strong></p>
       <p v-show="fileStyleShow">此文档类型对应的文件数量为<strong style="color:red">{{filePcs}}</strong>，请先删除相应的文件再进行操作！</p>
       <p v-show="pShow">此文档类型对应的文件数量为0，可以进行删除！</p>
-      <Button type="primary" @click="sureDelete" v-show="sureShow">确认删除!</Button>
+
     </Modal>
     <Modal
       v-model="updateFileName "
       width="400"
       title="修改文档目录名称"
+      :closable="false"
       @on-ok="sureUpdate"
     >
       <Form :model="updateParams" :label-width="90">
@@ -101,7 +106,6 @@
         fileStyleShow: false,
         value4: "",
         showMenu: false,
-        sureShow: false,
         insertFileParams: {
           parentId: "",
           docName: "",
@@ -135,40 +139,30 @@
             },
             on: {
               click: () => {
-                if (data.children != null) {
-                  this.$Message.warning("请点击树形结构末尾节点，再进行删除操作");
-                  return
-                }
                 this.deleteDocParams.fileStyleId = data.id;
+               // console.info(this.deleteDocParams.fileStyleId)
                 this.filekindname = data.fileKindName;
               }
             }
           }, data.fileKindName)
       },
-      circleFile(){
 
-      },
       deleteFileKind() {
-
-        if(this.deleteDocParams.fileStyleId==""){
+        if(this.deleteDocParams.fileStyleId===""){
           this.$Message.warning("您没有选中相应的节点！");
           return
         }
-        this.open = true;
+           this.open = true;
+        let _self=this;
            countFileStyle(this.deleteDocParams).then(res => {
            const data = res.data;
            if (data.data != 0) {
-            this.fileStyleShow = true;
-            this.filePcs = data.data;
-            this.deleteDocParams.fileStyleId = "";
-            this.pShow = false;
-            this.sureShow = false;
-            return
+             _self.fileStyleShow = true;
+             _self.filePcs = data.data;
+             _self.pShow = false;
           }
           else {
-            this.fileStyleShow = false;
-            this.pShow = true;
-            this.sureShow = true;
+             _self.pShow = true;
           }
         }).catch(err => {
         });
@@ -190,18 +184,34 @@
             }
           }, data.fileKindName)
       },
+      delcancel(){
+        this.fileStyleShow=false;
+        this.deleteDocParams.fileStyleId="";
+      },
       sureDelete() {
+
+        if(this.deleteDocParams.fileStyleId==""){
+          this.$Message.warning("请勾选想要删除的节点")
+          this.open = false;
+          return
+        }
+        if(this.filePcs>0){
+          this.$Message.warning("此文件还有对应的相应文件数量")
+          this.open = false;
+          return
+        }
+
         deleteDocRule(this.deleteDocParams).then(res => {
           let _self = this;
           const data = res.data;
           if (data.code == 0) {
             _self.deleteDocParams.fileStyleId = "";
-            _self.$Message.success(data.msg);
+            this.$Message.success(data.msg);
             _self.showDocTree();
             _self.open = false;
           }
           else {
-            _self.$Message.warning(data.msg);
+            this.$Message.warning(data.msg);
           }
         }).catch(err => {
         });
