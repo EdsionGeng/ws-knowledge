@@ -114,7 +114,7 @@
           </Upload>
         </FormItem>
         <FormItem label=" 文件描述：">
-          <Input v-model="uploadForm.describle" placeholder="" style="width: 200px" placeholder='描述内容'></Input>
+          <Input v-model="uploadDescription" placeholder="" style="width: 200px" placeholder='描述内容'></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -134,6 +134,8 @@
   export default {
     data() {
       return {
+        uploadDescription:'',
+        getPowerTree:[],
         submitText: '确定上传',
         submitLoading: false,
         insertFileList: {},
@@ -155,7 +157,7 @@
           id: "",
           content: "",
           fileurl: "",
-          photourl: "./bg.jpg",
+          photourl: "",
           describle: "",
           filesize: "",
           value: ""
@@ -225,20 +227,22 @@
         if(storeState.lookFileParams.userIds===''){
            this.showDepTree();
         }else{
-            this.showDepTree();
+            this.depTree=storeState.powerTreeLookList;
             this.selectDate(storeState.lookFileParams.userIds,this.depTree);
         }
-        if(storeState.editFilePower.length===0){
+        if(storeState.updateFileParams.userIds===''){
             this.showeditDepTree();
         }else{
-            this.showeditDepTree();
+            this.editdepTree=storeState.powerTreeEditList;
             this.selectDate(storeState.updateFileParams.userIds,this.editdepTree);
+             console.log(131)
         }
-        if(storeState.delFilePower.length===0){
+        if(storeState.deleteFileParams.userIds===''){
             this.showdelDepTree();
         }else{
-            this.showdelDepTree();
-           this.selectDate(storeState.deleteFileParams.userIds,this.deldepTree);       
+             this.deldepTree=storeState.powerTreeDelList;
+           this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);    
+            console.log(133)   
         }
       } else {
         this.showDepTree();
@@ -262,6 +266,10 @@
             title: "保存当前内容",
             content: "<p>是否保存当前编辑的内容</p>",
             onOk: () => {
+                this.$refs.myUeditor.submits();
+              this.getLookTreeList(this.depTree);
+              this.getEditTreeList(this.editdepTree);
+              this.getDelTreeList(this.deldepTree);
               this.setHasSaveContent(true);
               this.getdeleteFileParams(this.deleteFileParams);         
               this.getupdateFileParams(this.updateFileParams);
@@ -292,12 +300,12 @@
     },
     methods: {
       ...mapMutations([
+        "getLookTreeList",
+        "getEditTreeList",
+        "getDelTreeList",
         "getdeleteFileParams",
         "getupdateFileParams",
         "getlookFileParams",
-        "getEditpower",
-        "getLookpower",
-        "getDelpower",
         "getTitle",
         "getFileStyle",
         "getFileStyleId",
@@ -404,7 +412,9 @@
         let _self = this;
         getDepTree(_self.depTreeParams).then(res => {
           _self.depTree = res.data;
+          this.getPowerTree=res.data;
         });
+        
       },
       showeditDepTree() {
         let _self = this;
@@ -422,7 +432,7 @@
         console.log(this.$refs.fujianupload);
         for (let val of this.fujainList) {
           if (!val.hasOwnProperty("description")) {
-            Vue.set(val, 'description', this.uploadForm.describle)
+            Vue.set(val, 'description', this.uploadDescription)
             if(val.description===''){
               Vue.set(val, 'description', '无')
             }
@@ -523,6 +533,8 @@
       },
       selectDate(ids,data){
           const prams=ids.split(',');
+          console.log(prams);
+          console.log(data)
           function funSelect(data,prams){
             for(let val of data){
               const dataId=String(val.id);
@@ -564,6 +576,8 @@
         } else if (this.uploadForm.content === "") {
           this.$Message.warning("请编辑文件内容");
           return;
+        }else if(this.uploadForm.content.length>=16000){
+            this.$Message.warning("文件占位符过多,请删除多余的格式");
         } else if (
           this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
         ) {
