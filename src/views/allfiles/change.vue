@@ -39,9 +39,19 @@
           </div>
 
        <Row v-for='(item,index) in fujainList' :key='index'>
-            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
-            style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+             <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'>
+            </i>
+                <a :href="item.url">
+                  <span style='color:#ccc'>{{item.name}} 
+                  </span>
+                  <span style='color:#ccc;margin-left:5px;'>
+                    ({{parseInt((item.size)/1024)+'k'}})       
+              </span>
+                </a>       
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
+            <Button type="text" size="small" @click="handleRemove(item)">
+              <Icon type="android-cancel" ></Icon>
+            </Button>
           </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power'>
@@ -87,7 +97,7 @@
           </div>
         </FormItem>
         <FormItem label="">
-          <Button type='primary' size='large' @click="handleSubmit()">{{submitText}}</Button>
+          <Button type='primary' size='large' @click="handleSubmit()" :loading="submitLoading">{{submitText}}</Button>
         </FormItem>
       </Form>
     </div>
@@ -232,7 +242,6 @@ export default {
             }
             this.uploadForm.value = this.fileDetails.fileStyle;
             this.uploadForm.fileType = this.fileDetails.fileSpecies;
-            console.log(this.uploadForm);
             if (this.uploadForm.fileurl !== "") {
               this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
               this.fileDetailSize = this.fileDetails.fileSize.split(",");
@@ -242,17 +251,17 @@ export default {
               this.fujainList = [];
               for (let i = 0; i < this.fileDetailUrl.length; i++) {
                 let fujainDetail = {};
-                fujainDetail.size = parseInt(this.fileDetailSize[i]);
-                console.log(this.fileDetailSize[i]);
-                fujainDetail.name = this.fileDetailUrl[i].slice(13);
-                fujainDetail.url = this.fileDetailUrl[i];
+                fujainDetail.size = parseInt(this.fileDetailSize[i]);             
+                fujainDetail.name = this.fileDetailUrl[i].slice(15);              
+                fujainDetail.response ={data:this.fileDetailUrl[i]};               
                 fujainDetail.description = this.fileDetaildescible[i];
-                this.fujainList.push(fujainDetail);
+                this.fujainList.push(fujainDetail);      
               }
             } else {
               this.fujainList = [];
             }
           }
+         
         })
         .catch(err => {});
     },
@@ -268,8 +277,8 @@ export default {
           title: res.msg
         });
       } else {
-        console.log(fileList);
         this.fujainList = fileList;
+        console.log(this.fujainList)
       }
     },
     pichandleSuccess(res, file) {
@@ -376,11 +385,8 @@ export default {
       this.file = file;
       console.log(file);
       //return false;
-    },
-    
+    },  
     docupload() {
-      console.log(111)
-      console.log(this.$refs.fujianupload);
       for (let val of this.fujainList) {
         if (!val.hasOwnProperty("description")) {
           Vue.set(val, "description", this.uploadForm.describle);
@@ -407,9 +413,11 @@ export default {
       this.updateFileList.fileStyleName = this.uploadForm.value;
       this.updateFileList.fileSize = this.uploadForm.filesize;
       this.updateFileList.fileSpecies = this.uploadForm.fileType;
+      console.log(111111111)
+      console.log(this.updateFileList);
       if (this.lookFileParams.userIds !== "") {
         this.chooseUser = true;
-      }
+      };
       updateFile(this.updateFileList)
         .then(res => {
           if (res.data.code == 0) {
@@ -483,18 +491,18 @@ export default {
       var filesizeArry = [];
       var filedescribleArry = [];
       for (let i = 0; i < this.fujainList.length; i++) {
-        console.log(this.fujainList[i].response);
+        console.log(1111)
         newArry.push(this.fujainList[i].response.data);
+        console.log(222)
         filesizeArry.push(this.fujainList[i].size);
         filedescribleArry.push(this.fujainList[i].description);
       }
       this.uploadForm.fileurl = newArry.join(",");
       this.uploadForm.filesize = filesizeArry.join(",");
-      this.uploadForm.filedescrible = filedescribleArry.join(",");
+      this.uploadForm.describle = filedescribleArry.join(",");
     },
     handleSubmit() {
-      console.log(this.$refs);
-       //this.$refs.myUeditor.submits();
+      console.log(this.$refs)
       // 将文件上传中所有输入的信息已保存在uploadForm中
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
@@ -513,7 +521,7 @@ export default {
         this.$Message.warning("删除文件权限的人超过查看文件权限的人");
         return;
       } else {
-        if (this.uploadList.length > 0) {
+        if (this.fujainList.length > 0) {
           this.getFileData();
         }
         this.submitLoading = true;
