@@ -21,7 +21,7 @@
       </Row>
       <Row v-if='fujainList.length!==0' v-for='(item,index) in fujainList' :key='index' style='padding:3px 0;'>
         <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i>
-        <span>  <a :href="'http://192.168.3.26:8011/'+item.url">{{item.title}} </a>
+        <span>  <a target="_blank" :href="'http://192.168.3.26:8011/'+item.url">{{item.title}} </a>
               <span style='color:#ccc'>（{{parseInt(item.fileSize/1024)+'k'}}）</span>
             </span>
         <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
