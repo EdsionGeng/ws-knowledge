@@ -496,8 +496,8 @@ export default {
             console.log("新建文件成功");
             this.lookFileParams.fileId = res.data.data;
             this.lookFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
-            this.updateFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
-            this.deleteFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
+            this.updateFileParams.userIds=this.updateFileParams.userIds+","+sessionStorage.getItem('userId')
+            this.deleteFileParams.userIds=this.deleteFileParams.userIds+","+sessionStorage.getItem('userId')
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
             console.log(res.data.data);
