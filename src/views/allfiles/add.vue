@@ -194,7 +194,7 @@ export default {
       },
       uploadDoc: false,
       isBanDuan: true,
-      editorContent:''
+      editorContent: ""
     };
   },
   components: {
@@ -285,10 +285,10 @@ export default {
             this.getTitle(this.uploadForm.title);
             this.getFileStyle(this.uploadForm.value);
             this.getFileStyleId(this.uploadForm.id),
-            this.getPhotoUrl(this.uploadForm.photourl),
-            this.getFileUrl(this.uploadForm.fileurl),
-            this.getContent(this.uploadForm.content),
-            this.getFujainList(this.fujainList);
+              this.getPhotoUrl(this.uploadForm.photourl),
+              this.getFileUrl(this.uploadForm.fileurl),
+              this.getContent(this.uploadForm.content),
+              this.getFujainList(this.fujainList);
             this.getFilesize(this.uploadForm.filesize);
             this.getDescrible(this.uploadForm.describle);
             this.getFileType(this.uploadForm.fileType);
@@ -304,16 +304,16 @@ export default {
             this.getdeleteFileParams(null);
             this.getupdateFileParams(null);
             this.getlookFileParams(null);
-            this.getTitle('');
-            this.getFileStyle('');
-            this.getFileStyleId('0'),
-            this.getPhotoUrl(''),
-            this.getFileUrl(''),
-            this.getContent(''),
-            this.getFujainList([]);
-            this.getFilesize('');
-            this.getDescrible('');
-            this.getFileType('');
+            this.getTitle("");
+            this.getFileStyle("");
+            this.getFileStyleId("0"),
+              this.getPhotoUrl(""),
+              this.getFileUrl(""),
+              this.getContent(""),
+              this.getFujainList([]);
+            this.getFilesize("");
+            this.getDescrible("");
+            this.getFileType("");
             this.getPhotoUrlList([]);
             next();
           }
@@ -346,9 +346,9 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
-    showUploadModel(){
-      this.uploadDoc=true;
-      this.uploadDescription=''
+    showUploadModel() {
+      this.uploadDoc = true;
+      this.uploadDescription = "";
     },
     getEditorContent() {
       this.uploadForm.content = this.editorContent;
@@ -368,7 +368,7 @@ export default {
     },
     pichandleSuccess(res, file) {
       this.uploadForm.photourl = res.data;
-      console.log(this.$refs.upload)
+      console.log(this.$refs.upload);
     },
     pichandleBeforeUpload(file) {
       const check = this.picuploadList.length < 1;
@@ -416,6 +416,8 @@ export default {
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
+      this.lookFileParams.userIds =
+        this.lookFileParams.userIds + "," + sessionStorage.getItem("userId");
     },
     chooseDelPeople(arr) {
       this.deldepTreeList = arr;
@@ -426,6 +428,8 @@ export default {
         }
       }
       this.deleteFileParams.userIds = userIds.join(",");
+      this.deleteFileParams.userIds =
+        this.deleteFileParams.userIds + "," + sessionStorage.getItem("userId");
     },
     chooseEditPeople(arr) {
       this.editdepTreeList = arr;
@@ -436,6 +440,9 @@ export default {
         }
       }
       this.updateFileParams.userIds = userIds.join(",");
+
+      this.updateFileParams.userIds =
+        this.updateFileParams.userIds + "," + sessionStorage.getItem("userId");
     },
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
@@ -444,7 +451,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
-        console.log(res.data)
+        console.log(res.data);
       });
     },
     showeditDepTree() {
@@ -495,9 +502,6 @@ export default {
           if (res.data.code == 0) {
             console.log("新建文件成功");
             this.lookFileParams.fileId = res.data.data;
-            this.lookFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
-            this.updateFileParams.userIds=this.updateFileParams.userIds+","+sessionStorage.getItem('userId')
-            this.deleteFileParams.userIds=this.deleteFileParams.userIds+","+sessionStorage.getItem('userId')
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
             console.log(res.data.data);
@@ -636,9 +640,9 @@ export default {
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
 }
-.picUpload .ivu-upload-list-remove{
+.picUpload .ivu-upload-list-remove {
   font-size: 24px;
-  padding:3px;
+  padding: 3px;
 }
 </style>
 <style scoped>
