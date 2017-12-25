@@ -98,6 +98,20 @@
       </div>
     </Modal>
     <Modal
+      v-model="deletesure"
+      title="删除所勾选数据"
+      @on-ok="deleteAds"
+      :closable="false"
+      @on-cancel="cancel">
+    </Modal>
+    <Modal
+      v-model="deleteofcourse"
+      title="确定删除所勾选数据？"
+      @on-ok="sureDelete"
+      :closable="false"
+      @on-cancel="cancel">
+    </Modal>
+    <Modal
       title=""
       v-model="modal1"
       :mask-closable="false"
@@ -153,35 +167,35 @@ export default {
           key: "sendTime",
           sortable: true
         },
-
-        {
-          title: "操作",
-          key: "action",
-          width: 150,
-          align: "center",
-          render: (h, params) => {
-            return h("div", [
-              h(
-                "Button",
-                {
-                  props: {
-                    type: "primary",
-                    size: "small"
-                  },
-                  style: {
-                    marginRight: "5px"
-                  },
-                  on: {
-                    click: () => {
-                      this.modal1 = true;
-                    }
-                  }
-                },
-                "查看"
-              )
-            ]);
-          }
-        }
+//
+//        {
+//          title: "操作",
+//          key: "action",
+//          width: 150,
+//          align: "center",
+//          render: (h, params) => {
+//            return h("div", [
+//              h(
+//                "Button",
+//                {
+//                  props: {
+//                    type: "primary",
+//                    size: "small"
+//                  },
+//                  style: {
+//                    marginRight: "5px"
+//                  },
+//                  on: {
+//                    click: () => {
+//                      this.modal1 = true;
+//                    }
+//                  }
+//                },
+//                "查看"
+//              )
+   //         ]);
+//          }
+//        }
       ],
       usershow: false,
       params: {
@@ -192,6 +206,8 @@ export default {
         title: "",
         adStyle: ""
       },
+      deletesure:false,
+      deleteofcourse:false,
       singleMessageDetail: {
         AdTitle: "",
         addTime: "",
@@ -274,6 +290,9 @@ export default {
         },
         data.name
       );
+    },
+    deleteAds(){
+      this.deleteofcourse=true;
     },
     delAdAction(arr) {
       let fielIds = "";
@@ -393,19 +412,35 @@ export default {
         this.$Message.warning("没有选中相应数据!");
         return;
       } else {
-        let _self = this;
+        this. deletesure=true;
+//        let _self = this;
+//        deleteAd(this.delAdParams)
+//          .then(res => {
+//            const data = res.data;
+//            if (data.code == 0) {
+//              this.$Message.info(data.msg);
+//              _self.showAllAdList();
+//            } else {
+//              this.$Message.info(data.msg);
+//            }
+//          })
+//          .catch(err => {});
+      }
+//
+    },
+      sureDelete(){
         deleteAd(this.delAdParams)
           .then(res => {
             const data = res.data;
             if (data.code == 0) {
               this.$Message.info(data.msg);
-              _self.showAllAdList();
+              this.showAllAdList();
             } else {
               this.$Message.info(data.msg);
             }
           })
           .catch(err => {});
-      }
+
     },
     handleSearch() {
       console.info(this.params);
