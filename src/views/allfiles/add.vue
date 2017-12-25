@@ -98,14 +98,14 @@
       v-model="uploadDoc"
       width="400"
       @on-ok='docupload'
-      title="选择附件">   
+      title="选择附件">
       <Form>
         <FormItem label="">
           <Upload
             ref="fujianupload"
             :show-upload-list="true"
             multiple
-            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
+            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','zip','rar']"
             :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
@@ -134,7 +134,7 @@
   import {mapState, mapMutations} from "vuex";
   import Vue from 'vue'
   var E=require('wangeditor')
- 
+
   export default {
     data() {
       return {
@@ -221,12 +221,12 @@
     'Accept' : 'multipart/form-data'
   }
    editor.customConfig.uploadImgServer = 'http://192.168.22.45:8011/file/upload.htmls'
- 
+
   editor.create();
   setTimeout(()=>{
     editor.txt.html(this.uploadForm.content);
   },1000)
-   
+
     //   var  editor = new E('#editorElem')
     //       editor.customConfig.onchange = (html) => {
     //       this.editorContent = html
@@ -241,7 +241,7 @@
     //    editor.config.uploadHeaders = {
     //     'Accept' : 'text/x-json'
     //   };
-    
+
 
       this.adminPower();
       this.uploadList = this.$refs.fujianupload.fileList;
@@ -277,8 +277,8 @@
             this.showdelDepTree();
         }else{
              this.deldepTree=storeState.powerTreeDelList;
-           this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);    
-            console.log(133)   
+           this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);
+            console.log(133)
         }
       } else {
         this.showDepTree();
@@ -307,7 +307,7 @@
               this.getEditTreeList(this.editdepTree);
               this.getDelTreeList(this.deldepTree);
               this.setHasSaveContent(true);
-              this.getdeleteFileParams(this.deleteFileParams);         
+              this.getdeleteFileParams(this.deleteFileParams);
               this.getupdateFileParams(this.updateFileParams);
               this.getlookFileParams(this.lookFileParams);
               this.getTitle(this.uploadForm.title);
@@ -454,7 +454,7 @@
           _self.depTree = res.data;
           this.getPowerTree=res.data;
         });
-        
+
       },
       showeditDepTree() {
         let _self = this;
