@@ -131,6 +131,7 @@ import { updateFile } from "../../api/all_interface";
 import { lookFileUser } from "../../api/all_interface";
 import { updateFilePermission } from "../../api/all_interface";
 import { deleteFilePermission } from "../../api/all_interface";
+import { showusermission } from "../../api/all_interface";
 import { getFileDetail } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
 import Vue from "vue";
@@ -138,6 +139,7 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
+      showusermissionIdArry:[],
       submitText: "确认修改",
       submitLoading: false,
       chooseUser: false,
@@ -168,6 +170,9 @@ export default {
         power: [{ required: true }]
       },
       fileDetails: null,
+      showusermissionParams:{
+        fileId:this.$route.params.id
+      },
       lookFileParams: {
         userIds: "",
         fileId: "",
@@ -221,17 +226,46 @@ export default {
     };
     editor.customConfig.uploadImgServer =
       "http://192.168.3.26:8011/file/upload.htmls";
-    editor.create();
+        editor.create();   
+     setTimeout(()=>{
+       editor.txt.html(this.uploadForm.content);
+     },1000)
     this.initFileDetail();
     this.adminPower();
     this.showDepTree();
     this.showeditDepTree();
     this.showdelDepTree();
+    this.getUserMission();
   },
-  ready() {
-    editor.txt.html(this.uploadForm.content);
-  },
+
   methods: {
+    getUserMission(){
+       showusermission(this.fileDetailParams)
+                .then(res => {
+                  console.log(res.data);
+                 if (res.data.code == 0) {
+                    const data=res.data.data;
+                    this.showusermissionIdArry=data;
+                    this.lookFileParams.userIds = data[0].join(",");
+                    this.updateFileParams.userIds = data[1].join(",");
+                    this.deleteFileParams.userIds = data[2].join(",");
+                   }
+                })
+    },
+    selectDate(ids, data) {
+      function funSelect(data, ids) {
+        for (let val of data) {
+          const dataId = parseInt(val.id);
+          if (ids.indexOf(dataId) !== -1) {
+            val.checked = true;
+          }
+          if (val.children !== null) {
+            funSelect(val.children, ids);
+          }
+        }
+      }
+      funSelect(data, ids);
+    },
     getEditorContent() {
       this.uploadForm.content = this.editorContent;
       console.log(this.editorContent);
@@ -364,7 +398,6 @@ export default {
         }
       }
       this.updateFileParams.userIds = userIds.join(",");
-      console.log(this.deleteFileParams.userIds);
     },
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
@@ -373,18 +406,21 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
+        this.selectDate(this.showusermissionIdArry[0],_self.depTree)
       });
     },
     showeditDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.editdepTree = res.data;
+       this.selectDate(this.showusermissionIdArry[1],_self.editdepTree)
       });
     },
     showdelDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.deldepTree = res.data;
+        this.selectDate(this.showusermissionIdArry[2],_self.deldepTree)
       });
     },
     docupload() {
@@ -406,6 +442,7 @@ export default {
     upFileloadSuccess() {
       this.updateFileList.fileId = this.uploadForm.fileId;
       this.updateFileList.content = this.uploadForm.content;
+      console.log(this.updateFileList.content)
       this.updateFileList.photourl = this.uploadForm.photourl;
       if (this.insertFileList.photourl === "") {
         this.insertFileList.photourl = "1514028176737moren1.png";

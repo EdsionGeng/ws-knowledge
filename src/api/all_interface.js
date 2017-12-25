@@ -18,34 +18,21 @@ export function deletesinglefile(data) {
 
 export function showusermission(data) {
   return fetch({
-    url: 'showmission/user.htmls',
+    url: 'showmission/users.htmls',
     method: 'post',
     data: data
   })
 }
-
-/**
- *  得到用户菜单
- * @param data
- * @returns {*}
- */
-// export function getUserMenus(data) {
-//   return fetch({
-//     url: '/getMenus',
-//     method: 'data',
-//     data: data
-//   })
-// }
 /**
  * 全局搜索
  * @param data
  * @returns {*}
  */
-export function searchResult(data){
+export function searchResult(data) {
   return fetch({
-    url:'/show/searchresult',
-    method:'post',
-    data:data
+    url: '/show/searchresult',
+    method: 'post',
+    data: data
   })
 }
 
@@ -68,11 +55,11 @@ export function deleteAd(data) {
  * @returns {*}
  */
 export function showfilelog(data) {
- return fetch({
-   url: '/show/fileLog.htmls',
-   method: 'post',
-   data: data
- })
+  return fetch({
+    url: '/show/fileLog.htmls',
+    method: 'post',
+    data: data
+  })
 }
 
 /**
@@ -145,12 +132,12 @@ export function showAllAd(data) {
  * @param data
  * @returns {*}
  */
-export function showUserAd(data){
-return fetch({
-  url:'/show/userrecad.htmls',
-  method:'post',
-  data:data
-})
+export function showUserAd(data) {
+  return fetch({
+    url: '/show/userrecad.htmls',
+    method: 'post',
+    data: data
+  })
 }
 
 /**
@@ -158,11 +145,11 @@ return fetch({
  * @param data
  * @returns {*}
  */
-export function showUserUpload(data){
-  return fetch ({
-    url:'/show/allupload.htmls',
-    method:'post',
-    data:data
+export function showUserUpload(data) {
+  return fetch({
+    url: '/show/allupload.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -170,11 +157,11 @@ export function showUserUpload(data){
  * 展示当天的数据
  * @returns {*}
  */
-export function showDayData(data){
+export function showDayData(data) {
   return fetch({
-    url:'/show/daydata.htmls',
-    method:'get',
-    params:data
+    url: '/show/daydata.htmls',
+    method: 'get',
+    params: data
   })
 }
 
@@ -183,11 +170,11 @@ export function showDayData(data){
  * @param data
  * @returns {*}
  */
-export function showWeekData(data){
+export function showWeekData(data) {
   return fetch({
-    url:'/show/weekdata.htmls',
-    method:'get',
-    params:data
+    url: '/show/weekdata.htmls',
+    method: 'get',
+    params: data
   })
 }
 
@@ -196,13 +183,12 @@ export function showWeekData(data){
  * @param data
  * @returns {*}
  */
-export function showMonthData(data){
+export function showMonthData(data) {
   return fetch({
-    url:'/show/monthdata.htmls',
-    method:'get',
-    params:data
-    }
-  )
+    url: '/show/monthdata.htmls',
+    method: 'get',
+    params: data
+  })
 }
 
 /**
@@ -210,11 +196,11 @@ export function showMonthData(data){
  * @param data
  * @returns {*}
  */
-export  function  getDocTree(data){
+export function getDocTree(data) {
   return fetch({
-    url:'/getKindByTree',
-    method:'post',
-    data:data
+    url: '/getKindByTree',
+    method: 'post',
+    data: data
   })
 }
 
@@ -223,11 +209,11 @@ export  function  getDocTree(data){
  * @param data
  * @returns {*}
  */
-export function getDepTree(data){
+export function getDepTree(data) {
   return fetch({
-    url:'/getListByTree',
-    method:'post',
-    data:data
+    url: '/getListByTree',
+    method: 'post',
+    data: data
   })
 }
 
@@ -236,11 +222,11 @@ export function getDepTree(data){
  * @param data
  * @returns {*}
  */
-export function insertDocKind(data){
+export function insertDocKind(data) {
   return fetch({
-    url:'/insert/rule.htmls',
-    method:'post',
-    data:data
+    url: '/insert/rule.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -252,9 +238,9 @@ export function insertDocKind(data){
  */
 export function deleteFile(data) {
   return fetch({
-    url:'/deletefile.htmls',
-    method:'post',
-    data:data
+    url: '/deletefile.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -263,11 +249,11 @@ export function deleteFile(data) {
  * @param data
  * @returns {*}
  */
-export function  insertFile(data) {
+export function insertFile(data) {
   return fetch({
-    url:'insertFile.htmls',
-    method:'post',
-    data:data
+    url: 'insertFile.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -276,11 +262,11 @@ export function  insertFile(data) {
  * @param data
  * @returns {*}
  */
-export function readFile(data){
+export function readFile(data) {
   return fetch({
-    url:'/readfile.htmls',
-    method:'post',
-    data:data
+    url: '/readfile.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -289,11 +275,11 @@ export function readFile(data){
  * @param data
  * @returns {*}
  */
-export function showAllFile(data){
+export function showAllFile(data) {
   return fetch({
-    url:'/show/allFile',
-    method:'post',
-    data:data
+    url: '/show/allFile',
+    method: 'post',
+    data: data
   })
 }
 
@@ -302,11 +288,11 @@ export function showAllFile(data){
  * @param data
  * @returns {*}
  */
-export function showUserLookFile(data){
+export function showUserLookFile(data) {
   return fetch({
-    url:'/show/userlookfile',
-    method:'post',
-    data:data
+    url: '/show/userlookfile',
+    method: 'post',
+    data: data
   })
 }
 
@@ -315,11 +301,11 @@ export function showUserLookFile(data){
  * @param data
  * @returns {*}
  */
-export function updateFile(data){
+export function updateFile(data) {
   return fetch({
-    url:'/updateFile.htmls',
-    method:'post',
-    data:data
+    url: '/updateFile.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -328,11 +314,11 @@ export function updateFile(data){
  * @param data
  * @returns {*}
  */
-export function deleteFilePermission(data){
+export function deleteFilePermission(data) {
   return fetch({
-    url:'/delete/permission.htmls',
-    method:'post',
-    data:data
+    url: '/delete/permission.htmls',
+    method: 'post',
+    data: data
 
   })
 }
@@ -342,11 +328,11 @@ export function deleteFilePermission(data){
  * @param data
  * @returns {*}
  */
-export function lookFileUser(data){
+export function lookFileUser(data) {
   return fetch({
-    url:'/insert/filepermission.htmls',
-    method:'post',
-    data:data
+    url: '/insert/filepermission.htmls',
+    method: 'post',
+    data: data
   })
 }
 
@@ -355,11 +341,11 @@ export function lookFileUser(data){
  * @param data
  * @returns {*}
  */
-export function updateFilePermission(data){
+export function updateFilePermission(data) {
   return fetch({
-    url:'/update/permission.htmls',
-    method:'post',
-    data:data
+    url: '/update/permission.htmls',
+    method: 'post',
+    data: data
   })
 }
 /**
@@ -386,23 +372,23 @@ export function queryadmin(data) {
  * @param data
  * @returns {*}
  */
-export function showFilePermission(data){
+export function showFilePermission(data) {
   return fetch({
-    url:'/show/usermission.htmls',
-    method:'post',
-    data:data
+    url: '/show/usermission.htmls',
+    method: 'post',
+    data: data
   })
-  }
+}
 /**
  * 修改文件类型
  * @param data
  * @returns {*}
  */
-export function updateFileStyleDetail(data){
+export function updateFileStyleDetail(data) {
   return fetch({
-    url:'/update/filestyle',
-    method:'post',
-    data:data
+    url: '/update/filestyle',
+    method: 'post',
+    data: data
   })
 }
 
@@ -411,11 +397,11 @@ export function updateFileStyleDetail(data){
  * @param data
  * @returns {*}
  */
-export function countFileStyle(data){
+export function countFileStyle(data) {
   return fetch({
-    url:'/search/filestyleid',
-    method:'post',
-    data:data
+    url: '/search/filestyleid',
+    method: 'post',
+    data: data
   })
 }
 
@@ -424,11 +410,11 @@ export function countFileStyle(data){
  * @param data
  * @returns {*}
  */
-export function deleteDocRule(data){
+export function deleteDocRule(data) {
   return fetch({
-    url:'/delete/rule.htmls',
-    method:'post',
-    data:data
+    url: '/delete/rule.htmls',
+    method: 'post',
+    data: data
   })
 }
 /**
@@ -436,10 +422,10 @@ export function deleteDocRule(data){
  * @param data
  * @returns {*}
  */
-export function updateDocRule(data){
+export function updateDocRule(data) {
   return fetch({
-    url:'/update/docname.htmls',
-    method:'post',
-    data:data
+    url: '/update/docname.htmls',
+    method: 'post',
+    data: data
   })
 }
