@@ -15,9 +15,6 @@ import log from '@/views/allfiles/logs'//全部文件/查看文件/文件日志
 import change from '@/views/allfiles/change'//全部文件/修改文件
 import Login from '@/views/login/index' //登录页面
 import homeIndex from '@/views/home/index'    //管理员主页或者个人首页
-import ueditor from '@/components/setUeditor'    //管理员主页或者个人首页
-
-
 Vue.use(Router);
 
 
@@ -30,14 +27,6 @@ const constantRouteMap = [{
     component: Home,
     redirect: '/home',
     children: [
-
-      {
-        path: '/ueditor',
-        component:ueditor,
-        meta:{
-          pname: '首页'
-        }
-      },
       {
         path: '/home',
         component: homeIndex,
