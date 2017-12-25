@@ -28,12 +28,11 @@
           <div class="hello">
               <!-- <Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor> -->
               <div id="editorElem" style="text-align:left;width:900px"></div>
-              <Button v-on:click="getEditorContent" type="primary">保存内容</Button>
           </div>
         </FormItem>
         <FormItem label="上传附件：">
           <div class="uploadBtn">
-            <Button type="primary" size="small" @click="uploadDoc=true">上传附件</Button>
+            <Button type="primary" size="small" @click="showUploadModel">上传附件</Button>
           </div>
           <Row v-for='(item,index) in fujainList' :key='index'>
             <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
@@ -101,7 +100,7 @@
             ref="fujianupload"
             :show-upload-list="true"
             multiple
-            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','zip','rar']"
+            :format="[]"
             :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
@@ -194,7 +193,8 @@ export default {
         department: ""
       },
       uploadDoc: false,
-      isBanDuan: true
+      isBanDuan: true,
+      editorContent:''
     };
   },
   components: {
@@ -274,6 +274,7 @@ export default {
           title: "保存当前内容",
           content: "<p>是否保存当前编辑的内容</p>",
           onOk: () => {
+            this.getEditorContent();
             this.getLookTreeList(this.depTree);
             this.getEditTreeList(this.editdepTree);
             this.getDelTreeList(this.deldepTree);
@@ -295,6 +296,25 @@ export default {
             next();
           },
           onCancel: () => {
+            this.getEditorContent();
+            this.getLookTreeList([]);
+            this.getEditTreeList([]);
+            this.getDelTreeList([]);
+            this.setHasSaveContent(false);
+            this.getdeleteFileParams(null);
+            this.getupdateFileParams(null);
+            this.getlookFileParams(null);
+            this.getTitle('');
+            this.getFileStyle('');
+            this.getFileStyleId('0'),
+            this.getPhotoUrl(''),
+            this.getFileUrl(''),
+            this.getContent(''),
+            this.getFujainList([]);
+            this.getFilesize('');
+            this.getDescrible('');
+            this.getFileType('');
+            this.getPhotoUrlList([]);
             next();
           }
         });
@@ -326,6 +346,10 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
+    showUploadModel(){
+      this.uploadDoc=true;
+      this.uploadDescription=''
+    },
     getEditorContent() {
       this.uploadForm.content = this.editorContent;
       console.log(this.editorContent);
@@ -344,6 +368,7 @@ export default {
     },
     pichandleSuccess(res, file) {
       this.uploadForm.photourl = res.data;
+      console.log(this.$refs.upload)
     },
     pichandleBeforeUpload(file) {
       const check = this.picuploadList.length < 1;
@@ -470,6 +495,9 @@ export default {
           if (res.data.code == 0) {
             console.log("新建文件成功");
             this.lookFileParams.fileId = res.data.data;
+            this.lookFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
+            this.updateFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
+            this.deleteFileParams.userIds=this.lookFileParams.userIds+","+sessionStorage.getItem('userId')
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
             console.log(res.data.data);
@@ -502,7 +530,7 @@ export default {
                               console.log("设置删除权限成功");
                               this.submitLoading = false;
                               this.isBanDuan = false;
-                              this.$Message.success("上传成功,1s后少跳转到历史上传界面");
+                              this.$Message.success("上传成功,2s后少跳转到历史上传界面");
                               setTimeout(() => {
                                 this.$router.push("/hisupload");
                               }, 1000);
@@ -569,6 +597,7 @@ export default {
     },
     handleSubmit(name) {
       // 将文件上传中所有输入的信息已保存在uploadForm中
+      this.getEditorContent();
       if (this.uploadForm.title == "") {
         this.$Message.warning("请填写文件标题");
         return;
