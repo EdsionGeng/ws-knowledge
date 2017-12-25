@@ -51,7 +51,7 @@
             </TabPane>
             <TabPane label="可编辑人员" name="name2">
               <div>
-                <Tree :data="editdepTree" show-checkbox multiple :render="renderContentDep"
+                <Tree :data="editdepTree" show-checkbox  multiple :render="renderContentDep"
                       @on-check-change='chooseEditPeople'>>
                 </Tree>
               </div>
@@ -112,7 +112,7 @@
           </Upload>
         </FormItem>
         <FormItem label=" 文件描述：">
-          <Input v-model="uploadDescription" placeholder="" style="width: 200px" placeholder='描述内容'></Input>
+          <Input v-model="uploadDescription"  style="width: 200px" placeholder='描述内容'></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -419,6 +419,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
+        console.log(res.data)
       });
     },
     showeditDepTree() {
