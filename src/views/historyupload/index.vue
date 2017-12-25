@@ -102,6 +102,7 @@
               this.page = res.data.rdPage;
               console.log(this.page)
               this.historyUploadMessageList = showUserUpdata.data;
+              this.historyUploadpicMessageList=showUserUpdata.data;
             }
           })
           .catch(err => {

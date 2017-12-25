@@ -139,6 +139,7 @@
             if (res.data.code == 0) {
               this.page = res.data.rdPage;
               this.userLookFileList = showUserUpdata.data;
+              this.userLookpicFileList = showUserUpdata.data;
             }
           })
           .catch(err => {
