@@ -12,65 +12,62 @@
 </div>
 </template>
 <script>
-import pageTitle from './PageTitle'
-import vHeader from './Header'
-import vSideBar from './SideBar'
+import pageTitle from "./PageTitle";
+import vSideBar from "./SideBar";
 export default {
-    name:'home',
-    data(){
-        return{
-           breaddata:[],
-        }
-    },
-    components:{
-      vSideBar,pageTitle
-    },
-    created(){
-        this.initBreadData();
-    },
-    watch: {
-        $route: "initBreadData"
-    },
-    methods: {
-        initBreadData() {
-        const pname = this.$route.meta.pname;
-        const cname = this.$route.meta.cname;
-        const tname = this.$route.meta.tname;
-        const lname = this.$route.meta.lname;
-        this.breaddata = [];
-        if (cname != "首页") {
-            this.breaddata.push({
-            name: pname,
-            to: {}
-            });
-            if(cname!==undefined)
-            this.breaddata.push({
+  name: "home",
+  data() {
+    return {
+      breaddata: []
+    };
+  },
+  components: {
+    vSideBar,
+    pageTitle
+  },
+  created() {
+    this.initBreadData();
+  },
+  watch: {
+    $route: "initBreadData"
+  },
+  methods: {
+    initBreadData() {
+      const pname = this.$route.meta.pname;
+      const cname = this.$route.meta.cname;
+      const tname = this.$route.meta.tname;
+      const lname = this.$route.meta.lname;
+      this.breaddata = [];
+      if (cname != "首页") {
+        this.breaddata.push({
+          name: pname,
+          to: {}
+        });
+        if (cname !== undefined)
+          this.breaddata.push({
             name: cname,
-            to: {
-            }
-            });
-             if(tname!==undefined)
-            this.breaddata.push({
+            to: {}
+          });
+        if (tname !== undefined)
+          this.breaddata.push({
             name: tname,
-            to: {
-            }
-            });
-             if(lname!==undefined)
-            this.breaddata.push({
+            to: {}
+          });
+        if (lname !== undefined)
+          this.breaddata.push({
             name: lname,
-            to: {
-            }
-            });
-            }
-        }
+            to: {}
+          });
+      }
     }
-}
+  }
+};
 </script>
 <style scoped>
 
 </style>
 <style>
-    .wslayout {
+.wslayout {
   background: #f5f7f9;
   position: relative;
   height: 100%;

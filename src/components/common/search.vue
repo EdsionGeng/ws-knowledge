@@ -11,7 +11,7 @@
 
 </template>
 <script>
-  import {mapMutations} from 'vuex';
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -19,7 +19,7 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['getSearchKey']),
+    ...mapMutations(["getSearchKey"]),
     changekeyRouter(name) {
       console.log(this.inputValue);
       if (this.inputValue === "") {

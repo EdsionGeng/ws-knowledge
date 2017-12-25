@@ -31,9 +31,9 @@ export default {
     this.showDepTree();
   },
   methods: {
-    clearmeun(event){
-      if(event.target.tagName==='INPUT'){
-       this.showMenu = !this.showMenu
+    clearmeun(event) {
+      if (event.target.tagName === "INPUT") {
+        this.showMenu = !this.showMenu;
       }
     },
     showDepTree() {
@@ -51,7 +51,7 @@ export default {
         {
           style: {
             cursor: "pointer",
-             paddingRight:'10px'
+            paddingRight: "10px"
           },
           on: {
             click: () => {
@@ -70,9 +70,9 @@ export default {
 };
 </script>
 <style>
-.showmenubox .ivu-tree-arrow{
-  padding:0px 8px;
-  width:auto;
+.showmenubox .ivu-tree-arrow {
+  padding: 0px 8px;
+  width: auto;
 }
 </style>
 

@@ -29,162 +29,146 @@
   </div>
 </template>
 <script>
-  import {showUserAd} from "../../api/all_interface";
-  import {showAdPcs} from "../../api/all_interface";
-  import {showUserLookFile} from '../../api/all_interface'
+import { showUserAd } from "../../api/all_interface";
+import { showAdPcs } from "../../api/all_interface";
+import { showUserLookFile } from "../../api/all_interface";
 
-  export default {
-    data() {
-      return {
-        //当前公告的详细信息
-        mymessageDetail: {
-          MyMessageListTitle: '',
-          MyMessageupdate: '',
-          AddUser: '',
-          MyMessageMsg: '',
-          readed: 0,
-          noreaded: 0
+export default {
+  data() {
+    return {
+      //当前公告的详细信息
+      mymessageDetail: {
+        MyMessageListTitle: "",
+        MyMessageupdate: "",
+        AddUser: "",
+        MyMessageMsg: "",
+        readed: 0,
+        noreaded: 0
+      },
+      MyMessageList: [],
+      newMessageList: [],
+
+      mesDetail: [],
+      params: null,
+      //modal信息
+      title: "",
+      modal1: false,
+
+      data: {
+        current: 1,
+        pageSize: 5,
+        userId: sessionStorage.getItem("userId")
+      },
+      newdata: {
+        current: 1,
+        pageSize: 10,
+        userId: sessionStorage.getItem("userId"),
+        userGroupId: sessionStorage.getItem("userGroupId")
+      },
+      columns1: [
+        {
+          title: "标题",
+          key: "at"
         },
-        MyMessageList: [],
-        newMessageList: [],
-
-        mesDetail: [],
-        params: null,
-        //modal信息
-        title: '',
-        modal1: false,
-
-        data: {
-          current: 1,
-          pageSize: 5,
-          userId: sessionStorage.getItem('userId')
+        {
+          title: "发布时间",
+          key: "re",
+          sortType: "desc",
+          align: "right"
+        }
+      ],
+      columns2: [
+        {
+          title: "标题",
+          key: "title"
         },
-        newdata: {
-          current: 1,
-          pageSize: 10,
-          userId: sessionStorage.getItem('userId'),
-          userGroupId: sessionStorage.getItem('userGroupId')
+        {
+          title: "发布时间",
+          key: "addFileTime",
+          sortType: "desc",
+          align: "right"
         }
-        ,
-        columns1: [
-          {
-            title: '标题',
-            key: 'at',
-          },
-          {
-            title: '发布时间',
-            key: 're',
-            sortType: 'desc',
-            align: 'right',
-          }
-        ],
-        columns2: [
-          {
-            title: '标题',
-            key: 'title',
-          },
-          {
-            title: '发布时间',
-            key: 'addFileTime',
-            sortType: 'desc',
-            align: 'right',
-          }
-        ]
-      }
+      ]
+    };
+  },
+  mounted() {
+    this.initUserAd();
+    this.initUserLookFile();
+  },
+  methods: {
+    changeRoute(name) {
+      this.$router.push("/" + name);
     },
-    mounted() {
-      this.initUserAd();
-      this.initUserLookFile();
+
+    onRowClick(row, index) {
+      this.params = {
+        commonId: row.commonId
+      };
+
+      showAdPcs(this.params)
+        .then(res => {
+          const data = res.data;
+          console.log(res.data);
+          if (data.code == 0) {
+            this.mymessageDetail.MyMessageListTitle = row.at;
+            this.mymessageDetail.MyMessageupdate = row.re;
+            this.mymessageDetail.AddUser = row.AddUser;
+            var reg = new RegExp("<br>", "g");
+            this.mymessageDetail.MyMessageMsg = row.ad.replace(reg, "\n");
+            this.mymessageDetail.readed = data.data.isRead;
+            this.mymessageDetail.noreaded = data.data.noRead;
+          }
+        })
+        .catch(err => {});
+      this.modal1 = true;
     },
-    methods: {
-      changeRoute(name) {
-        this.$router.push('/' + name);
-      },
-
-      onRowClick(row, index) {
-        this.params = {
-          commonId: row.commonId
-        };
-
-        showAdPcs(this.params).then(
-          res => {
-            const data = res.data;
-            console.log(res.data);
-            if (data.code == 0) {
-              this.mymessageDetail.MyMessageListTitle = row.at
-              this.mymessageDetail.MyMessageupdate = row.re
-              this.mymessageDetail.AddUser = row.AddUser;
-              var reg = new RegExp("<br>","g");
-              //console.info(row.adContent.replace(reg,"\n"))
-              //this.singleMessageDetail.Content =  row.adContent.replace(reg,"\n");
-              this.mymessageDetail.MyMessageMsg = row.ad.replace(reg,"\n");
-              this.mymessageDetail.readed = data.data.isRead
-              this.mymessageDetail.noreaded = data.data.noRead
-            }
+    showNewMessageList(row, index) {
+      this.$router.push("/allfiles/check/" + row.id);
+    },
+    initUserLookFile() {
+      showUserLookFile(this.newdata)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            // console.log(this.MyMessageList)
+            this.newMessageList = data.data;
+            //console.log(this.newMessageList)
+            this.page = data.rdPage;
+            //console.log(data.rdPage)
           }
-        )
-          .catch(err => {
-          });
-        this.modal1 = true;
-      },//点击获取显示公告详情
-      showNewMessageList(row, index) {
-        this.$router.push('/allfiles/check/' + row.id);
-      },
-      //个人能看到的最新上传的文件后台获取
-      initUserLookFile() {
-        showUserLookFile(this.newdata).then(
-          res => {
-            const data = res.data;
-            if (data.code == 0) {
-              // console.log(this.MyMessageList)
-              this.newMessageList = data.data;
-              //console.log(this.newMessageList)
-              this.page = data.rdPage;
-              //console.log(data.rdPage)
-            }
+        })
+        .catch(err => {});
+    },
+    initUserAd() {
+      showUserAd(this.data)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            console.log(this.MyMessageList);
+            this.MyMessageList = data.data;
           }
-        )
-          .catch(err => {
-          });
-      },
-      // 我的消息初始化函数
-      initUserAd() {
-        showUserAd(this.data)
-          .then(res => {
-            const data = res.data;
-//            console.log('----');
-//            console.log(res);
-            if (data.code == 0) {
-              console.log(this.MyMessageList);
-              this.MyMessageList = data.data;
-            }
-          })
-          .catch(err => {
-          });
-      },
-      //改变未读行的数据的color （row,index）是获取当前行的row的信息和当前行的index下标
-      rowClassName(row, index) {
-        if (row.ifRead === 0) {
-          return 'demo-table-info-row';
-        }
+        })
+        .catch(err => {});
+    },
+    rowClassName(row, index) {
+      if (row.ifRead === 0) {
+        return "demo-table-info-row";
       }
     }
   }
+};
 </script>
 <style>
-  .ivu-table .demo-table-info-row td {
-    color: #2d8cf0;
-  }
-
-  .myTable .ivu-table-body tr {
-    cursor: pointer;
-  }
+.ivu-table .demo-table-info-row td {
+  color: #2d8cf0;
+}
+.myTable .ivu-table-body tr {
+  cursor: pointer;
+}
 </style>
 
 <style scoped>
-  .mycenter {
-    padding: 20px;
-  }
-
-
+.mycenter {
+  padding: 20px;
+}
 </style>

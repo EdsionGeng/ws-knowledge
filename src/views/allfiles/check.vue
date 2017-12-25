@@ -71,204 +71,202 @@
   </div>
 </template>
 <script>
-  import iconLine from "@/components/common/iconline";
-  import {getFileDetail} from "@/api/all_interface";
-  import {readFile} from "@/api/all_interface";
-  import {showfilelog} from "@/api/all_interface";
-  import {deletesinglefile} from "@/api/all_interface";
-  import {showFilePermission} from "@/api/all_interface";
-  export default {
-    data() {
-      return {
-        readFileparams: {
-          fileId: this.$route.params.id,
-          userId: sessionStorage.getItem("userId")
+import iconLine from "@/components/common/iconline";
+import { getFileDetail } from "@/api/all_interface";
+import { readFile } from "@/api/all_interface";
+import { showfilelog } from "@/api/all_interface";
+import { deletesinglefile } from "@/api/all_interface";
+import { showFilePermission } from "@/api/all_interface";
+export default {
+  data() {
+    return {
+      readFileparams: {
+        fileId: this.$route.params.id,
+        userId: sessionStorage.getItem("userId")
+      },
+      filelogParams: {
+        fileId: this.$route.params.id,
+        current: 1,
+        pageSize: 3
+      },
+      fileDetailParams: {
+        fileId: this.$route.params.id
+      },
+      delfileParams: {
+        fileId: this.$route.params.id,
+        userId: sessionStorage.getItem("userId")
+      },
+      columns5: [
+        {
+          title: "操作部门",
+          key: "departmentName"
         },
-        filelogParams: {
-          fileId: this.$route.params.id,
-          current: 1,
-          pageSize: 3
+        {
+          title: "姓名",
+          key: "username"
         },
-        fileDetailParams: {
-          fileId: this.$route.params.id
+        {
+          title: "时间",
+          key: "operationTime",
+          sortType: "desc"
         },
-        delfileParams: {
-          fileId: this.$route.params.id,
-          userId: sessionStorage.getItem("userId")
-        },
-        columns5: [
-          {
-            title: "操作部门",
-            key: "departmentName"
-          },
-          {
-            title: "姓名",
-            key: "username"
-          },
-          {
-            title: "时间",
-            key: "operationTime",
-            sortType: "desc"
-          },
-          {
-            title: "操作类型",
-            key: "operation"
-          }
-        ],
-        historyUploadMessageList: [],
-        fujainList: [],
-        fujainDetail: null,
-        canChange: false,
-        canDel: false,
-        fileDetailUrl: "",
-        fileDetailSize: "",
-        fileDetaildescible: "",
-        fileDetails: {
-          photoUrl: "",
-          title: "",
-          username: "",
-          departmentName: "",
-          addFileTime: "",
-          fileStyle: "",
-          fileContent: ""
+        {
+          title: "操作类型",
+          key: "operation"
         }
-      };
-    },
-    components: {
-      iconLine
-    },
-    computed:{
-      imgUrl(){   
-            return 'http://192.168.3.26:8011/'+this.fileDetails.photoUrl;    
+      ],
+      historyUploadMessageList: [],
+      fujainList: [],
+      fujainDetail: null,
+      canChange: false,
+      canDel: false,
+      fileDetailUrl: "",
+      fileDetailSize: "",
+      fileDetaildescible: "",
+      fileDetails: {
+        photoUrl: "",
+        title: "",
+        username: "",
+        departmentName: "",
+        addFileTime: "",
+        fileStyle: "",
+        fileContent: ""
       }
-    },
-    mounted() {
-      this.initreadFile();
-      this.initFileLog();
-      this.initFileDetail();
-      this.showFilePower();
-      console.log(this.$route.params.id);
-    },
-    methods: {
-      showFilePower() {
-        showFilePermission(this.readFileparams)
-          .then(res => {
-            console.log("用户id对文件的权限");
-            if (res.data.code == 0) {
-              const data = res.data.data;
-              console.log(res)
-              if (data.updateFile === 0) {
-                this.canChange = false;
-              } else if (data.updateFile === 1) {
-                this.canChange = true;
-              }
-              if (data.deleteFile === 0) {
-                this.canDel = false;
-              } else if (data.deleteFile === 1) {
-                this.canDel = true;
-              }
-            }
-          })
-          .catch(err => {
-          });
-      },
-      initFileDetail() {
-        getFileDetail(this.fileDetailParams)
-          .then(res => {
-            console.log("文件的详情");
-            console.log(res.data.code == 0);
-            if (res.data.code == 0) {
-              this.fileDetails = res.data.data;
-              console.log(this.fileDetails)
-              if(this.fileDetails.fileUrl!==''){
-                    this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
-                    this.fileDetailSize = this.fileDetails.fileSize.split(",");
-                    this.fileDetaildescible = this.fileDetails.enclosureInfo.split(",");
-                    this.fujainList = [];
-                    console.log(this.fileDetailUrl)
-                    for (let i = 0; i < this.fileDetailUrl.length; i++) {
-                        let fujainDetail = {};
-                        fujainDetail.fileSize = this.fileDetailSize[i];
-                        fujainDetail.title = this.fileDetailUrl[i].slice(15);
-                        fujainDetail.url = this.fileDetailUrl[i];
-                        fujainDetail.description = this.fileDetaildescible[i];
-                        this.fujainList.push(fujainDetail);
-                        console.log(this.fujainList);
-                  }
-              }             
-            }
-          })
-          .catch(err => {
-          });
-      },
-      initFileLog() {
-        showfilelog(this.filelogParams)
-          .then(res => {
-            console.log(res);
-            const showUserUpdata = res.data;
-            console.log("查看个人日志记录");
-            console.log(showUserUpdata);
-            if (res.data.code == 0) {
-              this.page = res.data.rdPage;
-              this.historyUploadMessageList = showUserUpdata.data;
-            }
-          })
-          .catch(err => {
-          });
-      },
-      initreadFile() {
-        readFile(this.readFileparams).then(res => {
-          console.log("文件的阅读");
-          console.log(res);
-        });
-      },
-      goRouter() {
-        this.$router.back();
-      },
-      changeRouter(name) {
-        console.log(this.$route.params.id);
-        console.log(name);
-        this.$router.push(name + this.$route.params.id);
-      },
-      delFile() {
-        this.$Modal.confirm({
-          content: "<h3>确定要删除么！！！</h3>",
-          onOk: () => {
-            deletesinglefile(this.delfileParams)
-              .then(res => {
-                console.log(res.data);
-                if (res.data.code === 0) {
-                  this.$Message.warning("您删除了该文件");
-                  this.$router.push('/')
-                } else {
-                  this.$Message.error("操作发生错误");
-                }
-              })
-              .catch(err => {
-              });
-          },
-
-          onCancel: () => {
-            this.$Message.success("您取消了该操作");
-          }
-        });
-      }
+    };
+  },
+  components: {
+    iconLine
+  },
+  computed: {
+    imgUrl() {
+      return "http://192.168.3.26:8011/" + this.fileDetails.photoUrl;
     }
-  };
+  },
+  mounted() {
+    this.initreadFile();
+    this.initFileLog();
+    this.initFileDetail();
+    this.showFilePower();
+    console.log(this.$route.params.id);
+  },
+  methods: {
+    showFilePower() {
+      showFilePermission(this.readFileparams)
+        .then(res => {
+          console.log("用户id对文件的权限");
+          if (res.data.code == 0) {
+            const data = res.data.data;
+            console.log(res);
+            if (data.updateFile === 0) {
+              this.canChange = false;
+            } else if (data.updateFile === 1) {
+              this.canChange = true;
+            }
+            if (data.deleteFile === 0) {
+              this.canDel = false;
+            } else if (data.deleteFile === 1) {
+              this.canDel = true;
+            }
+          }
+        })
+        .catch(err => {});
+    },
+    initFileDetail() {
+      getFileDetail(this.fileDetailParams)
+        .then(res => {
+          console.log("文件的详情");
+          console.log(res.data.code == 0);
+          if (res.data.code == 0) {
+            this.fileDetails = res.data.data;
+            console.log(this.fileDetails);
+            if (this.fileDetails.fileUrl !== "") {
+              this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
+              this.fileDetailSize = this.fileDetails.fileSize.split(",");
+              this.fileDetaildescible = this.fileDetails.enclosureInfo.split(
+                ","
+              );
+              this.fujainList = [];
+              console.log(this.fileDetailUrl);
+              for (let i = 0; i < this.fileDetailUrl.length; i++) {
+                let fujainDetail = {};
+                fujainDetail.fileSize = this.fileDetailSize[i];
+                fujainDetail.title = this.fileDetailUrl[i].slice(15);
+                fujainDetail.url = this.fileDetailUrl[i];
+                fujainDetail.description = this.fileDetaildescible[i];
+                this.fujainList.push(fujainDetail);
+                console.log(this.fujainList);
+              }
+            }
+          }
+        })
+        .catch(err => {});
+    },
+    initFileLog() {
+      showfilelog(this.filelogParams)
+        .then(res => {
+          console.log(res);
+          const showUserUpdata = res.data;
+          console.log("查看个人日志记录");
+          console.log(showUserUpdata);
+          if (res.data.code == 0) {
+            this.page = res.data.rdPage;
+            this.historyUploadMessageList = showUserUpdata.data;
+          }
+        })
+        .catch(err => {});
+    },
+    initreadFile() {
+      readFile(this.readFileparams).then(res => {
+        console.log("文件的阅读");
+        console.log(res);
+      });
+    },
+    goRouter() {
+      this.$router.back();
+    },
+    changeRouter(name) {
+      console.log(this.$route.params.id);
+      console.log(name);
+      this.$router.push(name + this.$route.params.id);
+    },
+    delFile() {
+      this.$Modal.confirm({
+        content: "<h3>确定要删除么！！！</h3>",
+        onOk: () => {
+          deletesinglefile(this.delfileParams)
+            .then(res => {
+              console.log(res.data);
+              if (res.data.code === 0) {
+                this.$Message.warning("您删除了该文件");
+                this.$router.push("/");
+              } else {
+                this.$Message.error("操作发生错误");
+              }
+            })
+            .catch(err => {});
+        },
+
+        onCancel: () => {
+          this.$Message.success("您取消了该操作");
+        }
+      });
+    }
+  }
+};
 </script>
 <style scoped>
-  .checkpage {
-    padding-left: 30px;
-    font-size: 14px;
-    color: #333;
-  }
+.checkpage {
+  padding-left: 30px;
+  font-size: 14px;
+  color: #333;
+}
 
-  .right-col .ivu-row-flex-center {
-    line-height: 40px;
-  }
+.right-col .ivu-row-flex-center {
+  line-height: 40px;
+}
 
-  .filecontent {
-    min-height: 160px;
-    padding: 30px 0px;
-  }
+.filecontent {
+  min-height: 160px;
+  padding: 30px 0px;
+}
 </style>

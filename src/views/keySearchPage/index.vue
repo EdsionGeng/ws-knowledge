@@ -1,20 +1,5 @@
 <template>
   <div class="page">
-    <!-- <Row align='middle' class='clearfix' style='margin-bottom:20px'>
-      <Col span="1" offset=2 style='height:30px;line-height:30px;padding-left:20px;'>
-      部门:</Col>
-      <Col span="6">
-      <SelectTree :myvalue='depTypeKey'></SelectTree>
-      </Col>
-      <Col span="1" style='height:30px;line-height:30px;padding-left:20px;'>
-      类型:</Col>
-      <Col span="6">
-      <docTree :myvalue='docTypeKey'></docTree>
-      </Col>
-      </Col>
-      <Button type='primary' @click="selAllFile">查询</Button>
-      </Col>
-    </Row> -->
     <Row>
       <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
       <Tabs type="card" @on-click='changePic'>
@@ -56,126 +41,117 @@
   </div>
 </template>
 <script>
-  import SelectTree from '@/components/common/selectTree'
-  import docTree from '@/components/common/docTree'
-  import {searchResult} from "../../api/all_interface";
-  import {mapState} from 'vuex';
+import { searchResult } from "../../api/all_interface";
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      docTypeKey: {
+        value: "",
+        id: 0
+      },
+      depTypeKey: {
+        value: ""
+      },
+      selectValue: "",
+      imgUrl: "./bg.jpg",
+      pageOpts: [20, 40, 60, 100],
+      listparams: {
+        current: 1,
+        pageSize: 20,
+        userId: sessionStorage.getItem("userId"),
+        searchContent: this.$route.params.key
+      },
+      num: 0,
+      deptlist: [],
+      fileparams: null,
+      page: { total: 20, pages: 1, current: 1, pageSize: 20 },
+      mymessageDetail: {
+        MyMessageListTitle: "",
+        MyMessageupdate: "",
+        AddUser: "",
+        MyMessageMsg: "",
+        readed: 0,
+        noreaded: 0
+      },
+      columns1: [
+        {
+          title: "标题",
+          key: "title"
+        },
 
-  export default {
-    data() {
-      return {
-        docTypeKey: {
-          value: '',
-          id: 0
+        {
+          title: "发布时间",
+          key: "addFileTime",
+          sortable: true,
+          align: "center"
         },
-        depTypeKey: {
-          value: ''
-        },
-        selectValue: '',
-        imgUrl: "./bg.jpg",
-        pageOpts: [20, 40, 60, 100],
-        listparams: {
-          current: 1,
-          pageSize: 20,
-          userId: sessionStorage.getItem('userId'),
-          searchContent: this.$route.params.key
-        },
-        num: 0,
-        deptlist: [],
-        fileparams: null,
-        page: {total: 20, pages: 1, current: 1, pageSize: 20},
-        mymessageDetail: {
-          MyMessageListTitle: "",
-          MyMessageupdate: "",
-          AddUser: "",
-          MyMessageMsg: "",
-          readed: 0,
-          noreaded: 0
-        },
-        columns1: [
-          {
-            title: "标题",
-            key: "title"
-          },
-
-          {
-            title: "发布时间",
-            key: "addFileTime",
-            sortable: true,
-            align: 'center'
-
-          },
-          {
-            title: "上传人",
-            key: "username",
-            align: "right"
-          }
-        ],
-        historyUploadpicMessageList: [],
-        historyUploadMessageList: []
-      };
-    },
-    watch: {
-      searchKey() {
-        this.initList();
+        {
+          title: "上传人",
+          key: "username",
+          align: "right"
+        }
+      ],
+      historyUploadpicMessageList: [],
+      historyUploadMessageList: []
+    };
+  },
+  watch: {
+    searchKey() {
+      this.initList();
+    }
+  },
+  computed: {
+    ...mapState(["searchKey"])
+  },
+  mounted() {
+    this.initList();
+  },
+  methods: {
+    changePic(name) {
+      console.log(name);
+      if (name === "pic") {
+        this.historyUploadpicMessageList = this.historyUploadMessageList;
+      } else {
+        this.historyUploadpicMessageList = [];
       }
     },
-    computed: {
-      ...mapState(['searchKey'])
-    },
-    mounted() {
+    selAllFile() {
+      this.listparams.departmentName = this.depTypeKey.value;
+      this.listparams.fileStyleId = this.docTypeKey.id;
+      console.log(this.listparams);
       this.initList();
     },
-    components: {
-      SelectTree, docTree
+    onRowClick(row) {
+      this.$router.push("/allfiles/check/" + row.id);
     },
-    methods: {
-      changePic(name) {
-        console.log(name)
-        if (name === 'pic') {
-          this.historyUploadpicMessageList = this.historyUploadMessageList;
-        } else {
-          this.historyUploadpicMessageList = []
-        }
-      },
-      selAllFile() {
-        this.listparams.departmentName = this.depTypeKey.value;
-        this.listparams.fileStyleId = this.docTypeKey.id;
-        console.log(this.listparams);
-        this.initList();
-      },
-      onRowClick(row) {
-        this.$router.push("/allfiles/check/" + row.id);
-      },
-      onPageChange(value) {
-        this.listparams.current = value;
-        this.initList();
-      },
-      onPageSizeChange(value) {
-        this.listparams.pageSize = value;
-        this.initList();
-      },
-      initList() {
-        console.log(this.listparams);
-        this.listparams.searchContent=this.$route.params.key;
-        searchResult(this.listparams)
-          .then(res => {
-            const showUserUpdata = res.data;
-            if (res.data.code == 0) {
-              console.log(res.data)
-              this.page = res.data.rdPage;
-              this.historyUploadMessageList = showUserUpdata.data;
-            }
-          })
-          .catch(err => {
-          });
-      }
+    onPageChange(value) {
+      this.listparams.current = value;
+      this.initList();
+    },
+    onPageSizeChange(value) {
+      this.listparams.pageSize = value;
+      this.initList();
+    },
+    initList() {
+      console.log(this.listparams);
+      this.listparams.searchContent = this.$route.params.key;
+      searchResult(this.listparams)
+        .then(res => {
+          const showUserUpdata = res.data;
+          if (res.data.code == 0) {
+            console.log(res.data);
+            this.page = res.data.rdPage;
+            this.historyUploadMessageList = showUserUpdata.data;
+          }
+        })
+        .catch(err => {});
     }
-  };
+  }
+};
 </script>
 <style scoped>
-  .page {
-    padding: 20px 10px;
-  }
-
+.page {
+  padding: 20px 10px;
+}
 </style>

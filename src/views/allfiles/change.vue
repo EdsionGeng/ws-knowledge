@@ -6,7 +6,7 @@
           <Input v-model="uploadForm.title" style="width: 200px;color:#333" disabled></Input>
         </FormItem>
         <FormItem label="文档类型：" prop="value">
-          <docTree :myvalue='uploadForm' ref='myUeditor'></docTree>
+          <docTree :myvalue='uploadForm'></docTree>
         </FormItem>
         <FormItem label="封面：">
           <div>
@@ -22,10 +22,6 @@
               action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
-            <div v-if="file !== null"> 所选文件: {{ file.name }}
-              <Button type="text" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '取消' : ' 确定上传？' }}
-              </Button>
-            </div>
           </div>
         </FormItem>
         <FormItem label="内容：" prop='content'>
@@ -33,14 +29,12 @@
             <!-- <Ueditor :ueditorContent='uploadForm'></Ueditor> -->
              <div id="editorElem1" style="text-align:left;width:700px"></div>
               <Button v-on:click="getEditorContent" type="primary">保存内容</Button>
-              
           </div>
         </FormItem>
         <FormItem label="上传附件：">
           <div class="uploadBtn">
             <Button type="primary" size="small" @click="uploadDoc=true">上传附件</Button>
           </div>
-
        <Row v-for='(item,index) in fujainList' :key='index'>
              <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'>
             </i>
@@ -80,7 +74,6 @@
               </div>
             </TabPane>
           </Tabs>
-
         </FormItem>
         <FormItem>
           <RadioGroup v-model="uploadForm.fileType">
@@ -88,7 +81,6 @@
             <Radio label="1">部门文件</Radio>
             <Radio label="2">公司文件</Radio>
           </RadioGroup>
-
           <div v-if="uploadForm.fileType=='0'">
             仅当前设置的查阅人员可以查看此文件，新入职的人员看不到，如果需要设置某一新入职人员查看该文件，可通过修改查阅人员实现
           </div>
@@ -141,8 +133,8 @@ import { updateFilePermission } from "../../api/all_interface";
 import { deleteFilePermission } from "../../api/all_interface";
 import { getFileDetail } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
-import Vue from 'vue'
-var E=require('wangeditor')
+import Vue from "vue";
+var E = require("wangeditor");
 export default {
   data() {
     return {
@@ -161,7 +153,7 @@ export default {
         fileId: "",
         content: "",
         fileurl: "",
-        photourl: "./bg.jpg",
+        photourl: "",
         describle: "",
         filesize: "",
         value: ""
@@ -194,7 +186,6 @@ export default {
       fileDetailUrl: [],
       fileDetailSize: [],
       fileDetaildescible: [],
-      file: null,
       loadingStatus: false,
       fileloadingStatus: false,
       // 编辑是根据查看人员进行筛选的
@@ -217,36 +208,34 @@ export default {
   },
   components: {
     docTree
-    // Ueditor
   },
   mounted() {
-    
-    var editor=new E('#editorElem1')
-    editor.customConfig.onchange = (html) => {
-          this.editorContent = html
-      };
-    editor.customConfig.zIndex = 100
-    editor.customConfig.showLinkImg = false
+    var editor = new E("#editorElem1");
+    editor.customConfig.onchange = html => {
+      this.editorContent = html;
+    };
+    editor.customConfig.zIndex = 100;
+    editor.customConfig.showLinkImg = false;
     editor.customConfig.uploadImgHeaders = {
-      'Accept' : 'multipart/form-data'
-    }
-   editor.customConfig.uploadImgServer = 'http://192.168.3.26:8011/file/upload.htmls'
-   editor.create();
-  
+      Accept: "multipart/form-data"
+    };
+    editor.customConfig.uploadImgServer =
+      "http://192.168.3.26:8011/file/upload.htmls";
+    editor.create();
     this.initFileDetail();
     this.adminPower();
     this.showDepTree();
     this.showeditDepTree();
     this.showdelDepTree();
   },
-  ready(){
-      editor.txt.html(this.uploadForm.content);
+  ready() {
+    editor.txt.html(this.uploadForm.content);
   },
   methods: {
-     getEditorContent(){
-          this.uploadForm.content=this.editorContent;
-          console.log(this.editorContent)
-      },
+    getEditorContent() {
+      this.uploadForm.content = this.editorContent;
+      console.log(this.editorContent);
+    },
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
         .then(res => {
@@ -274,11 +263,11 @@ export default {
               this.fujainList = [];
               for (let i = 0; i < this.fileDetailUrl.length; i++) {
                 let fujainDetail = {};
-                fujainDetail.size = parseInt(this.fileDetailSize[i]);             
-                fujainDetail.name = this.fileDetailUrl[i].slice(15);              
-                fujainDetail.response ={data:this.fileDetailUrl[i]};               
+                fujainDetail.size = parseInt(this.fileDetailSize[i]);
+                fujainDetail.name = this.fileDetailUrl[i].slice(15);
+                fujainDetail.response = { data: this.fileDetailUrl[i] };
                 fujainDetail.description = this.fileDetaildescible[i];
-                this.fujainList.push(fujainDetail);      
+                this.fujainList.push(fujainDetail);
               }
             } else {
               this.fujainList = [];
@@ -300,7 +289,7 @@ export default {
         });
       } else {
         this.fujainList = fileList;
-        console.log(this.fujainList)
+        console.log(this.fujainList);
       }
     },
     pichandleSuccess(res, file) {
@@ -380,10 +369,6 @@ export default {
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
     },
-    /**
-       * 获取文档树形结构
-       */
-
     showDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
@@ -402,12 +387,6 @@ export default {
         _self.deldepTree = res.data;
       });
     },
-    handleUpload(file) {
-      console.log(1111111);
-      this.file = file;
-      console.log(file);
-      //return false;
-    },  
     docupload() {
       for (let val of this.fujainList) {
         if (!val.hasOwnProperty("description")) {
@@ -428,6 +407,9 @@ export default {
       this.updateFileList.fileId = this.uploadForm.fileId;
       this.updateFileList.content = this.uploadForm.content;
       this.updateFileList.photourl = this.uploadForm.photourl;
+      if (this.insertFileList.photourl === "") {
+        this.insertFileList.photourl = "1514028176737moren1.png";
+      }
       this.updateFileList.describle = this.uploadForm.describle;
       this.updateFileList.fileurl = this.uploadForm.fileurl;
       this.updateFileList.userId = this.uploadForm.userId;
@@ -435,20 +417,17 @@ export default {
       this.updateFileList.fileStyleName = this.uploadForm.value;
       this.updateFileList.fileSize = this.uploadForm.filesize;
       this.updateFileList.fileSpecies = this.uploadForm.fileType;
-      console.log(111111111)
-      console.log(this.updateFileList);
       if (this.lookFileParams.userIds !== "") {
         this.chooseUser = true;
-      };
+      }
       updateFile(this.updateFileList)
         .then(res => {
           if (res.data.code == 0) {
-           
             if (this.chooseUser) {
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
-              console.log(this.lookFileParams.userIds)
+              console.log(this.lookFileParams.userIds);
               lookFileUser(this.lookFileParams)
                 .then(res => {
                   console.log(res.data);
@@ -464,13 +443,13 @@ export default {
                         if (res.data.code == 0) {
                           console.log("设置修改权限成功");
                           if (this.deleteFileParams.userIds === "") {
-                            this.deleteFileParams.userIds =  this.adminIds;
+                            this.deleteFileParams.userIds = this.adminIds;
                           }
                           deleteFilePermission(this.deleteFileParams)
                             .then(res => {
                               console.log(res.data);
                               if (res.data.code == 0) {
-                                console.log("设置删除权限成功");                             
+                                console.log("设置删除权限成功");
                               }
                             })
                             .catch(err => {});
@@ -481,11 +460,11 @@ export default {
                 })
                 .catch(err => {});
             }
-            this.submitLoading = false;                              
-            this.$Message.success("修改成功,1s后少跳转到文件详情页面");
+            this.submitLoading = false;
+            this.$Message.success("修改成功,2s后少跳转到文件详情页面");
             setTimeout(() => {
-              //this.$router.push('/allfiles/check/'+this.$route.params.id);
-            }, 1000);   
+              this.$router.push("/allfiles/check/" + this.$route.params.id);
+            }, 1000);
           }
         })
         .catch(err => {});
@@ -507,16 +486,15 @@ export default {
         })
         .catch(err => {});
     },
-   
     getFileData() {
       // 获得文件大小，名字，和描述
       var newArry = [];
       var filesizeArry = [];
       var filedescribleArry = [];
       for (let i = 0; i < this.fujainList.length; i++) {
-        console.log(1111)
+        console.log(1111);
         newArry.push(this.fujainList[i].response.data);
-        console.log(222)
+        console.log(222);
         filesizeArry.push(this.fujainList[i].size);
         filedescribleArry.push(this.fujainList[i].description);
       }
@@ -525,7 +503,7 @@ export default {
       this.uploadForm.describle = filedescribleArry.join(",");
     },
     handleSubmit() {
-      console.log(this.$refs)
+      console.log(this.$refs);
       // 将文件上传中所有输入的信息已保存在uploadForm中
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");

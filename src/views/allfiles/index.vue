@@ -63,7 +63,6 @@
   export default {
     data() {
       return {
-        //用对象就可以让子组件修改父组件的内容
         docTypeKey: {
           value: "",
           id: 0
@@ -111,7 +110,6 @@
     },
     methods: {
       changePic(name) {
-       // console.log(name)
         if (name === 'pic') {
           this.userLookpicFileList = this.userLookFileList;
         } else {
@@ -135,12 +133,9 @@
         this.initList();
       },
       initList() {
-//        console.log("个人能看到的文件展示列表");
-//        console.log(this.listparams);
         showUserLookFile(this.listparams)
           .then(res => {
             const showUserUpdata = res.data;
-          //  console.log(showUserUpdata);
             if (res.data.code == 0) {
               this.page = res.data.rdPage;
               this.userLookFileList = showUserUpdata.data;

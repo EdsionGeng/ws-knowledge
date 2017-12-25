@@ -16,6 +16,14 @@ export function deletesinglefile(data) {
   })
 }
 
+export function showusermission(data) {
+  return fetch({
+    url: 'showmission/user.htmls',
+    method: 'post',
+    data: data
+  })
+}
+
 /**
  *  得到用户菜单
  * @param data

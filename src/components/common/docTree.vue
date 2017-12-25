@@ -10,38 +10,38 @@
 <script>
 import { getDocTree } from "../../api/all_interface";
 export default {
-    props:["myvalue"],
+  props: ["myvalue"],
   data() {
     return {
       showMenu: false,
-       docTreeList:[],
-        docTreedata:{
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
+      docTreeList: [],
+      docTreedata: {
+        id: "",
+        deptno: "",
+        no: "",
+        pid: "",
+        type: "",
+        checked: "",
+        name: "",
+        department: ""
+      }
     };
   },
-  mounted(){
+  mounted() {
     this.showDocKind();
   },
   methods: {
-     clearmeun(event){
-      if(event.target.tagName==='INPUT'){
-       this.showMenu = !this.showMenu
+    clearmeun(event) {
+      if (event.target.tagName === "INPUT") {
+        this.showMenu = !this.showMenu;
       }
     },
-     showDocKind(){
-      getDocTree(this.docTreedata).then(res=>{
-        if(res.status==200){
-         this.docTreeList=res.data;
+    showDocKind() {
+      getDocTree(this.docTreedata).then(res => {
+        if (res.status == 200) {
+          this.docTreeList = res.data;
         }
-      })
+      });
     },
     renderContent(h, { root, node, data }) {
       return h(
@@ -49,13 +49,13 @@ export default {
         {
           style: {
             cursor: "pointer",
-            paddingRight:'10px'
+            paddingRight: "10px"
           },
           on: {
             click: () => {
-              console.log(data)
-              this.myvalue.id=data.id,
-              this.myvalue.value = data.fileKindName;
+              console.log(data);
+              (this.myvalue.id = data.id),
+                (this.myvalue.value = data.fileKindName);
               this.showMenu = false;
             }
           }
@@ -72,8 +72,8 @@ export default {
 <style scoped>
 .showmenubox {
   border: 1px solid #eee;
-      margin: 5px 0;
-    padding: 5px 0;
+  margin: 5px 0;
+  padding: 5px 0;
   min-width: 200px;
   border-radius: 4px;
   position: absolute;
@@ -82,8 +82,8 @@ export default {
   z-index: 9999;
   background: #fff;
   transform-origin: center top 0px;
-  box-shadow: 0 1px 6px rgba(0,0,0,.2);
-  max-height:200px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  max-height: 200px;
   overflow: auto;
 }
 .showmenubox.hide {

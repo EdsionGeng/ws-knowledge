@@ -23,7 +23,6 @@
               <Option value="公告">公告</Option>
               <Option value="温馨提示">温馨提示</Option>
             </Select>
-
           </FormItem>
           </Col>
           </Col>
@@ -31,8 +30,6 @@
           <Button type="primary" size="large" @click="handleSearch" style="width: 80px">查询</Button>
           </FormItem>
           </Col>
-
-
         </Form>
       </Row>
       <div class="buttonarea">
@@ -51,8 +48,6 @@
         <Col>
         <Table border ref="selection" :columns="AllAdColumns"   :data="AllAdList" stripe
                @on-selection-change="delAdAction" @on-row-dblclick="showAdDetail"></Table>
-        <!--<Table border ref="selection" :columns="AllAdColumns"   :data="AllAdList" stripe-->
-               <!--@on-selection-change="delAdAction" ></Table>-->
         </Col>
       </Row>
       <Page :total="page.total" :page-size-opts='pageOpts' show-sizer :current="page.current" :page-size="page.pageSize"
@@ -66,7 +61,6 @@
       @on-ok="sureSend"
       @on-cancel="cancel">
       <Form ref="insertAdParams" :model="insertAdParams" :label-width="90">
-
         <FormItem prop="adStyle" label="类型：">
           <Select placeholder="请选择" :clearable="true" :rows="4" v-model="insertAdParams.adStyle">
             <Option value="">请选择类型</Option>
@@ -87,10 +81,7 @@
         </FormItem>
 
         <Button type="primary" size="small" @click="chooseUser=true">选择人员</Button>
-
-        <!--<Button type="primary" size="large" @click="sureSend">确定发送</Button>-->
       </Form>
-
     </Modal>
     <Modal
       v-model="chooseUser"
@@ -102,18 +93,10 @@
       <div class="clearfix" style="height:600px;overflow: scroll">
         <Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"
               @on-check-change="circleUser"></Tree>
-        <!--<Tree class="lf" :data="depTree" show-checkbox multiple :render="renderContent"></Tree>-->
         <div class="user-detail rt">
-
-          <!--<Table border ref="circleAdUsers" :columns="showUserGroupColumns" :data="showUserGroup"-->
-          <!--@on-selection-change="chooseSingleUser" v-show="usershow"></Table>-->
         </div>
-        <!--<div class="clearup">-->
-        <!--<Button type="primary" size="large" @click="">确定所勾选人员</Button>-->
-        <!--</div>-->
       </div>
     </Modal>
-
     <Modal
       title=""
       v-model="modal1"
@@ -130,7 +113,6 @@
        <pre> {{singleMessageDetail.Content}}</pre></p>
     </Modal>
 </div>
-
 </template>
 <script>
 import { showAllAd } from "../../api/all_interface";
@@ -140,21 +122,9 @@ import { queryUserByGroup } from "../../api/all_interface";
 import { showAdPcs } from "../../api/all_interface";
 import { insertAd } from "../../api/all_interface";
 import { sendAdToUser } from "../../api/all_interface";
-
 export default {
   data() {
     return {
-      //        showUserGroupColumns: [
-      //          {
-      //            type: 'selection',
-      //            width: 60,
-      //            align: 'center'
-      //          },
-      //          {
-      //            title: "姓名",
-      //            key: "username",
-      //            width: 100,
-      //          }],
       AllAdColumns: [
         {
           type: "selection",
@@ -171,27 +141,12 @@ export default {
         },
         {
           title: "发送人",
-          key: "addUser",
-
+          key: "addUser"
         },
         {
           title: "发送人员",
           key: "sendObject",
-          ellipsis:true,
-//          render: (h, params) => {
-//            return h('Poptip', {
-//              props: {
-//                trigger: 'hover',
-////                title: params.row.people.length + 'customers',
-//                placement: 'bottom'
-//              }
-//            }, [
-////              h('Tag', params.row.people.length),
-//              h('div', {
-//                slot: 'sendObject'
-//              })
-//            ]);
-//          }
+          ellipsis: true
         },
         {
           title: "发送时间",
@@ -341,15 +296,15 @@ export default {
           const data = res.data;
           // console.log(res.data);
           if (data.code == 0) {
-//            console.info("hjhjhj");
-//            console.info(row);
+            //            console.info("hjhjhj");
+            //            console.info(row);
             this.singleMessageDetail.AdTitle = row.adTitle;
             this.singleMessageDetail.addTime = row.sendTime;
             this.singleMessageDetail.AddUser = row.addUser;
-            var reg = new RegExp("<br>","g");
-            console.info(row.adContent.replace(reg,"\n"))
-            this.singleMessageDetail.Content =  row.adContent.replace(reg,"\n");
-            this.singleMessageDetail.readed  = data.data.isRead;
+            var reg = new RegExp("<br>", "g");
+            console.info(row.adContent.replace(reg, "\n"));
+            this.singleMessageDetail.Content = row.adContent.replace(reg, "\n");
+            this.singleMessageDetail.readed = data.data.isRead;
             this.singleMessageDetail.noreaded = data.data.noRead;
           } else {
             this.$Message.warning("网络异常！");
@@ -474,29 +429,29 @@ export default {
         this.$Message.warning("发送对象不能为空！");
         return;
       }
-      let newcontent=this.insertAdParams.content.replace(/\n|\r\n/g,"<br>");
-      this.insertAdParams.content=newcontent;
-//      console.info(this.insertAdParams.content);
-//      debugger
+      let newcontent = this.insertAdParams.content.replace(/\n|\r\n/g, "<br>");
+      this.insertAdParams.content = newcontent;
+      //      console.info(this.insertAdParams.content);
+      //      debugger
       insertAd(this.insertAdParams)
         .then(res => {
           const data = res.data;
           let _self = this;
           if (data.code == 0) {
             _self.sendAdParams.commonId = data.data;
-//            console.info(_self.sendAdParams);
+            //            console.info(_self.sendAdParams);
             sendAdToUser(_self.sendAdParams).then(res => {
               const data = res.data;
-//              console.info(data);
+              //              console.info(data);
               if (data.code === 0) {
-               this.$Message.success("操作成功!");
+                this.$Message.success("操作成功!");
                 this.insertAd = false;
-                this.insertAdParams.title="";
-                this.insertAdParams.content="";
-                this.insertAdParams.sendDepartmentName="";
-                this.insertAdParams.adStyle="";
-                this.sendAdParams.userIds="";
-                this.sendAdParams.commonId="";
+                this.insertAdParams.title = "";
+                this.insertAdParams.content = "";
+                this.insertAdParams.sendDepartmentName = "";
+                this.insertAdParams.adStyle = "";
+                this.sendAdParams.userIds = "";
+                this.sendAdParams.commonId = "";
                 this.showAllAdList();
               }
             });

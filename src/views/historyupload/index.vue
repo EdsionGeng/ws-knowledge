@@ -47,14 +47,13 @@
   export default {
     data() {
       return {
-        modal1: false,
         pageOpts: [10, 20, 30, 40],
         listparams: {
           current: 1,
           pageSize: 20,
           userId: sessionStorage.getItem("userId")
         },
-        page: {total: 10, pages: 1, current: 1, pageSize: 20},
+        page: {total: 20, pages: 1, current: 1, pageSize: 20},
         columns1: [
           {
             title: "标题",
@@ -83,7 +82,6 @@
           this.historyUploadpicMessageList = []
         }
       },
-      //显示文件详情的方法
       onRowClick(row) {
         this.$router.push('/allfiles/check/' + row.id);
       },

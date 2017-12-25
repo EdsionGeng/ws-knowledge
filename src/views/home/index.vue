@@ -10,7 +10,6 @@
 
 </template>
 <style scoped>
-
 </style>
 <script>
   import admin from './admin.vue';

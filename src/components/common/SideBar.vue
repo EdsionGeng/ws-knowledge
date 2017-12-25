@@ -34,47 +34,47 @@
   </div>
 </template>
 <script>
-  import Search from '@/components/common/search';
-  import Vue from 'vue'
-  import {Menu} from 'iview';
+import Search from "@/components/common/search";
+import Vue from "vue";
+import { Menu } from "iview";
 
-  Vue.component('Menu', Menu);
+Vue.component("Menu", Menu);
 //  import {getUserMenus} from '../../api/all_interface'
 
-  export default {
-    data() {
-      return {
-        theme2: 'dark',
-        active: sessionStorage.getItem('isAdmin'),
-        menuListParams: {userId: sessionStorage.getItem('userId')}
-      }
-    },
-    methods: {
-      change(name) {
-        this.$router.push('/' + name);
-      }
-   },
-      components: {
-        Search
-      }
+export default {
+  data() {
+    return {
+      theme2: "dark",
+      active: sessionStorage.getItem("isAdmin"),
+      menuListParams: { userId: sessionStorage.getItem("userId") }
+    };
+  },
+  methods: {
+    change(name) {
+      this.$router.push("/" + name);
     }
+  },
+  components: {
+    Search
+  }
+};
 </script>
 <style scoped>
-  .sidebar {
-    display: block;
-    position: absolute;
-    width: 240px;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background: #495060;
-    overflow-y: auto;
-  }
+.sidebar {
+  display: block;
+  position: absolute;
+  width: 240px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #495060;
+  overflow-y: auto;
+}
 </style>
 <style>
-  .ivu-menu-vertical .ivu-menu-item-group-title {
-    height: 20px;
-    line-height: 20px;
-  }
+.ivu-menu-vertical .ivu-menu-item-group-title {
+  height: 20px;
+  line-height: 20px;
+}
 </style>
 

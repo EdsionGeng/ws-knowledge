@@ -38,7 +38,6 @@
 <script>
   import {showfilelog} from '@/api/all_interface';
   import SelectTree from '@/components/common/selectTree'
-
   export default {
     data() {
       return {
