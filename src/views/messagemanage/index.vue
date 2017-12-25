@@ -62,7 +62,7 @@
       @on-cancel="cancel">
       <Form ref="insertAdParams" :model="insertAdParams" :label-width="90">
         <FormItem prop="adStyle" label="类型：">
-          <Select placeholder="请选择" :clearable="true" :rows="4" v-model="insertAdParams.adStyle">
+          <Select placeholder="请选择" :clearable="true"  style="width:500px" v-model="insertAdParams.adStyle">
             <Option value="">请选择类型</Option>
             <Option value="通知">通知</Option>
             <Option value="公告">公告</Option>
