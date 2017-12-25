@@ -27,8 +27,7 @@
         <FormItem label="内容：" prop='content'>
           <div class="hello">
             <!-- <Ueditor :ueditorContent='uploadForm'></Ueditor> -->
-             <div id="editorElem1" style="text-align:left;width:700px"></div>
-              <Button v-on:click="getEditorContent" type="primary">保存内容</Button>
+             <div id="editorElem1" style="text-align:left;width:900px"></div>
           </div>
         </FormItem>
         <FormItem label="上传附件：">
@@ -118,7 +117,7 @@
           </Upload>
         </FormItem>
         <FormItem label=" 文件描述：">
-          <Input v-model="uploadForm.describle" placeholder="" style="width: 200px" placeholder='描述内容' @on-enter='docupload'></Input>
+          <Input v-model="uploadDescription"  style="width: 200px" placeholder='描述内容' @on-enter.prevent='docupload'></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -139,6 +138,7 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
+      uploadDescription:'',
       showusermissionIdArry:[],
       submitText: "确认修改",
       submitLoading: false,
@@ -208,7 +208,8 @@ export default {
         name: "",
         department: ""
       },
-      uploadDoc: false
+      uploadDoc: false,
+      editorContent:''
     };
   },
   components: {
@@ -216,6 +217,7 @@ export default {
   },
   mounted() {
     var editor = new E("#editorElem1");
+    this.editorContent=this.uploadForm.content;
     editor.customConfig.onchange = html => {
       this.editorContent = html;
     };
@@ -266,9 +268,8 @@ export default {
       }
       funSelect(data, ids);
     },
-    getEditorContent() {
-      this.uploadForm.content = this.editorContent;
-      console.log(this.editorContent);
+    getEditorContent() {   
+        this.uploadForm.content = this.editorContent;
     },
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
@@ -282,6 +283,7 @@ export default {
             this.uploadForm.id = this.fileDetails.fileStyleId;
             this.uploadForm.title = this.fileDetails.title;
             this.uploadForm.content = this.fileDetails.fileContent;
+            this.editorContent=this.fileDetails.fileContent;
             this.uploadForm.fileId = this.fileDetails.id;
             this.uploadForm.photourl=this.fileDetails.photoUrl;
             if(this.uploadForm.photourl!==''){
@@ -437,10 +439,11 @@ export default {
         this.selectDate(this.showusermissionIdArry[2],_self.deldepTree)
       });
     },
-    docupload() {
+     docupload() {
+      console.log(this.$refs.fujianupload);
       for (let val of this.fujainList) {
         if (!val.hasOwnProperty("description")) {
-          Vue.set(val, "description", this.uploadForm.describle);
+          Vue.set(val, "description", this.uploadDescription);
           if (val.description === "") {
             Vue.set(val, "description", "无");
           }
@@ -454,6 +457,7 @@ export default {
       });
     },
     upFileloadSuccess() {
+      
       this.updateFileList.fileId = this.uploadForm.fileId;
       this.updateFileList.content = this.uploadForm.content;
       console.log(this.updateFileList.content)
@@ -468,6 +472,7 @@ export default {
       this.updateFileList.fileStyleName = this.uploadForm.value;
       this.updateFileList.fileSize = this.uploadForm.filesize;
       this.updateFileList.fileSpecies = this.uploadForm.fileType;
+      console.log(this.updateFileList)
       if (this.lookFileParams.userIds !== "") {
         this.chooseUser = true;
       }
@@ -555,8 +560,8 @@ export default {
       this.uploadForm.describle = filedescribleArry.join(",");
     },
     handleSubmit() {
-      console.log(this.$refs);
-      // 将文件上传中所有输入的信息已保存在uploadForm中
+      this.getEditorContent();
+      console.log(this.uploadForm)
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
         return;
