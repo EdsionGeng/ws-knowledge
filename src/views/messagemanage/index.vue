@@ -97,13 +97,13 @@
         </div>
       </div>
     </Modal>
-    <Modal
-      v-model="deletesure"
-      title="删除所勾选数据"
-      @on-ok="deleteAds"
-      :closable="false"
-      @on-cancel="cancel">
-    </Modal>
+    <!--<Modal-->
+      <!--v-model="deletesure"-->
+      <!--title=""-->
+      <!--@on-ok="deleteAds"-->
+      <!--:closable="false"-->
+      <!--@on-cancel="cancel">-->
+    <!--</Modal>-->
     <Modal
       v-model="deleteofcourse"
       title="确定删除所勾选数据？"
@@ -111,13 +111,13 @@
       :closable="false"
       @on-cancel="cancel">
     </Modal>
-    <Modal
-      title=""
-      v-model="modal1"
-      :mask-closable="false"
-      :closable="false"
-      width="700"
-    >
+    <!--<Modal-->
+      <!--title=""-->
+      <!--v-model="modal1"-->
+      <!--:mask-closable="false"-->
+      <!--:closable="false"-->
+      <!--width="700"-->
+    <!--&gt;-->
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{singleMessageDetail.AdTitle}}</p>
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
@@ -206,7 +206,7 @@ export default {
         title: "",
         adStyle: ""
       },
-      deletesure:false,
+
       deleteofcourse:false,
       singleMessageDetail: {
         AdTitle: "",
@@ -291,9 +291,9 @@ export default {
         data.name
       );
     },
-    deleteAds(){
-      this.deleteofcourse=true;
-    },
+//    deleteAds(){
+//      this.deleteofcourse=true;
+//    },
     delAdAction(arr) {
       let fielIds = "";
       for (let i = 0; i < arr.length; i++) {
@@ -321,7 +321,7 @@ export default {
             this.singleMessageDetail.addTime = row.sendTime;
             this.singleMessageDetail.AddUser = row.addUser;
             var reg = new RegExp("<br>", "g");
-            console.info(row.adContent.replace(reg, "\n"));
+           // console.info(row.adContent.replace(reg, "\n"));
             this.singleMessageDetail.Content = row.adContent.replace(reg, "\n");
             this.singleMessageDetail.readed = data.data.isRead;
             this.singleMessageDetail.noreaded = data.data.noRead;
@@ -407,12 +407,35 @@ export default {
         this.params.endDate = rangedate[1];
       }
     },
-    toDelAd() {
+//    toDelAd() {
+//      if (this.delAdParams.ids == "") {
+//        this.$Message.warning("没有选中相应数据!");
+//        return;
+//      }
+//      this.deleteofcourse = true;
+//    }
+////        let _self = this;
+////        deleteAd(this.delAdParams)
+////          .then(res => {
+////            const data = res.data;
+////            if (data.code == 0) {
+////              this.$Message.info(data.msg);
+////              _self.showAllAdList();
+////            } else {
+////              this.$Message.info(data.msg);
+////            }
+////          })
+////          .catch(err => {});
+//      }
+////
+//    },
+        toDelAd() {
       if (this.delAdParams.ids == "") {
         this.$Message.warning("没有选中相应数据!");
         return;
-      } else {
-        this. deletesure=true;
+      }
+      this.deleteofcourse = true;
+
 //        let _self = this;
 //        deleteAd(this.delAdParams)
 //          .then(res => {
@@ -425,7 +448,6 @@ export default {
 //            }
 //          })
 //          .catch(err => {});
-      }
 //
     },
       sureDelete(){
