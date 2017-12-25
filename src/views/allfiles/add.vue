@@ -29,12 +29,11 @@
           </div>
         </FormItem>
         <FormItem label="内容：" prop='content'>
-          <!--<div class="hello">-->
-            <!--<Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor>-->
-          <!--</div>-->
-          <div id="editorElem" style="text-align:left;width:700px"></div>
-          <Button v-on:click="getContent" type="primary">保存内容</Button>
-
+          <div class="hello">
+              <!-- <Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor> -->
+              <div id="editorElem" style="text-align:left;width:700px"></div>
+              <Button v-on:click="getEditorContent" type="primary">保存内容</Button>
+          </div>
         </FormItem>
         <FormItem label="上传附件：">
           <div class="uploadBtn">
@@ -42,7 +41,7 @@
           </div>
           <Row v-for='(item,index) in fujainList' :key='index'>
             <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
-            style='color:#ccc'>（{{parseInt((item.size) / 1024) + 'k'}}）</span>  </span>
+            style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
           </Row>
         </FormItem>
@@ -99,15 +98,14 @@
       v-model="uploadDoc"
       width="400"
       @on-ok='docupload'
-      title="选择附件">
-
+      title="选择附件">   
       <Form>
         <FormItem label="">
           <Upload
             ref="fujianupload"
             :show-upload-list="true"
             multiple
-            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','rar','zip']"
+            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
             :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
@@ -116,21 +114,16 @@
             action="http://192.168.3.26:8011/file/upload.htmls">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
-          <!--<div v-if="filedoc!== null" v-for="(val,index) in filedoc" :key='index'>-->
-          <!--{{ val.name }}-->
-          <!--&lt;!&ndash; <Button type="text" @click="fileup" :loading="fileloadingStatus">{{ fileloadingStatus ? '内容' : ' 确定上传？'}} &ndash;&gt;-->
-          <!--&lt;!&ndash;</Button>&ndash;&gt;-->
-          <!--</div>-->
         </FormItem>
         <FormItem label=" 文件描述：">
-          <Input v-model="uploadForm.describle" placeholder="" style="width: 200px" placeholder='描述内容'></Input>
+          <Input v-model="uploadDescription" placeholder="" style="width: 200px" placeholder='描述内容'></Input>
         </FormItem>
       </Form>
     </Modal>
   </div>
 </template>
 <script>
-//  import Ueditor from "@/components/setUeditor";
+  // import Ueditor from "@/components/setUeditor";
   import docTree from "@/components/common/docTree";
   import {getDepTree} from "../../api/all_interface";
   import {insertFile} from "../../api/all_interface";
@@ -139,13 +132,15 @@
   import {deleteFilePermission} from "../../api/all_interface";
   import {queryadmin} from "../../api/all_interface";
   import {mapState, mapMutations} from "vuex";
-  import Vue from 'vue';
-   import E from 'wangeditor'
-
+  import Vue from 'vue'
+  var E=require('wangeditor')
+ 
   export default {
     data() {
       return {
-        submitText: '确定上传?',
+        uploadDescription:'',
+        getPowerTree:[],
+        submitText: '确定上传',
         submitLoading: false,
         insertFileList: {},
         fujainList: [],
@@ -166,12 +161,11 @@
           id: "",
           content: "",
           fileurl: "",
-          photourl: "./bg.jpg",
+          photourl: "",
           describle: "",
           filesize: "",
           value: ""
         },
-
         lookFileParams: {
           userIds: "",
           fileId: "",
@@ -196,6 +190,7 @@
         editdepTreeList: [],
         deldepTreeList: [],
         adminIds: "",
+
         depTreeParams: {
           id: "",
           deptno: "",
@@ -212,24 +207,47 @@
     },
     components: {
       docTree,
-      //Ueditor
+     // Ueditor
     },
-    computed: mapState(["addFileSaveList", "hasSaveContent"]),
-    mounted() {
-      var editor = new E('#editorElem') ;
-
-
-//      editor.config.uploadImgUrl = 'http://192.168.3.26:8011/photo/upload.htmls';
-      editor.customConfig.onchange = (html) => {
-        this.editorContent = html
+  computed: mapState(["addFileSaveList", "hasSaveContent"]),
+  mounted() {
+  var editor=new E('#editorElem')
+   editor.customConfig.onchange = (html) => {
+          this.editorContent = html
       };
-      editor.create();
+  editor.customConfig.zIndex = 100
+  editor.customConfig.showLinkImg = false
+  editor.customConfig.uploadImgHeaders = {
+    'Accept' : 'multipart/form-data'
+  }
+   editor.customConfig.uploadImgServer = 'http://192.168.22.45:8011/file/upload.htmls'
+ 
+  editor.create();
+  setTimeout(()=>{
+    editor.txt.html(this.uploadForm.content);
+  },1000)
+   
+    //   var  editor = new E('#editorElem')
+    //       editor.customConfig.onchange = (html) => {
+    //       this.editorContent = html
+    //   };
+    //   editor.config.hideLinkImg = true;
+    //   editor.create();
+    //      editor.config.uploadParams = {
+    //     token: 'abcdefg',
+    //     user: 'wangfupeng1988'
+    // };
+    //    editor.config.uploadImgUrl = '/upload';
+    //    editor.config.uploadHeaders = {
+    //     'Accept' : 'text/x-json'
+    //   };
+    
+
       this.adminPower();
       this.uploadList = this.$refs.fujianupload.fileList;
       this.picuploadList = this.$refs.upload.fileList;
       if (this.hasSaveContent) {
         const storeState = this.addFileSaveList;
-        console.log(storeState)
         this.uploadForm.title = storeState.addFileListParams.title;
         this.uploadForm.id = storeState.addFileListParams.fileStyleId;
         this.uploadForm.content = storeState.addFileListParams.content;
@@ -242,9 +260,26 @@
         this.fujainList = storeState.fujainList;
         this.$refs.fujianupload.fileList = storeState.fujainList;
         this.$refs.upload.fileList = storeState.photoUrlList;
-        this.depTree = storeState.lookFilePower;
-        this.editdepTree = storeState.editFilePower;
-        this.deldepTree = storeState.delFilePower;
+        if(storeState.lookFileParams.userIds===''){
+           this.showDepTree();
+        }else{
+            this.depTree=storeState.powerTreeLookList;
+            this.selectDate(storeState.lookFileParams.userIds,this.depTree);
+        }
+        if(storeState.updateFileParams.userIds===''){
+            this.showeditDepTree();
+        }else{
+            this.editdepTree=storeState.powerTreeEditList;
+            this.selectDate(storeState.updateFileParams.userIds,this.editdepTree);
+             console.log(131)
+        }
+        if(storeState.deleteFileParams.userIds===''){
+            this.showdelDepTree();
+        }else{
+             this.deldepTree=storeState.powerTreeDelList;
+           this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);    
+            console.log(133)   
+        }
       } else {
         this.showDepTree();
         this.showeditDepTree();
@@ -267,21 +302,25 @@
             title: "保存当前内容",
             content: "<p>是否保存当前编辑的内容</p>",
             onOk: () => {
+                //this.$refs.myUeditor.submits();
+              this.getLookTreeList(this.depTree);
+              this.getEditTreeList(this.editdepTree);
+              this.getDelTreeList(this.deldepTree);
               this.setHasSaveContent(true);
-              this.getDelpower(this.deldepTreeList);
-              this.getEditpower(this.editdepTreeList);
-              this.getLookpower(this.depTreeList);
+              this.getdeleteFileParams(this.deleteFileParams);         
+              this.getupdateFileParams(this.updateFileParams);
+              this.getlookFileParams(this.lookFileParams);
               this.getTitle(this.uploadForm.title);
               this.getFileStyle(this.uploadForm.value);
               this.getFileStyleId(this.uploadForm.id),
-                this.getPhotoUrl(this.uploadForm.photourl),
-                this.getFileUrl(this.uploadForm.fileurl),
-                this.getContent(this.uploadForm.content),
-                this.getFujainList(this.fujainList);
+              this.getPhotoUrl(this.uploadForm.photourl),
+              this.getFileUrl(this.uploadForm.fileurl),
+              this.getContent(this.uploadForm.content),
+              this.getFujainList(this.fujainList);
               this.getFilesize(this.uploadForm.filesize);
               this.getDescrible(this.uploadForm.describle);
               this.getFileType(this.uploadForm.fileType);
-              this.getPhotoUrlList(this.uploadList);
+              this.getPhotoUrlList(this.picuploadList);
               next();
             },
             onCancel: () => {
@@ -296,13 +335,13 @@
       }
     },
     methods: {
-      getContent: function () {
-        alert(this.editorContent)
-      },
       ...mapMutations([
-        "getEditpower",
-        "getLookpower",
-        "getDelpower",
+        "getLookTreeList",
+        "getEditTreeList",
+        "getDelTreeList",
+        "getdeleteFileParams",
+        "getupdateFileParams",
+        "getlookFileParams",
         "getTitle",
         "getFileStyle",
         "getFileStyleId",
@@ -316,8 +355,12 @@
         "getFileType",
         "getPhotoUrlList"
       ]),
+      getEditorContent(){
+          this.uploadForm.content=this.editorContent;
+          console.log(this.editorContent)
+      },
       handleSuccess(res, file) {
-        console.log(11111, file)
+        console.log(11111,file)
         const fileList = this.$refs.fujianupload.fileList;
         if (res.code === 2) {
           this.$refs.fujianupload.fileList.splice(fileList.indexOf(file), 1);
@@ -374,7 +417,6 @@
       },
       chooseCheckPeople(arr) {
         this.depTreeList = arr;
-        console.log(arr);
         var userIds = [];
         for (let i = 0; i < arr.length; i++) {
           if (arr[i].children === null) {
@@ -410,7 +452,9 @@
         let _self = this;
         getDepTree(_self.depTreeParams).then(res => {
           _self.depTree = res.data;
+          this.getPowerTree=res.data;
         });
+        
       },
       showeditDepTree() {
         let _self = this;
@@ -424,20 +468,12 @@
           _self.deldepTree = res.data;
         });
       },
-      // upload() {
-      //   this.loadingStatus = true;
-      //   setTimeout(() => {
-      //     this.file = null;
-      //     this.loadingStatus = false;
-      //     this.$Message.success("上传成功");
-      //   }, 1500);
-      // },
       docupload() {
         console.log(this.$refs.fujianupload);
         for (let val of this.fujainList) {
           if (!val.hasOwnProperty("description")) {
-            Vue.set(val, 'description', this.uploadForm.describle)
-            if (val.description === '') {
+            Vue.set(val, 'description', this.uploadDescription)
+            if(val.description===''){
               Vue.set(val, 'description', '无')
             }
           }
@@ -453,6 +489,9 @@
         this.insertFileList.title = this.uploadForm.title;
         this.insertFileList.content = this.uploadForm.content;
         this.insertFileList.photourl = this.uploadForm.photourl;
+        if(this.insertFileList.photourl===''){
+         this.insertFileList.photourl='1514028176737moren1.png'
+        }
         this.insertFileList.fileurl = this.uploadForm.fileurl;
         this.insertFileList.userId = this.uploadForm.userId;
         this.insertFileList.fileStyleId = this.uploadForm.id;
@@ -467,7 +506,7 @@
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
-              //console.log(res.data.data);
+              console.log(res.data.data);
               if (this.lookFileParams.userIds === "") {
                 this.lookFileParams.userIds = this.adminIds;
               }
@@ -497,7 +536,7 @@
                                 console.log("设置删除权限成功");
                                 this.submitLoading = false;
                                 this.isBanDuan = false;
-                                this.$Message.success("上传成功,1s后跳转到历史上传界面");
+                                this.$Message.success("上传成功,1s后少跳转到历史上传界面");
                                 setTimeout(() => {
                                   this.$router.push("/hisupload");
                                 }, 1000);
@@ -535,6 +574,23 @@
           .catch(err => {
           });
       },
+      selectDate(ids,data){
+          const prams=ids.split(',');
+          console.log(prams);
+          console.log(data)
+          function funSelect(data,prams){
+            for(let val of data){
+              const dataId=String(val.id);
+              if(prams.indexOf(dataId)!==-1){
+                val.checked=true;
+              }
+              if(val.children!==null){
+                funSelect(val.children,prams)
+              }
+            }
+          }
+            funSelect(data,prams)
+      },
       getFileData() {
         // 获得文件大小，名字，和描述
         var newArry = [];
@@ -551,7 +607,6 @@
         this.uploadForm.filedescrible = filedescribleArry.join(",");
       },
       handleSubmit(name) {
-        this.$refs.myUeditor.submits();
         // 将文件上传中所有输入的信息已保存在uploadForm中
         if (this.uploadForm.title == "") {
           this.$Message.warning("请填写文件标题");
@@ -562,6 +617,8 @@
         } else if (this.uploadForm.content === "") {
           this.$Message.warning("请编辑文件内容");
           return;
+        }else if(this.uploadForm.content.length>=26000){
+            this.$Message.warning("文件占位符过多,请删除多余的空格");
         } else if (
           this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
         ) {

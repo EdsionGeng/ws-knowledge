@@ -47,7 +47,6 @@
   export default {
     data() {
       return {
-        imgUrl: './bg.jpg',
         modal1: false,
         pageOpts: [10, 20, 30, 40],
         listparams: {

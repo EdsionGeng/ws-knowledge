@@ -138,14 +138,8 @@
       iconLine
     },
     computed:{
-      imgUrl(){
-        if(this.fileDetails.photoUrl===''){
-          console.log(111)
-           return '../../assets/img/moren1.png'        
-        }else{
-          console.log(222)          
-            return 'http://192.168.3.26:8011/'+this.fileDetails.photoUrl;
-        }
+      imgUrl(){   
+            return 'http://192.168.3.26:8011/'+this.fileDetails.photoUrl;    
       }
     },
     mounted() {
