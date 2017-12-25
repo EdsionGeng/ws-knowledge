@@ -3,7 +3,7 @@
     <div>
       <search></search>
     </div>
-    <Menu :theme="theme2" accordion @on-select="change" :active-name="activeName">
+    <Menu :theme="theme2" accordion @on-select="change" :active-name="this.$route.name">
       <MenuGroup title="" class='menuTitle'>
 
         <Menu-item name='home' >首页</Menu-item>
@@ -44,7 +44,6 @@ Vue.component("Menu", Menu);
 export default {
   data() {
     return {
-      activeName:this.$route.name,
       theme2: "dark",
       active: sessionStorage.getItem("isAdmin"),
       menuListParams: { userId: sessionStorage.getItem("userId") }
