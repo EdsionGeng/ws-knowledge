@@ -9,7 +9,7 @@
           <docTree :myvalue='uploadForm'></docTree>
         </FormItem>
         <FormItem label="封面：">
-          <div>
+          <div style="width:450px;" class="picUpload">
             <Upload
               ref="upload"
               :show-upload-list="true"
@@ -27,7 +27,7 @@
         <FormItem label="内容：" prop='content'>
           <div class="hello">
               <!-- <Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor> -->
-              <div id="editorElem" style="text-align:left;width:700px"></div>
+              <div id="editorElem" style="text-align:left;width:900px"></div>
               <Button v-on:click="getEditorContent" type="primary">保存内容</Button>
           </div>
         </FormItem>
@@ -578,7 +578,7 @@ export default {
       } else if (this.uploadForm.content === "") {
         this.$Message.warning("请编辑文件内容");
         return;
-      } else if (this.uploadForm.content.length >= 26000) {
+      } else if (this.uploadForm.content.length >= 2600) {
         this.$Message.warning("文件占位符过多,请删除多余的空格");
       } else if (
         this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
@@ -606,6 +606,10 @@ export default {
 }
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
+}
+.picUpload .ivu-upload-list-remove{
+  font-size: 24px;
+  padding:3px;
 }
 </style>
 <style scoped>
