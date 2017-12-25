@@ -417,32 +417,42 @@ export default {
       }
       this.lookFileParams.userIds = userIds.join(",");
       this.lookFileParams.userIds =
-        this.lookFileParams.userIds + "," + sessionStorage.getItem("userId");
+      this.lookFileParams.userIds + "," + sessionStorage.getItem("userId");
     },
     chooseDelPeople(arr) {
-      this.deldepTreeList = arr;
-      var userIds = [];
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+       if(this.lookFileParams.userIds===''){
+          this.$Message.error('请先选择可查阅的人员')
+          return
+      }else{
+        this.deldepTreeList = arr;
+        var userIds = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].children === null) {
+            userIds.push(arr[i].id);
+          }
         }
+        this.deleteFileParams.userIds = userIds.join(",");
+        this.deleteFileParams.userIds =
+          this.deleteFileParams.userIds + "," + sessionStorage.getItem("userId");
       }
-      this.deleteFileParams.userIds = userIds.join(",");
-      this.deleteFileParams.userIds =
-        this.deleteFileParams.userIds + "," + sessionStorage.getItem("userId");
-    },
+   },
     chooseEditPeople(arr) {
-      this.editdepTreeList = arr;
-      var userIds = [];
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+      if(this.lookFileParams.userIds===''){
+          this.$Message.error('请先选择可查阅的人员')
+          return
+      }else{
+        this.editdepTreeList = arr;
+        var userIds = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].children === null) {
+            userIds.push(arr[i].id);
+          }
         }
-      }
-      this.updateFileParams.userIds = userIds.join(",");
+        this.updateFileParams.userIds = userIds.join(",");
 
-      this.updateFileParams.userIds =
-        this.updateFileParams.userIds + "," + sessionStorage.getItem("userId");
+        this.updateFileParams.userIds =
+          this.updateFileParams.userIds + "," + sessionStorage.getItem("userId");
+      }
     },
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
