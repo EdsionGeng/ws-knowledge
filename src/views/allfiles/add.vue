@@ -217,6 +217,7 @@ export default {
     setTimeout(() => {
       editor.txt.html(this.uploadForm.content);
     }, 1000);
+     this.editorContent=this.uploadForm.content;
     this.adminPower();
     this.uploadList = this.$refs.fujianupload.fileList;
     this.picuploadList = this.$refs.upload.fileList;
@@ -259,6 +260,7 @@ export default {
     }
   },
   beforeRouteLeave(to, from, next) {
+    this.getEditorContent();
     if (this.isBanDuan) {
       if (
         this.uploadForm.title !== "" ||
@@ -274,7 +276,6 @@ export default {
           title: "保存当前内容",
           content: "<p>是否保存当前编辑的内容</p>",
           onOk: () => {
-            this.getEditorContent();
             this.getLookTreeList(this.depTree);
             this.getEditTreeList(this.editdepTree);
             this.getDelTreeList(this.deldepTree);
@@ -293,6 +294,7 @@ export default {
             this.getDescrible(this.uploadForm.describle);
             this.getFileType(this.uploadForm.fileType);
             this.getPhotoUrlList(this.picuploadList);
+            this.$Message.success('保存成功')
             next();
           },
           onCancel: () => {
@@ -615,7 +617,10 @@ export default {
       if (this.uploadForm.title == "") {
         this.$Message.warning("请填写文件标题");
         return;
-      } else if (this.uploadForm.id == "") {
+      } else if (this.uploadForm.title.length>20) {
+        this.$Message.warning("标题字符过长");
+        return;
+      } else if(this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
         return;
       } else if (this.uploadForm.content === "") {

@@ -26,18 +26,21 @@ const constantRouteMap = [{
     children: [{
       path: '/home',
       component: homeIndex,
+      name:'home',
       meta: {
         pname: '首页'
       }
     }, {
       path: 'hisupload',
       component: hisupload,
+      name:'hisupload',
       meta: {
         pname: '文件管理',
         cname: '历史上传'
       }
     }, {
       path: 'mymessage',
+      name:'mymessage',
       component: mymessage,
       meta: {
         pname: '个人中心',
@@ -45,6 +48,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'docmanagement',
+      name: 'docmanagement',
       component: docmanagement,
       meta: {
         pname: '管理中心',
@@ -52,6 +56,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'docdirmanagement',
+      name: 'docdirmanagement',
       component: docdirmanagement,
       meta: {
         pname: '管理中心',
@@ -59,12 +64,14 @@ const constantRouteMap = [{
       }
     }, {
       path: 'keySearchPage/:key',
+      name: 'keySearchPage',
       component: keySearchPage,
       meta: {
         pname: '搜索文件'
       }
     }, {
       path: 'allfiles',
+      name: 'allfiles',
       component: allfiles,
       meta: {
         pname: '文件管理',
@@ -72,6 +79,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'newfile',
+      name: 'newfile',
       component: newfile,
       meta: {
         pname: '新建文件'
@@ -79,6 +87,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'allfiles/check/:id',
+      name: 'check',
       component: check,
       meta: {
         pname: '文件管理',
@@ -87,6 +96,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'allfiles/log/:id',
+      name: 'log',
       component: log,
       meta: {
         pname: '文件管理',
@@ -96,6 +106,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'allfiles/change/:id',
+      name: 'change',
       component: change,
       meta: {
         pname: '文件管理',
@@ -104,6 +115,7 @@ const constantRouteMap = [{
       }
     }, {
       path: 'messagemanage',
+      name: 'messagemanage',
       component: messagemanage,
       meta: {
         pname: '管理中心',
@@ -113,6 +125,7 @@ const constantRouteMap = [{
   }, {
     path: '*',
     component: Home,
+    name: 'home',
     redirect: '/home'
   }
 ];
