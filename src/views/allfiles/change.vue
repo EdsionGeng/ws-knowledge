@@ -9,7 +9,7 @@
           <docTree :myvalue='uploadForm'></docTree>
         </FormItem>
         <FormItem label="封面：">
-          <div>
+          <div style='width:450px;' class="picUpload">
             <Upload
               ref="upload"
               :show-upload-list="true"
@@ -277,11 +277,21 @@ export default {
           if (res.data.code == 0) {
             this.fileDetails = res.data.data;
             console.log("文件详情");
+            console.log(this.fileDetails)
             console.log(this.uploadForm);
             this.uploadForm.id = this.fileDetails.fileStyleId;
             this.uploadForm.title = this.fileDetails.title;
             this.uploadForm.content = this.fileDetails.fileContent;
             this.uploadForm.fileId = this.fileDetails.id;
+            this.uploadForm.photourl=this.fileDetails.photoUrl;
+            if(this.uploadForm.photourl!==''){
+              let picUploadDetails={
+                name:this.uploadForm.photourl.slice(13)
+              }
+              this.$refs.upload.fileList.push(picUploadDetails)
+              console.log(this.$refs.upload.fileList)
+            }
+            this.uploadForm.filesize=this.fileDetails.fileSize;
             if (this.fileDetails.fileUrl !== "") {
               this.uploadForm.fileurl = this.fileDetails.fileUrl;
               this.uploadForm.describle = this.fileDetails.enclosureInfo;
@@ -331,6 +341,7 @@ export default {
     },
     pichandleBeforeUpload() {
       console.log(this.$refs.upload);
+      this.uploadList=this.$refs.upload.fileList;
       const check = this.uploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
@@ -339,8 +350,8 @@ export default {
       }
       return check;
     },
-    handleBeforeUpload(file) {
-      const check = this.uploadList.length < 10;
+    handleBeforeUpload(file) { 
+      const check = this.fujainList.length < 10;
       if (!check) {
         this.$Notice.warning({
           title: "附件上传已达上限"
@@ -406,6 +417,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
+        console.log(333)
         this.selectDate(this.showusermissionIdArry[0],_self.depTree)
       });
     },
@@ -413,6 +425,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.editdepTree = res.data;
+        console.log(222)
        this.selectDate(this.showusermissionIdArry[1],_self.editdepTree)
       });
     },
@@ -420,6 +433,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.deldepTree = res.data;
+        console.log(111)
         this.selectDate(this.showusermissionIdArry[2],_self.deldepTree)
       });
     },
@@ -464,7 +478,6 @@ export default {
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
-              console.log(this.lookFileParams.userIds);
               lookFileUser(this.lookFileParams)
                 .then(res => {
                   console.log(res.data);
@@ -472,7 +485,6 @@ export default {
                     console.log("设置权限成功");
                     if (this.updateFileParams.userIds === "") {
                       this.updateFileParams.userIds = this.adminIds;
-                      console.log(this.updateFileParams.userIds);
                     }
                     updateFilePermission(this.updateFileParams)
                       .then(res => {
@@ -487,6 +499,9 @@ export default {
                               console.log(res.data);
                               if (res.data.code == 0) {
                                 console.log("设置删除权限成功");
+                                console.log( 222,this.updateFileParams.userIds)
+                                console.log( 111,this.lookFileParams.userIds)
+                                console.log( 111,this.deleteFileParams.userIds)
                               }
                             })
                             .catch(err => {});
@@ -574,10 +589,15 @@ export default {
 .ivu-tabs-tabpane {
   border: 1px solid #eee;
 }
-
+.picUpload .ivu-upload-list-remove {
+ display:block !important; 
+  font-size: 24px;
+  padding:3px;
+}
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
 }
+
 </style>
 
 <style scoped>
