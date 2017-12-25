@@ -107,7 +107,7 @@
             ref="fujianupload"
             :show-upload-list="true"
             multiple
-            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
+            :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','rar','zip']"
             :on-format-error="handleFormatError"
             :max-size="10240"
             :on-exceeded-size="handleMaxSize"
@@ -196,7 +196,6 @@
         editdepTreeList: [],
         deldepTreeList: [],
         adminIds: "",
-
         depTreeParams: {
           id: "",
           deptno: "",
@@ -213,11 +212,14 @@
     },
     components: {
       docTree,
-//      Ueditor
+      //Ueditor
     },
     computed: mapState(["addFileSaveList", "hasSaveContent"]),
     mounted() {
-      var editor = new E('#editorElem')
+      var editor = new E('#editorElem') ;
+
+
+//      editor.config.uploadImgUrl = 'http://192.168.3.26:8011/photo/upload.htmls';
       editor.customConfig.onchange = (html) => {
         this.editorContent = html
       };
