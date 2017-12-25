@@ -111,13 +111,13 @@
       :closable="false"
       @on-cancel="cancel">
     </Modal>
-    <!--<Modal-->
-      <!--title=""-->
-      <!--v-model="modal1"-->
-      <!--:mask-closable="false"-->
-      <!--:closable="false"-->
-      <!--width="700"-->
-    <!--&gt;-->
+    <Modal
+      title=""
+      v-model="modal1"
+      :mask-closable="false"
+      :closable="false"
+      width="700"
+    >
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{singleMessageDetail.AdTitle}}</p>
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
