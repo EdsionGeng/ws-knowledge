@@ -18,7 +18,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img src="./bg.jpg" style='width:50%;height:90px;'>
+                  <img :src="'http:192.168.3.26:8011'+list.url" style='width:50%;height:90px;'>
                   <h2 style='color:#000;font-size:19px;' class="nowrap">{{list.title}}</h2>
                   <p style='color:#ccc'>上传时间：{{list.addFileTime}}</p>
                   <p style='color:#ccc'>上传人：{{list.username}}</p>
@@ -54,7 +54,7 @@ export default {
         value: ""
       },
       selectValue: "",
-      imgUrl: "./bg.jpg",
+      imgUrl: "",
       pageOpts: [20, 40, 60, 100],
       listparams: {
         current: 1,
