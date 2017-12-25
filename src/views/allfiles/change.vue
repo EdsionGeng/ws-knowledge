@@ -133,7 +133,6 @@
   </div>
 </template>
 <script>
-import Ueditor from "@/components/setUeditor";
 import docTree from "@/components/common/docTree";
 import { getDepTree } from "../../api/all_interface";
 import { updateFile } from "../../api/all_interface";
@@ -231,17 +230,17 @@ export default {
     editor.customConfig.uploadImgHeaders = {
       'Accept' : 'multipart/form-data'
     }
-   editor.customConfig.uploadImgServer = 'http://192.168.22.45:8011/file/upload.htmls'
+   editor.customConfig.uploadImgServer = 'http://192.168.3.26:8011/file/upload.htmls'
    editor.create();
-    setTimeout(()=>{
-    editor.txt.html(this.uploadForm.content);
-  },1000)
-   
+  
     this.initFileDetail();
     this.adminPower();
     this.showDepTree();
     this.showeditDepTree();
     this.showdelDepTree();
+  },
+  ready(){
+      editor.txt.html(this.uploadForm.content);
   },
   methods: {
      getEditorContent(){
@@ -285,7 +284,6 @@ export default {
               this.fujainList = [];
             }
           }
-         
         })
         .catch(err => {});
     },
