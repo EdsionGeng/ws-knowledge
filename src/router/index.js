@@ -125,7 +125,6 @@ const constantRouteMap = [{
   }, {
     path: '*',
     component: Home,
-    name: 'home',
     redirect: '/home'
   }
 ];
