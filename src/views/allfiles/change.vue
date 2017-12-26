@@ -12,7 +12,7 @@
           <div style='width:450px;' class="picUpload">
             <Upload
               ref="upload"
-              :show-upload-list="true"
+              :show-upload-list="false"
               :before-upload='pichandleBeforeUpload'
               :format="['jpg','jpeg','png']"
               :on-exceeded-size="pichandleMaxSize"
@@ -22,6 +22,16 @@
               action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
+             <Row 
+                v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;margin-left:5px;'>
+                <Icon type="image" style='margin-right:8px;color:#009DD9;'></Icon>
+                <span>                  
+                      <a @click.prevent="model7=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
+                </span>
+                <Button type="text" size="small" @click="pichandRemove(item)">
+                    <Icon type="android-cancel" ></Icon>
+                </Button>
+            </Row>
           </div>
         </FormItem>
         <FormItem label="内容：" prop='content'>
@@ -51,7 +61,7 @@
           </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power'>
-          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;">
+          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;" @on-click='changeTab'>
             <TabPane label="可查阅人员" name="name1">
               <div>
                 <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
@@ -119,6 +129,16 @@
         </FormItem>
       </Form>
     </Modal>
+      <Modal
+       v-model="model7"
+        width="300"
+        :closable='false'
+        cancel-text=''
+      >
+        <p slot="footer" style="height:0;line-height:0">
+        </p>
+      <img style='width:100%;height:100%;' :src="'http://192.168.3.26:8011/'+uploadForm.photourl" alt="">
+    </Modal>
   </div>
 </template>
 <script>
@@ -136,6 +156,8 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
+      model7:false,
+      picuploadList:[],
       userLookIds: "",
       uploadDescription: "",
       showusermissionIdArry: [],
@@ -215,52 +237,59 @@ export default {
     docTree
   },
   mounted() {
-    var editor = new E("#editorElem1");
-    this.editorContent = this.uploadForm.content;
-    editor.customConfig.onchange = html => {
-      this.editorContent = html;
-    };
-    editor.customConfig.zIndex = 100;
-    editor.customConfig.showLinkImg = false;
-    editor.customConfig.uploadImgHeaders = {
-      Accept: "multipart/form-data"
-    };
-    editor.customConfig.uploadImgServer =
-      "http://192.168.3.26:8011/file/upload.htmls";
-    editor.customConfig.menus = [
-      "head", // 标题
-      "bold", // 粗体
-      "italic", // 斜体
-      "underline", // 下划线
-      "strikeThrough", // 删除线
-      "foreColor", // 文字颜色
-      "backColor", // 背景颜色
-      "link", // 插入链接
-      "list", // 列表
-      "justify", // 对齐方式
-      "quote", // 引用
-      "emoticon", // 表情
-      // 'image',  // 插入图片
-      "table", // 表格
-      // 'video',  // 插入视频
-      "code", // 插入代码
-      "undo", // 撤销
-      "redo" // 重复
-    ];
-    editor.create();
-
-    setTimeout(() => {
-      editor.txt.html(this.uploadForm.content);
-    }, 1000);
+    this.picuploadList=this.$refs.upload.fileList;
     this.initFileDetail();
     this.adminPower();
-    this.showDepTree();
-    this.showeditDepTree();
-    this.showdelDepTree();
     this.getUserMission();
   },
 
   methods: {
+    createdEditor() {
+      console.log(this.uploadForm.content);
+      var editor = new E("#editorElem1");
+      this.editorContent = this.uploadForm.content;
+      editor.customConfig.onchange = html => {
+        this.editorContent = html;
+      };
+      editor.customConfig.zIndex = 100;
+      editor.customConfig.showLinkImg = false;
+      editor.customConfig.uploadImgHeaders = {
+        Accept: "multipart/form-data"
+      };
+      editor.customConfig.uploadImgServer =
+        "http://192.168.3.26:8011/file/upload.htmls";
+      editor.customConfig.menus = [
+        "head", // 标题
+        "bold", // 粗体
+        "italic", // 斜体
+        "underline", // 下划线
+        "strikeThrough", // 删除线
+        "foreColor", // 文字颜色
+        "backColor", // 背景颜色
+        "link", // 插入链接
+        "list", // 列表
+        "justify", // 对齐方式
+        "quote", // 引用
+        "emoticon", // 表情
+        // 'image',  // 插入图片
+        "table", // 表格
+        // 'video',  // 插入视频
+        "code", // 插入代码
+        "undo", // 撤销
+        "redo" // 重复
+      ];
+      editor.create();
+      editor.txt.html(this.uploadForm.content);
+    },
+    changeTab(name) {
+      console.log(name);
+      if (name == "name2" || name == "name3") {
+        if (this.userLookIds === "") {
+          this.$Message.error("请先选择可查阅的人员");
+          return;
+        }
+      }
+    },
     getUserMission() {
       showusermission(this.fileDetailParams).then(res => {
         console.log(res.data);
@@ -271,6 +300,9 @@ export default {
           this.updateFileParams.userIds = data[1].join(",");
           this.deleteFileParams.userIds = data[2].join(",");
           this.userLookIds = data[0].join(",");
+          this.showDepTree();
+          this.showeditDepTree();
+          this.showdelDepTree();
         }
       });
     },
@@ -294,6 +326,7 @@ export default {
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
         .then(res => {
+          console.log(111111111111);
           console.log(res.data);
           if (res.data.code == 0) {
             this.fileDetails = res.data.data;
@@ -303,13 +336,15 @@ export default {
             this.uploadForm.id = this.fileDetails.fileStyleId;
             this.uploadForm.title = this.fileDetails.title;
             this.uploadForm.content = this.fileDetails.fileContent;
+            console.log(111, this.uploadForm.content);
             this.editorContent = this.fileDetails.fileContent;
             this.uploadForm.fileId = this.fileDetails.id;
             this.uploadForm.photourl = this.fileDetails.photoUrl;
 
             if (this.uploadForm.photourl !== "") {
               let picUploadDetails = {
-                name: this.uploadForm.photourl.slice(13)
+                name: this.uploadForm.photourl.slice(13),
+                url:this.uploadForm.photourl
               };
               this.$refs.upload.fileList.push(picUploadDetails);
               console.log(this.$refs.upload.fileList);
@@ -339,9 +374,18 @@ export default {
             } else {
               this.fujainList = [];
             }
+            console.log("1dddddddddddddddd111");
+            this.createdEditor();
           }
         })
         .catch(err => {});
+    },
+    pichandRemove(file){
+      console.log(1111)
+      console.log(file)
+     const fileList = this.$refs.upload.fileList;
+      console.log(fileList)
+      this.picuploadList.splice(fileList.indexOf(file), 1);
     },
     handleRemove(file) {
       const fileList = this.fujainList;
@@ -415,39 +459,23 @@ export default {
       }
       this.lookFileParams.userIds = userIds.join(",");
       this.userLookIds = userIds.join(",");
-      console.log(this.lookFileParams.userIds);
     },
     chooseDelPeople(arr) {
-      console.log(this.userLookIds);
-      if (this.userLookIds === "") {
-        console.log(111);
-        this.$Message.error("请先选择可查阅的人员");
-        return;
-      } else {
-        var userIds = [];
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children === null) {
-            userIds.push(arr[i].id);
-          }
+      var userIds = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          userIds.push(arr[i].id);
         }
-
         this.deleteFileParams.userIds = userIds.join(",");
-        console.log(1111, this.deleteFileParams.userIds);
       }
     },
     chooseEditPeople(arr) {
-      if (this.userLookIds === "") {
-        this.$Message.error("请先选择可查阅的人员");
-        return;
-      } else {
-        var userIds = [];
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children === null) {
-            userIds.push(arr[i].id);
-          }
+      var userIds = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          userIds.push(arr[i].id);
         }
         this.updateFileParams.userIds = userIds.join(",");
-        console.log(this.updateFileParams.userIds);
       }
     },
     renderContentDep(h, { root, node, data }) {
@@ -673,7 +701,6 @@ export default {
   border: 1px solid #eee;
 }
 .picUpload .ivu-upload-list-remove {
-  display: block !important;
   font-size: 24px;
   padding: 3px;
 }
