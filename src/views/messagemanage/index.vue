@@ -575,7 +575,7 @@ export default {
 </style>
 
 <style>
-  .bodyarea .ivu-select-single .ivu-select-selection{
-    width:100%;
+  .ivu-select-single .ivu-select-selection{
+    width:100%!important;
   }
 </style>
