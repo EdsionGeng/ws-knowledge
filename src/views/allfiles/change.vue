@@ -138,8 +138,9 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
-      uploadDescription:'',
-      showusermissionIdArry:[],
+      userLookIds: "",
+      uploadDescription: "",
+      showusermissionIdArry: [],
       submitText: "确认修改",
       submitLoading: false,
       chooseUser: false,
@@ -170,8 +171,8 @@ export default {
         power: [{ required: true }]
       },
       fileDetails: null,
-      showusermissionParams:{
-        fileId:this.$route.params.id
+      showusermissionParams: {
+        fileId: this.$route.params.id
       },
       lookFileParams: {
         userIds: "",
@@ -209,7 +210,7 @@ export default {
         department: ""
       },
       uploadDoc: false,
-      editorContent:''
+      editorContent: ""
     };
   },
   components: {
@@ -217,7 +218,7 @@ export default {
   },
   mounted() {
     var editor = new E("#editorElem1");
-    this.editorContent=this.uploadForm.content;
+    this.editorContent = this.uploadForm.content;
     editor.customConfig.onchange = html => {
       this.editorContent = html;
     };
@@ -228,10 +229,31 @@ export default {
     };
     editor.customConfig.uploadImgServer =
       "http://192.168.3.26:8011/file/upload.htmls";
-        editor.create();   
-     setTimeout(()=>{
-       editor.txt.html(this.uploadForm.content);
-     },1000)
+    editor.customConfig.menus = [
+      "head", // 标题
+      "bold", // 粗体
+      "italic", // 斜体
+      "underline", // 下划线
+      "strikeThrough", // 删除线
+      "foreColor", // 文字颜色
+      "backColor", // 背景颜色
+      "link", // 插入链接
+      "list", // 列表
+      "justify", // 对齐方式
+      "quote", // 引用
+      "emoticon", // 表情
+      // 'image',  // 插入图片
+      "table", // 表格
+      // 'video',  // 插入视频
+      "code", // 插入代码
+      "undo", // 撤销
+      "redo" // 重复
+    ];
+    editor.create();
+
+    setTimeout(() => {
+      editor.txt.html(this.uploadForm.content);
+    }, 1000);
     this.initFileDetail();
     this.adminPower();
     this.showDepTree();
@@ -241,18 +263,18 @@ export default {
   },
 
   methods: {
-    getUserMission(){
-       showusermission(this.fileDetailParams)
-                .then(res => {
-                  console.log(res.data);
-                 if (res.data.code == 0) {
-                    const data=res.data.data;
-                    this.showusermissionIdArry=data;
-                    this.lookFileParams.userIds = data[0].join(",");
-                    this.updateFileParams.userIds = data[1].join(",");
-                    this.deleteFileParams.userIds = data[2].join(",");
-                   }
-                })
+    getUserMission() {
+      showusermission(this.fileDetailParams).then(res => {
+        console.log(res.data);
+        if (res.data.code == 0) {
+          const data = res.data.data;
+          this.showusermissionIdArry = data;
+          this.lookFileParams.userIds = data[0].join(",");
+          this.updateFileParams.userIds = data[1].join(",");
+          this.deleteFileParams.userIds = data[2].join(",");
+          console.log(this.lookFileParams.userIds);
+        }
+      });
     },
     selectDate(ids, data) {
       function funSelect(data, ids) {
@@ -268,8 +290,8 @@ export default {
       }
       funSelect(data, ids);
     },
-    getEditorContent() {   
-        this.uploadForm.content = this.editorContent;
+    getEditorContent() {
+      this.uploadForm.content = this.editorContent;
     },
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
@@ -278,22 +300,22 @@ export default {
           if (res.data.code == 0) {
             this.fileDetails = res.data.data;
             console.log("文件详情");
-            console.log(this.fileDetails)
+            console.log(this.fileDetails);
             console.log(this.uploadForm);
             this.uploadForm.id = this.fileDetails.fileStyleId;
             this.uploadForm.title = this.fileDetails.title;
             this.uploadForm.content = this.fileDetails.fileContent;
-            this.editorContent=this.fileDetails.fileContent;
+            this.editorContent = this.fileDetails.fileContent;
             this.uploadForm.fileId = this.fileDetails.id;
-            this.uploadForm.photourl=this.fileDetails.photoUrl;
-            if(this.uploadForm.photourl!==''){
-              let picUploadDetails={
-                name:this.uploadForm.photourl.slice(13)
-              }
-              this.$refs.upload.fileList.push(picUploadDetails)
-              console.log(this.$refs.upload.fileList)
+            this.uploadForm.photourl = this.fileDetails.photoUrl;
+            if (this.uploadForm.photourl !== "") {
+              let picUploadDetails = {
+                name: this.uploadForm.photourl.slice(13)
+              };
+              this.$refs.upload.fileList.push(picUploadDetails);
+              console.log(this.$refs.upload.fileList);
             }
-            this.uploadForm.filesize=this.fileDetails.fileSize;
+            this.uploadForm.filesize = this.fileDetails.fileSize;
             if (this.fileDetails.fileUrl !== "") {
               this.uploadForm.fileurl = this.fileDetails.fileUrl;
               this.uploadForm.describle = this.fileDetails.enclosureInfo;
@@ -343,7 +365,7 @@ export default {
     },
     pichandleBeforeUpload() {
       console.log(this.$refs.upload);
-      this.uploadList=this.$refs.upload.fileList;
+      this.uploadList = this.$refs.upload.fileList;
       const check = this.uploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
@@ -352,7 +374,7 @@ export default {
       }
       return check;
     },
-    handleBeforeUpload(file) { 
+    handleBeforeUpload(file) {
       const check = this.fujainList.length < 10;
       if (!check) {
         this.$Notice.warning({
@@ -393,24 +415,35 @@ export default {
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
+      this.userLookIds = userIds.join(",");
     },
     chooseDelPeople(arr) {
-      var userIds = [];
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+      if (this.userLookIds === "") {
+        this.$Message.error("请先选择可查阅的人员");
+        return;
+      } else {
+        var userIds = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].children === null) {
+            userIds.push(arr[i].id);
+          }
         }
+        this.deleteFileParams.userIds = userIds.join(",");
       }
-      this.deleteFileParams.userIds = userIds.join(",");
     },
     chooseEditPeople(arr) {
-      var userIds = [];
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+      if (this.userLookIds === "") {
+        this.$Message.error("请先选择可查阅的人员");
+        return;
+      } else {
+        var userIds = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].children === null) {
+            userIds.push(arr[i].id);
+          }
         }
+        this.updateFileParams.userIds = userIds.join(",");
       }
-      this.updateFileParams.userIds = userIds.join(",");
     },
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
@@ -419,27 +452,27 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
-        console.log(333)
-        this.selectDate(this.showusermissionIdArry[0],_self.depTree)
+        console.log(333);
+        this.selectDate(this.showusermissionIdArry[0], _self.depTree);
       });
     },
     showeditDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.editdepTree = res.data;
-        console.log(222)
-       this.selectDate(this.showusermissionIdArry[1],_self.editdepTree)
+        console.log(222);
+        this.selectDate(this.showusermissionIdArry[1], _self.editdepTree);
       });
     },
     showdelDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.deldepTree = res.data;
-        console.log(111)
-        this.selectDate(this.showusermissionIdArry[2],_self.deldepTree)
+        console.log(111);
+        this.selectDate(this.showusermissionIdArry[2], _self.deldepTree);
       });
     },
-     docupload() {
+    docupload() {
       console.log(this.$refs.fujianupload);
       for (let val of this.fujainList) {
         if (!val.hasOwnProperty("description")) {
@@ -457,10 +490,9 @@ export default {
       });
     },
     upFileloadSuccess() {
-      
       this.updateFileList.fileId = this.uploadForm.fileId;
       this.updateFileList.content = this.uploadForm.content;
-      console.log(this.updateFileList.content)
+      console.log(this.updateFileList.content);
       this.updateFileList.photourl = this.uploadForm.photourl;
       if (this.insertFileList.photourl === "") {
         this.insertFileList.photourl = "1514028176737moren1.png";
@@ -472,7 +504,7 @@ export default {
       this.updateFileList.fileStyleName = this.uploadForm.value;
       this.updateFileList.fileSize = this.uploadForm.filesize;
       this.updateFileList.fileSpecies = this.uploadForm.fileType;
-      console.log(this.updateFileList)
+      console.log(this.updateFileList);
       if (this.lookFileParams.userIds !== "") {
         this.chooseUser = true;
       }
@@ -483,6 +515,17 @@ export default {
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
+              this.lookFileParams.userIds =
+                this.lookFileParams.userIds + "," + this.adminIds;
+              this.updateFileParams.userIds =
+                this.updateFileParams.userIds + "," + this.adminIds;
+              this.deleteFileParams.userIds =
+                this.deleteFileParams.userIds + "," + this.adminIds;
+              console.log(
+                this.lookFileParams.userIds,
+                this.updateFileParams.userIds,
+                this.deleteFileParams.userIds
+              );
               lookFileUser(this.lookFileParams)
                 .then(res => {
                   console.log(res.data);
@@ -504,9 +547,9 @@ export default {
                               console.log(res.data);
                               if (res.data.code == 0) {
                                 console.log("设置删除权限成功");
-                                console.log( 222,this.updateFileParams.userIds)
-                                console.log( 111,this.lookFileParams.userIds)
-                                console.log( 111,this.deleteFileParams.userIds)
+                                console.log(222, this.updateFileParams.userIds);
+                                console.log(111, this.lookFileParams.userIds);
+                                console.log(111, this.deleteFileParams.userIds);
                               }
                             })
                             .catch(err => {});
@@ -561,7 +604,7 @@ export default {
     },
     handleSubmit() {
       this.getEditorContent();
-      console.log(this.uploadForm)
+      console.log(this.uploadForm);
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
         return;
@@ -595,14 +638,13 @@ export default {
   border: 1px solid #eee;
 }
 .picUpload .ivu-upload-list-remove {
- display:block !important; 
+  display: block !important;
   font-size: 24px;
-  padding:3px;
+  padding: 3px;
 }
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
 }
-
 </style>
 
 <style scoped>
