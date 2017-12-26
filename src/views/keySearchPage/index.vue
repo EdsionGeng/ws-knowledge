@@ -60,7 +60,8 @@ export default {
         current: 1,
         pageSize: 20,
         userId: sessionStorage.getItem("userId"),
-        searchContent: this.$route.params.key
+        searchContent: this.$route.params.key,
+        userGroupId:sessionStorage.getItem('userGroupId')
       },
       num: 0,
       deptlist: [],
@@ -79,7 +80,6 @@ export default {
           title: "标题",
           key: "title"
         },
-
         {
           title: "发布时间",
           key: "addFileTime",
