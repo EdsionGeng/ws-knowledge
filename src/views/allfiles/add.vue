@@ -93,6 +93,7 @@
       v-model="uploadDoc"
       width="400"
       @on-ok='docupload'
+      :mask-closable="false"
       title="选择附件">
       <Form>
         <FormItem label="">
@@ -103,7 +104,7 @@
             :format="[]"
             :on-format-error="handleFormatError"
             :max-size="10240"
-            :on-exceeded-size="handleMaxSize"
+            
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
             action="http://192.168.3.26:8011/file/upload.htmls">
@@ -132,6 +133,7 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
+      userLookIds:'',
       uploadDescription: "",
       submitText: "确定上传",
       submitLoading: false,
@@ -174,13 +176,9 @@ export default {
         operationStyleId: 1,
         fileId: ""
       },
-      loadingStatus: false,
       depTree: [],
       editdepTree: [],
       deldepTree: [],
-      depTreeList: [],
-      editdepTreeList: [],
-      deldepTreeList: [],
       adminIds: "",
       depTreeParams: {
         id: "",
@@ -267,9 +265,9 @@ export default {
         this.uploadForm.id !== "" ||
         this.uploadForm.content !== "" ||
         this.fujainList.length !== 0 ||
-        this.depTreeList.length !== 0 ||
-        this.editdepTreeList.length !== 0 ||
-        this.deldepTreeList.length !== 0
+        this.lookFileParams.userIds!== '' ||
+        this.updateFileParams.userIds !== '' ||
+        this.deleteFileParams.userIds !== ''
       ) {
         next(false);
         this.$Modal.confirm({
@@ -373,6 +371,7 @@ export default {
       console.log(this.$refs.upload);
     },
     pichandleBeforeUpload(file) {
+      console.log(this.$refs.upload)
       const check = this.picuploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
@@ -410,7 +409,6 @@ export default {
       });
     },
     chooseCheckPeople(arr) {
-      this.depTreeList = arr;
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
@@ -418,15 +416,15 @@ export default {
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
+      this.userLookIds=userIds.join(",");
       this.lookFileParams.userIds =
       this.lookFileParams.userIds + "," + sessionStorage.getItem("userId");
     },
     chooseDelPeople(arr) {
-       if(this.lookFileParams.userIds===''){
+       if(this.userLookIds===''){
           this.$Message.error('请先选择可查阅的人员')
           return
       }else{
-        this.deldepTreeList = arr;
         var userIds = [];
         for (let i = 0; i < arr.length; i++) {
           if (arr[i].children === null) {
@@ -439,11 +437,10 @@ export default {
       }
    },
     chooseEditPeople(arr) {
-      if(this.lookFileParams.userIds===''){
+      if(this.userLookIds===''){
           this.$Message.error('请先选择可查阅的人员')
           return
       }else{
-        this.editdepTreeList = arr;
         var userIds = [];
         for (let i = 0; i < arr.length; i++) {
           if (arr[i].children === null) {
@@ -469,7 +466,7 @@ export default {
     showeditDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
-        _self.editdepTree = res.data;
+        _self.editdepTree = res.data;       
       });
     },
     showdelDepTree() {
@@ -489,12 +486,12 @@ export default {
         }
       }
     },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "友情提醒",
-        desc: "文件  " + file.name + "过大,已超过10M！"
-      });
-    },
+    // handleMaxSize(file) {
+    //   this.$Notice.warning({
+    //     title: "友情提醒",
+    //     desc: "文件  " + file.name + "过大,已超过10M！"
+    //   });
+    // },
     upFileloadSuccess() {
       this.insertFileList.title = this.uploadForm.title;
       this.insertFileList.content = this.uploadForm.content;
