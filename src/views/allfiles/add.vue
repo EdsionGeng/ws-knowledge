@@ -528,20 +528,20 @@ export default {
             this.lookFileParams.fileId = res.data.data;
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
-            if (this.lookFileParams.userIds) {
+            if (this.lookFileParams.userIds=='') {
               this.lookFileParams.userIds = this.adminIds;
             } else {
               this.lookFileParams.userIds =
                 this.lookFileParams.userIds + "," + this.adminIds;
             }
-            if (this.updateFileParams.userIds) {
+            if (this.updateFileParams.userIds=='') {
               this.updateFileParams.userIds = this.adminIds;
             } else {
               this.updateFileParams.userIds =
                 this.updateFileParams.userIds + "," + this.adminIds;
             }
 
-            if (this.deleteFileParams.userIds) {
+            if (this.deleteFileParams.userIds=='') {
               this.deleteFileParams.userIds = this.adminIds;
             } else {
               this.deleteFileParams.userIds =
