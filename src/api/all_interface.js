@@ -8,6 +8,13 @@ export function getFileDetail(data) {
     data: data
   })
 }
+export function getDepByTree(data) {
+  return fetch({
+    url: '/getDepByTree',
+    method: 'post',
+    data: data
+  })
+}
 export function deletesinglefile(data) {
   return fetch({
     url: 'delete/singlefile',

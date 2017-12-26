@@ -8,7 +8,7 @@
 </div>
 </template>
 <script>
-import { getDepTree } from "../../api/all_interface";
+import { getDepByTree } from "../../api/all_interface";
 export default {
   props: ["myvalue"],
   data() {
@@ -37,8 +37,9 @@ export default {
       }
     },
     showDepTree() {
-      getDepTree(this.deptreedata)
+      getDepByTree(this.deptreedata)
         .then(res => {
+          console.log(res)
           if (res.status == 200) {
             this.deptlist = res.data;
           }
