@@ -46,7 +46,7 @@
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
-        <Table border ref="selection" :columns="AllAdColumns"   :data="AllAdList" stripe
+        <Table border ref="selection" :columns="AllAdColumns"  @on-sort-change="recSortType" :data="AllAdList" stripe
                @on-selection-change="delAdAction" @on-row-dblclick="showAdDetail"></Table>
         </Col>
       </Row>
@@ -165,7 +165,8 @@ export default {
         {
           title: "发送时间",
           key: "sendTime",
-          sortable: true
+          sortable: "custom",
+          sortType:""
         },
 //
 //        {
@@ -204,7 +205,8 @@ export default {
         startDate: "",
         endDate: "",
         title: "",
-        adStyle: ""
+        adStyle: "",
+        sortType:"",
       },
 
       deleteofcourse:false,
@@ -346,6 +348,11 @@ export default {
     //        this.insertAdParams.sendDepartmentName = userNames;
     //        this.sendAdParams.userIds = userIds;
     //      },
+
+    recSortType(order){
+ this.params.sortType=order.order;
+ this.showAllAdList();
+},
     circleUser(arr) {
       let departmentName = "";
       let userIds = "";

@@ -6,10 +6,10 @@
         <Form>
           <Col span="5">
           <FormItem label="文档类型:">
-              <docTree :myvalue='docTypeKey'></docTree>         
+              <docTree :myvalue='docTypeKey'></docTree>
             <!-- <Input v-model="value4" icon="arrow-down-b"  class="treestyle" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
                    style="width: 250px">
-                   
+
             </Input> -->
             <!-- <div v-if='showMenu' class="showmenubox">
                   <Tree :data="docTree" :render="renderContent"></Tree>
@@ -69,7 +69,7 @@
       title="删除文件"
       @on-ok="todelFile"
       @on-cancel="toDelCancel">
-      <p>确定删除所选文件</p>
+      <p style="text-align: center;font-size: 18px">是否确定删除选中文件？</p>
       <!--@on-check-change="getCheckNode"-->
     </Modal>
   </div>
