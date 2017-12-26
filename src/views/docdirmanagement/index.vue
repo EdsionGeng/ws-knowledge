@@ -164,6 +164,10 @@
       },
 
       deleteFileKind() {
+//        if(arr.length>1){
+//          this.$Message.warning("只能勾选一个节点");
+//          return
+//        }
         if(this.deleteDocParams.fileStyleId===""){
           this.$Message.warning("您没有选中相应的节点！");
           return

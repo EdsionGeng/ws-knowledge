@@ -243,7 +243,10 @@ export default {
           { required: true, message: "请填写公告标题", trigger: "blur" },
           { type: "string", max: 20, message: "标题限制在20字以内" }
         ],
-
+        content:[
+          { required: true, message: "请填写公告内容", trigger: "blur" },
+          { type: "string", max: 500, message: "标题限制在500字以内" }
+        ],
       },
       queryUserParams: {
         userGroupId: ""
