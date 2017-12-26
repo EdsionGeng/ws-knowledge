@@ -70,10 +70,10 @@
           </Select>
         </FormItem>
         <FormItem prop="title" label="标题：">
-          <Input type="text" :rows="4" placeholder="请输入标题！" v-model="insertAdParams.title"></Input>
+          <Input type="text" :rows="4" placeholder="请输入标题！" maxlength="20" v-model="insertAdParams.title"></Input>
         </FormItem>
         <FormItem prop="content" label="内容：">
-          <Input type="textarea" :rows="4" placeholder="请输入内容！" v-model="insertAdParams.content"></Input>
+          <Input type="textarea" :rows="4" placeholder="请输入内容！" maxlength="500" v-model="insertAdParams.content"></Input>
         </FormItem>
         <FormItem prop="sendDepartmentName" label="接收人员：">
           <Input type="textarea" :rows="4" placeholder="请点击下方按钮选择人员" disabled
@@ -124,7 +124,7 @@
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
           style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px; '>
+      <p class="modal-content" style="color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;">
        <pre> {{singleMessageDetail.Content}}</pre></p>
     </Modal>
 </div>
@@ -202,7 +202,7 @@ export default {
       usershow: false,
       params: {
         current: 1,
-        pageSize: 10,
+        pageSize: 20,
         startDate: "",
         endDate: "",
         title: "",

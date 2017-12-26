@@ -146,7 +146,7 @@
         pageOpts:[10,20,30,40,50],
         dataParams: {
           current: 1,
-          pageSize: 10,
+          pageSize: 20,
           title: "",
           startDate: "",
           endDate: "",
