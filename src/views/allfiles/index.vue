@@ -88,7 +88,7 @@
           {
             title: "发布时间",
             key: "addFileTime",
-            sortable: true,
+            sortType: "desc",
             align: "center"
           },
           {
