@@ -15,6 +15,7 @@
       v-model="modal1"
       :mask-closable="false"
       :closable="false"
+      @on-cancel="cancel"
       style="margin-left: 160px"
     >
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
@@ -86,8 +87,8 @@
             const data = res.data;
               // console.log(res.data);
               if (data.code == 0) {
+               // console.info(data.data)
               this.MyMessageList = data.data;
-
               this.page = data.rdPage;
               //console.info(data.rdPage)
               //console.log(data.rdPage)
@@ -98,6 +99,9 @@
         if(row.ifRead===0){
           return 'demo-table-info-row';
         }
+      },
+      cancel(){
+       window.location.reload();
       },
       onRowClick(row,index){
         this.params={

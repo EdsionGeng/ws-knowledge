@@ -15,7 +15,7 @@
       </Row>
     </div>
     <div class="doctree-sty ">
-      <Tree :data="docTree"    :render="renderContent1" ></Tree>
+      <Tree :data="docTree" :render="renderContent1"></Tree>
     </div>
     <Modal
       v-model="insertFile"
@@ -30,7 +30,7 @@
           <Input v-model="value4" icon="arrow-down-b" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
                  style="width: 200px">
           </Input>
-          <div  v-if='showMenu' style='border:1px solid #ccc;margin-top:2px;width:200px;max-height:200px;overflow:auto;' >
+          <div v-if='showMenu' style='border:1px solid #ccc;margin-top:2px;width:200px;max-height:200px;overflow:auto;'>
             <div class="showmenubox">
               <Tree :data="docTree" :render="renderContent"></Tree>
             </div>
@@ -38,7 +38,8 @@
 
         </FormItem>
         <FormItem prop="content" label="新增类型：">
-          <Input type="text" :rows="4" placeholder="请输入内容！" v-model="insertFileParams.docName" style='width:200px;'></Input>
+          <Input type="text" :rows="4" placeholder="请输入内容！" v-model="insertFileParams.docName"
+                 style='width:200px;'></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -58,12 +59,12 @@
     <Modal
       v-model="deletesure "
       width="400"
-      title="确定删除此文件类型?"
+      title="删除文件类型"
       :closable="false"
       @on-ok="sureDeleteDoc"
       @on-cancel="delcancel"
     >
-
+      <p style="font-size: 18px;text-align: center">确定删除所选文件类型？</p>
     </Modal>
     <Modal
       v-model="updateFileName "
@@ -77,14 +78,15 @@
           <Input v-model="value4" icon="arrow-down-b" placeholder="请选择" @on-click='dropmenu(!showMenu)'
                  style="width: 200px">
           </Input>
-           <div  v-if='showMenu' style='border:1px solid #ccc;margin-top:2px;width:200px;max-height:200px;overflow:auto;' >
+          <div v-if='showMenu' style='border:1px solid #ccc;margin-top:2px;width:200px;max-height:200px;overflow:auto;'>
             <div class="showmenubox">
               <Tree :data="docTree" :render="renderContent"></Tree>
             </div>
           </div>
         </FormItem>
         <FormItem prop="content" label="目录名称：">
-          <Input type="text" :rows="4" placeholder="请输入内容！"style="width: 200px" v-model="updateParams.fileName"></Input>
+          <Input type="text" :rows="4" placeholder="请输入内容！" style="width: 200px"
+                 v-model="updateParams.fileName"></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -118,7 +120,7 @@
         deleteDocParams: {
           fileStyleId: "",
         },
-        deletesure:false,
+        deletesure: false,
         fileStyleShow: false,
         value4: "",
         showMenu: false,
@@ -126,7 +128,7 @@
           parentId: "",
           docName: "",
         },
-        filekindname:"",
+        filekindname: "",
         updateParams: {
           fileName: "",
           fileStyleId: "",
@@ -135,6 +137,10 @@
     },
     created() {
       this.showDocTree();
+    },
+    mounted() {
+      //  挂载结束状态
+      // this.showDocTree();
     },
     methods: {
       showDocTree() {
@@ -168,21 +174,21 @@
 //          this.$Message.warning("只能勾选一个节点");
 //          return
 //        }
-        if(this.deleteDocParams.fileStyleId===""){
+        if (this.deleteDocParams.fileStyleId === "") {
           this.$Message.warning("您没有选中相应的节点！");
           return
         }
-           this.open = true;
-        let _self=this;
-           countFileStyle(this.deleteDocParams).then(res => {
-           const data = res.data;
-           if (data.data != 0) {
-             _self.fileStyleShow = true;
-             _self.filePcs = data.data;
-             _self.pShow = false;
+        this.open = true;
+        let _self = this;
+        countFileStyle(this.deleteDocParams).then(res => {
+          const data = res.data;
+          if (data.data != 0) {
+            _self.fileStyleShow = true;
+            _self.filePcs = data.data;
+            _self.pShow = false;
           }
           else {
-             _self.pShow = true;
+            _self.pShow = true;
           }
         }).catch(err => {
         });
@@ -198,29 +204,29 @@
               click: () => {
                 this.value4 = data.fileKindName;
                 this.insertFileParams.parentId = data.id;
-                this.updateParams.fileStyleId=data.id;
+                this.updateParams.fileStyleId = data.id;
                 this.showMenu = false;
               }
             }
           }, data.fileKindName)
       },
-      delcancel(){
-        this.fileStyleShow=false;
-        this.deleteDocParams.fileStyleId="";
+      delcancel() {
+        this.fileStyleShow = false;
+        this.deleteDocParams.fileStyleId = "";
       },
       sureDelete() {
 
-        if(this.deleteDocParams.fileStyleId==""){
+        if (this.deleteDocParams.fileStyleId == "") {
           this.$Message.warning("请勾选想要删除的节点")
           this.open = false;
           return
         }
-        if(this.filePcs>0){
+        if (this.filePcs > 0) {
           this.$Message.warning("此文件还有对应的相应文件数量")
           this.open = false;
           return
         }
-this. deletesure=true;
+        this.deletesure = true;
 //        deleteDocRule(this.deleteDocParams).then(res => {
 //          let _self = this;
 //          const data = res.data;
@@ -235,8 +241,8 @@ this. deletesure=true;
 //          }
 //        }).catch(err => {
 //        });
-    },
-      sureDeleteDoc(){
+      },
+      sureDeleteDoc() {
         deleteDocRule(this.deleteDocParams).then(res => {
           let _self = this;
           const data = res.data;
@@ -262,29 +268,34 @@ this. deletesure=true;
           return
         }
         updateDocRule(this.updateParams).then(res => {
-            let _self = this;
-            const data = res.data;
-            if (data.code == 0) {
-              _self.deleteDocParams.fileStyleId = "";
-              _self.insertFileParams.parentId = "";
-              _self.$Message.success(data.msg);
-              _self.showDocTree();
-              _self.updateFileName = false;
-            }
-            else {
-              _self.$Message.warning(data.msg);
-            }
-          }).catch(err => {
+          const data = res.data;
+          if (data.code == 0) {
+            this.deleteDocParams.fileStyleId = "";
+            this.insertFileParams.parentId = "";
+            this.updateParams.fileStyleId = "";
+            this.updateParams.fileName = "";
+            this.$Message.success(data.msg);
+            this.showDocTree();
+
+            this.updateFileName = false;
+            window.location.reload();
+          }
+          else {
+            this.$Message.warning(data.msg);
+          }
+        }).catch(err => {
         });
       },
       ok() {
 
-        if(this.insertFileParams.parentId==""){
+        if (this.insertFileParams.parentId == "") {
           this.$Message.warning("请点击想要添加的文档类型");
-        };
-        if(this.insertFileParams.docName==""){
+        }
+        ;
+        if (this.insertFileParams.docName == "") {
           this.$Message.warning("请输入新文档目录");
-        };
+        }
+        ;
         insertDocKind(this.insertFileParams).then(res => {
           let _self = this;
           const data = res.data;
