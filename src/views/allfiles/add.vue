@@ -212,10 +212,6 @@ export default {
     editor.customConfig.uploadImgServer =
       "http://192.168.22.45:8011/file/upload.htmls";
     editor.create();
-    setTimeout(() => {
-      editor.txt.html(this.uploadForm.content);
-    }, 1000);
-     this.editorContent=this.uploadForm.content;
     this.adminPower();
     this.uploadList = this.$refs.fujianupload.fileList;
     this.picuploadList = this.$refs.upload.fileList;
@@ -256,6 +252,9 @@ export default {
       this.showeditDepTree();
       this.showdelDepTree();
     }
+    if(this.uploadForm.content){
+      editor.txt.html(this.uploadForm.content);
+    }
   },
   beforeRouteLeave(to, from, next) {
     this.getEditorContent();
@@ -293,6 +292,7 @@ export default {
             this.getFileType(this.uploadForm.fileType);
             this.getPhotoUrlList(this.picuploadList);
             this.$Message.success('保存成功')
+            console.log('content:', this.uploadForm.content)
             next();
           },
           onCancel: () => {
