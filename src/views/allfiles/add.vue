@@ -103,8 +103,6 @@
             multiple
             :format="[]"
             :on-format-error="handleFormatError"
-            :max-size="10240"
-            
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
             action="http://192.168.3.26:8011/file/upload.htmls">
@@ -383,12 +381,27 @@ export default {
     handleBeforeUpload(file) {
       const check = this.uploadList.length < 10;
       console.log(this.uploadList.length);
+       console.log(file)
+     
       if (!check) {
         this.$Notice.warning({
           title: "附件上传已达上限"
         });
       }
-      return check;
+        // else if(file.size>=102400){
+        //       this.$Modal.confirm({
+        //         title:'上传提示！',
+        //         content: "该文件大于100M,是否上传？",
+        //           onOK:()=>{return check},
+        //           onCancel: () => {
+        //               return false
+        //               this.$Message.info('你选择了取消上传');
+        //           }
+        //       });
+        // }else{
+        //   
+        // }
+        return check
     },
     pichandleMaxSize(file) {
       this.$Notice.warning({
@@ -478,12 +491,6 @@ export default {
         }
       }
     },
-    // handleMaxSize(file) {
-    //   this.$Notice.warning({
-    //     title: "友情提醒",
-    //     desc: "文件  " + file.name + "过大,已超过10M！"
-    //   });
-    // },
     upFileloadSuccess() {
       this.insertFileList.title = this.uploadForm.title;
       this.insertFileList.content = this.uploadForm.content;
