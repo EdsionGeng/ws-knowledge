@@ -62,7 +62,7 @@
       @on-cancel="cancel">
       <Form   :rules="ruleValidate"  ref='formValidate' :model="insertAdParams" :label-width="90">
         <FormItem prop="adStyle" label="类型：">
-          <Select placeholder="请选择" :clearable="true"  style="width:500px" v-model="insertAdParams.adStyle">
+          <Select placeholder="请选择" :clearable="true"  v-model="insertAdParams.adStyle">
             <Option value="">请选择类型</Option>
             <Option value="通知">通知</Option>
             <Option value="公告">公告</Option>
@@ -246,7 +246,7 @@ export default {
         ],
         content:[
           { required: true, message: "请填写公告内容", trigger: "blur" },
-          { type: "string", max: 500, message: "标题限制在500字以内" }
+          { type: "string", max: 500, message: "内容限制在500字以内" }
         ],
       },
       queryUserParams: {
@@ -572,4 +572,10 @@ export default {
 }
 .user-detail {
 }
+</style>
+
+<style>
+  .ivu-select-single .ivu-select-selection{
+    width:100%!important;
+  }
 </style>
