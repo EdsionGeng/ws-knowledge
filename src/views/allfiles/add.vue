@@ -12,7 +12,7 @@
           <div style="width:450px;" class="picUpload">
             <Upload
               ref="upload"
-              :show-upload-list="true"
+              :show-upload-list="false"            
               :before-upload='pichandleBeforeUpload'
               :format="['jpg','jpeg','png']"
               :on-exceeded-size="pichandleMaxSize"
@@ -22,7 +22,18 @@
               action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
             </Upload>
-          </div>
+             <Row 
+                v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;'>
+                <Icon type="image" style='margin-right:8px;color:#009DD9;'></Icon>
+
+                <span>                  
+                      <a @click.prevent="model7=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
+                </span>
+                <Button type="text" size="small" @click="handleRemove(item)">
+                    <Icon type="android-cancel" ></Icon>
+                </Button>
+            </Row>
+            </div>
         </FormItem>
         <FormItem label="内容：" prop='content'>
           <div class="hello">
@@ -40,8 +51,8 @@
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
           </Row>
         </FormItem>
-        <FormItem label="权限设置：" prop='power'>
-          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;">
+        <FormItem label="权限设置：" prop='power' >
+          <Tabs value="name1" type='card' class='newfileTab' style="width:900px;" @on-click='changeTab'>
             <TabPane label="可查阅人员" name="name1">
               <div>
                 <Tree :data="depTree" show-checkbox multiple :render="renderContentDep"
@@ -90,6 +101,16 @@
       </Form>
     </div>
     <Modal
+       v-model="model7"
+        width="300"
+        :closable='false'
+        cancel-text=''
+      >
+       <p slot="footer" style="height:0;line-height:0">
+        </p>
+      <img style='width:100%;height:100%;' :src="'http://192.168.3.26:8011/'+uploadForm.photourl" alt="">
+    </Modal>
+    <Modal
       v-model="uploadDoc"
       width="400"
       @on-ok='docupload'
@@ -130,6 +151,8 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
+      model7: false,
+      picuploadList: [],
       userLookIds: "",
       uploadDescription: "",
       submitText: "确定上传",
@@ -363,6 +386,22 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
+    changeTab(name) {
+      console.log(name);
+      if (name == "name2" || name == "name3") {
+        if (this.userLookIds === "") {
+          this.$Message.error("请先选择可查阅的人员");
+          return;
+        }
+      }
+    },
+    handleRemove(file) {
+      console.log(file);
+
+      const fileList = this.picuploadList;
+      console.log(fileList);
+      this.picuploadList.splice(fileList.indexOf(file), 1);
+    },
     showUploadModel() {
       this.uploadDoc = true;
       this.uploadDescription = "";
@@ -385,7 +424,6 @@ export default {
     },
     pichandleSuccess(res, file) {
       this.uploadForm.photourl = res.data;
-      console.log(this.$refs.upload);
     },
     pichandleBeforeUpload(file) {
       console.log(this.$refs.upload);
@@ -448,31 +486,22 @@ export default {
       this.userLookIds = userIds.join(",");
     },
     chooseDelPeople(arr) {
-      if (this.userLookIds === "") {
-        this.$Message.error("请先选择可查阅的人员");
-        return;
-      } else {
-        var userIds = [];
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children === null) {
-            userIds.push(arr[i].id);
-          }
+      var userIds = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          userIds.push(arr[i].id);
         }
-        this.deleteFileParams.userIds = userIds.join(",");
       }
+      this.deleteFileParams.userIds = userIds.join(",");
     },
     chooseEditPeople(arr) {
-      if (this.userLookIds === "") {
-        this.$Message.error("请先选择可查阅的人员");
-      } else {
-        var userIds = [];
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children === null) {
-            userIds.push(arr[i].id);
-          }
+      var userIds = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children === null) {
+          userIds.push(arr[i].id);
         }
-        this.updateFileParams.userIds = userIds.join(",");
       }
+      this.updateFileParams.userIds = userIds.join(",");
     },
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
@@ -528,20 +557,20 @@ export default {
             this.lookFileParams.fileId = res.data.data;
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
-            if (this.lookFileParams.userIds=='') {
+            if (this.lookFileParams.userIds == "") {
               this.lookFileParams.userIds = this.adminIds;
             } else {
               this.lookFileParams.userIds =
                 this.lookFileParams.userIds + "," + this.adminIds;
             }
-            if (this.updateFileParams.userIds=='') {
+            if (this.updateFileParams.userIds == "") {
               this.updateFileParams.userIds = this.adminIds;
             } else {
               this.updateFileParams.userIds =
                 this.updateFileParams.userIds + "," + this.adminIds;
             }
 
-            if (this.deleteFileParams.userIds=='') {
+            if (this.deleteFileParams.userIds == "") {
               this.deleteFileParams.userIds = this.adminIds;
             } else {
               this.deleteFileParams.userIds =
