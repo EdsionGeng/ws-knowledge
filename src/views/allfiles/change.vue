@@ -108,8 +108,6 @@
             multiple
             :format="[ 'doc','docx','xls','xlsx','ppt','pptx','txt','jpg','jpeg','png','mp3','mp4']"
             :on-format-error="handleFormatError"
-            :max-size="10240"
-            :on-exceeded-size="handleMaxSize"
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
             action="http://192.168.3.26:8011/file/upload.htmls">
@@ -176,18 +174,18 @@ export default {
       },
       lookFileParams: {
         userIds: "",
-        fileId: "",
+        fileId: this.$route.params.id,
         operationStyleId: 1
       },
       updateFileParams: {
         userIds: "",
         operationStyleId: 1,
-        fileId: ""
+        fileId: this.$route.params.id
       },
       deleteFileParams: {
         userIds: "",
         operationStyleId: 1,
-        fileId: ""
+        fileId: this.$route.params.id
       },
       fileDetailUrl: [],
       fileDetailSize: [],
@@ -272,6 +270,7 @@ export default {
           this.lookFileParams.userIds = data[0].join(",");
           this.updateFileParams.userIds = data[1].join(",");
           this.deleteFileParams.userIds = data[2].join(",");
+          this.userLookIds = data[0].join(",");
         }
       });
     },
@@ -307,6 +306,7 @@ export default {
             this.editorContent = this.fileDetails.fileContent;
             this.uploadForm.fileId = this.fileDetails.id;
             this.uploadForm.photourl = this.fileDetails.photoUrl;
+
             if (this.uploadForm.photourl !== "") {
               let picUploadDetails = {
                 name: this.uploadForm.photourl.slice(13)
@@ -415,9 +415,9 @@ export default {
       }
       this.lookFileParams.userIds = userIds.join(",");
       this.userLookIds = userIds.join(",");
+      console.log(this.lookFileParams.userIds);
     },
     chooseDelPeople(arr) {
-      console.log(arr);
       console.log(this.userLookIds);
       if (this.userLookIds === "") {
         console.log(111);
@@ -430,8 +430,9 @@ export default {
             userIds.push(arr[i].id);
           }
         }
-        console.log(userIds);
+
         this.deleteFileParams.userIds = userIds.join(",");
+        console.log(1111, this.deleteFileParams.userIds);
       }
     },
     chooseEditPeople(arr) {
@@ -446,6 +447,7 @@ export default {
           }
         }
         this.updateFileParams.userIds = userIds.join(",");
+        console.log(this.updateFileParams.userIds);
       }
     },
     renderContentDep(h, { root, node, data }) {
@@ -455,7 +457,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
-        console.log(333);
+        console.log("查看");
         console.log(this.showusermissionIdArry[0]);
         this.selectDate(this.showusermissionIdArry[0], _self.depTree);
       });
@@ -464,7 +466,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.editdepTree = res.data;
-        console.log(222);
+        console.log("修改");
         console.log(this.showusermissionIdArry[1]);
         this.selectDate(this.showusermissionIdArry[1], _self.editdepTree);
       });
@@ -473,7 +475,7 @@ export default {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.deldepTree = res.data;
-        console.log(111);
+        console.log("删除");
         console.log(this.showusermissionIdArry[2]);
         this.selectDate(this.showusermissionIdArry[2], _self.deldepTree);
       });
@@ -489,12 +491,7 @@ export default {
         }
       }
     },
-    handleMaxSize(file) {
-      this.$Notice.warning({
-        title: "友情提醒",
-        desc: "文件  " + file.name + "过大,已超过10M！"
-      });
-    },
+
     upFileloadSuccess() {
       this.updateFileList.fileId = this.uploadForm.fileId;
       this.updateFileList.content = this.uploadForm.content;
@@ -510,6 +507,7 @@ export default {
       this.updateFileList.fileStyleName = this.uploadForm.value;
       this.updateFileList.fileSize = this.uploadForm.filesize;
       this.updateFileList.fileSpecies = this.uploadForm.fileType;
+      this.updateFileList.chooseUser = "1";
       console.log(this.updateFileList);
       if (this.lookFileParams.userIds !== "") {
         this.chooseUser = true;
@@ -518,32 +516,27 @@ export default {
         .then(res => {
           if (res.data.code == 0) {
             if (this.chooseUser) {
-              this.lookFileParams.fileId = res.data.data;
-              this.updateFileParams.fileId = res.data.data;
-              this.deleteFileParams.fileId = res.data.data;
-              if (this.lookFileParams.userIds=='') {
+              if (this.lookFileParams.userIds == "") {
                 this.lookFileParams.userIds = this.adminIds;
               } else {
                 this.lookFileParams.userIds =
                   this.lookFileParams.userIds + "," + this.adminIds;
               }
-              if (this.updateFileParams.userIds=='') {
+              if (this.updateFileParams.userIds == "") {
                 this.updateFileParams.userIds = this.adminIds;
               } else {
                 this.updateFileParams.userIds =
-                  this.updateFileParams.userIds + "," +  this.adminIds;
+                  this.updateFileParams.userIds + "," + this.adminIds;
               }
-              if (this.deleteFileParams.userIds=='') {
+              if (this.deleteFileParams.userIds == "") {
                 this.deleteFileParams.userIds = this.adminIds;
               } else {
                 this.deleteFileParams.userIds =
                   this.deleteFileParams.userIds + "," + this.adminIds;
               }
-              console.log(
-                this.lookFileParams.userIds,
-                this.updateFileParams.userIds,
-                this.deleteFileParams.userIds
-              );
+              console.log(1111, this.lookFileParams.userIds);
+              console.log(222, this.updateFileParams.userIds);
+              console.log(3333, this.deleteFileParams.userIds);
               lookFileUser(this.lookFileParams)
                 .then(res => {
                   console.log(res.data);
@@ -568,6 +561,13 @@ export default {
                                 console.log(222, this.updateFileParams.userIds);
                                 console.log(111, this.lookFileParams.userIds);
                                 console.log(333, this.deleteFileParams.userIds);
+                                this.submitLoading = false;
+                                this.$Message.success("修改成功,2s后少跳转到文件详情页面");
+                                setTimeout(() => {
+                                  this.$router.push(
+                                    "/allfiles/check/" + this.$route.params.id
+                                  );
+                                }, 2000);
                               }
                             })
                             .catch(err => {});
@@ -577,12 +577,13 @@ export default {
                   }
                 })
                 .catch(err => {});
+            } else {
+              this.submitLoading = false;
+              this.$Message.success("修改成功,2s后少跳转到文件详情页面");
+              setTimeout(() => {
+                this.$router.push("/allfiles/check/" + this.$route.params.id);
+              }, 2000);
             }
-            this.submitLoading = false;
-            this.$Message.success("修改成功,2s后少跳转到文件详情页面");
-            setTimeout(() => {
-              this.$router.push("/allfiles/check/" + this.$route.params.id);
-            }, 1000);
           }
         })
         .catch(err => {});
@@ -619,11 +620,19 @@ export default {
       this.uploadForm.filesize = filesizeArry.join(",");
       this.uploadForm.describle = filedescribleArry.join(",");
     },
+    ContainId(ids, id) {
+      for (var val of id) {
+        if (ids.indexOf(val) === -1) {
+          return true;
+        }
+      }
+      return false;
+    },
     handleSubmit() {
       this.getEditorContent();
-      console.log(this.lookFileParams.userIds);
-      console.log(this.updateFileParams.userIds);
-      console.log(this.deleteFileParams.userIds);
+      console.log(1, this.lookFileParams.userIds);
+      console.log(2, this.updateFileParams.userIds);
+      console.log(3, this.deleteFileParams.userIds);
       console.log(this.uploadForm);
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
@@ -632,12 +641,18 @@ export default {
         this.$Message.warning("请编辑文件内容");
         return;
       } else if (
-        this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
+        this.ContainId(
+          this.lookFileParams.userIds,
+          this.updateFileParams.userIds
+        )
       ) {
         this.$Message.warning("修改文件权限的人超过查看文件权限的人");
         return;
       } else if (
-        this.lookFileParams.userIds.indexOf(this.deleteFileParams.userIds) == -1
+        this.ContainId(
+          this.lookFileParams.userIds,
+          this.deleteFileParams.userIds
+        )
       ) {
         this.$Message.warning("删除文件权限的人超过查看文件权限的人");
         return;
