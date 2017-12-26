@@ -58,12 +58,12 @@
     <Modal
       v-model="deletesure "
       width="400"
-      title="确定删除此文件类型?"
+      title="删除文件类型"
       :closable="false"
       @on-ok="sureDeleteDoc"
       @on-cancel="delcancel"
     >
-
+      <p style="font-size: 18px;text-align: center">确定删除所选文件类型？</p>
     </Modal>
     <Modal
       v-model="updateFileName "
@@ -135,6 +135,10 @@
     },
     created() {
       this.showDocTree();
+    },
+    mounted(){
+      //  挂载结束状态
+     // this.showDocTree();
     },
     methods: {
       showDocTree() {
@@ -262,17 +266,18 @@ this. deletesure=true;
           return
         }
         updateDocRule(this.updateParams).then(res => {
-            let _self = this;
             const data = res.data;
             if (data.code == 0) {
-              _self.deleteDocParams.fileStyleId = "";
-              _self.insertFileParams.parentId = "";
-              _self.$Message.success(data.msg);
-              _self.showDocTree();
-              _self.updateFileName = false;
+              this.deleteDocParams.fileStyleId = "";
+              this.insertFileParams.parentId = "";
+              this.updateParams.fileStyleId="";
+              this.updateParams.fileName="";
+              this.$Message.success(data.msg);
+              this.showDocTree();
+              this.updateFileName = false;
             }
             else {
-              _self.$Message.warning(data.msg);
+              this.$Message.warning(data.msg);
             }
           }).catch(err => {
         });
