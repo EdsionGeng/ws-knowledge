@@ -272,7 +272,6 @@ export default {
           this.lookFileParams.userIds = data[0].join(",");
           this.updateFileParams.userIds = data[1].join(",");
           this.deleteFileParams.userIds = data[2].join(",");
-          console.log(this.lookFileParams.userIds);
         }
       });
     },
@@ -418,7 +417,10 @@ export default {
       this.userLookIds = userIds.join(",");
     },
     chooseDelPeople(arr) {
+      console.log(arr);
+      console.log(this.userLookIds);
       if (this.userLookIds === "") {
+        console.log(111);
         this.$Message.error("请先选择可查阅的人员");
         return;
       } else {
@@ -428,6 +430,7 @@ export default {
             userIds.push(arr[i].id);
           }
         }
+        console.log(userIds);
         this.deleteFileParams.userIds = userIds.join(",");
       }
     },
@@ -453,6 +456,7 @@ export default {
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
         console.log(333);
+        console.log(this.showusermissionIdArry[0]);
         this.selectDate(this.showusermissionIdArry[0], _self.depTree);
       });
     },
@@ -461,6 +465,7 @@ export default {
       getDepTree(_self.depTreeParams).then(res => {
         _self.editdepTree = res.data;
         console.log(222);
+        console.log(this.showusermissionIdArry[1]);
         this.selectDate(this.showusermissionIdArry[1], _self.editdepTree);
       });
     },
@@ -469,6 +474,7 @@ export default {
       getDepTree(_self.depTreeParams).then(res => {
         _self.deldepTree = res.data;
         console.log(111);
+        console.log(this.showusermissionIdArry[2]);
         this.selectDate(this.showusermissionIdArry[2], _self.deldepTree);
       });
     },
@@ -515,12 +521,24 @@ export default {
               this.lookFileParams.fileId = res.data.data;
               this.updateFileParams.fileId = res.data.data;
               this.deleteFileParams.fileId = res.data.data;
-              this.lookFileParams.userIds =
-                this.lookFileParams.userIds + "," + this.adminIds;
-              this.updateFileParams.userIds =
-                this.updateFileParams.userIds + "," + this.adminIds;
-              this.deleteFileParams.userIds =
-                this.deleteFileParams.userIds + "," + this.adminIds;
+              if (this.lookFileParams.userIds) {
+                this.lookFileParams.userIds = this.adminIds;
+              } else {
+                this.lookFileParams.userIds =
+                  this.lookFileParams.userIds + "," + this.adminIds;
+              }
+              if (this.updateFileParams.userIds) {
+                this.updateFileParams.userIds = this.adminIds;
+              } else {
+                this.updateFileParams.userIds =
+                  this.updateFileParams.userIds + "," +  this.adminIds;
+              }
+              if (this.deleteFileParams.userIds) {
+                this.deleteFileParams.userIds = this.adminIds;
+              } else {
+                this.deleteFileParams.userIds =
+                  this.deleteFileParams.userIds + "," + this.adminIds;
+              }
               console.log(
                 this.lookFileParams.userIds,
                 this.updateFileParams.userIds,
@@ -549,7 +567,7 @@ export default {
                                 console.log("设置删除权限成功");
                                 console.log(222, this.updateFileParams.userIds);
                                 console.log(111, this.lookFileParams.userIds);
-                                console.log(111, this.deleteFileParams.userIds);
+                                console.log(333, this.deleteFileParams.userIds);
                               }
                             })
                             .catch(err => {});
@@ -581,7 +599,6 @@ export default {
             this.adminIds = newArr.join(",");
             this.adminIds =
               this.adminIds + "," + sessionStorage.getItem("userId");
-            console.log(this.adminIds);
           }
         })
         .catch(err => {});
@@ -604,6 +621,9 @@ export default {
     },
     handleSubmit() {
       this.getEditorContent();
+      console.log(this.lookFileParams.userIds);
+      console.log(this.updateFileParams.userIds);
+      console.log(this.deleteFileParams.userIds);
       console.log(this.uploadForm);
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文件类型");
