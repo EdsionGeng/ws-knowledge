@@ -417,8 +417,6 @@ export default {
       }
       this.lookFileParams.userIds = userIds.join(",");
       this.userLookIds=userIds.join(",");
-      this.lookFileParams.userIds =
-      this.lookFileParams.userIds + "," + sessionStorage.getItem("userId");
     },
     chooseDelPeople(arr) {
        if(this.userLookIds===''){
@@ -432,14 +430,11 @@ export default {
           }
         }
         this.deleteFileParams.userIds = userIds.join(",");
-        this.deleteFileParams.userIds =
-          this.deleteFileParams.userIds + "," + sessionStorage.getItem("userId");
-      }
+    }
    },
     chooseEditPeople(arr) {
       if(this.userLookIds===''){
           this.$Message.error('请先选择可查阅的人员')
-          return
       }else{
         var userIds = [];
         for (let i = 0; i < arr.length; i++) {
@@ -448,9 +443,6 @@ export default {
           }
         }
         this.updateFileParams.userIds = userIds.join(",");
-
-        this.updateFileParams.userIds =
-          this.updateFileParams.userIds + "," + sessionStorage.getItem("userId");
       }
     },
     renderContentDep(h, { root, node, data }) {
@@ -513,29 +505,18 @@ export default {
             this.lookFileParams.fileId = res.data.data;
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
-            console.log(res.data.data);
-            if (this.lookFileParams.userIds === "") {
-              this.lookFileParams.userIds = this.adminIds;
-            }
-            console.log(this.lookFileParams.userIds);
+            this.lookFileParams.userIds = this.lookFileParams.userIds+','+this.adminIds;
+            this.updateFileParams.userIds = this.updateFileParams.userIds+','+this.adminIds;
+            this.deleteFileParams.userIds = this.deleteFileParams.userIds+','+this.adminIds;
             lookFileUser(this.lookFileParams)
               .then(res => {
-                console.log(res.data);
                 if (res.data.code == 0) {
-                  console.log("设置权限成功");
-                  console.log(this.updateFileParams.userIds);
-                  if (this.updateFileParams.userIds === "") {
-                    this.updateFileParams.userIds = this.adminIds;
-                    console.log(this.updateFileParams.userIds);
-                  }
+                  console.log("设置权限成功");  
                   updateFilePermission(this.updateFileParams)
                     .then(res => {
                       console.log(res.data);
                       if (res.data.code == 0) {
                         console.log("设置修改权限成功");
-                        if (this.deleteFileParams.userIds === "") {
-                          this.deleteFileParams.userIds = this.adminIds;
-                        }
                         deleteFilePermission(this.deleteFileParams)
                           .then(res => {
                             console.log(res.data);
