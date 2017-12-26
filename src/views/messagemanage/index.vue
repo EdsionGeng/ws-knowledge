@@ -2,9 +2,9 @@
   <div>
     <div class="bodyarea">
       <Row>
-        <Form>
+        <Form >
           <Col span="5">
-          <FormItem label=" 标题：">
+          <FormItem label=" 标题：" >
             <Input v-model="params.title" placeholder="请输入标题名称" style="width: 250px"></Input>
           </FormItem>
           </Col>
@@ -60,7 +60,7 @@
       title="添加公告"
       @on-ok="sureSend"
       @on-cancel="cancel">
-      <Form ref="insertAdParams" :model="insertAdParams" :label-width="90">
+      <Form   :rules="ruleValidate"  ref='formValidate' :model="insertAdParams" :label-width="90">
         <FormItem prop="adStyle" label="类型：">
           <Select placeholder="请选择" :clearable="true"  style="width:500px" v-model="insertAdParams.adStyle">
             <Option value="">请选择类型</Option>
@@ -69,7 +69,7 @@
             <Option value="温馨提示">温馨提示</Option>
           </Select>
         </FormItem>
-        <FormItem prop="" label="标题：">
+        <FormItem prop="title" label="标题：">
           <Input type="text" :rows="4" placeholder="请输入标题！" v-model="insertAdParams.title"></Input>
         </FormItem>
         <FormItem prop="content" label="内容：">
