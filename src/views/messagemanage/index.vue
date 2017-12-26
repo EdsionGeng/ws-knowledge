@@ -106,10 +106,11 @@
     <!--</Modal>-->
     <Modal
       v-model="deleteofcourse"
-      title="确定删除所勾选数据？"
+      title="删除公告"
       @on-ok="sureDelete"
       :closable="false"
       @on-cancel="cancel">
+      <p style="font-size: 18px;text-align: center">确定删除所选公告？</p>
     </Modal>
     <Modal
       title=""
