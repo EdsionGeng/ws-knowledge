@@ -69,11 +69,11 @@
             <Option value="温馨提示">温馨提示</Option>
           </Select>
         </FormItem>
-        <FormItem prop="title" label="标题：">
-          <Input type="text" :rows="4" placeholder="请输入标题！" maxlength="20" v-model="insertAdParams.title"></Input>
+        <FormItem  label="标题：">
+          <Input type="text" :rows="4" placeholder="请输入标题！" maxlength=20 v-model="insertAdParams.title"></Input>
         </FormItem>
-        <FormItem prop="content" label="内容：">
-          <Input type="textarea" :rows="4" placeholder="请输入内容！" maxlength="500" v-model="insertAdParams.content"></Input>
+        <FormItem  label="内容：">
+          <Input type="textarea" :rows="4" placeholder="请输入内容！" maxlength=500 v-model="insertAdParams.content"></Input>
         </FormItem>
         <FormItem prop="sendDepartmentName" label="接收人员：">
           <Input type="textarea" :rows="4" placeholder="请点击下方按钮选择人员" disabled

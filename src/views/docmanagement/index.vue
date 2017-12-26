@@ -251,16 +251,20 @@
         let _self = this;
 //      console.info(_self.selection)
         if (_self.deleteFileParams.fileIds == "") {
-          this.$Message.info('请勾选相应数据');
+          _self.$Message.info('请勾选相应数据');
           return
         }
         _self.deleteFileParams.fileIds = _self.selection;
         deleteFile(_self.deleteFileParams)
           .then(res => {
             const data = res.data;
+            console.log(data)
             if (data.code == 0) {
               _self.$Message.info('操作成功');
+              window.location.reload();
               _self.showAllFileList();
+            }else{
+              _self.$Message.info(data.msg);
             }
           })
           .catch(err => {
