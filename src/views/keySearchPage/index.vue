@@ -18,10 +18,10 @@
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img :src="'http:192.168.3.26:8011'+list.url" style='width:50%;height:90px;'>
-                  <h2 style='color:#000;font-size:19px;' class="nowrap">{{list.title}}</h2>
-                  <p style='color:#ccc'>上传时间：{{list.addFileTime}}</p>
-                  <p style='color:#ccc'>上传人：{{list.username}}</p>
+                   <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
+                  <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
+                  <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
+                  <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
                 </div>
               </Card>
             </a>
