@@ -20,7 +20,7 @@
                  <div style="text-align:center">
                   <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
-                  <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>   
+                  <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                 </div>
               </Card>
             </a>
@@ -34,7 +34,7 @@
     </Row>
     <Row>
       <Col>
-      <Page :total="page.total" placement='top' :page-size-opts='pageOpts' show-sizer :current="page.current"
+      <Page :total="page.total" placement='top' :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current"
             :page-size="page.pageSize" :show-total="true" @on-change="onPageChange"
             @on-page-size-change='onPageSizeChange' class="table-page"></Page>
       </Col>
@@ -58,6 +58,11 @@
           {
             title: "标题",
             key: "title"
+          },
+          {
+            title: "文件类型",
+            key: "fileStyle",
+            align: "center"
           },
           {
             title: "发布时间",

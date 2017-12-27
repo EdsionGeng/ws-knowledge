@@ -94,9 +94,14 @@ html,body,#app,.home{
     position: relative;
   }
   .absolute-position{
+    padding-left:20px;
+    padding-top:10px;
+    display: block;
+    background:#f5f7f9;
     position: fixed;
-    opacity:0.8;
-    left:270px;
-    bottom:20px;
+    left:250px;
+    bottom:-15px;
+    right:0;
+    z-index:999
   }
 
