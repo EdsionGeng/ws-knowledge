@@ -84,7 +84,7 @@
             </TabPane>
           </Tabs>
         </FormItem>
-        <FormItem>
+        <FormItem  style='margin-bottom:80px;'>
           <RadioGroup v-model="uploadForm.fileType">
             <Radio label="0">普通文件</Radio>
             <Radio label="1">部门文件</Radio>
@@ -100,7 +100,7 @@
             公司有新入职的人员均能看到此文件
           </div>
         </FormItem>
-        <FormItem label="">
+        <FormItem label=""  class="absolute-position" >
           <Button type='primary' size='large' @click="handleSubmit()" :loading="submitLoading">{{submitText}}</Button>
         </FormItem>
       </Form>

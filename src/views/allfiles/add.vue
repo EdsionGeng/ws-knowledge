@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="body-area">
-      <Form :rules="ruleValidate" label-position="right" :label-width="100" :model='uploadForm' ref='formValidate'>
+      <Form :rules="ruleValidate" label-position="right" :label-width="100" :model='uploadForm' ref='formValidate' >
         <FormItem label=" 文件标题：" prop="title">
           <Input v-model="uploadForm.title" placeholder="请输入标题" style="width: 200px"></Input>
         </FormItem>
@@ -78,7 +78,7 @@
             </TabPane>
           </Tabs>
         </FormItem>
-        <FormItem>
+        <FormItem style='margin-bottom:80px;'>
           <RadioGroup v-model="uploadForm.fileType">
             <Radio label="0">普通文件</Radio>
             <Radio label="1">部门文件</Radio>
@@ -94,12 +94,12 @@
             公司有新入职的人员均能看到此文件
           </div>
         </FormItem>
-        <FormItem label="">
-          <Button type='primary' size='large' :loading="submitLoading" @click="handleSubmit('formInline')">
+        <FormItem label="" class="absolute-position">
+          <Button type='primary' size='large'  :loading="submitLoading" @click="handleSubmit('formInline')">
             {{submitText}}
           </Button>
         </FormItem>
-      </Form>
+      </Form >
     </div>
     <Modal
        v-model="picViewModel"
