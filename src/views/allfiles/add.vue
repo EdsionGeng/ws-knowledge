@@ -707,7 +707,7 @@ export default {
           this.updateFileParams.userIds
         )
       ) {
-        this.$Message.warning("修改文件权限的人超过查看文件权限的人");
+        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
         return;
       } else if (
         this.checkIfContainId(
@@ -715,7 +715,7 @@ export default {
           this.deleteFileParams.userIds
         )
       ) {
-        this.$Message.warning("删除文件权限的人超过查看文件权限的人");
+        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
         return;
       } else {
         this.submitLoading = true;

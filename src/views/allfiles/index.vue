@@ -16,7 +16,7 @@
       </Col>
     </Row>
     <Row>
-      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
+      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:8px;">
       <Tabs type="card" @on-click='changePic'>
         <TabPane label="列表" name='table'>
           <Row>
