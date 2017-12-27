@@ -287,7 +287,6 @@
         });
       },
       ok() {
-
         if (this.insertFileParams.parentId == "") {
           this.$Message.warning("请点击想要添加的文档类型");
         }
