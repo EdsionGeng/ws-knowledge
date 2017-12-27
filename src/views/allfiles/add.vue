@@ -20,7 +20,7 @@
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
               action="http://192.168.3.26:8011/photo/upload.htmls">
-              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
+              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面 <br><span style='color:#bbb'>(建议宽高比例10:9)</span></Button>
             </Upload>
              <Row 
                 v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;'>

@@ -33,7 +33,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
@@ -121,10 +121,10 @@
         this.initList();
       },
       changePic(name) {
-        if (name === 'pic') {
-          this.userLookpicFileList = this.userLookFileList;
+         if (name === 'pic') {
+          this.historyUploadMessageList=[];
         } else {
-          this.userLookpicFileList = []
+          this.historyUploadMessageList=this.historyUploadpicMessageList;
         }
       },
       selAllFile() {
