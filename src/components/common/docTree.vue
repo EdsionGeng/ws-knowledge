@@ -1,10 +1,10 @@
 <template>
 <div style='display:inline-block;position:relative' @click="clearmeun">
-    <Input v-model="myvalue.value" icon="arrow-down-b" placeholder="类型" @on-click='dropmeun(!showMenu)' style="width: 200px">   
+    <Input v-model="myvalue.value" icon="arrow-down-b" placeholder="类型" @on-click='dropmeun(!showMenu)' style="width: 200px">
     </Input>
     <div v-show='showMenu' class="showmenubox">
-         <Tree :data="docTreeList"  multiple   :render="renderContent"></Tree>   
-    </div> 
+         <Tree :data="docTreeList"  multiple   :render="renderContent"></Tree>
+    </div>
 </div>
 </template>
 <script>

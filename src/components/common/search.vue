@@ -21,7 +21,7 @@ export default {
   methods: {
     ...mapMutations(["getSearchKey"]),
     changekeyRouter(name) {
-      console.log(this.inputValue);
+//      console.log(this.inputValue);
       if (this.inputValue === "") {
         this.$Message.warning("请输入关键字进行搜索");
       }
