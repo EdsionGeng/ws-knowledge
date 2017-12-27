@@ -418,7 +418,7 @@ export default {
     },
     // 判断附件上传数量
     handleBeforeUpload(file) {
-      const checkfileList = this.$refs.fujianupload.fileList.length < 10;
+      const checkfileList =this.fujainList.length+ this.$refs.fujianupload.fileList.length < 10;
       const check = this.fujainList.length < 10;
       if (!check || !checkfileList) {
         this.$Notice.warning({
