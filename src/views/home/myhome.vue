@@ -24,7 +24,7 @@
       <div style='font-size: 16px;color:#444444;margin-top:10px;text-align: center'>{{mymessageDetail.MyMessageListTitle}}
       </div>
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{
-        mymessageDetail.AddUser}}已读人：<strong style="color:red">{{mymessageDetail.readed
+        mymessageDetail.addUser}}已读人：<strong style="color:red">{{mymessageDetail.readed
         }}</strong> 未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
       <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
     </Modal>
@@ -34,6 +34,7 @@
 import { showUserAd } from "../../api/all_interface";
 import { showAdPcs } from "../../api/all_interface";
 import { showUserLookFile } from "../../api/all_interface";
+  import { readAd } from "../../api/all_interface";
 
 export default {
   data() {
@@ -102,7 +103,8 @@ export default {
   },
   methods: {
       cancel(){
-       window.location.reload();
+
+      //  window.location.reload();
       },
     changeRoute(name) {
       this.$router.push("/" + name);
@@ -112,7 +114,14 @@ export default {
       this.params = {
         commonId: row.commonId
       };
-
+      this.readAdParams.commonId=row.commonId
+       readAd(this.readAdParams).then(res => {
+        const data = res.data;
+        
+        if (data.code == 0) {
+          this.initUserAd()
+        }
+      });
       showAdPcs(this.params)
         .then(res => {
           const data = res.data;
@@ -125,15 +134,12 @@ export default {
             this.mymessageDetail.MyMessageMsg = row.ad.replace(reg, "\n");
             this.mymessageDetail.readed = data.data.isRead;
             this.mymessageDetail.noreaded = data.data.noRead;
-            readAd(this.readAdParams).then(res=>{
-                const data=res.data;
-              if(data.code==0){
-              }
-            })
+           
           }
         })
         .catch(err => {});
       this.modal1 = true;
+      
     },
     showNewMessageList(row, index) {
       this.$router.push("/allfiles/check/" + row.id);
