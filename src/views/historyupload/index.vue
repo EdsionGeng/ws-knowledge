@@ -6,7 +6,7 @@
         <TabPane label="列表" class="clearfix" name='table'>
           <Row>
             <Col>
-            <Table class="myTable" :columns="columns1" stripe :data="historyUploadMessageList"
+            <Table class="myTable" :columns="columns1" stripe @on-sort-change="recSortType" :data="historyUploadMessageList"
                    @on-row-click="onRowClick"></Table>
             </Col>
           </Row>
@@ -51,7 +51,8 @@
         listparams: {
           current: 1,
           pageSize: 20,
-          userId: sessionStorage.getItem("userId")
+          userId: sessionStorage.getItem("userId"),
+          sortType:"desc",
         },
         page: {total: 20, pages: 1, current: 1, pageSize: 20},
         columns1: [
@@ -79,6 +80,10 @@
       this.initList();
     },
     methods: {
+      recSortType(order){
+        this.listparams.sortType=order.order;
+        this.initList();
+      },
       changePic(name) {
         console.log(name)
         if (name === 'pic') {

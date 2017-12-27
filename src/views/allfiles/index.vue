@@ -21,7 +21,7 @@
         <TabPane label="列表" name='table'>
           <Row>
             <Col>
-            <Table :columns="columns1" stripe class="myTable" :data="userLookFileList"
+            <Table :columns="columns1" stripe class="myTable" @on-sort-change="recSortType" :data="userLookFileList"
                    @on-row-click="onRowClick"></Table>
             </Col>
           </Row>
@@ -75,14 +75,16 @@
           userId: sessionStorage.getItem("userId"),
           current: 1,
           pageSize: 20,
-          userGroupId: 3
+          userGroupId: 3,
+          sortType:"desc"
         },
         photourl:"1513841327678bg.jpg",
         page: {total: 20, pages: 1, current: 1, pageSize: 20},
         columns1: [
           {
             title: "标题",
-            key: "title"
+            key: "title",
+            align: "center",
           },
           {
             title: "文件类型",
@@ -92,7 +94,7 @@
           {
             title: "上传人",
             key: "username",
-            align: "right"
+            align: "center"
           },
           {
             title: "发布时间",
@@ -113,6 +115,10 @@
       this.initList();
     },
     methods: {
+      recSortType(order){
+        this.listparams.sortType=order.order;
+        this.initList();
+      },
       changePic(name) {
         if (name === 'pic') {
           this.userLookpicFileList = this.userLookFileList;
