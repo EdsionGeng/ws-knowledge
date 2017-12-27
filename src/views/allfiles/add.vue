@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="body-area">
-      <Form :rules="ruleValidate" label-position="right" :label-width="100" :model='uploadForm' ref='formValidate'>
+      <Form :rules="ruleValidate" label-position="right" :label-width="100" :model='uploadForm' ref='formValidate' >
         <FormItem label=" 文件标题：" prop="title">
           <Input v-model="uploadForm.title" placeholder="请输入标题" style="width: 200px"></Input>
         </FormItem>
@@ -43,10 +43,15 @@
           <div class="uploadBtn">
             <Button type="primary" size="small" @click="showUploadModel">上传附件</Button>
           </div>
-          <Row v-for='(item,index) in fujainList' :key='index'>
-            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
-            style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+          <Row  v-for='(item,index) in fujainList' :key='index'>
+            <a target="_blank" :href="item.response?'http://192.168.3.26:8011/'+item.response.data:''">
+              <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
+              style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+            </a>
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
+             <Button type="text" size="small" @click="handleRemove(item)">
+              <Icon type="android-cancel" ></Icon>
+            </Button>
           </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power' >
@@ -73,7 +78,7 @@
             </TabPane>
           </Tabs>
         </FormItem>
-        <FormItem>
+        <FormItem style='margin-bottom:80px;'>
           <RadioGroup v-model="uploadForm.fileType">
             <Radio label="0">普通文件</Radio>
             <Radio label="1">部门文件</Radio>
@@ -89,12 +94,12 @@
             公司有新入职的人员均能看到此文件
           </div>
         </FormItem>
-        <FormItem label="">
-          <Button type='primary' size='large' :loading="submitLoading" @click="handleSubmit('formInline')">
+        <FormItem label="" class="absolute-position">
+          <Button type='primary' size='large'  :loading="submitLoading" @click="handleSubmit('formInline')">
             {{submitText}}
           </Button>
         </FormItem>
-      </Form>
+      </Form >
     </div>
     <Modal
        v-model="picViewModel"
@@ -236,17 +241,21 @@ export default {
         this.showDepTree();
       } else {
         this.depTree = storeState.powerTreeLookList;
+        this.userLookIds = storeState.lookFileParams.userIds;
+        this.lookFileParams.userIds = storeState.lookFileParams.userIds;
         this.selectDate(storeState.lookFileParams.userIds, this.depTree);
       }
       if (storeState.updateFileParams.userIds === "") {
         this.showeditDepTree();
       } else {
+        this.updateFileParams.userIds = storeState.updateFileParams.userIds;
         this.editdepTree = storeState.powerTreeEditList;
         this.selectDate(storeState.updateFileParams.userIds, this.editdepTree);
       }
       if (storeState.deleteFileParams.userIds === "") {
         this.showdelDepTree();
       } else {
+        this.deleteFileParams.userIds = storeState.deleteFileParams.userIds;
         this.deldepTree = storeState.powerTreeDelList;
         this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);
       }
@@ -301,24 +310,7 @@ export default {
           },
           onCancel: () => {
             this.getEditorContent();
-            this.getLookTreeList([]);
-            this.getEditTreeList([]);
-            this.getDelTreeList([]);
-            this.setHasSaveContent(false);
-            this.getdeleteFileParams(null);
-            this.getupdateFileParams(null);
-            this.getlookFileParams(null);
-            this.getTitle("");
-            this.getFileStyle("");
-            this.getFileStyleId("0"),
-              this.getPhotoUrl(""),
-              this.getFileUrl(""),
-              this.getContent(""),
-              this.getFujainList([]);
-            this.getFilesize("");
-            this.getDescrible("");
-            this.getFileType("");
-            this.getPhotoUrlList([]);
+            this.clearSaveUploadFile();
             this.$Message.success("已清空保存的信息");
             next();
           }
@@ -351,9 +343,29 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
+    clearSaveUploadFile() {
+      this.getLookTreeList([]);
+      this.getEditTreeList([]);
+      this.getDelTreeList([]);
+      this.setHasSaveContent(false);
+      this.getdeleteFileParams(null);
+      this.getupdateFileParams(null);
+      this.getlookFileParams(null);
+      this.getTitle("");
+      this.getFileStyle("");
+      this.getFileStyleId("0"),
+        this.getPhotoUrl(""),
+        this.getFileUrl(""),
+        this.getContent(""),
+        this.getFujainList([]);
+      this.getFilesize("");
+      this.getDescrible("");
+      this.getFileType("");
+      this.getPhotoUrlList([]);
+    },
     createEditor() {
       var editor = new E("#editorElem");
-        this.editorContent=this.uploadForm.content;
+      this.editorContent = this.uploadForm.content;
       editor.customConfig.onchange = html => {
         this.editorContent = html;
       };
@@ -385,11 +397,10 @@ export default {
         "redo" // 重复
       ];
       editor.create();
-      editor.txt.html(this.uploadForm.content);   
+      editor.txt.html(this.uploadForm.content);
     },
     // 切换tab时进行的提示
     changeTab(name) {
-      console.log(name);
       if (name == "name2" || name == "name3") {
         if (this.userLookIds === "") {
           this.$Message.error("请先选择可查阅的人员");
@@ -401,6 +412,11 @@ export default {
     pichandleRemove(file) {
       const fileList = this.picuploadList;
       this.picuploadList.splice(fileList.indexOf(file), 1);
+    },
+    // 移除附件
+    handleRemove(file) {
+      const fileList = this.fujainList;
+      this.fujainList.splice(fileList.indexOf(file), 1);
     },
     // 清空图片描述
     showUploadModel() {
@@ -426,7 +442,6 @@ export default {
     },
     // 图片上传成功返回photourl
     pichandleSuccess(res, file) {
-      console.log(file)
       this.uploadForm.photourl = res.data;
     },
     // 图片上传个数验证
@@ -519,7 +534,6 @@ export default {
     },
     // 点击确定给附件加描述
     docupload() {
-      console.log(this.$refs.fujianupload);
       for (let val of this.fujainList) {
         if (!val.hasOwnProperty("description")) {
           Vue.set(val, "description", this.uploadDescription);
@@ -570,6 +584,9 @@ export default {
               this.deleteFileParams.userIds =
                 this.deleteFileParams.userIds + "," + this.adminIds;
             }
+            console.log("验证入参是否正确", this.lookFileParams);
+            console.log("验证修改入参是否正确", this.updateFileParams);
+            console.log("验证删除入参是否正确", this.deleteFileParams);
             lookFileUser(this.lookFileParams)
               .then(res => {
                 if (res.data.code == 0) {
@@ -584,6 +601,7 @@ export default {
                               console.log("设置删除权限成功");
                               this.submitLoading = false;
                               this.isBanDuan = false;
+                              this.clearSaveUploadFile();
                               this.$Message.success("上传成功,2s后少跳转到历史上传界面");
                               setTimeout(() => {
                                 this.$router.push("/hisupload");
@@ -671,7 +689,6 @@ export default {
         this.$Message.warning("请选择文件类型");
         return;
       } else if (this.uploadForm.content === "") {
-        console.log(222)
         this.$Message.warning("请编辑文件内容");
         return;
       } else if (this.uploadForm.content.length >= 2600) {

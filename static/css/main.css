@@ -90,4 +90,13 @@ html,body,#app,.home{
   .demo-tabs-style1 > .ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active {
     border-color: #fff;
   }
+  .port{
+    position: relative;
+  }
+  .absolute-position{
+    position: fixed;
+    opacity:0.8;
+    left:270px;
+    bottom:20px;
+  }
 

@@ -10,7 +10,7 @@
     <Row class="table-top">
       <Col>
       <Card dis-hover style="width:600px;">
-        <myPie title="文件编辑信息" :legendData='legend' :seriesData="seriesCash"></myPie>
+        <myPie title="文件操作统计" :legendData='legend' :seriesData="seriesCash"></myPie>
       </Card>
       </Col>
     </Row>

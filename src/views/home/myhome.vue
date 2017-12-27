@@ -18,6 +18,8 @@
     <Modal
       v-model="modal1"
       :mask-closable="false"
+       @on-cancel="cancel"
+      @on-ok="cancel"
     >
       <div style='font-size: 16px;color:#444444;margin-top:10px;text-align: center'>{{mymessageDetail.MyMessageListTitle}}
       </div>
@@ -53,7 +55,10 @@ export default {
       //modal信息
       title: "",
       modal1: false,
-
+      readAdParams:{
+          userId:sessionStorage.getItem("userId"),
+          commonId:""
+        },
       data: {
         current: 1,
         pageSize: 5,
@@ -96,6 +101,9 @@ export default {
     this.initUserLookFile();
   },
   methods: {
+      cancel(){
+       window.location.reload();
+      },
     changeRoute(name) {
       this.$router.push("/" + name);
     },
@@ -117,6 +125,11 @@ export default {
             this.mymessageDetail.MyMessageMsg = row.ad.replace(reg, "\n");
             this.mymessageDetail.readed = data.data.isRead;
             this.mymessageDetail.noreaded = data.data.noRead;
+            readAd(this.readAdParams).then(res=>{
+                const data=res.data;
+              if(data.code==0){
+              }
+            })
           }
         })
         .catch(err => {});
