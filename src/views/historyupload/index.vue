@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <Row>
-      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
+      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:8px;">
       <Tabs type="card" @on-click='changePic'>
         <TabPane label="列表" class="clearfix" name='table'>
           <Row>
@@ -13,12 +13,12 @@
         </TabPane>
         <TabPane label="图文" name='pic'>
           <Row :gutter="32">
-            <Col span="4" offset=1 pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index'
-                 style='margin-bottom:10px;'>
+            <Col span="4"   v-for='(list,index) in historyUploadpicMessageList' :key='index'
+                 style='margin-bottom:48px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                  <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                 </div>
@@ -85,11 +85,10 @@
         this.initList();
       },
       changePic(name) {
-        console.log(name)
         if (name === 'pic') {
-          this.historyUploadpicMessageList = this.historyUploadMessageList;
+          this.historyUploadMessageList=[];
         } else {
-          this.historyUploadpicMessageList = []
+          this.historyUploadMessageList=this.historyUploadpicMessageList;
         }
       },
       onRowClick(row) {

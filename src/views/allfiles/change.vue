@@ -20,7 +20,7 @@
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
               action="http://192.168.3.26:8011/photo/upload.htmls">
-              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面</Button>
+              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面 <br><span style='color:#bbb'>(建议宽高比例10:9)</span></Button>
             </Upload>
              <Row 
                 v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;margin-left:5px;'>
@@ -657,7 +657,7 @@ export default {
           this.updateFileParams.userIds
         )
       ) {
-        this.$Message.warning("修改文件权限的人超过查看文件权限的人");
+        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
         return;
       } else if (
         this.checkIfContainId(
@@ -665,7 +665,7 @@ export default {
           this.deleteFileParams.userIds
         )
       ) {
-        this.$Message.warning("删除文件权限的人超过查看文件权限的人");
+        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
         return;
       } else {
         if (this.fujainList.length > 0) {

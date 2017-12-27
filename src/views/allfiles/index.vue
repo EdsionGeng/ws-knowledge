@@ -16,7 +16,7 @@
       </Col>
     </Row>
     <Row>
-      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:16px;">
+      <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:8px;">
       <Tabs type="card" @on-click='changePic'>
         <TabPane label="列表" name='table'>
           <Row>
@@ -33,7 +33,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
@@ -87,15 +87,16 @@
             key: "title",
             align: "center",
           },
+           {
+            title: "发布时间",
+            key: "addFileTime",
+            sortable: true,
+            sortType:'desc',
+            align: "center"
+          },
           {
             title: "文件类型",
             key: "fileStyle",
-            align: "center"
-          },
-           {
-            title: "文件类型",
-            key: "addFileTime",
-            sortType: "desc",
             align: "center"
           },
           {
@@ -103,12 +104,7 @@
             key: "username",
             align: "center"
           },
-          {
-            title: "发布时间",
-            key: "addFileTime",
-            sortable: true,
-            align: "center"
-          },
+         
         ],
         userLookpicFileList: [],
         userLookFileList: []
@@ -127,10 +123,10 @@
         this.initList();
       },
       changePic(name) {
-        if (name === 'pic') {
-          this.userLookpicFileList = this.userLookFileList;
+         if (name === 'pic') {
+          this.historyUploadMessageList=[];
         } else {
-          this.userLookpicFileList = []
+          this.historyUploadMessageList=this.historyUploadpicMessageList;
         }
       },
       selAllFile() {
