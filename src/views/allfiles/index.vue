@@ -84,15 +84,15 @@
             title: "标题",
             key: "title"
           },
+           {
+            title: "发布时间",
+            key: "addFileTime",
+            sortable: true,
+            align: "center"
+          },
           {
             title: "文件类型",
             key: "fileStyle",
-            align: "center"
-          },
-           {
-            title: "文件类型",
-            key: "addFileTime",
-            sortType: "desc",
             align: "center"
           },
           {
@@ -100,12 +100,7 @@
             key: "username",
             align: "right"
           },
-          {
-            title: "发布时间",
-            key: "addFileTime",
-            sortable: true,
-            align: "center"
-          },
+         
         ],
         userLookpicFileList: [],
         userLookFileList: []
