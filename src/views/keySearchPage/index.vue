@@ -33,7 +33,7 @@
     </Row>
     <Row>
       <Col>
-      <Page placement='top' :total="page.total" :page-size-opts='pageOpts' show-sizer
+      <Page placement='top' :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator
             :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange"
             @on-page-size-change='onPageSizeChange' class="table-page"></Page>
       </Col>

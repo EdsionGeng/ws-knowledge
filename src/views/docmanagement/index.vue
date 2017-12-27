@@ -51,7 +51,7 @@
                @on-selection-change="delFileAction"></Table>
         </Col>
       </Row>
-      <Page :total="page.total"   :page-size-opts='pageOpts':current="page.current" :page-size="page.pageSize" show-sizer :show-total="true"
+      <Page :total="page.total"  show-elevator :page-size-opts='pageOpts':current="page.current" :page-size="page.pageSize" show-sizer :show-total="true"
             @on-change="onPageChange" @on-page-size-change='onPageSizeChange'  class="table-page"></Page>
     </div>
     <Modal

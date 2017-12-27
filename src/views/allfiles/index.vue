@@ -48,7 +48,7 @@
     </Row>
     <Row style='padding-top:10px,padding-right:5px;' class="bottom-fixed">
       <Col>
-      <Page :total="page.total" placement='top' :page-size-opts='pageOpts' show-sizer
+      <Page :total="page.total" placement='top' :page-size-opts='pageOpts' show-sizer show-elevator
             :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange"
             @on-page-size-change='onPageSizeChange' class="table-page"></Page>
       </Col>

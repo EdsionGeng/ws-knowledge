@@ -28,7 +28,7 @@
     </Row>
     <Row>
       <Col>
-      <Page :total="page.total" placement='top' show-sizer  :current="page.current"
+      <Page :total="page.total" placement='top' show-sizer  :current="page.current" show-elevator
             :page-size="page.pageSize" :show-total="true" @on-change="onPageChange"
             @on-page-size-change='onPageSizeChange' class="table-page"></Page>
       </Col>
