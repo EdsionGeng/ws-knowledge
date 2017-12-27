@@ -21,19 +21,19 @@
         <TabPane label="列表" name='table'>
           <Row>
             <Col>
-            <Table :columns="columns1" stripe class="myTable" :data="userLookFileList"
+            <Table :columns="columns1" stripe class="myTable" @on-sort-change="recSortType" :data="userLookFileList"
                    @on-row-click="onRowClick"></Table>
             </Col>
           </Row>
         </TabPane>
         <TabPane label="图文" name='pic'>
-          <Row>
-            <Col span="5" offset=1 pull=1 v-for='(list,index) in userLookpicFileList' :key='index'
-                 style='margin-bottom:8px;'>
+          <Row :gutter="32">
+            <Col span="4"  v-for='(list,index) in userLookpicFileList' :key='index'
+                 style='margin-bottom:48px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
@@ -75,24 +75,32 @@
           userId: sessionStorage.getItem("userId"),
           current: 1,
           pageSize: 20,
-          userGroupId: 3
+          userGroupId: 3,
+          sortType:"desc"
         },
         photourl:"1513841327678bg.jpg",
         page: {total: 20, pages: 1, current: 1, pageSize: 20},
         columns1: [
           {
             title: "标题",
-            key: "title"
+            key: "title",
+            align: "center",
           },
           {
             title: "文件类型",
             key: "fileStyle",
             align: "center"
           },
+           {
+            title: "文件类型",
+            key: "addFileTime",
+            sortType: "desc",
+            align: "center"
+          },
           {
             title: "上传人",
             key: "username",
-            align: "right"
+            align: "center"
           },
           {
             title: "发布时间",
@@ -113,6 +121,10 @@
       this.initList();
     },
     methods: {
+      recSortType(order){
+        this.listparams.sortType=order.order;
+        this.initList();
+      },
       changePic(name) {
         if (name === 'pic') {
           this.userLookpicFileList = this.userLookFileList;
@@ -145,6 +157,7 @@
               this.page = res.data.rdPage;
               this.userLookFileList = showUserUpdata.data;
               this.userLookpicFileList = showUserUpdata.data;
+              console.log(res.data)
             }
           })
           .catch(err => {

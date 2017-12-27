@@ -6,19 +6,19 @@
         <TabPane label="列表" class="clearfix" name='table'>
           <Row>
             <Col>
-            <Table class="myTable" :columns="columns1" stripe :data="historyUploadMessageList"
+            <Table class="myTable" :columns="columns1" stripe @on-sort-change="recSortType" :data="historyUploadMessageList"
                    @on-row-click="onRowClick"></Table>
             </Col>
           </Row>
         </TabPane>
         <TabPane label="图文" name='pic'>
-          <Row>
-            <Col span="5" offset=1 pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index'
+          <Row :gutter="32">
+            <Col span="4" offset=1 pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index'
                  style='margin-bottom:10px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                  <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                 </div>
@@ -51,7 +51,8 @@
         listparams: {
           current: 1,
           pageSize: 20,
-          userId: sessionStorage.getItem("userId")
+          userId: sessionStorage.getItem("userId"),
+          sortType:"desc",
         },
         page: {total: 20, pages: 1, current: 1, pageSize: 20},
         columns1: [
@@ -79,6 +80,10 @@
       this.initList();
     },
     methods: {
+      recSortType(order){
+        this.listparams.sortType=order.order;
+        this.initList();
+      },
       changePic(name) {
         console.log(name)
         if (name === 'pic') {

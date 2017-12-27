@@ -97,11 +97,11 @@ html,body,#app,.home{
     padding-left:20px;
     padding-top:10px;
     display: block;
-    background:#f5f7f9;
+    background:#fff;
     position: fixed;
     left:250px;
     bottom:-15px;
-    right:0;
+    right:27px;
     z-index:999
   }
 
