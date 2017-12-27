@@ -27,13 +27,13 @@
           </Row>
         </TabPane>
         <TabPane label="图文" name='pic'>
-          <Row>
-            <Col span="5" offset=1 pull=1 v-for='(list,index) in userLookpicFileList' :key='index'
-                 style='margin-bottom:8px;'>
+          <Row :gutter="32">
+            <Col span="4"  v-for='(list,index) in userLookpicFileList' :key='index'
+                 style='margin-bottom:48px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
@@ -91,6 +91,12 @@
             sortType: "desc",
             align: "center"
           },
+           {
+            title: "文件类型",
+            key: "addFileTime",
+            sortType: "desc",
+            align: "center"
+          },
           {
             title: "上传人",
             key: "username",
@@ -140,6 +146,7 @@
               this.page = res.data.rdPage;
               this.userLookFileList = showUserUpdata.data;
               this.userLookpicFileList = showUserUpdata.data;
+              console.log(res.data)
             }
           })
           .catch(err => {
