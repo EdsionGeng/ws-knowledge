@@ -25,11 +25,10 @@
              <Row 
                 v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;'>
                 <Icon type="image" style='margin-right:8px;color:#009DD9;'></Icon>
-
                 <span>                  
-                      <a @click.prevent="model7=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
+                      <a @click.prevent="picViewModel=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
                 </span>
-                <Button type="text" size="small" @click="handleRemove(item)">
+                <Button type="text" size="small" @click="pichandleRemove(item)">
                     <Icon type="android-cancel" ></Icon>
                 </Button>
             </Row>
@@ -37,7 +36,6 @@
         </FormItem>
         <FormItem label="内容：" prop='content'>
           <div class="hello">
-              <!-- <Ueditor :ueditorContent='uploadForm' ref="myUeditor"></Ueditor> -->
               <div id="editorElem" style="text-align:left;width:900px"></div>
           </div>
         </FormItem>
@@ -74,7 +72,6 @@
               </div>
             </TabPane>
           </Tabs>
-
         </FormItem>
         <FormItem>
           <RadioGroup v-model="uploadForm.fileType">
@@ -82,7 +79,6 @@
             <Radio label="1">部门文件</Radio>
             <Radio label="2">公司文件</Radio>
           </RadioGroup>
-
           <div v-if="uploadForm.fileType=='0'">
             仅当前设置的查阅人员可以查看此文件，新入职的人员看不到，如果需要设置某一新入职人员查看该文件，可通过修改查阅人员实现
           </div>
@@ -101,8 +97,8 @@
       </Form>
     </div>
     <Modal
-       v-model="model7"
-        width="300"
+       v-model="picViewModel"
+        width="500"
         :closable='false'
         cancel-text=''
       >
@@ -122,8 +118,6 @@
             ref="fujianupload"
             :show-upload-list="true"
             multiple
-            :format="[]"
-            :on-format-error="handleFormatError"
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
             action="http://192.168.3.26:8011/file/upload.htmls">
@@ -151,15 +145,14 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
-      model7: false,
+      picViewModel: false,
       picuploadList: [],
       userLookIds: "",
       uploadDescription: "",
       submitText: "确定上传",
       submitLoading: false,
-      insertFileList: {},
+      insertFilePrams: {},
       fujainList: [],
-      uploadList: [],
       ruleValidate: {
         title: [
           { required: true, message: "请填写文件标题", trigger: "blur" },
@@ -220,41 +213,10 @@ export default {
   },
   computed: mapState(["addFileSaveList", "hasSaveContent"]),
   mounted() {
-    var editor = new E("#editorElem");
-    editor.customConfig.onchange = html => {
-      this.editorContent = html;
-    };
-    editor.customConfig.zIndex = 100;
-    editor.customConfig.showLinkImg = false;
-    editor.customConfig.uploadImgHeaders = {
-      Accept: "multipart/form-data"
-    };
-    editor.customConfig.uploadImgServer =
-      "http://192.168.22.45:8011/file/upload.htmls";
-    editor.customConfig.menus = [
-      "head", // 标题
-      "bold", // 粗体
-      "italic", // 斜体
-      "underline", // 下划线
-      "strikeThrough", // 删除线
-      "foreColor", // 文字颜色
-      "backColor", // 背景颜色
-      "link", // 插入链接
-      "list", // 列表
-      "justify", // 对齐方式
-      "quote", // 引用
-      "emoticon", // 表情
-      // 'image',  // 插入图片
-      "table", // 表格
-      // 'video',  // 插入视频
-      "code", // 插入代码
-      "undo", // 撤销
-      "redo" // 重复
-    ];
-    editor.create();
     this.adminPower();
-    this.uploadList = this.$refs.fujianupload.fileList;
+    this.fujainList = this.$refs.fujianupload.fileList;
     this.picuploadList = this.$refs.upload.fileList;
+    // 有保存信息时要执行的方法（默认为false）
     if (this.hasSaveContent) {
       const storeState = this.addFileSaveList;
       this.uploadForm.title = storeState.addFileListParams.title;
@@ -269,6 +231,7 @@ export default {
       this.fujainList = storeState.fujainList;
       this.$refs.fujianupload.fileList = storeState.fujainList;
       this.$refs.upload.fileList = storeState.photoUrlList;
+      this.picuploadList = storeState.photoUrlList;
       if (storeState.lookFileParams.userIds === "") {
         this.showDepTree();
       } else {
@@ -292,12 +255,13 @@ export default {
       this.showeditDepTree();
       this.showdelDepTree();
     }
-    if (this.uploadForm.content) {
-      editor.txt.html(this.uploadForm.content);
-    }
+    this.createEditor();
   },
+  // 离开这个页面时需要保存的信息
   beforeRouteLeave(to, from, next) {
+    // 得到保存当前编辑器的内容
     this.getEditorContent();
+    // 控制是否可以保存
     if (this.isBanDuan) {
       if (
         this.uploadForm.title !== "" ||
@@ -313,10 +277,10 @@ export default {
           title: "保存当前内容",
           content: "<p>是否保存当前编辑的内容</p>",
           onOk: () => {
+            this.setHasSaveContent(true);
             this.getLookTreeList(this.depTree);
             this.getEditTreeList(this.editdepTree);
             this.getDelTreeList(this.deldepTree);
-            this.setHasSaveContent(true);
             this.getdeleteFileParams(this.deleteFileParams);
             this.getupdateFileParams(this.updateFileParams);
             this.getlookFileParams(this.lookFileParams);
@@ -355,6 +319,7 @@ export default {
             this.getDescrible("");
             this.getFileType("");
             this.getPhotoUrlList([]);
+            this.$Message.success("已清空保存的信息");
             next();
           }
         });
@@ -386,6 +351,43 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
+    createEditor() {
+      var editor = new E("#editorElem");
+        this.editorContent=this.uploadForm.content;
+      editor.customConfig.onchange = html => {
+        this.editorContent = html;
+      };
+      editor.customConfig.zIndex = 100;
+      editor.customConfig.showLinkImg = false;
+      editor.customConfig.uploadImgHeaders = {
+        Accept: "multipart/form-data"
+      };
+      editor.customConfig.uploadImgServer =
+        "http://192.168.22.45:8011/file/upload.htmls";
+      editor.customConfig.menus = [
+        "head", // 标题
+        "bold", // 粗体
+        "italic", // 斜体
+        "underline", // 下划线
+        "strikeThrough", // 删除线
+        "foreColor", // 文字颜色
+        "backColor", // 背景颜色
+        "link", // 插入链接
+        "list", // 列表
+        "justify", // 对齐方式
+        "quote", // 引用
+        "emoticon", // 表情
+        // 'image',  // 插入图片
+        "table", // 表格
+        // 'video',  // 插入视频
+        "code", // 插入代码
+        "undo", // 撤销
+        "redo" // 重复
+      ];
+      editor.create();
+      editor.txt.html(this.uploadForm.content);   
+    },
+    // 切换tab时进行的提示
     changeTab(name) {
       console.log(name);
       if (name == "name2" || name == "name3") {
@@ -395,21 +397,22 @@ export default {
         }
       }
     },
-    handleRemove(file) {
-      console.log(file);
-
+    // 移除图片
+    pichandleRemove(file) {
       const fileList = this.picuploadList;
-      console.log(fileList);
       this.picuploadList.splice(fileList.indexOf(file), 1);
     },
+    // 清空图片描述
     showUploadModel() {
       this.uploadDoc = true;
       this.uploadDescription = "";
     },
+    // 得到编辑器内容 （提交，要保存时）
     getEditorContent() {
       this.uploadForm.content = this.editorContent;
       console.log(this.editorContent);
     },
+    // 附件上传成功返回fujainList
     handleSuccess(res, file) {
       const fileList = this.$refs.fujianupload.fileList;
       if (res.code === 2) {
@@ -418,15 +421,16 @@ export default {
           title: res.msg
         });
       } else {
-        console.log(fileList);
         this.fujainList = fileList;
       }
     },
+    // 图片上传成功返回photourl
     pichandleSuccess(res, file) {
+      console.log(file)
       this.uploadForm.photourl = res.data;
     },
+    // 图片上传个数验证
     pichandleBeforeUpload(file) {
-      console.log(this.$refs.upload);
       const check = this.picuploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
@@ -435,46 +439,31 @@ export default {
       }
       return check;
     },
+    // 附件上传个数验证
     handleBeforeUpload(file) {
-      const check = this.uploadList.length < 10;
+      const check = this.fujainList.length < 10;
       if (!check) {
         this.$Notice.warning({
           title: "附件上传已达上限"
         });
       }
-      // else if(file.size>=102400){
-      //       this.$Modal.confirm({
-      //         title:'上传提示！',
-      //         content: "该文件大于100M,是否上传？",
-      //           onOK:()=>{return check},
-      //           onCancel: () => {
-      //               return false
-      //               this.$Message.info('你选择了取消上传');
-      //           }
-      //       });
-      // }else{
-      //
-      // }
       return check;
     },
+    // 图片上传大小设置
     pichandleMaxSize(file) {
       this.$Notice.warning({
         title: "大小限制",
         desc: "" + file.name + "：头像大小不能超过2M"
       });
     },
-    handleFormatError(file) {
-      this.$Notice.warning({
-        title: "文件上传类型限制",
-        desc: file.name + " ：该文件类型不支持上传"
-      });
-    },
+    // 图片格式设置
     pichandleFormatError(file) {
       this.$Notice.warning({
         title: "文件类型限制",
         desc: file.name + " 该文件不是图片类型"
       });
     },
+    // 选择查看权限的人
     chooseCheckPeople(arr) {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
@@ -485,6 +474,7 @@ export default {
       this.lookFileParams.userIds = userIds.join(",");
       this.userLookIds = userIds.join(",");
     },
+    // 选择删除权限的人
     chooseDelPeople(arr) {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
@@ -494,6 +484,7 @@ export default {
       }
       this.deleteFileParams.userIds = userIds.join(",");
     },
+    // 选择修改权限的人
     chooseEditPeople(arr) {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
@@ -503,14 +494,15 @@ export default {
       }
       this.updateFileParams.userIds = userIds.join(",");
     },
+    // 树形结构渲染
     renderContentDep(h, { root, node, data }) {
       return h("span", data.name);
     },
+    // 获取默认树形数据结构
     showDepTree() {
       let _self = this;
       getDepTree(_self.depTreeParams).then(res => {
         _self.depTree = res.data;
-        console.log(res.data);
       });
     },
     showeditDepTree() {
@@ -525,6 +517,7 @@ export default {
         _self.deldepTree = res.data;
       });
     },
+    // 点击确定给附件加描述
     docupload() {
       console.log(this.$refs.fujianupload);
       for (let val of this.fujainList) {
@@ -536,21 +529,22 @@ export default {
         }
       }
     },
+    // 验证通过开始上传函数
     upFileloadSuccess() {
-      this.insertFileList.title = this.uploadForm.title;
-      this.insertFileList.content = this.uploadForm.content;
-      this.insertFileList.photourl = this.uploadForm.photourl;
-      if (this.insertFileList.photourl === "") {
-        this.insertFileList.photourl = "1514028176737moren1.png";
+      this.insertFilePrams.title = this.uploadForm.title;
+      this.insertFilePrams.content = this.uploadForm.content;
+      this.insertFilePrams.photourl = this.uploadForm.photourl;
+      if (this.insertFilePrams.photourl === "") {
+        this.insertFilePrams.photourl = "1514028176737moren1.png";
       }
-      this.insertFileList.fileurl = this.uploadForm.fileurl;
-      this.insertFileList.userId = this.uploadForm.userId;
-      this.insertFileList.fileStyleId = this.uploadForm.id;
-      this.insertFileList.filesize = this.uploadForm.filesize;
-      this.insertFileList.fileSpecies = this.uploadForm.fileType;
-      this.insertFileList.describle = this.uploadForm.filedescrible;
-      console.log(this.insertFileList);
-      insertFile(this.insertFileList)
+      this.insertFilePrams.fileurl = this.uploadForm.fileurl;
+      this.insertFilePrams.userId = this.uploadForm.userId;
+      this.insertFilePrams.fileStyleId = this.uploadForm.id;
+      this.insertFilePrams.filesize = this.uploadForm.filesize;
+      this.insertFilePrams.fileSpecies = this.uploadForm.fileType;
+      this.insertFilePrams.describle = this.uploadForm.filedescrible;
+      console.log("验证获取的参数是否正确", this.insertFilePrams);
+      insertFile(this.insertFilePrams)
         .then(res => {
           if (res.data.code == 0) {
             console.log("新建文件成功");
@@ -582,12 +576,10 @@ export default {
                   console.log("设置权限成功");
                   updateFilePermission(this.updateFileParams)
                     .then(res => {
-                      console.log(res.data);
                       if (res.data.code == 0) {
                         console.log("设置修改权限成功");
                         deleteFilePermission(this.deleteFileParams)
                           .then(res => {
-                            console.log(res.data);
                             if (res.data.code == 0) {
                               console.log("设置删除权限成功");
                               this.submitLoading = false;
@@ -595,7 +587,7 @@ export default {
                               this.$Message.success("上传成功,2s后少跳转到历史上传界面");
                               setTimeout(() => {
                                 this.$router.push("/hisupload");
-                              }, 1000);
+                              }, 2000);
                             }
                           })
                           .catch(err => {});
@@ -609,6 +601,7 @@ export default {
         })
         .catch(err => {});
     },
+    // 获取管理员用户和自己上传人的用户
     adminPower() {
       queryadmin()
         .then(res => {
@@ -625,10 +618,9 @@ export default {
         })
         .catch(err => {});
     },
+    // 根据ids进行树的选择
     selectDate(ids, data) {
       const prams = ids.split(",");
-      console.log(prams);
-      console.log(data);
       function funSelect(data, prams) {
         for (let val of data) {
           const dataId = String(val.id);
@@ -642,13 +634,12 @@ export default {
       }
       funSelect(data, prams);
     },
+    // 获得文件大小，名字，和描述
     getFileData() {
-      // 获得文件大小，名字，和描述
       var newArry = [];
       var filesizeArry = [];
       var filedescribleArry = [];
       for (let i = 0; i < this.fujainList.length; i++) {
-        console.log(this.fujainList[i].response);
         newArry.push(this.fujainList[i].response.data);
         filesizeArry.push(this.fujainList[i].size);
         filedescribleArry.push(this.fujainList[i].description);
@@ -657,8 +648,18 @@ export default {
       this.uploadForm.filesize = filesizeArry.join(",");
       this.uploadForm.filedescrible = filedescribleArry.join(",");
     },
+    //检测是否查看包含编辑或删除的功能
+    checkIfContainId(ids, id) {
+      for (var val of id) {
+        if (ids.indexOf(val) === -1) {
+          return true;
+        }
+      }
+      return false;
+    },
+    // 确定上传要执行的验证
     handleSubmit(name) {
-      // 将文件上传中所有输入的信息已保存在uploadForm中
+      // 得到编辑器内容 （提交，要保存时）
       this.getEditorContent();
       if (this.uploadForm.title == "") {
         this.$Message.warning("请填写文件标题");
@@ -670,24 +671,32 @@ export default {
         this.$Message.warning("请选择文件类型");
         return;
       } else if (this.uploadForm.content === "") {
+        console.log(222)
         this.$Message.warning("请编辑文件内容");
         return;
       } else if (this.uploadForm.content.length >= 2600) {
         this.$Message.warning("文件占位符过多,请删除多余的空格");
+        return;
       } else if (
-        this.lookFileParams.userIds.indexOf(this.updateFileParams.userIds) == -1
+        this.checkIfContainId(
+          this.lookFileParams.userIds,
+          this.updateFileParams.userIds
+        )
       ) {
         this.$Message.warning("修改文件权限的人超过查看文件权限的人");
         return;
       } else if (
-        this.lookFileParams.userIds.indexOf(this.deleteFileParams.userIds) == -1
+        this.checkIfContainId(
+          this.lookFileParams.userIds,
+          this.deleteFileParams.userIds
+        )
       ) {
         this.$Message.warning("删除文件权限的人超过查看文件权限的人");
         return;
       } else {
-        this.getFileData();
         this.submitLoading = true;
         this.submitText = "正在上传";
+        this.getFileData();
         this.upFileloadSuccess();
       }
     }
@@ -700,10 +709,6 @@ export default {
 }
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
-}
-.picUpload .ivu-upload-list-remove {
-  font-size: 24px;
-  padding: 3px;
 }
 </style>
 <style scoped>
