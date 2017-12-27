@@ -16,6 +16,7 @@
       :mask-closable="false"
       :closable="false"
       @on-cancel="cancel"
+      @on-ok="surelook"
       style="margin-left: 160px"
     >
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
@@ -102,6 +103,9 @@
       },
       cancel(){
        window.location.reload();
+      },
+      surelook(){
+        window.location.reload();
       },
       onRowClick(row,index){
         this.params={
