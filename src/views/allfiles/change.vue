@@ -47,7 +47,7 @@
        <Row v-for='(item,index) in fujainList' :key='index'>
              <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'>
             </i>
-                <a  target="_blank" :href="item.response?'http://192.168.3.26:8011/'+item.response.data:''">
+                <a  target="_blank" :href="'http://192.168.3.26:8011/'+item.url">
                   <span >{{item.name}} 
                   </span>
                   <span style='color:#ccc;margin-left:5px;'>
@@ -101,7 +101,7 @@
           </div>
         </FormItem>
         <FormItem label=""  class="absolute-position" >
-          <Button type='primary' size='large' @click="handleSubmit()" :loading="submitLoading">{{submitText}}</Button>
+          <Button type='primary'  style='margin-bottom:6px;' size='large' @click="handleSubmit()" :loading="submitLoading">{{submitText}}</Button>
         </FormItem>
       </Form>
     </div>
@@ -182,7 +182,6 @@ export default {
       },
       updateFileList: {},
       fujainList: [],
-      uploadList: [],
       ruleValidate: {
         title: [{ required: true }],
         value: [{ required: true, message: "请选择文件类型" }],
@@ -347,7 +346,7 @@ export default {
 
             if (this.uploadForm.photourl !== "") {
               let picUploadDetails = {
-                name: this.uploadForm.photourl.slice(13),
+                name: this.uploadForm.photourl.slice(15),
                 url: this.uploadForm.photourl
               };
               this.$refs.upload.fileList.push(picUploadDetails);
@@ -370,7 +369,7 @@ export default {
                 let fujainDetail = {};
                 fujainDetail.size = parseInt(this.fileDetailSize[i]);
                 fujainDetail.name = this.fileDetailUrl[i].slice(15);
-                fujainDetail.response = { data: this.fileDetailUrl[i] };
+                fujainDetail.url =  this.fileDetailUrl[i] ;
                 fujainDetail.description = this.fileDetaildescible[i];
                 this.fujainList.push(fujainDetail);
               }
@@ -378,17 +377,15 @@ export default {
               this.fujainList = [];
             }
             console.log("初始化后的uploform", this.uploadForm);
+            console.log("初始化后的uploform", this.fujainList);
             this.createdEditor();
           }
         })
         .catch(err => {});
     },
     // 移除pic
-    pichandRemove(file) {
-      console.log(1111);
-      console.log(file);
+    pichandRemove(file) {  
       const fileList = this.$refs.upload.fileList;
-      console.log(fileList);
       this.picuploadList.splice(fileList.indexOf(file), 1);
     },
     // 移除附件
@@ -398,14 +395,11 @@ export default {
     },
     // 上传附件成功
     handleSuccess(res, file) {
-      const fileList = this.$refs.fujianupload.fileList;
       if (res.code === 2) {
         this.$refs.fujianupload.fileList.splice(fileList.indexOf(file), 1);
         this.$Notice.warning({
           title: res.msg
         });
-      } else {
-        this.fujainList = fileList;
       }
     },
     // 上传图片成功
@@ -414,9 +408,8 @@ export default {
     },
     // 判断图片上传数量
     pichandleBeforeUpload() {
-      console.log(this.$refs.upload);
-      this.uploadList = this.$refs.upload.fileList;
-      const check = this.uploadList.length < 1;
+     
+      const check = this.picuploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
           title: "封面最多只能上传一个图片"
@@ -507,15 +500,21 @@ export default {
     },
     // 设置图片的描述
     docupload() {
-      console.log(this.$refs.fujianupload);
-      for (let val of this.fujainList) {
-        if (!val.hasOwnProperty("description")) {
-          Vue.set(val, "description", this.uploadDescription);
-          if (val.description === "") {
-            Vue.set(val, "description", "无");
-          }
-        }
+      const fileList=this.$refs.fujianupload.fileList;
+      console.log(fileList)
+      if(this.uploadDescription===''){
+        this.uploadDescription='无'
       }
+      for(var val of fileList){
+        let fujianListDetail={
+            url:val.response.data,
+            name:val.response.data.slice(15),
+            size:val.size,
+            description:this.uploadDescription
+          }
+        this.fujainList.push(fujianListDetail);
+      } 
+      this.$refs.fujianupload.fileList=[];
     },
     // 文件验证成功进入修改
     upFileloadSuccess() {
@@ -626,7 +625,7 @@ export default {
       var filesizeArry = [];
       var filedescribleArry = [];
       for (let i = 0; i < this.fujainList.length; i++) {
-        newArry.push(this.fujainList[i].response.data);
+        newArry.push(this.fujainList[i].url);
         filesizeArry.push(this.fujainList[i].size);
         filedescribleArry.push(this.fujainList[i].description);
       }
