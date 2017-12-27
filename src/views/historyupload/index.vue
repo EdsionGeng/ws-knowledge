@@ -60,6 +60,11 @@
             key: "title"
           },
           {
+            title: "文件类型",
+            key: "fileStyle",
+            align: "center"
+          },
+          {
             title: "发布时间",
             key: "addFileTime",
             sortable: true,

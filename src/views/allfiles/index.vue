@@ -84,18 +84,22 @@
             title: "标题",
             key: "title"
           },
-
           {
-            title: "发布时间",
-            key: "addFileTime",
-            sortType: "desc",
+            title: "文件类型",
+            key: "fileStyle",
             align: "center"
           },
           {
             title: "上传人",
             key: "username",
             align: "right"
-          }
+          },
+          {
+            title: "发布时间",
+            key: "addFileTime",
+            sortable: true,
+            align: "center"
+          },
         ],
         userLookpicFileList: [],
         userLookFileList: []
@@ -137,6 +141,7 @@
           .then(res => {
             const showUserUpdata = res.data;
             if (res.data.code == 0) {
+              console.info(res.data.data);
               this.page = res.data.rdPage;
               this.userLookFileList = showUserUpdata.data;
               this.userLookpicFileList = showUserUpdata.data;
