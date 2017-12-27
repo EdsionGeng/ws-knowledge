@@ -47,11 +47,11 @@
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
-        <Table border ref="selection" :columns="AllFileColumns" :data="AllFileList" stripe
+        <Table border ref="selection" :columns="AllFileColumns"   @on-sort-change="recSortType" :data="AllFileList" stripe
                @on-selection-change="delFileAction"></Table>
         </Col>
       </Row>
-      <Page :total="page.total"   :page-size-opts='pageOpts':current="page.current" :page-size="page.pageSize" show-sizer :show-total="true"
+      <Page :total="page.total"  show-elevator :page-size-opts='pageOpts':current="page.current" :page-size="page.pageSize" show-sizer :show-total="true"
             @on-change="onPageChange" @on-page-size-change='onPageSizeChange'  class="table-page"></Page>
     </div>
     <Modal
@@ -150,7 +150,8 @@
           title: "",
           startDate: "",
           endDate: "",
-          fileStyleId: ""
+          fileStyleId: "",
+          sortType:"desc",
         },
         openDelWindow:false,
         updateFileStyle: false,
@@ -223,6 +224,10 @@
         getDocTree(this.docTreeParams).then(res => {
           _doc.docTree = res.data;
         })
+      },
+      recSortType(order){
+        this.dataParams.sortType=order.order;
+        this.showAllFileList();
       },
       /**
        * 删除文件获取参数

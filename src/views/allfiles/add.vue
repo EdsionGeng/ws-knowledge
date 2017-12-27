@@ -370,12 +370,12 @@ export default {
         this.editorContent = html;
       };
       editor.customConfig.zIndex = 100;
+      editor.customConfig.uploadImgShowBase64 = true;
       editor.customConfig.showLinkImg = false;
       editor.customConfig.uploadImgHeaders = {
         Accept: "multipart/form-data"
       };
-      editor.customConfig.uploadImgServer =
-        "http://192.168.22.45:8011/file/upload.htmls";
+      editor.customConfig.uploadImgServer = "http://192.168.22.45:8011/file/upload.htmls";
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
