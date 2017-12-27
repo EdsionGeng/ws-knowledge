@@ -50,7 +50,7 @@
                @on-selection-change="delAdAction" @on-row-dblclick="showAdDetail"></Table>
         </Col>
       </Row>
-      <Page :total="page.total" :page-size-opts='pageOpts' show-sizer :current="page.current" :page-size="page.pageSize"
+      <Page :total="page.total" :page-size-opts='pageOpts' show-sizer  show-elevator :current="page.current" :page-size="page.pageSize"
             :show-total="true"
             @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
@@ -224,7 +224,7 @@ export default {
         adStyle: "",
         content: "",
         sendDepartmentName: "",
-        userId: 1
+        userId: sessionStorage.getItem("userId"),
       },
       modal1: false,
       insertAd: false,
