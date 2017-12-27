@@ -24,7 +24,7 @@
       <div style='font-size: 16px;color:#444444;margin-top:10px;text-align: center'>{{mymessageDetail.MyMessageListTitle}}
       </div>
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{
-        mymessageDetail.addUser}}已读人：<strong style="color:red">{{mymessageDetail.readed
+        mymessageDetail.AddUser}}已读人：<strong style="color:red">{{mymessageDetail.readed
         }}</strong> 未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
       <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
     </Modal>
@@ -129,7 +129,7 @@ export default {
           if (data.code == 0) {
             this.mymessageDetail.MyMessageListTitle = row.at;
             this.mymessageDetail.MyMessageupdate = row.re;
-            this.mymessageDetail.AddUser = row.AddUser;
+            this.mymessageDetail.AddUser = row.addUser;
             var reg = new RegExp("<br>", "g");
             this.mymessageDetail.MyMessageMsg = row.ad.replace(reg, "\n");
             this.mymessageDetail.readed = data.data.isRead;
