@@ -24,8 +24,8 @@
       <div style='font-size: 16px;color:#444444;margin-top:10px;text-align: center'>{{mymessageDetail.MyMessageListTitle}}
       </div>
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ mymessageDetail.MyMessageupdate}}&nbsp; &nbsp;发布人：{{
-        mymessageDetail.AddUser}}已读人：<strong style="color:red">{{mymessageDetail.readed
-        }}</strong> 未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
+        mymessageDetail.AddUser}}&nbsp;&nbsp;已读人数：<strong style="color:red">{{mymessageDetail.readed
+        }}</strong> 未读人数：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
       <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'>{{mymessageDetail.MyMessageMsg}}</p>
     </Modal>
   </div>
