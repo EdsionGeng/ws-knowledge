@@ -217,7 +217,7 @@ export default {
       });
     },
     goRouter() {
-      this.$router.back();
+      this.$router.push("/allfiles");
     },
     changeRouter(name) {
       this.$router.push(name + this.$route.params.id);
