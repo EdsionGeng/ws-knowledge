@@ -12,7 +12,7 @@
         </Col>
       </Row>
       <Row class='filecontent'>
-        <div v-html='fileDetails.fileContent'> <!-- 文件的详情显示 -->
+        <div v-html='fileDetails.fileContent'>
 
         </div>
       </Row>
@@ -147,16 +147,14 @@ export default {
     this.initFileLog();
     this.initFileDetail();
     this.showFilePower();
-    console.log(this.$route.params.id);
   },
   methods: {
     showFilePower() {
       showFilePermission(this.readFileparams)
-        .then(res => {
-          console.log("用户id对文件的权限");
+        .then(res => {        
           if (res.data.code == 0) {
             const data = res.data.data;
-            console.log(res);
+            console.log("用户id对文件的权限获取成功");
             if (data.updateFile === 0) {
               this.canChange = false;
             } else if (data.updateFile === 1) {
@@ -174,11 +172,11 @@ export default {
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
         .then(res => {
-          console.log("文件的详情");
+          
           console.log(res.data.code == 0);
           if (res.data.code == 0) {
             this.fileDetails = res.data.data;
-            console.log(this.fileDetails);
+            console.log("文件的详情",this.fileDetails);
             if (this.fileDetails.fileUrl !== "") {
               this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
               this.fileDetailSize = this.fileDetails.fileSize.split(",");
@@ -186,7 +184,6 @@ export default {
                 ","
               );
               this.fujainList = [];
-              console.log(this.fileDetailUrl);
               for (let i = 0; i < this.fileDetailUrl.length; i++) {
                 let fujainDetail = {};
                 fujainDetail.fileSize = this.fileDetailSize[i];
@@ -194,7 +191,7 @@ export default {
                 fujainDetail.url = this.fileDetailUrl[i];
                 fujainDetail.description = this.fileDetaildescible[i];
                 this.fujainList.push(fujainDetail);
-                console.log(this.fujainList);
+                console.log("附件列表",this.fujainList);
               }
             }
           }
@@ -203,11 +200,8 @@ export default {
     },
     initFileLog() {
       showfilelog(this.filelogParams)
-        .then(res => {
-          console.log(res);
-          const showUserUpdata = res.data;
-          console.log("查看个人日志记录");
-          console.log(showUserUpdata);
+        .then(res => {        
+          const showUserUpdata = res.data;      
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
             this.historyUploadMessageList = showUserUpdata.data;
@@ -217,16 +211,15 @@ export default {
     },
     initreadFile() {
       readFile(this.readFileparams).then(res => {
-        console.log("文件的阅读");
-        console.log(res);
+        if(res.code===0){
+          console.log("文件的阅读方法已调用");
+        }
       });
     },
     goRouter() {
       this.$router.back();
     },
     changeRouter(name) {
-      console.log(this.$route.params.id);
-      console.log(name);
       this.$router.push(name + this.$route.params.id);
     },
     delFile() {
@@ -235,7 +228,6 @@ export default {
         onOk: () => {
           deletesinglefile(this.delfileParams)
             .then(res => {
-              console.log(res.data);
               if (res.data.code === 0) {
                 this.$Message.warning("您删除了该文件");
                 this.$router.push("/");
@@ -245,7 +237,6 @@ export default {
             })
             .catch(err => {});
         },
-
         onCancel: () => {
           this.$Message.success("您取消了该操作");
         }

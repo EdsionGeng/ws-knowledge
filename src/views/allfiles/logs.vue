@@ -103,7 +103,6 @@
       selAllFile() {
         this.filelogParams.operationStyle = this.operationModel;
         this.filelogParams.departmentName = this.depTypeKey.value;
-        console.log(this.filelogParams);
         this.initFileLog();
       },
       initFileLog() {
