@@ -425,7 +425,7 @@ export default {
           title: "附件上传已达上限"
         });
       }
-      return check;
+      return check&&checkfileList;
     },
     // 图片大小限制
     pichandleMaxSize(file) {
