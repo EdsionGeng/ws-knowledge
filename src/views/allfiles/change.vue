@@ -47,8 +47,8 @@
        <Row v-for='(item,index) in fujainList' :key='index'>
              <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'>
             </i>
-                <a :href="item.url">
-                  <span style='color:#ccc'>{{item.name}} 
+                <a  target="_blank" :href="item.response?'http://192.168.3.26:8011/'+item.response.data:''">
+                  <span >{{item.name}} 
                   </span>
                   <span style='color:#ccc;margin-left:5px;'>
                     ({{parseInt((item.size)/1024)+'k'}})       
@@ -129,7 +129,7 @@
     </Modal>
       <Modal
        v-model="picViewModel"
-        width="300"
+        width="500"
         :closable='false'
         cancel-text=''
       >

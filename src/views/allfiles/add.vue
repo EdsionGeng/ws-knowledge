@@ -43,10 +43,15 @@
           <div class="uploadBtn">
             <Button type="primary" size="small" @click="showUploadModel">上传附件</Button>
           </div>
-          <Row v-for='(item,index) in fujainList' :key='index'>
-            <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
-            style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+          <Row  v-for='(item,index) in fujainList' :key='index'>
+            <a target="_blank" :href="item.response?'http://192.168.3.26:8011/'+item.response.data:''">
+              <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
+              style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
+            </a>
             <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
+             <Button type="text" size="small" @click="handleRemove(item)">
+              <Icon type="android-cancel" ></Icon>
+            </Button>
           </Row>
         </FormItem>
         <FormItem label="权限设置：" prop='power' >
@@ -236,21 +241,21 @@ export default {
         this.showDepTree();
       } else {
         this.depTree = storeState.powerTreeLookList;
-        this.userLookIds=storeState.lookFileParams.userIds;
-        this.lookFileParams.userIds=storeState.lookFileParams.userIds;
+        this.userLookIds = storeState.lookFileParams.userIds;
+        this.lookFileParams.userIds = storeState.lookFileParams.userIds;
         this.selectDate(storeState.lookFileParams.userIds, this.depTree);
       }
       if (storeState.updateFileParams.userIds === "") {
         this.showeditDepTree();
       } else {
-        this.updateFileParams.userIds=storeState.updateFileParams.userIds;
+        this.updateFileParams.userIds = storeState.updateFileParams.userIds;
         this.editdepTree = storeState.powerTreeEditList;
         this.selectDate(storeState.updateFileParams.userIds, this.editdepTree);
       }
       if (storeState.deleteFileParams.userIds === "") {
         this.showdelDepTree();
       } else {
-        this.deleteFileParams.userIds=storeState.deleteFileParams.userIds;
+        this.deleteFileParams.userIds = storeState.deleteFileParams.userIds;
         this.deldepTree = storeState.powerTreeDelList;
         this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);
       }
@@ -338,29 +343,29 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
-    clearSaveUploadFile(){         
-            this.getLookTreeList([]);
-            this.getEditTreeList([]);
-            this.getDelTreeList([]);
-            this.setHasSaveContent(false);
-            this.getdeleteFileParams(null);
-            this.getupdateFileParams(null);
-            this.getlookFileParams(null);
-            this.getTitle("");
-            this.getFileStyle("");
-            this.getFileStyleId("0"),
-            this.getPhotoUrl(""),
-            this.getFileUrl(""),
-            this.getContent(""),
-            this.getFujainList([]);
-            this.getFilesize("");
-            this.getDescrible("");
-            this.getFileType("");
-            this.getPhotoUrlList([]);         
+    clearSaveUploadFile() {
+      this.getLookTreeList([]);
+      this.getEditTreeList([]);
+      this.getDelTreeList([]);
+      this.setHasSaveContent(false);
+      this.getdeleteFileParams(null);
+      this.getupdateFileParams(null);
+      this.getlookFileParams(null);
+      this.getTitle("");
+      this.getFileStyle("");
+      this.getFileStyleId("0"),
+        this.getPhotoUrl(""),
+        this.getFileUrl(""),
+        this.getContent(""),
+        this.getFujainList([]);
+      this.getFilesize("");
+      this.getDescrible("");
+      this.getFileType("");
+      this.getPhotoUrlList([]);
     },
     createEditor() {
       var editor = new E("#editorElem");
-        this.editorContent=this.uploadForm.content;
+      this.editorContent = this.uploadForm.content;
       editor.customConfig.onchange = html => {
         this.editorContent = html;
       };
@@ -392,7 +397,7 @@ export default {
         "redo" // 重复
       ];
       editor.create();
-      editor.txt.html(this.uploadForm.content);   
+      editor.txt.html(this.uploadForm.content);
     },
     // 切换tab时进行的提示
     changeTab(name) {
@@ -407,6 +412,11 @@ export default {
     pichandleRemove(file) {
       const fileList = this.picuploadList;
       this.picuploadList.splice(fileList.indexOf(file), 1);
+    },
+    // 移除附件
+    handleRemove(file) {
+      const fileList = this.fujainList;
+      this.fujainList.splice(fileList.indexOf(file), 1);
     },
     // 清空图片描述
     showUploadModel() {
@@ -432,7 +442,6 @@ export default {
     },
     // 图片上传成功返回photourl
     pichandleSuccess(res, file) {
-      console.log(file)
       this.uploadForm.photourl = res.data;
     },
     // 图片上传个数验证
@@ -525,7 +534,6 @@ export default {
     },
     // 点击确定给附件加描述
     docupload() {
-      console.log(this.$refs.fujianupload);
       for (let val of this.fujainList) {
         if (!val.hasOwnProperty("description")) {
           Vue.set(val, "description", this.uploadDescription);
@@ -576,9 +584,9 @@ export default {
               this.deleteFileParams.userIds =
                 this.deleteFileParams.userIds + "," + this.adminIds;
             }
-            console.log("验证入参是否正确",this.lookFileParams)
-            console.log("验证修改入参是否正确",this.updateFileParams)
-            console.log("验证删除入参是否正确",this.deleteFileParams)
+            console.log("验证入参是否正确", this.lookFileParams);
+            console.log("验证修改入参是否正确", this.updateFileParams);
+            console.log("验证删除入参是否正确", this.deleteFileParams);
             lookFileUser(this.lookFileParams)
               .then(res => {
                 if (res.data.code == 0) {
@@ -681,7 +689,6 @@ export default {
         this.$Message.warning("请选择文件类型");
         return;
       } else if (this.uploadForm.content === "") {
-        console.log(222)
         this.$Message.warning("请编辑文件内容");
         return;
       } else if (this.uploadForm.content.length >= 2600) {
