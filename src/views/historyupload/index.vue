@@ -12,13 +12,13 @@
           </Row>
         </TabPane>
         <TabPane label="图文" name='pic'>
-          <Row>
-            <Col span="5" offset=1 pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index'
+          <Row :gutter="32">
+            <Col span="4" offset=1 pull=1 v-for='(list,index) in historyUploadpicMessageList' :key='index'
                  style='margin-bottom:10px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                  <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:50%;height:90px;'>
+                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:90px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                 </div>
