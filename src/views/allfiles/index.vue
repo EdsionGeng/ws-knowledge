@@ -65,18 +65,19 @@
       return {
         docTypeKey: {
           value: "",
-          id: 0
+          id: ""
         },
         depTypeKey: {
-          value: ""
+          value: "",
+          id:""
         },
         pageOpts: [20, 40, 60, 100],
         listparams: {
           userId: sessionStorage.getItem("userId"),
           current: 1,
           pageSize: 20,
-          userGroupId: 3,
-          sortType:"desc"
+          userGroupId: sessionStorage.getItem("userGroupId"),
+          sortType:"desc",
         },
         photourl:"1513841327678bg.jpg",
         page: {total: 20, pages: 1, current: 1, pageSize: 20},
@@ -133,8 +134,13 @@
         }
       },
       selAllFile() {
-        this.listparams.departmentName = this.depTypeKey.value;
+      this.listparams.departmentName = this.depTypeKey.value;
+//        console.info(this.depTypeKey.id)
+//        this.listparams.groupId = this.depTypeKey.id;
+//        console.info("dfsbhjdfs")
+
         this.listparams.fileStyleId = this.docTypeKey.id;
+
         this.initList();
       },
       onRowClick(row) {
@@ -153,11 +159,11 @@
           .then(res => {
             const showUserUpdata = res.data;
             if (res.data.code == 0) {
-              console.info(res.data.data);
+
               this.page = res.data.rdPage;
               this.userLookFileList = showUserUpdata.data;
               this.userLookpicFileList = showUserUpdata.data;
-              console.log(res.data)
+
             }
           })
           .catch(err => {
