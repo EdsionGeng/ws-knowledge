@@ -369,7 +369,7 @@ export default {
                 let fujainDetail = {};
                 fujainDetail.size = parseInt(this.fileDetailSize[i]);
                 fujainDetail.name = this.fileDetailUrl[i].slice(15);
-                fujainDetail.url =  this.fileDetailUrl[i] ;
+                fujainDetail.url = this.fileDetailUrl[i];
                 fujainDetail.description = this.fileDetaildescible[i];
                 this.fujainList.push(fujainDetail);
               }
@@ -384,7 +384,7 @@ export default {
         .catch(err => {});
     },
     // 移除pic
-    pichandRemove(file) {  
+    pichandRemove(file) {
       const fileList = this.$refs.upload.fileList;
       this.picuploadList.splice(fileList.indexOf(file), 1);
     },
@@ -408,7 +408,6 @@ export default {
     },
     // 判断图片上传数量
     pichandleBeforeUpload() {
-     
       const check = this.picuploadList.length < 1;
       if (!check) {
         this.$Notice.warning({
@@ -419,8 +418,9 @@ export default {
     },
     // 判断附件上传数量
     handleBeforeUpload(file) {
+      const checkfileList = this.$refs.fujianupload.fileList.length < 10;
       const check = this.fujainList.length < 10;
-      if (!check) {
+      if (!check || !checkfileList) {
         this.$Notice.warning({
           title: "附件上传已达上限"
         });
@@ -500,21 +500,21 @@ export default {
     },
     // 设置图片的描述
     docupload() {
-      const fileList=this.$refs.fujianupload.fileList;
-      console.log(fileList)
-      if(this.uploadDescription===''){
-        this.uploadDescription='无'
+      const fileList = this.$refs.fujianupload.fileList;
+      console.log(fileList);
+      if (this.uploadDescription === "") {
+        this.uploadDescription = "无";
       }
-      for(var val of fileList){
-        let fujianListDetail={
-            url:val.response.data,
-            name:val.response.data.slice(15),
-            size:val.size,
-            description:this.uploadDescription
-          }
+      for (var val of fileList) {
+        let fujianListDetail = {
+          url: val.response.data,
+          name: val.response.data.slice(15),
+          size: val.size,
+          description: this.uploadDescription
+        };
         this.fujainList.push(fujianListDetail);
-      } 
-      this.$refs.fujianupload.fileList=[];
+      }
+      this.$refs.fujianupload.fileList = [];
     },
     // 文件验证成功进入修改
     upFileloadSuccess() {

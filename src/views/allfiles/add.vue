@@ -454,9 +454,10 @@ export default {
       return check;
     },
     // 附件上传个数验证
-    handleBeforeUpload(file) {
+     handleBeforeUpload(file) {
+      const checkfileList = this.$refs.fujianupload.fileList.length < 10;
       const check = this.fujainList.length < 10;
-      if (!check) {
+      if (!check || !checkfileList) {
         this.$Notice.warning({
           title: "附件上传已达上限"
         });
