@@ -224,7 +224,7 @@ export default {
     },
     delFile() {
       this.$Modal.confirm({
-        content: "<h3>确定要删除么！！！</h3>",
+        content: "<h3>确定要删除么！</h3>",
         onOk: () => {
           deletesinglefile(this.delfileParams)
             .then(res => {
