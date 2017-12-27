@@ -157,7 +157,7 @@ export default {
       picViewModel: false,
       picuploadList: [],
       userLookIds: "",
-      chooseuserLookIds:'',
+      chooseuserLookIds: "",
       uploadDescription: "",
       showusermissionIdArry: [],
       submitText: "确认修改",
@@ -457,16 +457,16 @@ export default {
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
-      this.chooseuserLookIds = userIds.join(",");
     },
     chooseDelPeople(arr) {
+      console.log(111);
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
           userIds.push(arr[i].id);
         }
-        this.deleteFileParams.userIds = userIds.join(",");
       }
+      this.deleteFileParams.userIds = userIds.join(",");
     },
     chooseEditPeople(arr) {
       var userIds = [];
@@ -474,8 +474,8 @@ export default {
         if (arr[i].children === null) {
           userIds.push(arr[i].id);
         }
-        this.updateFileParams.userIds = userIds.join(",");
       }
+      this.updateFileParams.userIds = userIds.join(",");
     },
     // 树形渲染函数
     renderContentDep(h, { root, node, data }) {

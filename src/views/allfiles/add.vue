@@ -236,17 +236,21 @@ export default {
         this.showDepTree();
       } else {
         this.depTree = storeState.powerTreeLookList;
+        this.userLookIds=storeState.lookFileParams.userIds;
+        this.lookFileParams.userIds=storeState.lookFileParams.userIds;
         this.selectDate(storeState.lookFileParams.userIds, this.depTree);
       }
       if (storeState.updateFileParams.userIds === "") {
         this.showeditDepTree();
       } else {
+        this.updateFileParams.userIds=storeState.updateFileParams.userIds;
         this.editdepTree = storeState.powerTreeEditList;
         this.selectDate(storeState.updateFileParams.userIds, this.editdepTree);
       }
       if (storeState.deleteFileParams.userIds === "") {
         this.showdelDepTree();
       } else {
+        this.deleteFileParams.userIds=storeState.deleteFileParams.userIds;
         this.deldepTree = storeState.powerTreeDelList;
         this.selectDate(storeState.deleteFileParams.userIds, this.deldepTree);
       }
@@ -301,24 +305,7 @@ export default {
           },
           onCancel: () => {
             this.getEditorContent();
-            this.getLookTreeList([]);
-            this.getEditTreeList([]);
-            this.getDelTreeList([]);
-            this.setHasSaveContent(false);
-            this.getdeleteFileParams(null);
-            this.getupdateFileParams(null);
-            this.getlookFileParams(null);
-            this.getTitle("");
-            this.getFileStyle("");
-            this.getFileStyleId("0"),
-              this.getPhotoUrl(""),
-              this.getFileUrl(""),
-              this.getContent(""),
-              this.getFujainList([]);
-            this.getFilesize("");
-            this.getDescrible("");
-            this.getFileType("");
-            this.getPhotoUrlList([]);
+            this.clearSaveUploadFile();
             this.$Message.success("已清空保存的信息");
             next();
           }
@@ -351,6 +338,26 @@ export default {
       "getFileType",
       "getPhotoUrlList"
     ]),
+    clearSaveUploadFile(){         
+            this.getLookTreeList([]);
+            this.getEditTreeList([]);
+            this.getDelTreeList([]);
+            this.setHasSaveContent(false);
+            this.getdeleteFileParams(null);
+            this.getupdateFileParams(null);
+            this.getlookFileParams(null);
+            this.getTitle("");
+            this.getFileStyle("");
+            this.getFileStyleId("0"),
+            this.getPhotoUrl(""),
+            this.getFileUrl(""),
+            this.getContent(""),
+            this.getFujainList([]);
+            this.getFilesize("");
+            this.getDescrible("");
+            this.getFileType("");
+            this.getPhotoUrlList([]);         
+    },
     createEditor() {
       var editor = new E("#editorElem");
         this.editorContent=this.uploadForm.content;
@@ -389,7 +396,6 @@ export default {
     },
     // 切换tab时进行的提示
     changeTab(name) {
-      console.log(name);
       if (name == "name2" || name == "name3") {
         if (this.userLookIds === "") {
           this.$Message.error("请先选择可查阅的人员");
@@ -570,6 +576,9 @@ export default {
               this.deleteFileParams.userIds =
                 this.deleteFileParams.userIds + "," + this.adminIds;
             }
+            console.log("验证入参是否正确",this.lookFileParams)
+            console.log("验证修改入参是否正确",this.updateFileParams)
+            console.log("验证删除入参是否正确",this.deleteFileParams)
             lookFileUser(this.lookFileParams)
               .then(res => {
                 if (res.data.code == 0) {
@@ -584,6 +593,7 @@ export default {
                               console.log("设置删除权限成功");
                               this.submitLoading = false;
                               this.isBanDuan = false;
+                              this.clearSaveUploadFile();
                               this.$Message.success("上传成功,2s后少跳转到历史上传界面");
                               setTimeout(() => {
                                 this.$router.push("/hisupload");
