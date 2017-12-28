@@ -10,7 +10,7 @@ if(process.env.NODE_ENV ==='development'){
     }
 }
 export function getUploadUrl(){
-    let uploadUrl = baseURL+'/downLoadFile';
+    let uploadUrl = baseURL+'/file/upload.htmls';
     // let uploadUrl = baseurl+'/projectManage/uploadFile';
     return uploadUrl;
 }

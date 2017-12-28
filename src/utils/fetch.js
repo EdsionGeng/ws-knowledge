@@ -1,9 +1,10 @@
 import axios from 'axios'
+import {getRequestUrl} from "../utils/commonurl";
 
 // 封装axios 创建基础实例以及axios拦截
 const service = axios.create({
     timeout:60000,
-    baseURL:'http://192.168.3.26:8011',
+    baseURL:getRequestUrl(),
     headers: {
     'Content-Type': 'application/json;charset=utf-8',
     // 'Accept': 'application/json'

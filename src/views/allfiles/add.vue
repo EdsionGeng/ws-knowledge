@@ -19,7 +19,7 @@
               :max-size="2048"
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
-              action="http://192.168.3.26:8011/photo/upload.htmls">
+              :action="uploadurl">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面 <br><span style='color:#bbb'>(建议宽高比例10:9)</span></Button>
             </Upload>
              <Row
@@ -145,11 +145,13 @@ import { updateFilePermission } from "../../api/all_interface";
 import { deleteFilePermission } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
 import { mapState, mapMutations } from "vuex";
+import { getUploadUrl } from "../../utils/commonurl";
 import Vue from "vue";
 var E = require("wangeditor");
 export default {
   data() {
     return {
+      uploadurl: "",
       picViewModel: false,
       picuploadList: [],
       userLookIds: "",
@@ -218,6 +220,7 @@ export default {
   },
   computed: mapState(["addFileSaveList", "hasSaveContent"]),
   mounted() {
+    this.uploadurl = getUploadUrl();
     this.adminPower();
     //this.fujainList = this.$refs.fujianupload.fileList;
     this.picuploadList = this.$refs.upload.fileList;
