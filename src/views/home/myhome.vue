@@ -18,8 +18,6 @@
     <Modal
       v-model="modal1"
       :mask-closable="false"
-       @on-cancel="cancel"
-      @on-ok="cancel"
     >
       <div style='font-size: 16px;color:#444444;margin-top:10px;text-align: center'>{{mymessageDetail.MyMessageListTitle}}
       </div>
@@ -102,10 +100,6 @@ export default {
     this.initUserLookFile();
   },
   methods: {
-      cancel(){
-
-      //  window.location.reload();
-      },
     changeRoute(name) {
       this.$router.push("/" + name);
     },
