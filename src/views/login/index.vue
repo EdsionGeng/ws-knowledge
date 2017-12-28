@@ -52,19 +52,11 @@ export default {
               const data = res.data;
               if (data.code == 0) {
                 let username = data.data.username;
-                let isAdmin = false;
-                // 判断是否是管理员
-                if (res.data.count === 0) {
-                  isAdmin = false;
-                } else {
-                  isAdmin = true;
-                }
                 let id = data.data.id;
                 let userGroupId = data.data.UserGroupId;
                 this.isLoading = false;
                 this.$Message.success(data.msg);
                 sessionStorage.setItem("isLogin", true);
-                sessionStorage.setItem("isAdmin", isAdmin);
                 sessionStorage.setItem("userGroupId", userGroupId);
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("userId", id);
