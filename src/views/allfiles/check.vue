@@ -218,7 +218,6 @@ export default {
       });
     },
     goRouter() {
-      console.log(this.lastestUrl);
       if (this.lastestUrl === "allfiles") {
         this.$router.push("/allfiles");
       } else {
@@ -236,7 +235,7 @@ export default {
             .then(res => {
               if (res.data.code === 0) {
                 this.$Message.warning("您删除了该文件");
-                this.$router.push("/allfiles");
+                this.goRouter();
               } else {
                 this.$Message.error("操作发生错误");
               }
