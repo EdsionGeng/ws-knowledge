@@ -6,10 +6,10 @@
     <div style="margin:10px">
       <Row class="table-top">
         <Col>
-        <Table :columns="MyMsgColumns" class='myTable' :data="MyMessageList" :row-class-name='rowClassName' showStripe  @on-row-click="onRowClick"></Table>
+        <Table :columns="MyMsgColumns" class='myTable' :data="MyMessageList" :row-class-name='rowClassName'  @on-sort-change="recSortType" showStripe  @on-row-click="onRowClick"></Table>
         </Col>
       </Row>
-      <Page :total="page.total" :page-size-opts='pageOpts'show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+      <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
     <Modal
       v-model="modal1"
@@ -65,6 +65,7 @@
         dataParams: {
           current: 1,
           pageSize:10,
+          sortType:"desc",
           userId:sessionStorage.getItem("userId")
         }
       };
@@ -77,7 +78,10 @@
         this.dataParams.current=value;
         this.initUserAd();
       },
-
+      recSortType(order) {
+        this.dataParams.sortType = order.order;
+        this.initUserAd();
+      },
       onPageSizeChange(value){
         this.dataParams.pageSize=value;
         this.initUserAd();
