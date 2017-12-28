@@ -58,7 +58,8 @@
         columns1: [
           {
             title: "标题",
-            key: "title"
+            key: "title",
+             align: "center"
           },
           {
             title: "文件类型",
@@ -69,7 +70,7 @@
             title: "发布时间",
             key: "addFileTime",
             sortable: true,
-            align: "right"
+            align: "center"
           }
         ],
         historyUploadpicMessageList: [],
