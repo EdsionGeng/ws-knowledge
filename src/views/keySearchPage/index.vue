@@ -20,8 +20,8 @@
                 <div style="text-align:center">
                    <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
-                  <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
-                  <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
+                  <p style='color:#999;font-size:12px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
+                  <p style='color:#999;font-size:12px;' class="nowrap">上传人：{{list.username}}</p>
                 </div>
               </Card>
             </a>

@@ -133,6 +133,6 @@ export default {
 </script>
 <style scoped>
 .page {
-  padding: 20px 10px;
+  padding: 20px 20px;
 }
 </style>
