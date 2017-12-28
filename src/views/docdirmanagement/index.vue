@@ -35,7 +35,6 @@
               <Tree :data="docTree" :render="renderContent"></Tree>
             </div>
           </div>
-
         </FormItem>
         <FormItem prop="content" label="新增类型：">
           <Input type="text" :rows="4" placeholder="请输入内容！" v-model="insertFileParams.docName"
@@ -140,8 +139,6 @@ export default {
     this.showDocTree();
   },
   mounted() {
-    //  挂载结束状态
-    // this.showDocTree();
   },
   methods: {
     showDocTree() {
@@ -188,12 +185,7 @@ export default {
       }
       funSelect(data);
     },
-
     deleteFileKind() {
-      //        if(arr.length>1){
-      //          this.$Message.warning("只能勾选一个节点");
-      //          return
-      //        }
       if (this.deleteDocParams.fileStyleId === "") {
         this.$Message.warning("您没有选中相应的节点！");
         return;
@@ -246,25 +238,10 @@ export default {
         return;
       }
       if (this.filePcs > 0) {
-        this.$Message.warning("此文件还有对应的相应文件数量");
         this.open = false;
         return;
       }
       this.deletesure = true;
-      //        deleteDocRule(this.deleteDocParams).then(res => {
-      //          let _self = this;
-      //          const data = res.data;
-      //          if (data.code == 0) {
-      //            _self.deleteDocParams.fileStyleId = "";
-      //            this.$Message.success(data.msg);
-      //            _self.showDocTree();
-      //            _self.open = false;
-      //          }
-      //          else {
-      //            this.$Message.warning(data.msg);
-      //          }
-      //        }).catch(err => {
-      //        });
     },
     sureDeleteDoc() {
       deleteDocRule(this.deleteDocParams)
@@ -301,7 +278,6 @@ export default {
             this.updateParams.fileName = "";
             this.$Message.success(data.msg);
             this.showDocTree();
-
             this.updateFileName = false;
             window.location.reload();
           } else {
@@ -327,12 +303,13 @@ export default {
             _self.insertFileParams.parentId = "";
             _self.deleteDocParams.fileStyleId = "";
             _self.showDocTree();
+            window.location.reload();
           }
         })
         .catch(err => {});
     },
-    cancel() {}
-    // this.$Message.info('Clicked ok');
+    cancel() {
+    }
   }
 };
 </script>
@@ -342,7 +319,6 @@ export default {
   color: #000;
 }
 </style>
-
 <style scoped>
 .doctree-sty {
   margin-top: 20px;
