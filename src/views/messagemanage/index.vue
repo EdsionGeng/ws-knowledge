@@ -46,8 +46,8 @@
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
-        <Table border ref="selection" :columns="AllAdColumns" @on-sort-change="recSortType" :data="AllAdList" stripe
-               @on-selection-change="delAdAction" @on-row-dblclick="showAdDetail"></Table>
+        <Table class="myTable" border ref="selection" :columns="AllAdColumns" @on-sort-change="recSortType" :data="AllAdList" stripe
+               @on-selection-change="delAdAction" @on-row-click="showAdDetail"></Table>
         </Col>
       </Row>
       <Page :total="page.total" :page-size-opts='pageOpts' show-sizer show-elevator :current="page.current"
@@ -136,9 +136,9 @@
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
-          style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
+          style="color:red">{{singleMessageDetail.noreaded}}</strong>
       <p class="modal-content" style="color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;">
-      <pre> {{singleMessageDetail.Content}}</pre>
+        {{singleMessageDetail.Content }}
       </p>
     </Modal>
   </div>
