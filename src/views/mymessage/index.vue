@@ -6,10 +6,10 @@
     <div style="margin:10px">
       <Row class="table-top">
         <Col>
-        <Table :columns="MyMsgColumns" :data="MyMessageList" :row-class-name='rowClassName' showStripe  @on-row-click="onRowClick"></Table>
+        <Table :columns="MyMsgColumns" class='myTable' :data="MyMessageList" :row-class-name='rowClassName' showStripe  @on-row-click="onRowClick"></Table>
         </Col>
       </Row>
-      <Page :total="page.total" :page-size-opts='pageOpts'show-sizer  :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
+      <Page :total="page.total" :page-size-opts='pageOpts'show-sizer show-elevator :current="page.current" :page-size="page.pageSize" :show-total="true" @on-change="onPageChange" @on-page-size-change='onPageSizeChange' class="table-page"></Page>
     </div>
     <Modal
       v-model="modal1"
@@ -21,7 +21,7 @@
     >
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
       <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ mymessageDetail.MyMessagetime}}&nbsp; &nbsp;发布人：{{ mymessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong style="color:red">{{mymessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong style="color:red">{{mymessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'><pre>{{mymessageDetail.MyMessageMsg}}</pre></p>
+      <div class="modal-content" style='color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;'>{{mymessageDetail.MyMessageMsg}}</div>
     </Modal>
   </div>
 
