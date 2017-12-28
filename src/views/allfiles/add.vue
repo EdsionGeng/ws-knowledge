@@ -375,7 +375,8 @@ export default {
       editor.customConfig.uploadImgHeaders = {
         Accept: "multipart/form-data"
       };
-      editor.customConfig.uploadImgServer = "http://192.168.22.45:8011/file/upload.htmls";
+      editor.customConfig.uploadImgServer =
+        "http://192.168.22.45:8011/file/upload.htmls";
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
@@ -389,9 +390,9 @@ export default {
         "justify", // 对齐方式
         "quote", // 引用
         "emoticon", // 表情
-        'image',  // 插入图片
+        "image", // 插入图片
         "table", // 表格
-        'video',  // 插入视频
+        "video", // 插入视频
         "code", // 插入代码
         "undo", // 撤销
         "redo" // 重复
@@ -437,7 +438,7 @@ export default {
         this.$Notice.warning({
           title: res.msg
         });
-      } 
+      }
     },
     // 图片上传成功返回photourl
     pichandleSuccess(res, file) {
@@ -454,15 +455,16 @@ export default {
       return check;
     },
     // 附件上传个数验证
-     handleBeforeUpload(file) {
-      const checkfileList = this.fujainList.length+this.$refs.fujianupload.fileList.length < 10;
+    handleBeforeUpload(file) {
+      const checkfileList =
+        this.fujainList.length + this.$refs.fujianupload.fileList.length < 10;
       const check = this.fujainList.length < 10;
       if (!check || !checkfileList) {
         this.$Notice.warning({
           title: "附件上传已达上限"
         });
       }
-      return check&&checkfileList;
+      return check && checkfileList;
     },
     // 图片上传大小设置
     pichandleMaxSize(file) {
@@ -534,21 +536,21 @@ export default {
     },
     // 点击确定给附件加描述
     docupload() {
-      const fileList=this.$refs.fujianupload.fileList;
-      console.log(fileList)
-      if(this.uploadDescription===''){
-        this.uploadDescription='无'
+      const fileList = this.$refs.fujianupload.fileList;
+      console.log(fileList);
+      if (this.uploadDescription === "") {
+        this.uploadDescription = "无";
       }
-      for(var val of fileList){
-        let fujianListDetail={
-            url:val.response.data,
-            name:val.response.data.slice(13),
-            size:val.size,
-            description:this.uploadDescription
-          }
+      for (var val of fileList) {
+        let fujianListDetail = {
+          url: val.response.data,
+          name: val.response.data.slice(15),
+          size: val.size,
+          description: this.uploadDescription
+        };
         this.fujainList.push(fujianListDetail);
-      } 
-      this.$refs.fujianupload.fileList=[];
+      }
+      this.$refs.fujianupload.fileList = [];
     },
     // 验证通过开始上传函数
     upFileloadSuccess() {
@@ -707,7 +709,10 @@ export default {
           this.updateFileParams.userIds
         )
       ) {
-        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
+        this.$Message.warning({
+          content: "有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",
+          duration: 5
+        });
         return;
       } else if (
         this.checkIfContainId(
@@ -715,7 +720,10 @@ export default {
           this.deleteFileParams.userIds
         )
       ) {
-        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
+        this.$Message.warning({
+          content: "有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",
+          duration: 5
+        });
         return;
       } else {
         this.submitLoading = true;

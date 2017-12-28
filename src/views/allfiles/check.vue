@@ -4,7 +4,7 @@
       <Col span='20' style='border-right:1px solid #ccc;padding:20px;'>
       <Row type='flex' align='middle' justify='space-between'>
         <Col class="lf">
-        <Button type='ghost' @click="goRouter">&lt; 返回</Button>
+        <Button type='ghost' @click="goRouter"><Icon type="chevron-left"></Icon>  返回</Button>
         </Col>
         <Col>
         <h3 style='margin-left:-64px'>{{fileDetails.title}}</h3> </Col>

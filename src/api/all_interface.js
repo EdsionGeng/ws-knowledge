@@ -8,6 +8,14 @@ export function getFileDetail(data) {
     data: data
   })
 }
+
+export function getUserMenus(data) {
+  return fetch({
+    url: '/getMenus',
+    method: 'post',
+    data: data
+  })
+}
 export function getDepByTree(data) {
   return fetch({
     url: '/getDepByTree',

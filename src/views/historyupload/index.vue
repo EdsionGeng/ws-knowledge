@@ -42,92 +42,90 @@
   </div>
 </template>
 <script>
-  import {showUserUpload} from "../../api/all_interface";
+import { showUserUpload } from "../../api/all_interface";
 
-  export default {
-    data() {
-      return {
-        pageOpts: [10, 20, 30, 40],
-        listparams: {
-          current: 1,
-          pageSize: 20,
-          userId: sessionStorage.getItem("userId"),
-          sortType:"desc",
+export default {
+  data() {
+    return {
+      pageOpts: [10, 20, 30, 40],
+      listparams: {
+        current: 1,
+        pageSize: 20,
+        userId: sessionStorage.getItem("userId"),
+        sortType: "desc"
+      },
+      page: { total: 20, pages: 1, current: 1, pageSize: 20 },
+      columns1: [
+        {
+          title: "标题",
+          key: "title",
+          align: "center"
         },
-        page: {total: 20, pages: 1, current: 1, pageSize: 20},
-        columns1: [
-          {
-            title: "标题",
-            key: "title",
-             align: "center"
-          },
-          {
-            title: "文件类型",
-            key: "fileStyle",
-            align: "center"
-          },
-          {
-            title: "发布时间",
-            key: "addFileTime",
-            sortable: true,
-            align: "center"
-          }
-        ],
-        historyUploadpicMessageList: [],
-        historyUploadMessageList: []
-      };
-    },
-    mounted() {
+        {
+          title: "文件类型",
+          key: "fileStyle",
+          align: "center"
+        },
+        {
+          title: "发布时间",
+          key: "addFileTime",
+          sortable: true,
+          align: "center"
+        }
+      ],
+      historyUploadpicMessageList: [],
+      historyUploadMessageList: []
+    };
+  },
+  mounted() {
+    this.initList();
+  },
+  methods: {
+    recSortType(order) {
+      this.listparams.sortType = order.order;
       this.initList();
     },
-    methods: {
-      recSortType(order){
-        this.listparams.sortType=order.order;
-        this.initList();
-      },
-      changePic(name) {
-        if (name === 'pic') {
-          this.historyUploadMessageList=[];
-        } else {
-          this.historyUploadMessageList=this.historyUploadpicMessageList;
-        }
-      },
-      onRowClick(row) {
-        this.$router.push('/allfiles/check/' + row.id);
-      },
-      onPageChange(value) {
-        this.listparams.current = value;
-        this.initList();
-      },
-      onPageSizeChange(value) {
-        this.listparams.pageSize = value;
-        this.initList();
-      },
-      initList() {
-        showUserUpload(this.listparams)
-          .then(res => {
-            const showUserUpdata = res.data;
-            console.log(showUserUpdata);
-            if (res.data.code == 0) {
-              this.page = res.data.rdPage;
-              console.log(this.page)
-              this.historyUploadMessageList = showUserUpdata.data;
-              this.historyUploadpicMessageList=showUserUpdata.data;
-            }
-          })
-          .catch(err => {
-          });
+    changePic(name) {
+      if (name === "pic") {
+        this.historyUploadMessageList = [];
+      } else {
+        this.historyUploadMessageList = this.historyUploadpicMessageList;
       }
+    },
+    onRowClick(row) {
+      this.$router.push("/allfiles/check/" + row.id);
+    },
+    onPageChange(value) {
+      this.listparams.current = value;
+      this.initList();
+    },
+    onPageSizeChange(value) {
+      this.listparams.pageSize = value;
+      this.initList();
+    },
+    initList() {
+      showUserUpload(this.listparams)
+        .then(res => {
+          const showUserUpdata = res.data;
+          console.log(showUserUpdata);
+          if (res.data.code == 0) {
+            this.page = res.data.rdPage;
+            console.log(this.page);
+            this.historyUploadMessageList = showUserUpdata.data;
+            this.historyUploadpicMessageList = showUserUpdata.data;
+          }
+        })
+        .catch(err => {});
     }
-  };
+  }
+};
 </script>
 <style>
-  .ivu-select-single .ivu-select-selection {
-    width: 100px;
-  }
+.ivu-select-single .ivu-select-selection {
+  width: 100px;
+}
 
-  .page {
-    height: 100%;
-  }
-
+.page {
+  height: 100%;
+}
 </style>

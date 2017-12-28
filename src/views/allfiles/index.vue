@@ -56,120 +56,116 @@
   </div>
 </template>
 <script>
-  import {showUserLookFile} from "../../api/all_interface";
-  import SelectTree from "@/components/common/selectTree";
-  import docTree from "@/components/common/docTree";
+import { showUserLookFile } from "../../api/all_interface";
+import SelectTree from "@/components/common/selectTree";
+import docTree from "@/components/common/docTree";
 
-  export default {
-    data() {
-      return {
-        docTypeKey: {
-          value: "",
-          id: ""
+export default {
+  data() {
+    return {
+      docTypeKey: {
+        value: "",
+        id: ""
+      },
+      depTypeKey: {
+        value: "",
+        id: ""
+      },
+      pageOpts: [20, 40, 60, 100],
+      listparams: {
+        userId: sessionStorage.getItem("userId"),
+        current: 1,
+        pageSize: 20,
+        userGroupId: sessionStorage.getItem("userGroupId"),
+        sortType: "desc"
+      },
+      photourl: "1513841327678bg.jpg",
+      page: { total: 20, pages: 1, current: 1, pageSize: 20 },
+      columns1: [
+        {
+          title: "标题",
+          key: "title",
+          align: "center"
         },
-        depTypeKey: {
-          value: "",
-          id:""
+        {
+          title: "发布时间",
+          key: "addFileTime",
+          sortable: true,
+          sortType: "desc",
+          align: "center"
         },
-        pageOpts: [20, 40, 60, 100],
-        listparams: {
-          userId: sessionStorage.getItem("userId"),
-          current: 1,
-          pageSize: 20,
-          userGroupId: sessionStorage.getItem("userGroupId"),
-          sortType:"desc",
+        {
+          title: "文件类型",
+          key: "fileStyle",
+          align: "center"
         },
-        photourl:"1513841327678bg.jpg",
-        page: {total: 20, pages: 1, current: 1, pageSize: 20},
-        columns1: [
-          {
-            title: "标题",
-            key: "title",
-            align: "center",
-          },
-           {
-            title: "发布时间",
-            key: "addFileTime",
-            sortable: true,
-            sortType:'desc',
-            align: "center"
-          },
-          {
-            title: "文件类型",
-            key: "fileStyle",
-            align: "center"
-          },
-          {
-            title: "上传人",
-            key: "username",
-            align: "center"
-          },
-         
-        ],
-        userLookpicFileList: [],
-        userLookFileList: []
-      };
-    },
-    components: {
-      SelectTree,
-      docTree
-    },
-    created() {
+        {
+          title: "上传人",
+          key: "username",
+          align: "center"
+        }
+      ],
+      userLookpicFileList: [],
+      userLookFileList: []
+    };
+  },
+  components: {
+    SelectTree,
+    docTree
+  },
+  created() {
+    this.initList();
+  },
+  methods: {
+    recSortType(order) {
+      this.listparams.sortType = order.order;
       this.initList();
     },
-    methods: {
-      recSortType(order){
-        this.listparams.sortType=order.order;
-        this.initList();
-      },
-      changePic(name) {
-         if (name === 'pic') {
-          this.historyUploadMessageList=[];
-        } else {
-          this.historyUploadMessageList=this.historyUploadpicMessageList;
-        }
-      },
-      selAllFile() {
-      this.listparams.departmentName = this.depTypeKey.value;
-//        console.info(this.depTypeKey.id)
-//        this.listparams.groupId = this.depTypeKey.id;
-//        console.info("dfsbhjdfs")
-
-        this.listparams.fileStyleId = this.docTypeKey.id;
-
-        this.initList();
-      },
-      onRowClick(row) {
-        this.$router.push("/allfiles/check/" + row.id);
-      },
-      onPageChange(value) {
-        this.listparams.current = value;
-        this.initList();
-      },
-      onPageSizeChange(value) {
-        this.listparams.pageSize = value;
-        this.initList();
-      },
-      initList() {
-        showUserLookFile(this.listparams)
-          .then(res => {
-            const showUserUpdata = res.data;
-            if (res.data.code == 0) {
-
-              this.page = res.data.rdPage;
-              this.userLookFileList = showUserUpdata.data;
-              this.userLookpicFileList = showUserUpdata.data;
-
-            }
-          })
-          .catch(err => {
-          });
+    changePic(name) {
+      if (name === "pic") {
+        this.historyUploadMessageList = [];
+      } else {
+        this.historyUploadMessageList = this.historyUploadpicMessageList;
       }
+    },
+    selAllFile() {
+      this.listparams.departmentName = this.depTypeKey.value;
+      //        console.info(this.depTypeKey.id)
+      //        this.listparams.groupId = this.depTypeKey.id;
+      //        console.info("dfsbhjdfs")
+
+      this.listparams.fileStyleId = this.docTypeKey.id;
+
+      this.initList();
+    },
+    onRowClick(row) {
+      this.$router.push("/allfiles/check/" + row.id);
+    },
+    onPageChange(value) {
+      this.listparams.current = value;
+      this.initList();
+    },
+    onPageSizeChange(value) {
+      this.listparams.pageSize = value;
+      this.initList();
+    },
+    initList() {
+      showUserLookFile(this.listparams)
+        .then(res => {
+          const showUserUpdata = res.data;
+          if (res.data.code == 0) {
+            this.page = res.data.rdPage;
+            this.userLookFileList = showUserUpdata.data;
+            this.userLookpicFileList = showUserUpdata.data;
+          }
+        })
+        .catch(err => {});
     }
-  };
+  }
+};
 </script>
 <style scoped>
-  .page {
-    padding: 20px 10px;
-  }
+.page {
+  padding: 20px 10px;
+}
 </style>

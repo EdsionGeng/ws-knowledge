@@ -7,14 +7,6 @@
           <Col span="5">
           <FormItem label="文档类型:">
               <docTree :myvalue='docTypeKey'></docTree>
-            <!-- <Input v-model="value4" icon="arrow-down-b"  class="treestyle" placeholder="文档类型" @on-click='dropmenu(!showMenu)'
-                   style="width: 250px">
-
-            </Input> -->
-            <!-- <div v-if='showMenu' class="showmenubox">
-                  <Tree :data="docTree" :render="renderContent"></Tree>
-            </div> -->
-
           </FormItem>
           </Col>
           <Col span="5">
@@ -60,7 +52,7 @@
       title="调整文件类型"
       @on-ok="ok"
       @on-cancel="cancel">
-      <Tree :data="docTree" :render="renderContent1"></Tree>
+      <Tree :data="docTree" :render="renderContent1" ref='tree2'></Tree>
       <!--@on-check-change="getCheckNode"-->
     </Modal>
     <Modal
@@ -75,285 +67,276 @@
   </div>
 </template>
 <script>
-  import {showAllFile} from "../../api/all_interface";
-  import {deleteFile} from "../../api/all_interface";
-  import {getDocTree} from "../../api/all_interface";
-  import {updateFileStyleDetail} from "../../api/all_interface";
-  import docTree from '@/components/common/docTree'
-  export default {
-    data() {
-      return {
-         docTypeKey: {
-          value: "",
-          id: 0
+import { showAllFile } from "../../api/all_interface";
+import { deleteFile } from "../../api/all_interface";
+import { getDocTree } from "../../api/all_interface";
+import { updateFileStyleDetail } from "../../api/all_interface";
+import docTree from "@/components/common/docTree";
+export default {
+  data() {
+    return {
+      docTypeKey: {
+        value: "",
+        id: 0
+      },
+      AllFileColumns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
         },
-        AllFileColumns: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-
-          },
-          {
-            title: "编号",
-            key: "fileNo",
-
-          },
-          {
-            title: "文件名称",
-            key: "title",
-
-          }, {
-            title: "创建时间",
-            key: "addFileTime",
-            sortable: true
-
-          },
-          {
-            title: "创建人",
-            key: "username",
-          },
-          {
-            title: "部门",
-            key: "departmentName",
-          },
-          {
-            title: "文档类型",
-            key: "fileStyle",
-          },
-        ],
-        docTreeParams: {
-          id: "",
-          fileKindName: "",
-          fileParentId: "",
-          operationTime: "",
-          checked: "",
-          fileKind: ""
+        {
+          title: "编号",
+          key: "fileNo"
         },
-        showMenu: false,
-        docTree: [],
+        {
+          title: "文件名称",
+          key: "title"
+        },
+        {
+          title: "创建时间",
+          key: "addFileTime",
+          sortable: true
+        },
+        {
+          title: "创建人",
+          key: "username"
+        },
+        {
+          title: "部门",
+          key: "departmentName"
+        },
+        {
+          title: "文档类型",
+          key: "fileStyle"
+        }
+      ],
+      docTreeParams: {
+        id: "",
+        fileKindName: "",
+        fileParentId: "",
+        operationTime: "",
+        checked: "",
+        fileKind: ""
+      },
+      showMenu: false,
+      docTree: [],
 
-        deleteFileParams: {
-          fileIds: "",
-          userId: 1
-        },
-        value4: "",
-        updateFileParams: {
-          fileIds: "",
-          userId: 1,
-          fileStyleId: ""
-        },
-        pageOpts:[10,20,30,40,50],
-        dataParams: {
-          current: 1,
-          pageSize: 20,
-          title: "",
-          startDate: "",
-          endDate: "",
-          fileStyleId: "",
-          sortType:"desc",
-        },
-        openDelWindow:false,
-        updateFileStyle: false,
-        selection: [],
-        date: "",
-        page: {},
-        AllFileList: [],
-      };
-    },
-    components:{
-      docTree
-    },
-    created() {
-      this.showAllFileList();
-      this.showDocTree();
-    },
-    methods: {
-      renderContent(h, {root, node, data}) {
-        return h('span',
-          {
-            style: {
-              cursor: "pointer",
-              marginLeft: "5px"
-            },
-            on: {
-              click: () => {
-                this.value4 = data.fileKindName;
-                this.dataParams.fileStyleId = data.id;
-                this.showMenu = false;
-              }
+      deleteFileParams: {
+        fileIds: "",
+        userId: 1
+      },
+      value4: "",
+      updateFileParams: {
+        fileIds: "",
+        userId: 1,
+        fileStyleId: ""
+      },
+      pageOpts: [10, 20, 30, 40, 50],
+      dataParams: {
+        current: 1,
+        pageSize: 20,
+        title: "",
+        startDate: "",
+        endDate: "",
+        fileStyleId: "",
+        sortType: "desc"
+      },
+      openDelWindow: false,
+      updateFileStyle: false,
+      selection: [],
+      date: "",
+      page: {},
+      AllFileList: []
+    };
+  },
+  components: {
+    docTree
+  },
+  created() {
+    this.showAllFileList();
+    this.showDocTree();
+  },
+  methods: {
+    renderContent1(h, { root, node, data }) {
+      return h(
+        "span",
+        {
+          style: {
+            cursor: "pointer",
+            padding: "3px 5px",
+            borderRadius: "3px"
+          },
+          on: {
+            click: e => {
+              this.selectNode(this.$refs.tree2.$el);
+              e.target.className = "activeSpan";
+              this.updateFileParams.fileStyleId = data.id;
             }
-          },
-          data.fileKindName)
-      },
-
-      renderContent1(h, {root, node, data}) {
-        return h('span',
-          {
-            style: {
-              cursor: "pointer",
-              marginLeft: "5px"
-            },
-            on: {
-              click: () => {
-                this.updateFileParams.fileStyleId = data.id;
-              }
-            }
-          },
-          data.fileKindName)
-      },
-      dropmenu(isshow) {
-        this.showMenu = isshow;
-      },
-      /**
+          }
+        },
+        data.fileKindName
+      );
+    },
+    selectNode(data) {
+      function funSelect(data) {
+        for (let val of data.children) {
+          if (val.children.length !== 0) {
+            funSelect(val);
+          }
+          if (val.className === "activeSpan") {
+            val.className = "";
+          }
+        }
+      }
+      funSelect(data);
+    },
+    dropmenu(isshow) {
+      this.showMenu = isshow;
+    },
+    /**
        * 分页
        */
-      onPageChange(value) {
-        this.dataParams.current = value;
-        this.showAllFileList();
-      },
-      onPageSizeChange(value){
-        this.dataParams.pageSize=value;
-        this.showAllFileList();
-      },
-      /**
+    onPageChange(value) {
+      this.dataParams.current = value;
+      this.showAllFileList();
+    },
+    onPageSizeChange(value) {
+      this.dataParams.pageSize = value;
+      this.showAllFileList();
+    },
+    /**
        * 获取文档树形结构
        */
-      showDocTree() {
-        let _doc = this
-        getDocTree(this.docTreeParams).then(res => {
-          _doc.docTree = res.data;
-        })
-      },
-      recSortType(order){
-        this.dataParams.sortType=order.order;
-        this.showAllFileList();
-      },
-      /**
+    showDocTree() {
+      let _doc = this;
+      getDocTree(this.docTreeParams).then(res => {
+        _doc.docTree = res.data;
+      });
+    },
+    recSortType(order) {
+      this.dataParams.sortType = order.order;
+      this.showAllFileList();
+    },
+    /**
        * 删除文件获取参数
        * @param arr
        * @returns {string}
        */
-      delFileAction(arr) {
-        let fielIds = "";
+    delFileAction(arr) {
+      let fielIds = "";
 
-        for (let i = 0; i < arr.length; i++) {
-          if (i > 0) {
-            fielIds += ","
-          }
-          fielIds += arr[i].id
+      for (let i = 0; i < arr.length; i++) {
+        if (i > 0) {
+          fielIds += ",";
         }
-        this.selection = fielIds
-        this.deleteFileParams.fileIds = fielIds;
-        this.updateFileParams.fileIds = fielIds;
-        return fielIds
-      },
-      /**
+        fielIds += arr[i].id;
+      }
+      this.selection = fielIds;
+      this.deleteFileParams.fileIds = fielIds;
+      this.updateFileParams.fileIds = fielIds;
+      return fielIds;
+    },
+    /**
        * 删除文件
        */
-      todelFile() {
-        // console.log("222解决"+this.selection)
-        let _self = this;
-//      console.info(_self.selection)
-        if (_self.deleteFileParams.fileIds == "") {
-          _self.$Message.info('请勾选相应数据');
-          return
-        }
-        _self.deleteFileParams.fileIds = _self.selection;
-        deleteFile(_self.deleteFileParams)
-          .then(res => {
-            const data = res.data;
-            console.log(data)
-            if (data.code == 0) {
-              _self.$Message.info('操作成功');
-              window.location.reload();
-              _self.showAllFileList();
-            }else{
-              _self.$Message.info(data.msg);
-            }
-          })
-          .catch(err => {
-          });
-      },
-      toDelCancel(){
-        this.deleteFileParams.fileIds="";
-      },
-      /**
+    todelFile() {
+      // console.log("222解决"+this.selection)
+      let _self = this;
+      //      console.info(_self.selection)
+      if (_self.deleteFileParams.fileIds == "") {
+        _self.$Message.info("请勾选相应数据");
+        return;
+      }
+      _self.deleteFileParams.fileIds = _self.selection;
+      deleteFile(_self.deleteFileParams)
+        .then(res => {
+          const data = res.data;
+          console.log(data);
+          if (data.code == 0) {
+            _self.$Message.info("操作成功");
+            window.location.reload();
+            _self.showAllFileList();
+          } else {
+            _self.$Message.info(data.msg);
+          }
+        })
+        .catch(err => {});
+    },
+    toDelCancel() {
+      this.deleteFileParams.fileIds = "";
+    },
+    /**
        * 确定修改文档类型
        */
-      ok() {
-        if (this.updateFileParams.fileIds == "") {
-          this.$Message.info('请勾选相应数据');
-          return
-        }
-        this.updateFileParams.fileIds = this.selection;
-        let _self = this;
-        updateFileStyleDetail(this.updateFileParams).then(res => {
+    ok() {
+      if (this.updateFileParams.fileIds == "") {
+        this.$Message.info("请勾选相应数据");
+        return;
+      }
+      this.updateFileParams.fileIds = this.selection;
+      let _self = this;
+      updateFileStyleDetail(this.updateFileParams)
+        .then(res => {
           const data = res.data;
           if (data.code == 0) {
-            this.$Message.info('操作成功');
+            this.$Message.info("操作成功");
             _self.showAllFileList();
           }
         })
-          .catch(err => {
-          });
-      },
-      cancel() {
-
-      },
-      /**
+        .catch(err => {});
+    },
+    cancel() {},
+    /**
        * 搜索
        */
-      handleSearch() {
-        this.dataParams.fileStyleId = this.docTypeKey.id;
-        this.showAllFileList();
-      },
-      /**
+    handleSearch() {
+      this.dataParams.fileStyleId = this.docTypeKey.id;
+      this.showAllFileList();
+    },
+    /**
        * 获取选择日期
        * @param arr
        */
-      dateOnChange(arr) {
-        const rangedate = arr;
-        this.dataParams.startDate = rangedate[0];
-        if (rangedate[1] === undefined) {
-          this.dataParams.endDate = "";
-        } else {
-          this.dataParams.endDate = rangedate[1];
-        }
-      },
-      /**
+    dateOnChange(arr) {
+      const rangedate = arr;
+      this.dataParams.startDate = rangedate[0];
+      if (rangedate[1] === undefined) {
+        this.dataParams.endDate = "";
+      } else {
+        this.dataParams.endDate = rangedate[1];
+      }
+    },
+    /**
        * 初始所有文件
        */
-      showAllFileList() {
-        // this.listparams.departmentName = this.depTypeKey.value;
-        // this.dataParams.fileStyleId = this.docTypeKey.id;
-        showAllFile(this.dataParams)
-          .then(res => {
-            const data = res.data;
-            if (data.code == 0) {
-              this.AllFileList = data.data;
-              this.page = data.rdPage;
-            }
-          })
-          .catch(err => {
-          });
-      }
+    showAllFileList() {
+      // this.listparams.departmentName = this.depTypeKey.value;
+      // this.dataParams.fileStyleId = this.docTypeKey.id;
+      showAllFile(this.dataParams)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            this.AllFileList = data.data;
+            this.page = data.rdPage;
+          }
+        })
+        .catch(err => {});
     }
   }
+};
 </script>
 <style scoped>
-  .buttonarea {
-    margin-left: 35px;
-  }
-  .bodyarea {
-    margin-left: 30px;
-    margin-top: 30px;
-  }
+.buttonarea {
+  margin-left: 35px;
+}
+.bodyarea {
+  margin-left: 30px;
+  margin-top: 30px;
+}
 
-  .bodyarea .treestyle{
-    max-height:200px;
-    overflow: auto;
-  }
-
-
+.bodyarea .treestyle {
+  max-height: 200px;
+  overflow: auto;
+}
 </style>
