@@ -574,25 +574,7 @@ export default {
             this.lookFileParams.fileId = res.data.data;
             this.updateFileParams.fileId = res.data.data;
             this.deleteFileParams.fileId = res.data.data;
-            if (this.lookFileParams.userIds == "") {
-              this.lookFileParams.userIds = this.adminIds;
-            } else {
-              this.lookFileParams.userIds =
-                this.lookFileParams.userIds + "," + this.adminIds;
-            }
-            if (this.updateFileParams.userIds == "") {
-              this.updateFileParams.userIds = this.adminIds;
-            } else {
-              this.updateFileParams.userIds =
-                this.updateFileParams.userIds + "," + this.adminIds;
-            }
-
-            if (this.deleteFileParams.userIds == "") {
-              this.deleteFileParams.userIds = this.adminIds;
-            } else {
-              this.deleteFileParams.userIds =
-                this.deleteFileParams.userIds + "," + this.adminIds;
-            }
+           
             console.log("验证入参是否正确", this.lookFileParams);
             console.log("验证修改入参是否正确", this.updateFileParams);
             console.log("验证删除入参是否正确", this.deleteFileParams);
@@ -679,7 +661,10 @@ export default {
     checkIfContainId(ids, id) {
        ids=ids.split(',');
        id=id.split(',');
+     
       for (var val of id) {
+        console.log(111,val)
+       console.log(222,ids)
         if (ids.indexOf(val) === -1) {
           return true;
         }
@@ -690,6 +675,25 @@ export default {
     handleSubmit(name) {
       // 得到编辑器内容 （提交，要保存时）
       this.getEditorContent();
+           if (this.lookFileParams.userIds == "") {
+              this.lookFileParams.userIds = this.adminIds;
+            } else {
+              this.lookFileParams.userIds =
+                this.lookFileParams.userIds + "," + this.adminIds;
+            }
+            if (this.updateFileParams.userIds == "") {
+              this.updateFileParams.userIds = this.adminIds;
+            } else {
+              this.updateFileParams.userIds =
+                this.updateFileParams.userIds + "," + this.adminIds;
+            }
+
+            if (this.deleteFileParams.userIds == "") {
+              this.deleteFileParams.userIds = this.adminIds;
+            } else {
+              this.deleteFileParams.userIds =
+                this.deleteFileParams.userIds + "," + this.adminIds;
+            }
       if (this.uploadForm.title == "") {
         this.$Message.warning("请填写文件标题");
         return;
