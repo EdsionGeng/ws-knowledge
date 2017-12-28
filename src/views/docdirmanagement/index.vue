@@ -113,7 +113,7 @@
           checked: "",
           fileKind: ""
         },
-        pShow: "false",
+        pShow: false,
         filePcs: "",
         open: false,
         updateFileName: false,
@@ -188,6 +188,7 @@
             _self.pShow = false;
           }
           else {
+            _self.fileStyleShow = false;
             _self.pShow = true;
           }
         }).catch(err => {
