@@ -16,7 +16,7 @@ import Login from '@/views/login/index' //登录页面
 import homeIndex from '@/views/home/index' //管理员主页或者个人首页
 Vue.use(Router);
 const constantRouteMap = [{
-    path: '/Login',
+    path: '/login',
     component: Login
   },
   {
