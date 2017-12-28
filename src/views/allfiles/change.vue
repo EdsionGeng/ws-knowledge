@@ -284,7 +284,6 @@ export default {
     },
     // 切换路由触发是否选择可查阅人员
     changeTab(name) {
-      console.log(name);
       if (name == "name2" || name == "name3") {
         if (this.chooseuserLookIds === "") {
           this.$Message.error("请先选择可查阅的人员");
@@ -306,6 +305,7 @@ export default {
           this.userLookIds = data[0].join(",");
           this.userUpdateIds = data[1].join(",");
           this.userDeleteIds = data[2].join(",");
+          console.log(this.userLookIds)
           this.showDepTree();
           this.showeditDepTree();
           this.showdelDepTree();
@@ -450,6 +450,7 @@ export default {
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
+      this.chooseuserLookIds=userIds.join(',');
     },
     chooseDelPeople(arr) {
       console.log(111);
