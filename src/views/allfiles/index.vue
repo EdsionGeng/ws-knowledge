@@ -59,11 +59,12 @@
 import { showUserLookFile } from "../../api/all_interface";
 import SelectTree from "@/components/common/selectTree";
 import docTree from "@/components/common/docTree";
+import { mapMutations } from "vuex";
 
 export default {
   data() {
     return {
-      defaultUrl:'@/assets/img/default.png',
+      defaultUrl: "@/assets/img/default.png",
       docTypeKey: {
         value: "",
         id: ""
@@ -114,10 +115,15 @@ export default {
     SelectTree,
     docTree
   },
+  beforeRouteLeave(to, from, next) {
+    this.GET_LATEEST("allfiles");
+    next();
+  },
   created() {
     this.initList();
   },
   methods: {
+    ...mapMutations(["GET_LATEEST"]),
     recSortType(order) {
       this.listparams.sortType = order.order;
       this.initList();

@@ -77,6 +77,7 @@ import { readFile } from "@/api/all_interface";
 import { showfilelog } from "@/api/all_interface";
 import { deletesinglefile } from "@/api/all_interface";
 import { showFilePermission } from "@/api/all_interface";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -138,6 +139,7 @@ export default {
     iconLine
   },
   computed: {
+    ...mapState(["lastestUrl"]),
     imgUrl() {
       return "http://192.168.3.26:8011/" + this.fileDetails.photoUrl;
     }
@@ -151,7 +153,7 @@ export default {
   methods: {
     showFilePower() {
       showFilePermission(this.readFileparams)
-        .then(res => {        
+        .then(res => {
           if (res.data.code == 0) {
             const data = res.data.data;
             console.log("用户id对文件的权限获取成功");
@@ -172,11 +174,10 @@ export default {
     initFileDetail() {
       getFileDetail(this.fileDetailParams)
         .then(res => {
-          
           console.log(res.data.code == 0);
           if (res.data.code == 0) {
             this.fileDetails = res.data.data;
-            console.log("文件的详情",this.fileDetails);
+            console.log("文件的详情", this.fileDetails);
             if (this.fileDetails.fileUrl !== "") {
               this.fileDetailUrl = this.fileDetails.fileUrl.split(",");
               this.fileDetailSize = this.fileDetails.fileSize.split(",");
@@ -191,7 +192,7 @@ export default {
                 fujainDetail.url = this.fileDetailUrl[i];
                 fujainDetail.description = this.fileDetaildescible[i];
                 this.fujainList.push(fujainDetail);
-                console.log("附件列表",this.fujainList);
+                console.log("附件列表", this.fujainList);
               }
             }
           }
@@ -200,8 +201,8 @@ export default {
     },
     initFileLog() {
       showfilelog(this.filelogParams)
-        .then(res => {        
-          const showUserUpdata = res.data;      
+        .then(res => {
+          const showUserUpdata = res.data;
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
             this.historyUploadMessageList = showUserUpdata.data;
@@ -211,13 +212,18 @@ export default {
     },
     initreadFile() {
       readFile(this.readFileparams).then(res => {
-        if(res.code===0){
+        if (res.code === 0) {
           console.log("文件的阅读方法已调用");
         }
       });
     },
     goRouter() {
-      this.$router.push("/allfiles");
+      console.log(this.lastestUrl);
+      if (this.lastestUrl === "allfiles") {
+        this.$router.push("/allfiles");
+      } else {
+        this.$router.push("/hisupload");
+      }
     },
     changeRouter(name) {
       this.$router.push(name + this.$route.params.id);

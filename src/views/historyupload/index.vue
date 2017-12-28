@@ -43,7 +43,7 @@
 </template>
 <script>
 import { showUserUpload } from "../../api/all_interface";
-
+import { mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -80,7 +80,12 @@ export default {
   mounted() {
     this.initList();
   },
+  beforeRouteLeave(to, from, next) {
+    this.GET_LATEEST("hisuplod");
+    next();
+  },
   methods: {
+    ...mapMutations(["GET_LATEEST"]),
     recSortType(order) {
       this.listparams.sortType = order.order;
       this.initList();
