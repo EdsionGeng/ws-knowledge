@@ -238,7 +238,6 @@ export default {
         return;
       }
       if (this.filePcs > 0) {
-        this.$Message.warning("此文件还有对应的相应文件数量");
         this.open = false;
         return;
       }
@@ -310,8 +309,6 @@ export default {
         .catch(err => {});
     },
     cancel() {
-
-
     }
   }
 };
@@ -322,7 +319,6 @@ export default {
   color: #000;
 }
 </style>
-
 <style scoped>
 .doctree-sty {
   margin-top: 20px;
