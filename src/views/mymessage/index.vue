@@ -15,8 +15,6 @@
       v-model="modal1"
       :mask-closable="false"
       :closable="false"
-      @on-cancel="cancel"
-      @on-ok="surelook"
       style="margin-left: 160px"
     >
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{mymessageDetail.MyMessageListTitle}}</p>
@@ -27,124 +25,119 @@
 
 </template>
 <script>
-  import { showUserAd } from "../../api/all_interface";
-  import { showAdPcs } from "../../api/all_interface";
-  import { readAd } from "../../api/all_interface";
-  export default {
-    data(){
-      return {
-        modal1:false,
-        MyMsgColumns: [
-          {
-            title: "标题",
-            key: "at",
-          },
-          {
-            title: "时间",
-            key: "re",
-            width: 150,
-            align: 'center',
-            sortable: true
-          }],
-        mymessageDetail:{
-          MyMessageListTitle:'',
-          MyMessagetime:'',
-          AddUser:'',
-          MyMessageMsg:'',
-          readed:0,
-          noreaded:0
+import { showUserAd } from "../../api/all_interface";
+import { showAdPcs } from "../../api/all_interface";
+import { readAd } from "../../api/all_interface";
+export default {
+  data() {
+    return {
+      modal1: false,
+      MyMsgColumns: [
+        {
+          title: "标题",
+          key: "at"
         },
-        pageOpts:[10,20,30,40,50],
-        showStripe:true,
-        MyMessageList: [],
-        page: {},
-        readAdParams:{
-          userId:sessionStorage.getItem("userId"),
-          commonId:""
-        },
-        dataParams: {
-          current: 1,
-          pageSize:10,
-          sortType:"desc",
-          userId:sessionStorage.getItem("userId")
+        {
+          title: "时间",
+          key: "re",
+          width: 150,
+          align: "center",
+          sortable: true
         }
-      };
-    },
-    created() {
+      ],
+      mymessageDetail: {
+        MyMessageListTitle: "",
+        MyMessagetime: "",
+        AddUser: "",
+        MyMessageMsg: "",
+        readed: 0,
+        noreaded: 0
+      },
+      pageOpts: [10, 20, 30, 40, 50],
+      showStripe: true,
+      MyMessageList: [],
+      page: {},
+      readAdParams: {
+        userId: sessionStorage.getItem("userId"),
+        commonId: ""
+      },
+      dataParams: {
+        current: 1,
+        pageSize: 10,
+        sortType: "desc",
+        userId: sessionStorage.getItem("userId")
+      }
+    };
+  },
+  created() {
+    this.initUserAd();
+  },
+  methods: {
+    onPageChange(value) {
+      this.dataParams.current = value;
       this.initUserAd();
     },
-    methods:{
-      onPageChange(value) {
-        this.dataParams.current=value;
-        this.initUserAd();
-      },
-      recSortType(order) {
-        this.dataParams.sortType = order.order;
-        this.initUserAd();
-      },
-      onPageSizeChange(value){
-        this.dataParams.pageSize=value;
-        this.initUserAd();
-      },
-      initUserAd() {
-        showUserAd(this. dataParams)
-          .then(res => {
-            const data = res.data;
-              // console.log(res.data);
-              if (data.code == 0) {
-               // console.info(data.data)
-              this.MyMessageList = data.data;
-              this.page = data.rdPage;
-              //console.info(data.rdPage)
-              //console.log(data.rdPage)
-            }
-          })
-          .catch(err => {});
-      },   rowClassName(row,index){
-        if(row.ifRead===0){
-          return 'demo-table-info-row';
-        }
-      },
-      cancel(){
-       window.location.reload();
-      },
-      surelook(){
-        window.location.reload();
-      },
-      onRowClick(row,index){
-        this.params={
-          commonId:row.commonId
-        };
-        //console.log(this.params.commonId)
-        let _self=this;
-        showAdPcs(this.params).then(
-          res => {
-            const data = res.data;
-            if (data.code == 0) {
-              //console.info(row);
-              _self.mymessageDetail.MyMessageListTitle=row.at;
-              _self.mymessageDetail.MyMessagetime=row.re;
-              _self.mymessageDetail.AddUser=row.addUser;
-              var reg = new RegExp("<br>","g");
-              _self.mymessageDetail.MyMessageMsg=row.ad.replace(reg,"\n");
-              _self.mymessageDetail.readed=data.data.isRead;
-              _self.mymessageDetail.noreaded=data.data.noRead;
-              _self.readAdParams.commonId=row.commonId;
-              readAd(this.readAdParams).then(res=>{
-                const data=res.data;
-              if(data.code==0){
-
-              }
-            })
-              .catch(err =>{});
-            }
+    recSortType(order) {
+      this.dataParams.sortType = order.order;
+      this.initUserAd();
+    },
+    onPageSizeChange(value) {
+      this.dataParams.pageSize = value;
+      this.initUserAd();
+    },
+    initUserAd() {
+      showUserAd(this.dataParams)
+        .then(res => {
+          const data = res.data;
+          // console.log(res.data);
+          if (data.code == 0) {
+            console.log(data.data)
+            this.MyMessageList = data.data;
+            this.page = data.rdPage;
           }
-        )
-          .catch(err => {});
-        this.modal1=true;
-      },
+        })
+        .catch(err => {});
+    },
+    rowClassName(row, index) {
+      if (row.ifRead === 0) {
+        return "demo-table-info-row";
+      }
+    },
+    onRowClick(row, index) {
+      this.params = {
+        commonId: row.commonId
+      };
+
+      this.readAdParams.commonId = row.commonId;
+      readAd(this.readAdParams).then(res => {
+        const data = res.data;
+        if (data.code == 0) {
+          this.initUserAd();
+        }
+      });
+      //console.log(this.params.commonId)
+      let _self = this;
+      showAdPcs(this.params)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            //console.info(row);
+            _self.mymessageDetail.MyMessageListTitle = row.at;
+            _self.mymessageDetail.MyMessagetime = row.re;
+            _self.mymessageDetail.AddUser = row.addUser;
+            var reg = new RegExp("<br>", "g");
+            _self.mymessageDetail.MyMessageMsg = row.ad.replace(reg, "\n");
+            _self.mymessageDetail.readed = data.data.isRead;
+            _self.mymessageDetail.noreaded = data.data.noRead;
+            _self.readAdParams.commonId = row.commonId;
+          }
+        })
+        .catch(err => {});
+      this.modal1 = true;
     }
   }
+};
 </script>
 <style scoped>
+
 </style>
