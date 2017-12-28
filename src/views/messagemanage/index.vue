@@ -137,8 +137,8 @@
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
           style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
           style="color:red">{{singleMessageDetail.noreaded}}</strong></p>
-      <p class="modal-content" style="color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;">
-      <pre> {{singleMessageDetail.Content}}</pre>
+      <p class="modal-content" style="color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;"v-html="">
+       {{singleMessageDetail.Content}}
       </p>
     </Modal>
   </div>
@@ -182,7 +182,7 @@
             title: "发送时间",
             key: "sendTime",
             sortable: "custom",
-            sortType: ""
+
           },
 
         ],
