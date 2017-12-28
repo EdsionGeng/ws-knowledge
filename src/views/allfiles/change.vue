@@ -184,7 +184,7 @@ export default {
       fujainList: [],
       ruleValidate: {
         title: [{ required: true }],
-        value: [{ required: true, message: "请选择文件类型" }],
+        value: [{ required: true, message: "请选择文档类型" }],
         content: [{ required: true }],
         power: [{ required: true }]
       },
@@ -635,7 +635,10 @@ export default {
       this.uploadForm.describle = filedescribleArry.join(",");
     },
     checkIfContainId(ids, id) {
+       ids=ids.split(',');
+       id=id.split(',');
       for (var val of id) {
+        console.log(111,val,ids,ids.indexOf(val) === -1)
         if (ids.indexOf(val) === -1) {
           return true;
         }
@@ -647,7 +650,7 @@ export default {
       // 将文本编辑器的内容传给content
       this.getEditorContent();
       if (this.uploadForm.id == "") {
-        this.$Message.warning("请选择文件类型");
+        this.$Message.warning("请选择文档类型");
         return;
       } else if (this.uploadForm.content === "") {
         this.$Message.warning("请编辑文件内容");

@@ -5,7 +5,7 @@
     </div>
     <Menu :theme="theme2" accordion @on-select="change" :active-name="this.$route.name">
       <MenuGroup title="" class='menuTitle'>
-        <Menu-item name='home'>首页</Menu-item>
+          <Menu-item name='home'>首页</Menu-item> 
         <Submenu name="index" v-for='(item,index) in menuList' :key="index">
           <template slot="title">
             {{item.name}}
@@ -22,7 +22,6 @@ import Vue from "vue";
 import { Menu } from "iview";
 Vue.component("Menu", Menu);
 import { getUserMenus } from "../../api/all_interface";
-
 export default {
   data() {
     return {

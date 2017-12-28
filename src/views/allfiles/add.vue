@@ -163,7 +163,7 @@ export default {
           { required: true, message: "请填写文件标题", trigger: "blur" },
           { type: "string", max: 20, message: "标题限制在20字以内" }
         ],
-        value: [{ required: true, message: "请选择文件类型" }],
+        value: [{ required: true, message: "请选择文档类型" }],
         content: [{ required: true }],
         power: [{ required: true }]
       },
@@ -390,9 +390,9 @@ export default {
         "justify", // 对齐方式
         "quote", // 引用
         "emoticon", // 表情
-        "image", // 插入图片
+        // "image", // 插入图片
         "table", // 表格
-        "video", // 插入视频
+        // "video", // 插入视频
         "code", // 插入代码
         "undo", // 撤销
         "redo" // 重复
@@ -677,6 +677,8 @@ export default {
     },
     //检测是否查看包含编辑或删除的功能
     checkIfContainId(ids, id) {
+       ids=ids.split(',');
+       id=id.split(',');
       for (var val of id) {
         if (ids.indexOf(val) === -1) {
           return true;
@@ -695,7 +697,7 @@ export default {
         this.$Message.warning("标题字符过长");
         return;
       } else if (this.uploadForm.id == "") {
-        this.$Message.warning("请选择文件类型");
+        this.$Message.warning("请选择文档类型");
         return;
       } else if (this.uploadForm.content === "") {
         this.$Message.warning("请编辑文件内容");
