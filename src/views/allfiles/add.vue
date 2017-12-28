@@ -26,7 +26,7 @@
                 v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;'>
                 <Icon type="image" style='margin-right:8px;color:#009DD9;'></Icon>
                 <span>
-                      <a @click.prevent="picViewModel=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
+                      <a @click.prevent="picViewModel=true" :href="baseurl+uploadForm.photourl">{{item.name}} </a>
                 </span>
                 <Button type="text" size="small" @click="pichandleRemove(item)">
                     <Icon type="android-cancel" ></Icon>
@@ -44,7 +44,7 @@
             <Button type="primary" size="small" @click="showUploadModel">上传附件</Button>
           </div>
           <Row  v-for='(item,index) in fujainList' :key='index'>
-            <a target="_blank" :href="item.url?'http://192.168.3.26:8011/'+item.url:''">
+            <a target="_blank" :href="item.url?baseurl+item.url:''">
               <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i><span>{{item.name}} <span
               style='color:#ccc'>（{{parseInt((item.size)/1024)+'k'}}）</span>  </span>
             </a>
@@ -109,7 +109,7 @@
       >
        <p slot="footer" style="height:0;line-height:0">
         </p>
-      <img style='width:100%;height:100%;' :src="'http://192.168.3.26:8011/'+uploadForm.photourl" alt="">
+      <img style='width:100%;height:100%;' :src="baseurl+uploadForm.photourl" alt="">
     </Modal>
     <Modal
       v-model="uploadDoc"
@@ -125,7 +125,7 @@
             multiple
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
-            action="http://192.168.3.26:8011/file/upload.htmls">
+            :action="uploadurl">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
         </FormItem>
@@ -146,12 +146,14 @@ import { deleteFilePermission } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
 import { mapState, mapMutations } from "vuex";
 import { getUploadUrl } from "../../utils/commonurl";
+import { getRequestUrl } from "../../utils/commonurl";
 import Vue from "vue";
 var E = require("wangeditor");
 export default {
   data() {
     return {
       uploadurl: "",
+      baseurl:'',
       picViewModel: false,
       picuploadList: [],
       userLookIds: "",
@@ -221,6 +223,7 @@ export default {
   computed: mapState(["addFileSaveList", "hasSaveContent"]),
   mounted() {
     this.uploadurl = getUploadUrl();
+    this.baseurl = getRequestUrl();
     this.adminPower();
     //this.fujainList = this.$refs.fujianupload.fileList;
     this.picuploadList = this.$refs.upload.fileList;
@@ -379,7 +382,7 @@ export default {
         Accept: "multipart/form-data"
       };
       editor.customConfig.uploadImgServer =
-        "http://192.168.22.45:8011/file/upload.htmls";
+        this.uploadurl;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体

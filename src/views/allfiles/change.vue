@@ -19,14 +19,14 @@
               :max-size="2048"
               :on-format-error="pichandleFormatError"
               :on-success="pichandleSuccess"
-              action="http://192.168.3.26:8011/photo/upload.htmls">
+              :action="uploadurl">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面 <br><span style='color:#bbb'>(建议宽高比例10:9)</span></Button>
             </Upload>
              <Row 
                 v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;margin-left:5px;'>
                 <Icon type="image" style='margin-right:8px;color:#009DD9;'></Icon>
                 <span>                  
-                      <a @click.prevent="picViewModel=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
+                      <a @click.prevent="picViewModel=true" :href="baseurl+uploadForm.photourl">{{item.name}} </a>
                 </span>
                 <Button type="text" size="small" @click="pichandRemove(item)">
                     <Icon type="android-cancel" ></Icon>
@@ -47,7 +47,7 @@
        <Row v-for='(item,index) in fujainList' :key='index'>
              <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'>
             </i>
-                <a  target="_blank" :href="'http://192.168.3.26:8011/'+item.url">
+                <a  target="_blank" :href="baseurl+item.url">
                   <span >{{item.name}} 
                   </span>
                   <span style='color:#ccc;margin-left:5px;'>
@@ -118,7 +118,7 @@
             multiple  
             :before-upload="handleBeforeUpload"
             :on-success="handleSuccess"
-            action="http://192.168.3.26:8011/file/upload.htmls">
+            :action="uploadurl">
             <Button type="ghost" icon="ios-cloud-upload-outline">附件上传</Button>
           </Upload>
         </FormItem>
@@ -135,7 +135,7 @@
       >
         <p slot="footer" style="height:0;line-height:0">
         </p>
-      <img style='width:100%;height:100%;' :src="'http://192.168.3.26:8011/'+uploadForm.photourl" alt="">
+      <img style='width:100%;height:100%;' :src="baseurl+uploadForm.photourl" alt="">
     </Modal>
   </div>
 </template>
@@ -149,11 +149,15 @@ import { deleteFilePermission } from "../../api/all_interface";
 import { showusermission } from "../../api/all_interface";
 import { getFileDetail } from "../../api/all_interface";
 import { queryadmin } from "../../api/all_interface";
+import { getUploadUrl } from "../../utils/commonurl";
+import { getRequestUrl } from "../../utils/commonurl";
 import Vue from "vue";
 var E = require("wangeditor");
 export default {
   data() {
     return {
+      baseurl:'',
+      uploadurl:'',
       picViewModel: false,
       picuploadList: [],
       userLookIds: "",
@@ -237,6 +241,8 @@ export default {
     docTree
   },
   mounted() {
+    this.uploadurl=getUploadUrl();
+    this.baseurl=getRequestUrl();
     this.picuploadList = this.$refs.upload.fileList;
     // 根据文件详情显示
     this.initFileDetail();
@@ -258,7 +264,7 @@ export default {
         Accept: "multipart/form-data"
       };
       editor.customConfig.uploadImgServer =
-        "http://192.168.3.26:8011/file/upload.htmls";
+        this.uploadurl;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体

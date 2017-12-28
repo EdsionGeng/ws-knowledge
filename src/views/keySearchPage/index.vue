@@ -18,7 +18,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                   <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:100px;'>
+                   <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
@@ -42,10 +42,12 @@
 </template>
 <script>
 import { searchResult } from "../../api/all_interface";
+import { getRequestUrl } from "../../utils/commonurl";
 import { mapState } from "vuex";
 export default {
   data() {
     return {
+      baseurl:'',
       docTypeKey: {
         value: "",
         id: 0
@@ -105,6 +107,7 @@ export default {
     ...mapState(["searchKey"])
   },
   mounted() {
+    this.baseurl=getRequestUrl();
     this.initList();
   },
   methods: {

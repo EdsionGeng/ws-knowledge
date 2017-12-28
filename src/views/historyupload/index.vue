@@ -18,7 +18,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                  <div style="text-align:center">
-                  <img :src="'http://192.168.3.26:8011/'+list.photoUrl" style='width:60%;height:100px;'>
+                  <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                 </div>
@@ -43,10 +43,12 @@
 </template>
 <script>
 import { showUserUpload } from "../../api/all_interface";
+import { getRequestUrl } from "../../utils/commonurl";
 import { mapMutations } from "vuex";
 export default {
   data() {
     return {
+      baseurl:'',
       pageOpts: [10, 20, 30, 40],
       listparams: {
         current: 1,
@@ -78,6 +80,7 @@ export default {
     };
   },
   mounted() {
+    this.baseurl=getRequestUrl();
     this.initList();
   },
   beforeRouteLeave(to, from, next) {

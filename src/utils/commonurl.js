@@ -16,7 +16,8 @@ export function getUploadUrl(){
 }
 
 export function getRequestUrl(){
-    let requestUrl = baseURL;
+    let requestUrl = baseURL+'/';
     // let requestUrl = baseurl+'/projectManage';
+    console.log(111)
     return requestUrl;
 }

@@ -21,7 +21,7 @@
       </Row>
       <Row v-if='fujainList.length!==0' v-for='(item,index) in fujainList' :key='index' style='padding:3px 0;'>
         <i class="iconfont  icon-fujian" style='margin-right:8px;color:#009DD9;'></i>
-        <span>  <a target="_blank" :href="'http://192.168.3.26:8011/'+item.url">{{item.title}} </a>
+        <span>  <a target="_blank" :href="baseurl+item.url">{{item.title}} </a>
               <span style='color:#ccc'>（{{parseInt(item.fileSize/1024)+'k'}}）</span>
             </span>
         <span style='padding-left:15px;color:#ccc'>描述：{{item.description}}</span>
@@ -77,10 +77,12 @@ import { readFile } from "@/api/all_interface";
 import { showfilelog } from "@/api/all_interface";
 import { deletesinglefile } from "@/api/all_interface";
 import { showFilePermission } from "@/api/all_interface";
+import { getRequestUrl } from "../../utils/commonurl";
 import { mapState } from "vuex";
 export default {
   data() {
     return {
+      baseurl:'',
       readFileparams: {
         fileId: this.$route.params.id,
         userId: sessionStorage.getItem("userId")
@@ -141,10 +143,11 @@ export default {
   computed: {
     ...mapState(["lastestUrl"]),
     imgUrl() {
-      return "http://192.168.3.26:8011/" + this.fileDetails.photoUrl;
+      return this.baseurl + this.fileDetails.photoUrl;
     }
   },
   mounted() {
+    this.baseurl=getRequestUrl();
     this.initreadFile();
     this.initFileLog();
     this.initFileDetail();

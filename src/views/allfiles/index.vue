@@ -33,7 +33,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
-                  <img :src="list.photoUrl?'http://192.168.3.26:8011/'+list.photoUrl:defaultUrl" style='width:60%;height:100px;'>
+                  <img :src="list.photoUrl?baseurl+list.photoUrl:defaultUrl" style='width:60%;height:100px;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:12px;' >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:12px;'>上传人：{{list.username}}</p>
@@ -59,11 +59,13 @@
 import { showUserLookFile } from "../../api/all_interface";
 import SelectTree from "@/components/common/selectTree";
 import docTree from "@/components/common/docTree";
+import { getRequestUrl } from "../../utils/commonurl";
 import { mapMutations } from "vuex";
 
 export default {
   data() {
     return {
+      baseurl:'',
       defaultUrl: "@/assets/img/default.png",
       docTypeKey: {
         value: "",
@@ -118,6 +120,10 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.GET_LATEEST("allfiles");
     next();
+  },
+  mounted(){
+    this.baseurl=getRequestUrl();
+    console.log(this.baseurl)
   },
   created() {
     this.initList();
