@@ -207,7 +207,9 @@ export default {
             _self.fileStyleShow = true;
             _self.filePcs = data.data;
             _self.pShow = false;
-          } else {
+          }
+          else {
+            _self.fileStyleShow = false;
             _self.pShow = true;
           }
         })

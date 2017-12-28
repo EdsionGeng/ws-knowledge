@@ -12,7 +12,7 @@
           <div style="width:450px;" class="picUpload">
             <Upload
               ref="upload"
-              :show-upload-list="false"            
+              :show-upload-list="false"
               :before-upload='pichandleBeforeUpload'
               :format="['jpg','jpeg','png']"
               :on-exceeded-size="pichandleMaxSize"
@@ -22,10 +22,10 @@
               action="http://192.168.3.26:8011/photo/upload.htmls">
               <Button type="ghost" icon="ios-cloud-upload-outline">上传文件封面 <br><span style='color:#bbb'>(建议宽高比例10:9)</span></Button>
             </Upload>
-             <Row 
+             <Row
                 v-if='picuploadList.length!==0' v-for='(item,index) in picuploadList' :key='index' style='padding:3px 0;width:450px;'>
                 <Icon type="image" style='margin-right:8px;color:#009DD9;'></Icon>
-                <span>                  
+                <span>
                       <a @click.prevent="picViewModel=true" :href="'http://192.168.3.26:8011/'+uploadForm.photourl">{{item.name}} </a>
                 </span>
                 <Button type="text" size="small" @click="pichandleRemove(item)">
@@ -88,7 +88,7 @@
             仅当前设置的查阅人员可以查看此文件，新入职的人员看不到，如果需要设置某一新入职人员查看该文件，可通过修改查阅人员实现
           </div>
           <div v-if="uploadForm.fileType=='1'">
-            当前可查阅人员对应的部门有新入职的人员均能看到此文件
+            上传人对应的部门有新入职的人员均能看到此文件
           </div>
           <div v-if="uploadForm.fileType=='2'">
             公司有新入职的人员均能看到此文件
