@@ -48,10 +48,7 @@ export default {
       },
       MyMessageList: [],
       newMessageList: [],
-
-      mesDetail: [],
       params: null,
-      //modal信息
       title: "",
       modal1: false,
       readAdParams:{
@@ -103,7 +100,6 @@ export default {
     changeRoute(name) {
       this.$router.push("/" + name);
     },
-
     onRowClick(row, index) {
       this.params = {
         commonId: row.commonId
@@ -157,7 +153,6 @@ export default {
         .then(res => {
           const data = res.data;
           if (data.code == 0) {
-            console.log(this.MyMessageList);
             this.MyMessageList = data.data;
           }
         })
@@ -179,7 +174,6 @@ export default {
   cursor: pointer;
 }
 </style>
-
 <style scoped>
 .mycenter {
   padding: 20px;

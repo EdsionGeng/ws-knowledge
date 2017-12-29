@@ -89,9 +89,7 @@ export default {
       showUserAd(this.dataParams)
         .then(res => {
           const data = res.data;
-          // console.log(res.data);
           if (data.code == 0) {
-            console.log(data.data)
             this.MyMessageList = data.data;
             this.page = data.rdPage;
           }
@@ -115,13 +113,11 @@ export default {
           this.initUserAd();
         }
       });
-      //console.log(this.params.commonId)
       let _self = this;
       showAdPcs(this.params)
         .then(res => {
           const data = res.data;
           if (data.code == 0) {
-            //console.info(row);
             _self.mymessageDetail.MyMessageListTitle = row.at;
             _self.mymessageDetail.MyMessagetime = row.re;
             _self.mymessageDetail.AddUser = row.addUser;

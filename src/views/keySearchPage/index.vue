@@ -47,7 +47,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      baseurl:'',
+      baseurl: "",
       docTypeKey: {
         value: "",
         id: 0
@@ -55,28 +55,15 @@ export default {
       depTypeKey: {
         value: ""
       },
-      selectValue: "",
-      imgUrl: "",
       pageOpts: [20, 40, 60, 100],
       listparams: {
         current: 1,
         pageSize: 20,
         userId: sessionStorage.getItem("userId"),
-        searchContent:this.$route.params.key,
-        userGroupId:sessionStorage.getItem('userGroupId')
+        searchContent: this.$route.params.key,
+        userGroupId: sessionStorage.getItem("userGroupId")
       },
-      num: 0,
-      deptlist: [],
-      fileparams: null,
       page: { total: 20, pages: 1, current: 1, pageSize: 20 },
-      mymessageDetail: {
-        MyMessageListTitle: "",
-        MyMessageupdate: "",
-        AddUser: "",
-        MyMessageMsg: "",
-        readed: 0,
-        noreaded: 0
-      },
       columns1: [
         {
           title: "标题",
@@ -107,23 +94,16 @@ export default {
     ...mapState(["searchKey"])
   },
   mounted() {
-    this.baseurl=getRequestUrl();
+    this.baseurl = getRequestUrl();
     this.initList();
   },
   methods: {
     changePic(name) {
-      console.log(name);
       if (name === "pic") {
         this.historyUploadpicMessageList = this.historyUploadMessageList;
       } else {
         this.historyUploadpicMessageList = [];
       }
-    },
-    selAllFile() {
-      this.listparams.departmentName = this.depTypeKey.value;
-      this.listparams.fileStyleId = this.docTypeKey.id;
-      console.log(this.listparams);
-      this.initList();
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);

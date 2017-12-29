@@ -65,7 +65,7 @@ import { mapMutations } from "vuex";
 export default {
   data() {
     return {
-      baseurl:'',
+      baseurl: "",
       defaultUrl: "@/assets/img/default.png",
       docTypeKey: {
         value: "",
@@ -121,9 +121,9 @@ export default {
     this.GET_LATEEST("allfiles");
     next();
   },
-  mounted(){
-    this.baseurl=getRequestUrl();
-    console.log(this.baseurl)
+  mounted() {
+    this.baseurl = getRequestUrl();
+    console.log(this.baseurl);
   },
   created() {
     this.initList();

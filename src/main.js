@@ -51,7 +51,6 @@ router.beforeEach((to, from, next) => {
           next();
         } else if (data.code == 2) {
           next('/login');
-          // window.location.href = "http://report.wsloan.com:8888/wsdm/login";
         }
       })
     } else {
@@ -59,7 +58,6 @@ router.beforeEach((to, from, next) => {
         next();
       } else {
         next('/login');
-        // window.location.href = "http://report.wsloan.com:8888/wsdm/login";
       }
     }
   }
