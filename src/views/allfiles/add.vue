@@ -563,7 +563,7 @@ export default {
       this.insertFilePrams.content = this.uploadForm.content;
       this.insertFilePrams.photourl = this.uploadForm.photourl;
       if (this.insertFilePrams.photourl === "") {
-        this.insertFilePrams.photourl = "1514028176737moren1.png";
+        this.insertFilePrams.photourl = "458814304482422455.png";
       }
       this.insertFilePrams.fileurl = this.uploadForm.fileurl;
       this.insertFilePrams.userId = this.uploadForm.userId;

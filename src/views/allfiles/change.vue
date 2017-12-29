@@ -529,7 +529,7 @@ export default {
       this.updateFileList.content = this.uploadForm.content;
       this.updateFileList.photourl = this.uploadForm.photourl;
       if (this.insertFileList.photourl === "") {
-        this.insertFileList.photourl = "1514028176737moren1.png";
+        this.insertFileList.photourl = "458814304482422455.png";
       }
       this.updateFileList.describle = this.uploadForm.describle;
       this.updateFileList.fileurl = this.uploadForm.fileurl;
