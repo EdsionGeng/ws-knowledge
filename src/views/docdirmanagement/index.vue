@@ -215,6 +215,7 @@ export default {
             click: () => {
               this.value4 = data.fileKindName;
               this.insertFileParams.parentId = data.id;
+              console.info(  this.insertFileParams.parentId = data.id)
               this.updateParams.fileStyleId = data.id;
               this.showMenu = false;
             }
@@ -283,11 +284,12 @@ export default {
         .catch(err => {});
     },
       ok() {
-      if (this.insertFileParams.parentId == "") {
+      console.info(this.insertFileParams);
+      if (this.insertFileParams.parentId ==="") {
         this.$Message.warning("请点击想要添加的文档类型");
         return;
       }
-      if (this.insertFileParams.docName == "") {
+      if (this.insertFileParams.docName === "") {
         this.$Message.warning("请输入新文档目录");
         return;
       }
