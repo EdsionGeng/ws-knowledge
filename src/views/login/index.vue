@@ -23,7 +23,6 @@
 </template>
 <script>
 import { login } from "../../api/login";
-
 export default {
   data() {
     return {
@@ -92,7 +91,6 @@ export default {
   height: 100%;
   background-color: #495060;
 }
-
 .login-form {
   position: absolute;
   width: 525px;

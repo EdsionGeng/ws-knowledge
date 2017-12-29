@@ -20,9 +20,6 @@
         isAdmin: sessionStorage.getItem('isAdmin')
       }
     },
-    mounted() {
-      console.log(!(this.isAdmin))
-    },
     components: {
       admin, myHome
     }
