@@ -490,7 +490,7 @@ export default {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+          userIds.push(arr[i].userId);
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
@@ -501,7 +501,7 @@ export default {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+          userIds.push(arr[i].userId);
         }
       }
       this.deleteFileParams.userIds = userIds.join(",");
@@ -511,7 +511,7 @@ export default {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+          userIds.push(arr[i].userId);
         }
       }
       this.updateFileParams.userIds = userIds.join(",");
@@ -637,7 +637,7 @@ export default {
       const prams = ids.split(",");
       function funSelect(data, prams) {
         for (let val of data) {
-          const dataId = String(val.id);
+          const dataId = String(val.userId);
           if (prams.indexOf(dataId) !== -1) {
             val.checked = true;
           }

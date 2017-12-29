@@ -321,7 +321,7 @@ export default {
     selectDate(ids, data) {
       function funSelect(data, ids) {
         for (let val of data) {
-          const dataId = parseInt(val.id);
+          const dataId = parseInt(val.userId);
           if (ids.indexOf(dataId) !== -1) {
             val.checked = true;
           }
@@ -452,7 +452,7 @@ export default {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+          userIds.push(arr[i].userId);
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
@@ -463,7 +463,7 @@ export default {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+          userIds.push(arr[i].userId);
         }
       }
       this.deleteFileParams.userIds = userIds.join(",");
@@ -472,7 +472,7 @@ export default {
       var userIds = [];
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].children === null) {
-          userIds.push(arr[i].id);
+          userIds.push(arr[i].userId);
         }
       }
       this.updateFileParams.userIds = userIds.join(",");
