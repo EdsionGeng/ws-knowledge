@@ -51,7 +51,7 @@
       width="500"
       title="调整文件类型"
       @on-ok="ok"
-      @on-cancel="cancel">
+    >
       <Tree :data="docTree" :render="renderContent1" ref='tree2'></Tree>
       <!--@on-check-change="getCheckNode"-->
     </Modal>
@@ -119,14 +119,12 @@ export default {
         checked: "",
         fileKind: ""
       },
-      showMenu: false,
       docTree: [],
 
       deleteFileParams: {
         fileIds: "",
         userId: 1
       },
-      value4: "",
       updateFileParams: {
         fileIds: "",
         userId: 1,
@@ -191,12 +189,6 @@ export default {
       }
       funSelect(data);
     },
-    dropmenu(isshow) {
-      this.showMenu = isshow;
-    },
-    /**
-       * 分页
-       */
     onPageChange(value) {
       this.dataParams.current = value;
       this.showAllFileList();
@@ -205,9 +197,6 @@ export default {
       this.dataParams.pageSize = value;
       this.showAllFileList();
     },
-    /**
-       * 获取文档树形结构
-       */
     showDocTree() {
       let _doc = this;
       getDocTree(this.docTreeParams).then(res => {
@@ -218,14 +207,8 @@ export default {
       this.dataParams.sortType = order.order;
       this.showAllFileList();
     },
-    /**
-       * 删除文件获取参数
-       * @param arr
-       * @returns {string}
-       */
     delFileAction(arr) {
       let fielIds = "";
-
       for (let i = 0; i < arr.length; i++) {
         if (i > 0) {
           fielIds += ",";
@@ -237,13 +220,8 @@ export default {
       this.updateFileParams.fileIds = fielIds;
       return fielIds;
     },
-    /**
-       * 删除文件
-       */
     todelFile() {
-      // console.log("222解决"+this.selection)
       let _self = this;
-      //      console.info(_self.selection)
       if (_self.deleteFileParams.fileIds == "") {
         _self.$Message.info("请勾选相应数据");
         return;
@@ -266,9 +244,6 @@ export default {
     toDelCancel() {
       this.deleteFileParams.fileIds = "";
     },
-    /**
-       * 确定修改文档类型
-       */
     ok() {
       if (this.updateFileParams.fileIds == "") {
         this.$Message.info("请勾选相应数据");
@@ -286,18 +261,10 @@ export default {
         })
         .catch(err => {});
     },
-    cancel() {},
-    /**
-       * 搜索
-       */
     handleSearch() {
       this.dataParams.fileStyleId = this.docTypeKey.id;
       this.showAllFileList();
     },
-    /**
-       * 获取选择日期
-       * @param arr
-       */
     dateOnChange(arr) {
       const rangedate = arr;
       this.dataParams.startDate = rangedate[0];
@@ -307,12 +274,7 @@ export default {
         this.dataParams.endDate = rangedate[1];
       }
     },
-    /**
-       * 初始所有文件
-       */
     showAllFileList() {
-      // this.listparams.departmentName = this.depTypeKey.value;
-      // this.dataParams.fileStyleId = this.docTypeKey.id;
       showAllFile(this.dataParams)
         .then(res => {
           const data = res.data;

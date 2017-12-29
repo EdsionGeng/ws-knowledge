@@ -17,107 +17,105 @@
   </div>
 </template>
 <script>
-  import myPie from "@/components/echarts/pie";
-  import {showDayData} from "@/api/all_interface";
-  import {showWeekData} from "@/api/all_interface";
-  import {showMonthData} from "@/api/all_interface";
+import myPie from "@/components/echarts/pie";
+import { showDayData } from "@/api/all_interface";
+import { showWeekData } from "@/api/all_interface";
+import { showMonthData } from "@/api/all_interface";
 
-  export default {
-    data() {
-      return {
-        seriesCash: [],
-        BreadTitle: ['首页'],
-        index: 'day',
-        seriescash: [],
-        legend: ['上传', '修改', '删除'],
-        params: null
+export default {
+  data() {
+    return {
+      seriesCash: [],
+      index: "day",
+      legend: ["上传", "修改", "删除"],
+      params: null
+    };
+  },
+  components: {
+    myPie
+  },
+  mounted() {
+    this.getDayData();
+  },
+  methods: {
+    getDayData(val) {
+      if (val != undefined) {
+        this.index = val;
       }
-    },
-    components: {
-      myPie
-    },
-    mounted() {
-      this.getDayData()
-    },
-    methods: {
-      getDayData(val) {
-        if (val != undefined) {
-          this.index = val;
+      showDayData(this.params).then(res => {
+        let data = res.data;
+        if (data.code == 0) {
+          let bardata = data.data;
+          this.seriesCash = [
+            {
+              value: bardata.addpcs,
+              name: this.legend[0]
+            },
+            {
+              value: bardata.updatepcs,
+              name: this.legend[1]
+            },
+            {
+              value: bardata.deletepcs,
+              name: this.legend[2]
+            }
+          ];
         }
-        showDayData(this.params).then(res => {
-          let data = res.data;
-          if (data.code == 0) {
-            let bardata = data.data;
-            this.seriesCash = [
-              {
-                value: bardata.addpcs,
-                name: this.legend[0]
-              },
-              {
-                value: bardata.updatepcs,
-                name: this.legend[1]
-              },
-              {
-                value: bardata.deletepcs,
-                name: this.legend[2]
-              }
-            ]
-          }
-        })
-      },
-      getWeekData(val) {
-        this.index = val;
-        showWeekData(this.params).then(res => {
-          let data = res.data;
-          if (data.code == 0) {
-            let bardata = data.data;
-            this.seriesCash = [
-              {
-                value: bardata.addpcs,
-                name: this.legend[0]
-              },
-              {
-                value: bardata.updatepcs,
-                name: this.legend[1]
-              },
-              {
-                value: bardata.deletepcs,
-                name: this.legend[2]
-              }
-            ]
-          }
-        })
-      },
-      getMonthData(val) {
-        this.index = val;
-        showMonthData(this.params).then(res => {
-          let data = res.data;
-          if (data.code == 0) {
-            let bardata = data.data;
-            this.seriesCash = [
-              {
-                value: bardata.addpcs,
-                name: this.legend[0]
-              },
-              {
-                value: bardata.updatepcs,
-                name: this.legend[1]
-              },
-              {
-                value: bardata.deletepcs,
-                name: this.legend[2]
-              }
-            ]
-          }
-        })
-      }
+      });
+    },
+    getWeekData(val) {
+      this.index = val;
+      showWeekData(this.params).then(res => {
+        let data = res.data;
+        if (data.code == 0) {
+          let bardata = data.data;
+          this.seriesCash = [
+            {
+              value: bardata.addpcs,
+              name: this.legend[0]
+            },
+            {
+              value: bardata.updatepcs,
+              name: this.legend[1]
+            },
+            {
+              value: bardata.deletepcs,
+              name: this.legend[2]
+            }
+          ];
+        }
+      });
+    },
+    getMonthData(val) {
+      this.index = val;
+      showMonthData(this.params).then(res => {
+        let data = res.data;
+        if (data.code == 0) {
+          let bardata = data.data;
+          this.seriesCash = [
+            {
+              value: bardata.addpcs,
+              name: this.legend[0]
+            },
+            {
+              value: bardata.updatepcs,
+              name: this.legend[1]
+            },
+            {
+              value: bardata.deletepcs,
+              name: this.legend[2]
+            }
+          ];
+        }
+      });
     }
   }
+};
 </script>
 <style scoped>
-  .pagebox {
-    padding: 40px 20px;
-  }
+.pagebox {
+  padding: 40px 20px;
+}
 </style>
 
 

@@ -82,7 +82,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      baseurl:'',
+      baseurl: "",
       readFileparams: {
         fileId: this.$route.params.id,
         userId: sessionStorage.getItem("userId")
@@ -147,7 +147,7 @@ export default {
     }
   },
   mounted() {
-    this.baseurl=getRequestUrl();
+    this.baseurl = getRequestUrl();
     this.initreadFile();
     this.initFileLog();
     this.initFileDetail();

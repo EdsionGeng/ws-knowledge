@@ -118,7 +118,6 @@ export default {
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
-            console.log(this.page);
             this.historyUploadMessageList = showUserUpdata.data;
             this.historyUploadpicMessageList = showUserUpdata.data;
           }
@@ -132,7 +131,6 @@ export default {
 .ivu-select-single .ivu-select-selection {
   width: 100px;
 }
-
 .page {
   height: 100%;
 }

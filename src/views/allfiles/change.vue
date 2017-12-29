@@ -156,8 +156,8 @@ var E = require("wangeditor");
 export default {
   data() {
     return {
-      baseurl:'',
-      uploadurl:'',
+      baseurl: "",
+      uploadurl: "",
       picViewModel: false,
       picuploadList: [],
       userLookIds: "",
@@ -241,8 +241,8 @@ export default {
     docTree
   },
   mounted() {
-    this.uploadurl=getUploadUrl();
-    this.baseurl=getRequestUrl();
+    this.uploadurl = getUploadUrl();
+    this.baseurl = getRequestUrl();
     this.picuploadList = this.$refs.upload.fileList;
     // 根据文件详情显示
     this.initFileDetail();
@@ -263,8 +263,7 @@ export default {
       editor.customConfig.uploadImgHeaders = {
         Accept: "multipart/form-data"
       };
-      editor.customConfig.uploadImgServer =
-        this.uploadurl;
+      editor.customConfig.uploadImgServer = this.uploadurl;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
@@ -311,7 +310,7 @@ export default {
           this.userLookIds = data[0].join(",");
           this.userUpdateIds = data[1].join(",");
           this.userDeleteIds = data[2].join(",");
-          console.log(this.userLookIds)
+          console.log(this.userLookIds);
           this.showDepTree();
           this.showeditDepTree();
           this.showdelDepTree();
@@ -424,14 +423,15 @@ export default {
     },
     // 判断附件上传数量
     handleBeforeUpload(file) {
-      const checkfileList =this.fujainList.length+ this.$refs.fujianupload.fileList.length < 10;
+      const checkfileList =
+        this.fujainList.length + this.$refs.fujianupload.fileList.length < 10;
       const check = this.fujainList.length < 10;
       if (!check || !checkfileList) {
         this.$Notice.warning({
           title: "附件上传已达上限"
         });
       }
-      return check&&checkfileList;
+      return check && checkfileList;
     },
     // 图片大小限制
     pichandleMaxSize(file) {
@@ -456,7 +456,7 @@ export default {
         }
       }
       this.lookFileParams.userIds = userIds.join(",");
-      this.chooseuserLookIds=userIds.join(',');
+      this.chooseuserLookIds = userIds.join(",");
     },
     chooseDelPeople(arr) {
       console.log(111);
@@ -529,7 +529,7 @@ export default {
       this.updateFileList.content = this.uploadForm.content;
       this.updateFileList.photourl = this.uploadForm.photourl;
       if (this.insertFileList.photourl === "") {
-        this.insertFileList.photourl = "1514028176737moren1.png";
+        this.insertFileList.photourl = "458814304482422455.png";
       }
       this.updateFileList.describle = this.uploadForm.describle;
       this.updateFileList.fileurl = this.uploadForm.fileurl;
@@ -552,24 +552,6 @@ export default {
         .then(res => {
           if (res.data.code == 0) {
             if (this.chooseUser) {
-              if (this.lookFileParams.userIds == "") {
-                this.lookFileParams.userIds = this.adminIds;
-              } else {
-                this.lookFileParams.userIds =
-                  this.lookFileParams.userIds + "," + this.adminIds;
-              }
-              if (this.updateFileParams.userIds == "") {
-                this.updateFileParams.userIds = this.adminIds;
-              } else {
-                this.updateFileParams.userIds =
-                  this.updateFileParams.userIds + "," + this.adminIds;
-              }
-              if (this.deleteFileParams.userIds == "") {
-                this.deleteFileParams.userIds = this.adminIds;
-              } else {
-                this.deleteFileParams.userIds =
-                  this.deleteFileParams.userIds + "," + this.adminIds;
-              }
               lookFileUser(this.lookFileParams)
                 .then(res => {
                   if (res.data.code == 0) {
@@ -641,10 +623,16 @@ export default {
       this.uploadForm.describle = filedescribleArry.join(",");
     },
     checkIfContainId(ids, id) {
-       ids=ids.split(',');
-       id=id.split(',');
+      ids = ids.split(",");
+      id = id.split(",");
+      if (ids === "") {
+        return true;
+      }
+      if (id === "") {
+        return false;
+      }
       for (var val of id) {
-        console.log(111,val,ids,ids.indexOf(val) === -1)
+        console.log(111, val, ids, ids.indexOf(val) === -1);
         if (ids.indexOf(val) === -1) {
           return true;
         }
@@ -655,6 +643,24 @@ export default {
     handleSubmit() {
       // 将文本编辑器的内容传给content
       this.getEditorContent();
+      if (this.lookFileParams.userIds == "") {
+        this.lookFileParams.userIds = this.adminIds;
+      } else {
+        this.lookFileParams.userIds =
+          this.lookFileParams.userIds + "," + this.adminIds;
+      }
+      if (this.updateFileParams.userIds == "") {
+        this.updateFileParams.userIds = this.adminIds;
+      } else {
+        this.updateFileParams.userIds =
+          this.updateFileParams.userIds + "," + this.adminIds;
+      }
+      if (this.deleteFileParams.userIds == "") {
+        this.deleteFileParams.userIds = this.adminIds;
+      } else {
+        this.deleteFileParams.userIds =
+          this.deleteFileParams.userIds + "," + this.adminIds;
+      }
       if (this.uploadForm.id == "") {
         this.$Message.warning("请选择文档类型");
         return;
@@ -667,7 +673,10 @@ export default {
           this.updateFileParams.userIds
         )
       ) {
-        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
+        this.$Message.warning({
+          content: "有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",
+          duration: 5
+        });
         return;
       } else if (
         this.checkIfContainId(
@@ -675,7 +684,10 @@ export default {
           this.deleteFileParams.userIds
         )
       ) {
-        this.$Message.warning({content:"有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",duration:5});
+        this.$Message.warning({
+          content: "有查阅权限的人员，才能修改或删除文件，请重新设置人员权限",
+          duration: 5
+        });
         return;
       } else {
         if (this.fujainList.length > 0) {

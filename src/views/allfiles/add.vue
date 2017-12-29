@@ -153,7 +153,7 @@ export default {
   data() {
     return {
       uploadurl: "",
-      baseurl:'',
+      baseurl: "",
       picViewModel: false,
       picuploadList: [],
       userLookIds: "",
@@ -381,8 +381,7 @@ export default {
       editor.customConfig.uploadImgHeaders = {
         Accept: "multipart/form-data"
       };
-      editor.customConfig.uploadImgServer =
-        this.uploadurl;
+      editor.customConfig.uploadImgServer = this.uploadurl;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
@@ -564,7 +563,7 @@ export default {
       this.insertFilePrams.content = this.uploadForm.content;
       this.insertFilePrams.photourl = this.uploadForm.photourl;
       if (this.insertFilePrams.photourl === "") {
-        this.insertFilePrams.photourl = "1514028176737moren1.png";
+        this.insertFilePrams.photourl = "458814304482422455.png";
       }
       this.insertFilePrams.fileurl = this.uploadForm.fileurl;
       this.insertFilePrams.userId = this.uploadForm.userId;
@@ -667,6 +666,12 @@ export default {
     checkIfContainId(ids, id) {
       ids = ids.split(",");
       id = id.split(",");
+      if (ids === "") {
+        return true;
+      }
+      if (id === "") {
+        return false;
+      }
       for (var val of id) {
         if (ids.indexOf(val) === -1) {
           return true;

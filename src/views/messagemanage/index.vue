@@ -8,7 +8,6 @@
             <Input v-model="params.title" placeholder="请输入标题名称" style="width: 250px"></Input>
           </FormItem>
           </Col>
-
           <Col span="5">
           <FormItem label="发送时间：">
             <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
@@ -89,8 +88,6 @@
       v-model="chooseUser"
       width="700px"
       title="选择人员"
-      @on-ok="ok"
-
       :closable="false"
       @on-cancel="cancel">
       <div class="clearfix" style="height:600px;overflow: scroll">
@@ -105,18 +102,10 @@
       v-model="isSubmit"
       width="500px"
       title="是否保存"
-      @on-ok="okSubmit"
       :closable="false"
       @on-cancel="cancelSubmit">
       <p style="text-align: center;font-size: 16px">是否保存此次编辑？</p>
     </Modal>
-    <!--<Modal-->
-    <!--v-model="deletesure"-->
-    <!--title=""-->
-    <!--@on-ok="deleteAds"-->
-    <!--:closable="false"-->
-    <!--@on-cancel="cancel">-->
-    <!--</Modal>-->
     <Modal
       v-model="deleteofcourse"
       title="删除公告"
@@ -144,450 +133,332 @@
   </div>
 </template>
 <script>
-  import {showAllAd} from "../../api/all_interface";
-  import {deleteAd} from "../../api/all_interface";
-  import {getDepTree} from "../../api/all_interface";
-  import {queryUserByGroup} from "../../api/all_interface";
-  import {showAdPcs} from "../../api/all_interface";
-  import {insertAd} from "../../api/all_interface";
-  import {sendAdToUser} from "../../api/all_interface";
+import { showAllAd } from "../../api/all_interface";
+import { deleteAd } from "../../api/all_interface";
+import { getDepTree } from "../../api/all_interface";
+import { queryUserByGroup } from "../../api/all_interface";
+import { showAdPcs } from "../../api/all_interface";
+import { insertAd } from "../../api/all_interface";
+import { sendAdToUser } from "../../api/all_interface";
 
-  export default {
-    data() {
-      return {
-        AllAdColumns: [
-          {
-            type: "selection",
-            width: 60,
-            align: "center"
-          },
-          {
-            title: "标题",
-            key: "adTitle"
-          },
-          {
-            title: "公告类型",
-            key: "adStyle"
-          },
-          {
-            title: "发送人",
-            key: "addUser"
-          },
-          {
-            title: "接收人员",
-            key: "sendObject",
-            ellipsis: true
-          },
-          {
-            title: "发送时间",
-            key: "sendTime",
-            sortable: "custom",
-            sortType: ""
-          },
+export default {
+  data() {
+    return {
+      AllAdColumns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "标题",
+          key: "adTitle"
+        },
+        {
+          title: "公告类型",
+          key: "adStyle"
+        },
+        {
+          title: "发送人",
+          key: "addUser"
+        },
+        {
+          title: "接收人员",
+          key: "sendObject",
+          ellipsis: true
+        },
+        {
+          title: "发送时间",
+          key: "sendTime",
+          sortable: "custom",
+          sortType: ""
+        }
+      ],
+      usershow: false,
+      params: {
+        current: 1,
+        pageSize: 20,
+        startDate: "",
+        endDate: "",
+        title: "",
+        adStyle: "",
+        sortType: "desc"
+      },
 
+      deleteofcourse: false,
+      singleMessageDetail: {
+        AdTitle: "",
+        addTime: "",
+        AddUser: "",
+        Content: "",
+        readed: 0,
+        noreaded: 0
+      },
+      insertAdParams: {
+        title: "",
+        adStyle: "",
+        content: "",
+        sendDepartmentName: "",
+        userId: sessionStorage.getItem("userId")
+      },
+      modal1: false,
+      isSubmit: false,
+      insertAd: false,
+      sendAdParams: {
+        userIds: "",
+        commonId: ""
+      },
+      pageOpts: [10, 20, 30, 40, 50],
+      depTree: [],
+      chooseUser: false,
+      delAdParams: {
+        ids: ""
+      },
+      ruleValidate: {
+        title: [
+          { required: true, message: "请填写公告标题", trigger: "blur" },
+          { type: "string", max: 20, message: "标题限制在20字以内" }
         ],
-        usershow: false,
-        params: {
-          current: 1,
-          pageSize: 20,
-          startDate: "",
-          endDate: "",
-          title: "",
-          adStyle: "",
-          sortType: "desc",
-        },
-
-        deleteofcourse: false,
-        singleMessageDetail: {
-          AdTitle: "",
-          addTime: "",
-          AddUser: "",
-          Content: "",
-          readed: 0,
-          noreaded: 0
-        },
-        insertAdParams: {
-          title: "",
-          adStyle: "",
-          content: "",
-          sendDepartmentName: "",
-          userId: sessionStorage.getItem("userId"),
-        },
-        modal1: false,
-        isSubmit: false,
-        insertAd: false,
-        childData: [],
-        sendAdParams: {
-          userIds: "",
-          commonId: ""
-        },
-        pageOpts: [10, 20, 30, 40, 50],
-        depTree: [],
-        chooseUser: false,
-        delAdParams: {
-          ids: ""
-        },
-        ruleValidate: {
-          title: [
-            {required: true, message: "请填写公告标题", trigger: "blur"},
-            {type: "string", max: 20, message: "标题限制在20字以内"}
-          ],
-          content: [
-            {required: true, message: "请填写公告内容", trigger: "blur"},
-            {type: "string", max: 500, message: "内容限制在500字以内"}
-          ],
-        },
-        queryUserParams: {
-          userGroupId: ""
-        },
-        showUserGroup: [],
-        depTreeParams: {
-          id: "",
-          deptno: "",
-          no: "",
-          pid: "",
-          type: "",
-          checked: "",
-          name: "",
-          department: ""
-        },
-        showAdParams: {
-          commonId: ""
-        },
-        readAdParams: {
-          commonId: "",
-          userId: sessionStorage.getItem("userId")
-        },
-        page: {},
-        ids: "",
-        chooseObject: "",
-        selection: [],
-        circleAdUsers: [],
-        AllAdList: [],
-        CircleUserIds: [],
-        CircleUserNames: []
-      };
-    },
-    created() {
+        content: [
+          { required: true, message: "请填写公告内容", trigger: "blur" },
+          { type: "string", max: 500, message: "内容限制在500字以内" }
+        ]
+      },
+      showUserGroup: [],
+      depTreeParams: {
+        id: "",
+        deptno: "",
+        no: "",
+        pid: "",
+        type: "",
+        checked: "",
+        name: "",
+        department: ""
+      },
+      showAdParams: {
+        commonId: ""
+      },
+      page: {},
+      ids: "",
+      selection: [],
+      AllAdList: []
+    };
+  },
+  created() {
+    this.showAllAdList();
+    this.showDepTree();
+  },
+  methods: {
+    onPageChange(value) {
+      this.params.current = value;
       this.showAllAdList();
+    },
+    onPageSizeChange(value) {
+      this.params.pageSize = value;
+      this.showAllAdList();
+    },
+    renderContent(h, { root, node, data }) {
+      return h(
+        "span",
+        {
+          style: {
+            width: "52px"
+          }
+        },
+        data.name
+      );
+    },
+    sureSubmit() {
+      this.isSubmit = true;
+    },
+    cancelSubmit() {
+      this.insertAdParams.title = "";
+      this.insertAdParams.content = "";
+      this.insertAdParams.sendDepartmentName = "";
+      this.insertAdParams.adStyle = "";
+      this.sendAdParams.userIds = "";
+      this.sendAdParams.commonId = "";
       this.showDepTree();
     },
-    methods: {
-      onPageChange(value) {
-        this.params.current = value;
-        this.showAllAdList();
-      },
-      onPageSizeChange(value) {
-        this.params.pageSize = value;
-        this.showAllAdList();
-      },
-      renderContent(h, {root, node, data}) {
-        return h(
-          "span",
-          {
-            style: {
-              width: "52px"
-            }
-          },
-          data.name
-        );
-      },
-//    deleteAds(){
-//      this.deleteofcourse=true;
-//    },
-      sureSubmit(){
-        this.isSubmit= true;
-      },
-      okSubmit() {
-      },
-
-      cancelSubmit() {
-        this.insertAdParams.title = "";
-        this.insertAdParams.content = "";
-        this.insertAdParams.sendDepartmentName = "";
-        this.insertAdParams.adStyle = "";
-        this.sendAdParams.userIds = "";
-        this.sendAdParams.commonId = "";
-        this.showDepTree();
-      },
-      delAdAction(arr) {
-        let fielIds = "";
-        for (let i = 0; i < arr.length; i++) {
-          if (i > 0) {
-            fielIds += ",";
-          }
-          fielIds += arr[i].id;
+    delAdAction(arr) {
+      let fielIds = "";
+      for (let i = 0; i < arr.length; i++) {
+        if (i > 0) {
+          fielIds += ",";
         }
-        this.delAdParams.ids = fielIds;
-        return fielIds;
-      },
-      showAdDetail(row, index) {
-        this.showAdParams = {
-          commonId: row.id
-        };
-        //      console.info(this.showAdParams.commonId)
-        showAdPcs(this.showAdParams)
-          .then(res => {
-            const data = res.data;
-            // console.log(res.data);
-            if (data.code == 0) {
-              //            console.info("hjhjhj");
-              //            console.info(row);
-              this.singleMessageDetail.AdTitle = row.adTitle;
-              this.singleMessageDetail.addTime = row.sendTime;
-              this.singleMessageDetail.AddUser = row.addUser;
-              var reg = new RegExp("<br>", "g");
-              // console.info(row.adContent.replace(reg, "\n"));
-              this.singleMessageDetail.Content = row.adContent.replace(reg, "\n");
-              this.singleMessageDetail.readed = data.data.isRead;
-              this.singleMessageDetail.noreaded = data.data.noRead;
-            } else {
-              this.$Message.warning("网络异常！");
-            }
-          })
-          .catch(err => {
-          });
-        this.modal1 = true;
-      },
-      //      chooseSingleUser(arr) {
-      //        let userIds = "";
-      //        let userNames = "";
-      //        for (let i = 0; i < arr.length; i++) {
-      //          if (i > 0) {
-      //            userIds += ",";
-      //            userNames += ",";
-      //          }
-      //          userIds += arr[i].id;
-      //          userNames += arr[i].username;
-      //        }
-      //        this.insertAdParams.sendDepartmentName = userNames;
-      //        this.sendAdParams.userIds = userIds;
-      //      },
-
-      recSortType(order) {
-        this.params.sortType = order.order;
-        this.showAllAdList();
-      },
-      circleUser(arr) {
-        let departmentName = "";
-        let userIds = "";
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].children == null) {
-            if (i > 0) {
-              departmentName += ",";
-              userIds += ",";
-            }
-            departmentName += arr[i].name;
-            userIds += arr[i].id;
-          }
-        }
-
-        this.sendAdParams.userIds = userIds;
-        //console.info(this.sendAdParams.userIds);
-        if (departmentName.length > 1000) {
-          departmentName = "全公司";
-        }
-        this.insertAdParams.sendDepartmentName = departmentName;
-      },
-      //      circleUser(arr) {
-      //        // console.log('circleUser:', arguments)
-      //        let fetchs = []
-      //        let departmentName = "";
-      //        let groupIds="";
-      //        for (let i = 0; i < arr.length; i++) {
-      //          if (arr[i].children === null) {
-      //            let o = {
-      //              userGroupId: arr[i].id
-      //            }
-      //            if(i>0){
-      //              departmentName + =",";
-      //              groupIds +=",";
-      //            }
-      //            departmentName += arr[i].name;
-      //            groupIds+=arr[i].id;
-      //            this.sendAdParams.groupIds=groupIds;
-      //            fetchs.push(queryUserByGroup(o))
-      //          }
-      //        }
-      //        this.insertAdParams.sendDepartmentName = departmentName;
-      //        Promise.all(fetchs).then(ret => {
-      //          let tmpa = []
-      //          ret.forEach(item => {
-      //            // console.log('item:', item)
-      //            tmpa = [...tmpa, ...item.data.data]
-      //          })
-      //          this.showUserGroup = tmpa;
-      //          this.usershow = true;
-      //        })
-      //      },
-      dateOnChange(arr) {
-        const rangedate = arr;
-        this.params.startDate = rangedate[0];
-        if (rangedate[1] === undefined) {
-          this.params.endDate = "";
-        } else {
-          this.params.endDate = rangedate[1];
-        }
-      },
-//    toDelAd() {
-//      if (this.delAdParams.ids == "") {
-//        this.$Message.warning("没有选中相应数据!");
-//        return;
-//      }
-//      this.deleteofcourse = true;
-//    }
-////        let _self = this;
-////        deleteAd(this.delAdParams)
-////          .then(res => {
-////            const data = res.data;
-////            if (data.code == 0) {
-////              this.$Message.info(data.msg);
-////              _self.showAllAdList();
-////            } else {
-////              this.$Message.info(data.msg);
-////            }
-////          })
-////          .catch(err => {});
-//      }
-////
-//    },
-      toDelAd() {
-        if (this.delAdParams.ids == "") {
-          this.$Message.warning("没有选中相应数据!");
-          return;
-        }
-        this.deleteofcourse = true;
-
-//        let _self = this;
-//        deleteAd(this.delAdParams)
-//          .then(res => {
-//            const data = res.data;
-//            if (data.code == 0) {
-//              this.$Message.info(data.msg);
-//              _self.showAllAdList();
-//            } else {
-//              this.$Message.info(data.msg);
-//            }
-//          })
-//          .catch(err => {});
-//
-      },
-      sureDelete() {
-        deleteAd(this.delAdParams)
-          .then(res => {
-            const data = res.data;
-            if (data.code == 0) {
-              this.$Message.info(data.msg);
-              this.showAllAdList();
-            } else {
-              this.$Message.info(data.msg);
-            }
-          })
-          .catch(err => {
-          });
-
-      },
-      handleSearch() {
-        console.info(this.params);
-        this.showAllAdList();
-      },
-      sureSend() {
-        if (this.insertAdParams.title == "") {
-          this.$Message.warning("标题不能为空！");
-          return;
-        }
-        if (this.insertAdParams.adStyle == "") {
-          this.$Message.warning("公告类型不能为空！");
-          return;
-        }
-        if (this.insertAdParams.content == "") {
-          this.$Message.warning("内容不能为空！");
-          return;
-        }
-        if (this.insertAdParams.sendDepartmentName == "") {
-          this.$Message.warning("发送对象不能为空！");
-          return;
-        }
-        let newcontent = this.insertAdParams.content.replace(/\n|\r\n/g, "<br>");
-        this.insertAdParams.content = newcontent;
-        //      console.info(this.insertAdParams.content);
-        //      debugger
-        insertAd(this.insertAdParams)
-          .then(res => {
-            const data = res.data;
-            let _self = this;
-            if (data.code == 0) {
-              _self.sendAdParams.commonId = data.data;
-              //            console.info(_self.sendAdParams);
-              sendAdToUser(_self.sendAdParams).then(res => {
-                const data = res.data;
-                //              console.info(data);
-                if (data.code == 0) {
-                  this.$Message.success("操作成功!");
-                  this.insertAd = false;
-                  this.insertAdParams.title = "";
-                  this.insertAdParams.content = "";
-                  this.insertAdParams.sendDepartmentName = "";
-                  this.insertAdParams.adStyle = "";
-                  this.sendAdParams.userIds = "";
-                  this.sendAdParams.commonId = "";
-                  this.showDepTree();
-                  this.showAllAdList();
-                }
-              });
-            }
-          })
-          .catch(err => {
-          });
-      },
-      ok() {
-      },
-      cancel() {
-        this.insertAdParams.sendDepartmentName = "";
-        this.sendAdParams.userIds = "";
-      },
-      showDepTree() {
-        let _self = this;
-        getDepTree(_self.depTreeParams).then(res => {
-          _self.depTree = res.data;
-        });
-      },
-
-      showAllAdList() {
-        showAllAd(this.params)
-          .then(res => {
-            const data = res.data;
-            if (data.code == 0) {
-              this.AllAdList = data.data;
-              this.page = data.rdPage;
-            }
-          })
-          .catch(err => {
-          });
+        fielIds += arr[i].id;
       }
+      this.delAdParams.ids = fielIds;
+      return fielIds;
+    },
+    showAdDetail(row, index) {
+      this.showAdParams = {
+        commonId: row.id
+      };
+      showAdPcs(this.showAdParams)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            this.singleMessageDetail.AdTitle = row.adTitle;
+            this.singleMessageDetail.addTime = row.sendTime;
+            this.singleMessageDetail.AddUser = row.addUser;
+            var reg = new RegExp("<br>", "g");
+            this.singleMessageDetail.Content = row.adContent.replace(reg, "\n");
+            this.singleMessageDetail.readed = data.data.isRead;
+            this.singleMessageDetail.noreaded = data.data.noRead;
+          } else {
+            this.$Message.warning("网络异常！");
+          }
+        })
+        .catch(err => {});
+      this.modal1 = true;
+    },
+    recSortType(order) {
+      this.params.sortType = order.order;
+      this.showAllAdList();
+    },
+    circleUser(arr) {
+      let departmentName = "";
+      let userIds = "";
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children == null) {
+          if (i > 0) {
+            departmentName += ",";
+            userIds += ",";
+          }
+          departmentName += arr[i].name;
+          userIds += arr[i].id;
+        }
+      }
+
+      this.sendAdParams.userIds = userIds;
+      if (departmentName.length > 1000) {
+        departmentName = "全公司";
+      }
+      this.insertAdParams.sendDepartmentName = departmentName;
+    },
+    dateOnChange(arr) {
+      const rangedate = arr;
+      this.params.startDate = rangedate[0];
+      if (rangedate[1] === undefined) {
+        this.params.endDate = "";
+      } else {
+        this.params.endDate = rangedate[1];
+      }
+    },
+    toDelAd() {
+      if (this.delAdParams.ids == "") {
+        this.$Message.warning("没有选中相应数据!");
+        return;
+      }
+      this.deleteofcourse = true;
+    },
+    sureDelete() {
+      deleteAd(this.delAdParams)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            this.$Message.info(data.msg);
+            this.showAllAdList();
+          } else {
+            this.$Message.info(data.msg);
+          }
+        })
+        .catch(err => {});
+    },
+    handleSearch() {
+      console.info(this.params);
+      this.showAllAdList();
+    },
+    sureSend() {
+      if (this.insertAdParams.title == "") {
+        this.$Message.warning("标题不能为空！");
+        return;
+      }
+      if (this.insertAdParams.adStyle == "") {
+        this.$Message.warning("公告类型不能为空！");
+        return;
+      }
+      if (this.insertAdParams.content == "") {
+        this.$Message.warning("内容不能为空！");
+        return;
+      }
+      if (this.insertAdParams.sendDepartmentName == "") {
+        this.$Message.warning("发送对象不能为空！");
+        return;
+      }
+      let newcontent = this.insertAdParams.content.replace(/\n|\r\n/g, "<br>");
+      this.insertAdParams.content = newcontent;
+      insertAd(this.insertAdParams)
+        .then(res => {
+          const data = res.data;
+          let _self = this;
+          if (data.code == 0) {
+            _self.sendAdParams.commonId = data.data;
+            sendAdToUser(_self.sendAdParams).then(res => {
+              const data = res.data;
+              if (data.code == 0) {
+                this.$Message.success("操作成功!");
+                this.insertAd = false;
+                this.insertAdParams.title = "";
+                this.insertAdParams.content = "";
+                this.insertAdParams.sendDepartmentName = "";
+                this.insertAdParams.adStyle = "";
+                this.sendAdParams.userIds = "";
+                this.sendAdParams.commonId = "";
+                this.showDepTree();
+                this.showAllAdList();
+              }
+            });
+          }
+        })
+        .catch(err => {});
+    },
+    cancel() {
+      this.insertAdParams.sendDepartmentName = "";
+      this.sendAdParams.userIds = "";
+    },
+    showDepTree() {
+      let _self = this;
+      getDepTree(_self.depTreeParams).then(res => {
+        _self.depTree = res.data;
+      });
+    },
+
+    showAllAdList() {
+      showAllAd(this.params)
+        .then(res => {
+          const data = res.data;
+          if (data.code == 0) {
+            this.AllAdList = data.data;
+            this.page = data.rdPage;
+          }
+        })
+        .catch(err => {});
     }
-  };
+  }
+};
 </script>
 <style scoped>
-  .myTable .demo-table-info-row td {
-    color: red;
-  }
+.myTable .demo-table-info-row td {
+  color: red;
+}
 
-  .buttonarea {
-    margin-left: 20px;
-  }
+.buttonarea {
+  margin-left: 20px;
+}
 
-  .bodyarea {
-    margin-left: 30px;
-    margin-top: 30px;
-  }
+.bodyarea {
+  margin-left: 30px;
+  margin-top: 30px;
+}
 
-  .user-detail {
-  }
+.user-detail {
+}
 </style>
 
 <style>
-  .ivu-select-single .ivu-select-selection {
-    width: 100% !important;
-  }
+.ivu-select-single .ivu-select-selection {
+  width: 100% !important;
+}
 </style>
