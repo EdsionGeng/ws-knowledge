@@ -11,7 +11,7 @@
 
           <Col span="5">
           <FormItem label="发送时间：">
-            <DatePicker format="yyyy-MM-dd HH:mm" type="daterange" size="large" placement="bottom-end"
+            <DatePicker format="yyyy-MM-dd HH:mm:ss" type="daterange" size="large" placement="bottom-end"
                         placeholder="请选择时间" @on-change="dateOnChange" style="width: 250px"></DatePicker>
           </FormItem>
           </Col>
