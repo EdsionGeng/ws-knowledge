@@ -710,12 +710,10 @@ export default {
       } else if (this.uploadForm.content === "") {
         this.$Message.warning("请编辑文件内容");
         return;
-       } 
-      //else if (this.uploadForm.content.length >= 2600) {
-      //   this.$Message.warning("文件占位符过多,请删除多余的空格");
-      //   return;
-      // } 
-      else if (
+      } else if (this.uploadForm.content.length >= 4180453) {
+        this.$Message.warning("文件内容过大,请删除多余的图片内容");
+        return;
+      } else if (
         this.checkIfContainId(
           this.lookFileParams.userIds,
           this.updateFileParams.userIds
