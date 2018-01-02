@@ -3,6 +3,22 @@
     <Row>
       <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:8px;">
       <Tabs type="card" @on-click='changePic'>
+      <TabPane label="图文" name='pic'>
+          <Row :gutter="32">
+            <Col span="4"   v-for='(list,index) in historyUploadpicMessageList' :key='index'
+                 style='margin-bottom:10px;margin-top:10px;'>
+            <a @click="onRowClick(list)">
+              <Card style="">
+                 <div style="text-align:center">
+                  <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;overflow:hidden;' onerror='this.style.opacity=0;'>
+                  <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
+                  <p style='color:#999;font-size:11px;margin-top:8px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
+                </div>
+              </Card>
+            </a>
+            </Col>
+          </Row>
+        </TabPane>
         <TabPane label="列表" class="clearfix" name='table'>
           <Row>
             <Col>
@@ -11,23 +27,6 @@
             </Col>
           </Row>
         </TabPane>
-        <TabPane label="图文" name='pic'>
-          <Row :gutter="32">
-            <Col span="4"   v-for='(list,index) in historyUploadpicMessageList' :key='index'
-                 style='margin-bottom:48px;'>
-            <a @click="onRowClick(list)">
-              <Card style="">
-                 <div style="text-align:center">
-                  <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;'>
-                  <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
-                  <p style='color:#999;font-size:12px;margin-top:8px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
-                </div>
-              </Card>
-            </a>
-            </Col>
-          </Row>
-        </TabPane>
-
       </Tabs>
 
       </Col>
@@ -118,7 +117,7 @@ export default {
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
-            this.historyUploadMessageList = showUserUpdata.data;
+            // this.historyUploadMessageList = showUserUpdata.data;
             this.historyUploadpicMessageList = showUserUpdata.data;
           }
         })

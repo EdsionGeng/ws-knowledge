@@ -5,7 +5,7 @@
         <FormItem label=" 文件标题：" prop="title">
           <Input v-model="uploadForm.title" placeholder="请输入标题" style="width: 200px"></Input>
         </FormItem>
-        <FormItem label="文档类型：" prop="value">
+        <FormItem label="文档类型：" prop="value" class="myFileType">
           <docTree :myvalue='uploadForm'></docTree>
         </FormItem>
         <FormItem label="封面：">
@@ -282,6 +282,7 @@ export default {
         this.uploadForm.title !== "" ||
         this.uploadForm.id !== "" ||
         this.uploadForm.content !== "" ||
+        this.uploadForm.fileType !== "" ||
         this.fujainList.length !== 0 ||
         this.lookFileParams.userIds !== "" ||
         this.updateFileParams.userIds !== "" ||
@@ -752,6 +753,10 @@ export default {
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
 }
+.myFileType .ivu-form-item-content{
+  line-height: normal;
+}
+
 </style>
 <style scoped>
 .body-area {
