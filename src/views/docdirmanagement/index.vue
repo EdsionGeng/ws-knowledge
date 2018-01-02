@@ -276,7 +276,7 @@ export default {
             this.$Message.success(data.msg);
             this.showDocTree();
             this.updateFileName = false;
-            window.location.reload();
+
           } else {
             this.$Message.warning(data.msg);
           }
@@ -297,13 +297,14 @@ export default {
         .then(res => {
           let _self = this;
           const data = res.data;
+          console.info("success");
           if (data.code == 0) {
             _self.$Message.success("操作成功");
             _self.insertFileParams.docName = "";
             _self.insertFileParams.parentId = "";
             _self.deleteDocParams.fileStyleId = "";
             _self.showDocTree();
-            window.location.reload();
+
           }
         })
         .catch(err => {});
