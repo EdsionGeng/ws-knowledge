@@ -25,7 +25,7 @@
             <a @click="onRowClick(list)">
               <Card style="max-height:200px;">
                 <div style="text-align:center">
-                  <img :src="list.photoUrl?baseurl+list.photoUrl:defaultUrl" style='width:60%;height:100px;overflow:hidden;' onerror='this.style.opacity=0;'>
+                  <img :src="list.photoUrl?baseurl+list.photoUrl:defaultUrl" style='width:60%;height:100px;overflow:hidden;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:11px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
                   <p style='color:#999;font-size:11px;' class="nowrap">上传人：{{list.username}}</p>
