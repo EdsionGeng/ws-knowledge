@@ -378,11 +378,6 @@ export default {
       editor.customConfig.zIndex = 100;
       editor.customConfig.uploadImgShowBase64 = true;
       editor.customConfig.showLinkImg = false;
-      
-      // editor.customConfig.uploadImgHeaders = {
-      //   Accept: "multipart/form-data"
-      // };
-      //editor.customConfig.uploadImgServer = this.uploadurl;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
