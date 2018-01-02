@@ -378,10 +378,11 @@ export default {
       editor.customConfig.zIndex = 100;
       editor.customConfig.uploadImgShowBase64 = true;
       editor.customConfig.showLinkImg = false;
-      editor.customConfig.uploadImgHeaders = {
-        Accept: "multipart/form-data"
-      };
-      editor.customConfig.uploadImgServer = this.uploadurl;
+      
+      // editor.customConfig.uploadImgHeaders = {
+      //   Accept: "multipart/form-data"
+      // };
+      //editor.customConfig.uploadImgServer = this.uploadurl;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
@@ -395,9 +396,9 @@ export default {
         "justify", // 对齐方式
         "quote", // 引用
         "emoticon", // 表情
-        // "image", // 插入图片
+        "image", // 插入图片
         "table", // 表格
-        // "video", // 插入视频
+        "video", // 插入视频
         "code", // 插入代码
         "undo", // 撤销
         "redo" // 重复
@@ -714,10 +715,12 @@ export default {
       } else if (this.uploadForm.content === "") {
         this.$Message.warning("请编辑文件内容");
         return;
-      } else if (this.uploadForm.content.length >= 2600) {
-        this.$Message.warning("文件占位符过多,请删除多余的空格");
-        return;
-      } else if (
+       } 
+      //else if (this.uploadForm.content.length >= 2600) {
+      //   this.$Message.warning("文件占位符过多,请删除多余的空格");
+      //   return;
+      // } 
+      else if (
         this.checkIfContainId(
           this.lookFileParams.userIds,
           this.updateFileParams.userIds
