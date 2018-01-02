@@ -260,10 +260,7 @@ export default {
       };
       editor.customConfig.zIndex = 100;
       editor.customConfig.showLinkImg = false;
-      editor.customConfig.uploadImgHeaders = {
-        Accept: "multipart/form-data"
-      };
-      editor.customConfig.uploadImgServer = this.uploadurl;
+      editor.customConfig.uploadImgShowBase64 = true;
       editor.customConfig.menus = [
         "head", // 标题
         "bold", // 粗体
@@ -277,9 +274,9 @@ export default {
         "justify", // 对齐方式
         "quote", // 引用
         "emoticon", // 表情
-        // 'image',  // 插入图片
+        "image", // 插入图片
         "table", // 表格
-        // 'video',  // 插入视频
+        "video", // 插入视频
         "code", // 插入代码
         "undo", // 撤销
         "redo" // 重复
@@ -346,6 +343,7 @@ export default {
             this.uploadForm.id = this.fileDetails.fileStyleId;
             this.uploadForm.title = this.fileDetails.title;
             this.uploadForm.content = this.fileDetails.fileContent;
+
             this.uploadForm.fileId = this.fileDetails.id;
             this.uploadForm.photourl = this.fileDetails.photoUrl;
 
@@ -527,6 +525,7 @@ export default {
     upFileloadSuccess() {
       this.updateFileList.fileId = this.uploadForm.fileId;
       this.updateFileList.content = this.uploadForm.content;
+      console.log(this.uploadForm.content.length);
       this.updateFileList.photourl = this.uploadForm.photourl;
       if (this.insertFileList.photourl === "") {
         this.insertFileList.photourl = "458814304482422455.png";
@@ -666,6 +665,9 @@ export default {
         return;
       } else if (this.uploadForm.content === "") {
         this.$Message.warning("请编辑文件内容");
+        return;
+      } else if (this.uploadForm.content.length >= 4180453) {
+        this.$Message.warning("文件内容过大,请删除多余的图片内容");
         return;
       } else if (
         this.checkIfContainId(

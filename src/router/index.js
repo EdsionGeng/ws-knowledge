@@ -63,7 +63,7 @@ const constantRouteMap = [{
         cname: '文档目录管理'
       }
     }, {
-      path: 'keySearchPage/:key',
+      path: 'keySearchPage',
       name: 'keySearchPage',
       component: keySearchPage,
       meta: {
