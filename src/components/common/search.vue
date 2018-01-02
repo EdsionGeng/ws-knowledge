@@ -1,7 +1,7 @@
 <template>
 <div class="clearfix">
  <div class="search">
-      <Input class='searchInput' size='large' v-model='inputValue'  icon="search" placeholder="搜索"
+      <Input class='searchInput' size='large' v-model.trim='inputValue'  icon="search" placeholder="搜索"
       style="width: 200px" @on-enter="changekeyRouter('keySearchPage')" @on-click="changekeyRouter('keySearchPage')"></Input>
   </div>
   <div class="creatFile">
@@ -26,7 +26,7 @@ export default {
         this.$Message.warning("请输入关键字进行搜索");
       }
       this.getSearchKey(this.inputValue);
-      this.$router.push("/" + name + "/" + this.inputValue);
+      this.$router.push({path:"/" + name,query:{key:this.inputValue}});
     },
     changeRouter(name) {
       this.$router.push("/" + name);

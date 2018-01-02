@@ -60,7 +60,7 @@ export default {
         current: 1,
         pageSize: 20,
         userId: sessionStorage.getItem("userId"),
-        searchContent: this.$route.params.key,
+        searchContent: this.$route.query.key,
         userGroupId: sessionStorage.getItem("userGroupId")
       },
       page: { total: 20, pages: 1, current: 1, pageSize: 20 },
@@ -118,7 +118,7 @@ export default {
     },
     initList() {
       console.log(this.listparams);
-      this.listparams.searchContent = this.$route.params.key;
+      this.listparams.searchContent = this.$route.query.key;
       searchResult(this.listparams)
         .then(res => {
           const showUserUpdata = res.data;
