@@ -10,7 +10,7 @@
             <a @click="onRowClick(list)">
               <Card style="">
                  <div style="text-align:center">
-                  <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;overflow:hidden;' onerror='this.style.opacity=0;'>
+                  <img :src="baseurl+list.photoUrl" style='width:60%;height:100px;overflow:hidden;'>
                   <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
                   <p style='color:#999;font-size:11px;margin-top:8px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
                 </div>
