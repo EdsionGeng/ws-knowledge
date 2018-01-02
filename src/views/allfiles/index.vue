@@ -18,28 +18,28 @@
     <Row>
       <Col span="24" class="demo-tabs-style1" style="background: #e3e8ee;padding:8px;">
       <Tabs type="card" @on-click='changePic'>
-        <TabPane label="列表" name='table'>
+        <TabPane label="图文" name='pic'>
+          <Row :gutter="32">
+            <Col span="4"  v-for='(list,index) in userLookpicFileList' :key='index'
+                 style='margin-top:10px;margin-bottom:10px;'>
+            <a @click="onRowClick(list)">
+              <Card style="max-height:200px;">
+                <div style="text-align:center">
+                  <img :src="list.photoUrl?baseurl+list.photoUrl:defaultUrl" style='width:60%;height:100px;overflow:hidden;' onerror='this.style.opacity=0;'>
+                  <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
+                  <p style='color:#999;font-size:11px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
+                  <p style='color:#999;font-size:11px;' class="nowrap">上传人：{{list.username}}</p>
+                </div>
+              </Card>
+            </a>
+            </Col>
+          </Row>  
+        </TabPane>
+         <TabPane label="列表" name='table'>
           <Row>
             <Col>
             <Table :columns="columns1" stripe class="myTable" @on-sort-change="recSortType" :data="userLookFileList"
                    @on-row-click="onRowClick"></Table>
-            </Col>
-          </Row>
-        </TabPane>
-        <TabPane label="图文" name='pic'>
-          <Row :gutter="32">
-            <Col span="4"  v-for='(list,index) in userLookpicFileList' :key='index'
-                 style='margin-bottom:48px;'>
-            <a @click="onRowClick(list)">
-              <Card style="">
-                <div style="text-align:center">
-                  <img :src="list.photoUrl?baseurl+list.photoUrl:defaultUrl" style='width:60%;height:100px;'>
-                  <div style='color:#444;font-size:16px;' class="nowrap">{{list.title}}</div>
-                  <p style='color:#999;font-size:12px;' class="nowrap" >上传时间：{{list.addFileTime}}</p>
-                  <p style='color:#999;font-size:12px;' class="nowrap">上传人：{{list.username}}</p>
-                </div>
-              </Card>
-            </a>
             </Col>
           </Row>
         </TabPane>
@@ -110,7 +110,7 @@ export default {
         }
       ],
       userLookpicFileList: [],
-      userLookFileList: []
+      userLookFileList: [],
     };
   },
   components: {
@@ -136,19 +136,14 @@ export default {
     },
     changePic(name) {
       if (name === "pic") {
-        this.historyUploadMessageList = [];
+        this.userLookFileList = [];
       } else {
-        this.historyUploadMessageList = this.historyUploadpicMessageList;
+        this.userLookFileList = this.userLookpicFileList;
       }
     },
     selAllFile() {
       this.listparams.departmentName = this.depTypeKey.value;
-      //        console.info(this.depTypeKey.id)
-      //        this.listparams.groupId = this.depTypeKey.id;
-      //        console.info("dfsbhjdfs")
-
       this.listparams.fileStyleId = this.docTypeKey.id;
-
       this.initList();
     },
     onRowClick(row) {
@@ -168,7 +163,7 @@ export default {
           const showUserUpdata = res.data;
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
-            this.userLookFileList = showUserUpdata.data;
+            // this.userLookFileList = showUserUpdata.data;
             this.userLookpicFileList = showUserUpdata.data;
           }
         })
