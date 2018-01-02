@@ -122,11 +122,11 @@ export default {
       docTree: [],
 
       deleteFileParams: {
-        fileIds: "",
+        fileIds:"",
         userId: 1
       },
       updateFileParams: {
-        fileIds: "",
+        fileIds:"",
         userId: 1,
         fileStyleId: ""
       },
@@ -134,8 +134,8 @@ export default {
       dataParams: {
         current: 1,
         pageSize: 20,
-        title: "",
-        startDate: "",
+        title:"",
+        startDate:"",
         endDate: "",
         fileStyleId: "",
         sortType: "desc"
@@ -233,7 +233,7 @@ export default {
           console.log(data);
           if (data.code == 0) {
             _self.$Message.info("操作成功");
-            window.location.reload();
+
             _self.showAllFileList();
           } else {
             _self.$Message.info(data.msg);

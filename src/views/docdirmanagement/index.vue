@@ -276,7 +276,7 @@ export default {
             this.$Message.success(data.msg);
             this.showDocTree();
             this.updateFileName = false;
-            window.location.reload();
+
           } else {
             this.$Message.warning(data.msg);
           }
