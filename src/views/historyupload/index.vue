@@ -6,7 +6,7 @@
       <TabPane label="图文" name='pic'>
           <Row :gutter="32">
             <Col span="4"   v-for='(list,index) in historyUploadpicMessageList' :key='index'
-                 style='margin-bottom:10px;margin-top:10px;'>
+                  style='margin-top:24px;margin-bottom:24px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                  <div style="text-align:center">
@@ -47,7 +47,7 @@ import { mapMutations } from "vuex";
 export default {
   data() {
     return {
-      baseurl:'',
+      baseurl: "",
       pageOpts: [10, 20, 30, 40],
       listparams: {
         current: 1,
@@ -75,11 +75,12 @@ export default {
         }
       ],
       historyUploadpicMessageList: [],
-      historyUploadMessageList: []
+      historyUploadMessageList: [],
+      activeName: "pic"
     };
   },
   mounted() {
-    this.baseurl=getRequestUrl();
+    this.baseurl = getRequestUrl();
     this.initList();
   },
   beforeRouteLeave(to, from, next) {
@@ -93,11 +94,8 @@ export default {
       this.initList();
     },
     changePic(name) {
-      if (name === "pic") {
-        this.historyUploadMessageList = [];
-      } else {
-        this.historyUploadMessageList = this.historyUploadpicMessageList;
-      }
+      this.activeName = name;
+      this.initList();
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
@@ -117,8 +115,13 @@ export default {
           console.log(showUserUpdata);
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
-            // this.historyUploadMessageList = showUserUpdata.data;
-            this.historyUploadpicMessageList = showUserUpdata.data;
+            if (this.activeName === "pic") {
+              this.historyUploadpicMessageList = showUserUpdata.data;
+              this.historyUploadMessageList = [];
+            } else {
+              this.historyUploadMessageList = showUserUpdata.data;
+              this.historyUploadpicMessageList = [];
+            }
           }
         })
         .catch(err => {});

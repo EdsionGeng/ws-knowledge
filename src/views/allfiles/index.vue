@@ -21,7 +21,7 @@
         <TabPane label="图文" name='pic'>
           <Row :gutter="32">
             <Col span="4"  v-for='(list,index) in userLookpicFileList' :key='index'
-                 style='margin-top:10px;margin-bottom:10px;'>
+                 style='margin-top:24px;margin-bottom:24px;'>
             <a @click="onRowClick(list)">
               <Card style="max-height:200px;">
                 <div style="text-align:center">
@@ -65,6 +65,7 @@ import { mapMutations } from "vuex";
 export default {
   data() {
     return {
+      activeName: "pic",
       baseurl: "",
       defaultUrl: "@/assets/img/default.png",
       docTypeKey: {
@@ -110,7 +111,7 @@ export default {
         }
       ],
       userLookpicFileList: [],
-      userLookFileList: [],
+      userLookFileList: []
     };
   },
   components: {
@@ -135,11 +136,8 @@ export default {
       this.initList();
     },
     changePic(name) {
-      if (name === "pic") {
-        this.userLookFileList = [];
-      } else {
-        this.userLookFileList = this.userLookpicFileList;
-      }
+      this.activeName = name;
+      this.initList();
     },
     selAllFile() {
       this.listparams.departmentName = this.depTypeKey.value;
@@ -163,8 +161,13 @@ export default {
           const showUserUpdata = res.data;
           if (res.data.code == 0) {
             this.page = res.data.rdPage;
-            // this.userLookFileList = showUserUpdata.data;
-            this.userLookpicFileList = showUserUpdata.data;
+            if (this.activeName === "pic") {
+              this.userLookpicFileList = showUserUpdata.data;
+              this.userLookFileList = [];
+            } else {
+              this.userLookFileList = showUserUpdata.data;
+              this.userLookpicFileList = [];
+            }
           }
         })
         .catch(err => {});

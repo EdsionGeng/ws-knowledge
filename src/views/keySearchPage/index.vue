@@ -6,7 +6,7 @@
          <TabPane label="图文" name='pic'>
           <Row :gutter="32">
             <Col span="4"  v-for='(list,index) in historyUploadpicMessageList' :key='index'
-                 style='margin-bottom:10px;margin-top:10px;'>
+                  style='margin-top:24px;margin-bottom:24px;'>
             <a @click="onRowClick(list)">
               <Card style="">
                 <div style="text-align:center">
@@ -48,6 +48,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
+      activeName:'pic',
       baseurl: "",
       docTypeKey: {
         value: "",
@@ -100,11 +101,8 @@ export default {
   },
   methods: {
     changePic(name) {
-      if (name === "pic") {
-        this.historyUploadMessageList = [];
-      } else {
-      this.historyUploadMessageList=this.historyUploadpicMessageList;
-      }
+      this.activeName=name;   
+      this.initList();
     },
     onRowClick(row) {
       this.$router.push("/allfiles/check/" + row.id);
@@ -124,9 +122,16 @@ export default {
         .then(res => {
           const showUserUpdata = res.data;
           if (res.data.code == 0) {
-            console.log(res.data);
+           
             this.page = res.data.rdPage;
-            this.historyUploadpicMessageList = showUserUpdata.data;
+            if(this.activeName==='pic'){
+                this.historyUploadpicMessageList = showUserUpdata.data;
+                 this.historyUploadMessageList = [];
+            }else{
+               this.historyUploadpicMessageList =[];
+                this.historyUploadMessageList = showUserUpdata.data;
+            }
+          
           }
         })
         .catch(err => {});
