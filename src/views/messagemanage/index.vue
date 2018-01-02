@@ -327,7 +327,7 @@ export default {
             userIds += ",";
           }
           departmentName += arr[i].name;
-          userIds += arr[i].id;
+          userIds += arr[i].userId;
         }
       }
 

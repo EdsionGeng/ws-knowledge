@@ -1,9 +1,9 @@
 let baseURL="";
 if(process.env.NODE_ENV ==='development'){
-    baseURL = 'http://192.168.3.26:8011';
+    baseURL = 'http://192.168.22.45:8011';
 }else{
     if(process.env.type ==="test"){
-        baseURL='http://192.168.3.26:8011';
+        baseURL='http://192.168.22.45:8011';
     }else{
         baseURL="http://report.wsloan.com:8888/knowledge/";
         // console.log(baseURL);
