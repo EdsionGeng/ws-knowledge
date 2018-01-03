@@ -282,7 +282,7 @@ export default {
         this.uploadForm.title !== "" ||
         this.uploadForm.id !== "" ||
         this.uploadForm.content !== "" ||
-        this.uploadForm.fileType !== "" ||
+        this.uploadForm.fileType !== '0' ||
         this.fujainList.length !== 0 ||
         this.lookFileParams.userIds !== "" ||
         this.updateFileParams.userIds !== "" ||
@@ -323,6 +323,7 @@ export default {
           }
         });
       } else {
+        this.getFileType('0');
         next();
       }
     } else {
@@ -367,7 +368,7 @@ export default {
         this.getFujainList([]);
       this.getFilesize("");
       this.getDescrible("");
-      this.getFileType("");
+      this.getFileType("0");
       this.getPhotoUrlList([]);
     },
     createEditor() {
@@ -753,10 +754,9 @@ export default {
 .newfileTab .ivu-tabs-bar {
   margin-bottom: 0;
 }
-.myFileType .ivu-form-item-content{
+.myFileType .ivu-form-item-content {
   line-height: normal;
 }
-
 </style>
 <style scoped>
 .body-area {
