@@ -160,7 +160,8 @@ export default {
       uploadDescription: "",
       submitText: "确定上传",
       submitLoading: false,
-      insertFilePrams: {},
+      insertFilePrams: {
+      },
       fujainList: [],
       ruleValidate: {
         title: [
@@ -181,7 +182,8 @@ export default {
         photourl: "",
         describle: "",
         filesize: "",
-        value: ""
+        value: "",
+        companyId:sessionStorage.getItem("companyId")
       },
       lookFileParams: {
         userIds: "",
@@ -569,6 +571,7 @@ export default {
       this.insertFilePrams.filesize = this.uploadForm.filesize;
       this.insertFilePrams.fileSpecies = this.uploadForm.fileType;
       this.insertFilePrams.describle = this.uploadForm.filedescrible;
+      this.insertFilePrams.companyId = this.uploadForm.companyId;
       console.log("验证获取的参数是否正确", this.insertFilePrams);
       insertFile(this.insertFilePrams)
         .then(res => {
