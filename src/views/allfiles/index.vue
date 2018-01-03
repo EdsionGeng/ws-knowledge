@@ -160,6 +160,7 @@ export default {
         .then(res => {
           const showUserUpdata = res.data;
           if (res.data.code == 0) {
+            console.info(showUserUpdata.data)
             this.page = res.data.rdPage;
             if (this.activeName === "pic") {
               this.userLookpicFileList = showUserUpdata.data;
