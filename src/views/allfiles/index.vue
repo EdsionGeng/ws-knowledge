@@ -33,7 +33,7 @@
               </Card>
             </a>
             </Col>
-          </Row>  
+          </Row>
         </TabPane>
          <TabPane label="列表" name='table'>
           <Row>
@@ -76,13 +76,14 @@ export default {
         value: "",
         id: ""
       },
-      pageOpts: [20, 40, 60, 100],
+      pageOpts: [10, 20, 30, 40,50],
       listparams: {
         userId: sessionStorage.getItem("userId"),
         current: 1,
         pageSize: 20,
         userGroupId: sessionStorage.getItem("userGroupId"),
-        sortType: "desc"
+        sortType: "desc",
+        companyId:sessionStorage.getItem("companyId")
       },
       photourl: "1513841327678bg.jpg",
       page: { total: 20, pages: 1, current: 1, pageSize: 20 },
