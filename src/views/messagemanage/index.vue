@@ -182,7 +182,8 @@ export default {
         endDate: "",
         title: "",
         adStyle: "",
-        sortType: "desc"
+        sortType: "desc",
+        companyId:sessionStorage.getItem("companyId")
       },
 
       deleteofcourse: false,
@@ -199,7 +200,8 @@ export default {
         adStyle: "",
         content: "",
         sendDepartmentName: "",
-        userId: sessionStorage.getItem("userId")
+        userId: sessionStorage.getItem("userId"),
+        companyId:sessionStorage.getItem("companyId")
       },
       modal1: false,
       isSubmit: false,

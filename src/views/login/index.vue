@@ -60,11 +60,15 @@ export default {
                      isAdmin=true;
                   };
                 let userGroupId = data.data.UserGroupId;
+                let companyId=data.data.companyId;
+                console.log("获取公司Id");
+                console.log(companyId);
                 this.isLoading = false;
                 this.$Message.success(data.msg);
                 sessionStorage.setItem("isLogin", true);
                 sessionStorage.setItem("isAdmin", isAdmin);
                 sessionStorage.setItem("userGroupId", userGroupId);
+                sessionStorage.setItem("companyId",companyId);
                 sessionStorage.setItem("username", username);
                 sessionStorage.setItem("userId", id);
                 this.$router.push("/");

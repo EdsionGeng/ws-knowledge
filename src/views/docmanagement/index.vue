@@ -138,7 +138,8 @@ export default {
         startDate:"",
         endDate: "",
         fileStyleId: "",
-        sortType: "desc"
+        sortType: "desc",
+        companyId:sessionStorage.getItem("companyId")
       },
       openDelWindow: false,
       updateFileStyle: false,
