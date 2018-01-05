@@ -28,7 +28,9 @@ export default {
       seriesCash: [],
       index: "day",
       legend: ["上传", "修改", "删除"],
-      params: null
+      params: {
+        companyId:sessionStorage.getItem("companyId")
+      }
     };
   },
   components: {

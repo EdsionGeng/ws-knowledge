@@ -28,7 +28,7 @@
             </Col>
           </Row>
         </TabPane>
-       
+
       </Tabs>
       </Col>
     </Row>
@@ -63,7 +63,8 @@ export default {
         pageSize: 20,
         userId: sessionStorage.getItem("userId"),
         searchContent: this.$route.query.key,
-        userGroupId: sessionStorage.getItem("userGroupId")
+        userGroupId: sessionStorage.getItem("userGroupId"),
+        companyId:   sessionStorage.getItem("companyId")
       },
       page: { total: 20, pages: 1, current: 1, pageSize: 20 },
       columns1: [
@@ -101,7 +102,7 @@ export default {
   },
   methods: {
     changePic(name) {
-      this.activeName=name;   
+      this.activeName=name;
       this.initList();
     },
     onRowClick(row) {
@@ -122,7 +123,7 @@ export default {
         .then(res => {
           const showUserUpdata = res.data;
           if (res.data.code == 0) {
-           
+
             this.page = res.data.rdPage;
             if(this.activeName==='pic'){
                 this.historyUploadpicMessageList = showUserUpdata.data;
@@ -131,7 +132,7 @@ export default {
                this.historyUploadpicMessageList =[];
                 this.historyUploadMessageList = showUserUpdata.data;
             }
-          
+
           }
         })
         .catch(err => {});
