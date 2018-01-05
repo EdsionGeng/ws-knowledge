@@ -26,7 +26,7 @@ module.exports = {
     port: 8080,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/ws-knowledge/',
+    assetsPublicPath: '/ws-operationsystem/',
     proxyTable: {
     },
     
