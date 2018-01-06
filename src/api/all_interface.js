@@ -176,7 +176,7 @@ export function showDayData(data) {
   return fetch({
     url: '/show/daydata.htmls',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
@@ -189,7 +189,7 @@ export function showWeekData(data) {
   return fetch({
     url: '/show/weekdata.htmls',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
@@ -202,7 +202,7 @@ export function showMonthData(data) {
   return fetch({
     url: '/show/monthdata.htmls',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
