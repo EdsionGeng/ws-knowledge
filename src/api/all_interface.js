@@ -444,3 +444,15 @@ export function updateDocRule(data) {
     data: data
   })
 }
+/**
+ * 查询某一公告已读未读人员信息
+ * @param data
+ * @returns {*}
+ */
+export function showAdInfo(data) {
+  return fetch({
+    url: '/show/adinfo.htmls',
+    method: 'post',
+    data: data
+  })
+}

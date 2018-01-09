@@ -45,7 +45,8 @@
     <div style="margin:40px">
       <Row class="table-top">
         <Col>
-        <Table class="myTable" border ref="selection" :columns="AllAdColumns" @on-sort-change="recSortType" :data="AllAdList" stripe
+        <Table class="myTable" border ref="selection" :columns="AllAdColumns" @on-sort-change="recSortType"
+               :data="AllAdList" stripe
                @on-selection-change="delAdAction" @on-row-click="showAdDetail"></Table>
         </Col>
       </Row>
@@ -122,345 +123,416 @@
       width="700"
     >
       <p style="font-size: 16px;color:#444444;margin-top:10px;text-align: center">{{singleMessageDetail.AdTitle}}</p>
-      <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;'>发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
+      <p style='text-align:center;color:#999999;font-size: 12px;margin-top:10px;' v-on:click='openAdInfo'>
+        发布时间：{{ singleMessageDetail.addTime}}&nbsp; &nbsp;发布人：{{
         singleMessageDetail.AddUser}}&nbsp;&nbsp;已读人：<strong
-          style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
-          style="color:red">{{singleMessageDetail.noreaded}}</strong>
+        style="color:red">{{singleMessageDetail.readed }}</strong>&nbsp;&nbsp;未读人：<strong
+        style="color:red">{{singleMessageDetail.noreaded}}</strong>
       <p class="modal-content" style="color:#666666;margin-top:5px;margin-left:10px;margin-right:10px;">
         {{singleMessageDetail.Content }}
       </p>
     </Modal>
+    <Modal
+      title=""
+      v-model="adPerInfo"
+      :mask-closable="false"
+      :closable="false"
+    >
+      <Tabs>
+        <TabPane label="已读">
+          <Table class="myTable" :columns=" ReadPerson"
+                 :data="AdInfoList"></Table>
+        </TabPane>
+
+        <TabPane label="未读">
+          <Table class="myTable" :columns=" NoReadPerson"
+                 :data="AdNoInfoList"
+          ></Table>
+        </TabPane>
+      </Tabs>
+    </Modal>
   </div>
 </template>
 <script>
-import { showAllAd } from "../../api/all_interface";
-import { deleteAd } from "../../api/all_interface";
-import { getDepTree } from "../../api/all_interface";
-import { queryUserByGroup } from "../../api/all_interface";
-import { showAdPcs } from "../../api/all_interface";
-import { insertAd } from "../../api/all_interface";
-import { sendAdToUser } from "../../api/all_interface";
+  import {showAllAd} from "../../api/all_interface";
+  import {deleteAd} from "../../api/all_interface";
+  import {getDepTree} from "../../api/all_interface";
+  import {queryUserByGroup} from "../../api/all_interface";
+  import {showAdPcs} from "../../api/all_interface";
+  import {insertAd} from "../../api/all_interface";
+  import {sendAdToUser} from "../../api/all_interface";
+  import {showAdInfo} from "../../api/all_interface";
 
-export default {
-  data() {
-    return {
-      AllAdColumns: [
-        {
-          type: "selection",
-          width: 60,
-          align: "center"
-        },
-        {
-          title: "标题",
-          key: "adTitle"
-        },
-        {
-          title: "公告类型",
-          key: "adStyle"
-        },
-        {
-          title: "发送人",
-          key: "addUser"
-        },
-        {
-          title: "接收人员",
-          key: "sendObject",
-          ellipsis: true
-        },
-        {
-          title: "发送时间",
-          key: "sendTime",
-          sortable: "custom",
-          sortType: ""
-        }
-      ],
-      usershow: false,
-      params: {
-        current: 1,
-        pageSize: 20,
-        startDate: "",
-        endDate: "",
-        title: "",
-        adStyle: "",
-        sortType: "desc",
-        companyId:sessionStorage.getItem("companyId")
-      },
-
-      deleteofcourse: false,
-      singleMessageDetail: {
-        AdTitle: "",
-        addTime: "",
-        AddUser: "",
-        Content: "",
-        readed: 0,
-        noreaded: 0
-      },
-      insertAdParams: {
-        title: "",
-        adStyle: "",
-        content: "",
-        sendDepartmentName: "",
-        userId: sessionStorage.getItem("userId"),
-        companyId:sessionStorage.getItem("companyId")
-      },
-      modal1: false,
-      isSubmit: false,
-      insertAd: false,
-      sendAdParams: {
-        userIds: "",
-        commonId: ""
-      },
-      pageOpts: [10, 20, 30, 40, 50],
-      depTree: [],
-      chooseUser: false,
-      delAdParams: {
-        ids: ""
-      },
-      ruleValidate: {
-        title: [
-          { required: true, message: "请填写公告标题", trigger: "blur" },
-          { type: "string", max: 20, message: "标题限制在20字以内" }
-        ],
-        content: [
-          { required: true, message: "请填写公告内容", trigger: "blur" },
-          { type: "string", max: 500, message: "内容限制在500字以内" }
-        ]
-      },
-      showUserGroup: [],
-      depTreeParams: {
-        id: "",
-        deptno: "",
-        no: "",
-        pid: "",
-        type: "",
-        checked: "",
-        name: "",
-        department: ""
-      },
-      showAdParams: {
-        commonId: ""
-      },
-      page: {},
-      ids: "",
-      selection: [],
-      AllAdList: []
-    };
-  },
-  created() {
-    this.showAllAdList();
-    this.showDepTree();
-  },
-  methods: {
-    onPageChange(value) {
-      this.params.current = value;
-      this.showAllAdList();
-    },
-    onPageSizeChange(value) {
-      this.params.pageSize = value;
-      this.showAllAdList();
-    },
-    renderContent(h, { root, node, data }) {
-      return h(
-        "span",
-        {
-          style: {
-            width: "52px"
+  export default {
+    data() {
+      return {
+        AllAdColumns: [
+          {
+            type: "selection",
+            width: 60,
+            align: "center"
+          },
+          {
+            title: "标题",
+            key: "adTitle"
+          },
+          {
+            title: "公告类型",
+            key: "adStyle"
+          },
+          {
+            title: "发送人",
+            key: "addUser"
+          },
+          {
+            title: "接收人员",
+            key: "sendObject",
+            ellipsis: true
+          },
+          {
+            title: "发送时间",
+            key: "sendTime",
+            sortable: "custom",
+            sortType: ""
           }
+        ],
+        ReadPerson: [
+
+          {
+            title: "姓名",
+            key: "username"
+          },
+          {
+            title: "部门",
+            key: "departmentName"
+          },
+
+        ],
+        NoReadPerson: [
+          {
+            title: "姓名",
+            key: "username"
+          },
+          {
+            title: "部门",
+            key: "departmentName"
+          },
+        ],
+        AdInfoList: [],
+        AdNoInfoList: [],
+        usershow: false,
+        params: {
+          current: 1,
+          pageSize: 20,
+          startDate: "",
+          endDate: "",
+          title: "",
+          adStyle: "",
+          sortType: "desc",
+          companyId: sessionStorage.getItem("companyId")
         },
-        data.name
-      );
+        adPerInfo: false,
+        deleteofcourse: false,
+        singleMessageDetail: {
+          AdTitle: "",
+          addTime: "",
+          AddUser: "",
+          Content: "",
+          readed: 0,
+          noreaded: 0
+        },
+        insertAdParams: {
+          title: "",
+          adStyle: "",
+          content: "",
+          sendDepartmentName: "",
+          userId: sessionStorage.getItem("userId"),
+          companyId: sessionStorage.getItem("companyId")
+        },
+        modal1: false,
+        isSubmit: false,
+        insertAd: false,
+        sendAdParams: {
+          userIds: "",
+          commonId: ""
+        },
+        pageOpts: [10, 20, 30, 40, 50],
+        depTree: [],
+        chooseUser: false,
+        delAdParams: {
+          ids: ""
+        },
+        ruleValidate: {
+          title: [
+            {required: true, message: "请填写公告标题", trigger: "blur"},
+            {type: "string", max: 20, message: "标题限制在20字以内"}
+          ],
+          content: [
+            {required: true, message: "请填写公告内容", trigger: "blur"},
+            {type: "string", max: 500, message: "内容限制在500字以内"}
+          ]
+        },
+        showUserGroup: [],
+        depTreeParams: {
+          id: "",
+          deptno: "",
+          no: "",
+          pid: "",
+          type: "",
+          checked: "",
+          name: "",
+          department: ""
+        },
+        showAdInfoParams: {
+          commonId: ""
+        },
+        showAdParams: {
+          commonId: ""
+        },
+        page: {},
+        ids: "",
+        selection: [],
+        AllAdList: []
+      };
     },
-    sureSubmit() {
-      this.isSubmit = true;
-    },
-    cancelSubmit() {
-      this.insertAdParams.title = "";
-      this.insertAdParams.content = "";
-      this.insertAdParams.sendDepartmentName = "";
-      this.insertAdParams.adStyle = "";
-      this.sendAdParams.userIds = "";
-      this.sendAdParams.commonId = "";
+    created() {
+      this.showAllAdList();
       this.showDepTree();
     },
-    delAdAction(arr) {
-      let fielIds = "";
-      for (let i = 0; i < arr.length; i++) {
-        if (i > 0) {
-          fielIds += ",";
-        }
-        fielIds += arr[i].id;
-      }
-      this.delAdParams.ids = fielIds;
-      return fielIds;
-    },
-    showAdDetail(row, index) {
-      this.showAdParams = {
-        commonId: row.id
-      };
-      showAdPcs(this.showAdParams)
-        .then(res => {
-          const data = res.data;
-          if (data.code == 0) {
-            this.singleMessageDetail.AdTitle = row.adTitle;
-            this.singleMessageDetail.addTime = row.sendTime;
-            this.singleMessageDetail.AddUser = row.addUser;
-            var reg = new RegExp("<br>", "g");
-            this.singleMessageDetail.Content = row.adContent.replace(reg, "\n");
-            this.singleMessageDetail.readed = data.data.isRead;
-            this.singleMessageDetail.noreaded = data.data.noRead;
-          } else {
-            this.$Message.warning("网络异常！");
-          }
-        })
-        .catch(err => {});
-      this.modal1 = true;
-    },
-    recSortType(order) {
-      this.params.sortType = order.order;
-      this.showAllAdList();
-    },
-    circleUser(arr) {
-      let departmentName = "";
-      let userIds = "";
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].children == null) {
+    methods: {
+      onPageChange(value) {
+        this.params.current = value;
+        this.showAllAdList();
+      },
+      onPageSizeChange(value) {
+        this.params.pageSize = value;
+        this.showAllAdList();
+      },
+      renderContent(h, {root, node, data}) {
+        return h(
+          "span",
+          {
+            style: {
+              width: "52px"
+            }
+          },
+          data.name
+        );
+      },
+      sureSubmit() {
+        this.isSubmit = true;
+      },
+      cancelSubmit() {
+        this.insertAdParams.title = "";
+        this.insertAdParams.content = "";
+        this.insertAdParams.sendDepartmentName = "";
+        this.insertAdParams.adStyle = "";
+        this.sendAdParams.userIds = "";
+        this.sendAdParams.commonId = "";
+        this.showDepTree();
+      },
+      delAdAction(arr) {
+        let fielIds = "";
+        for (let i = 0; i < arr.length; i++) {
           if (i > 0) {
-            departmentName += ",";
-            userIds += ",";
+            fielIds += ",";
           }
-          departmentName += arr[i].name;
-          userIds += arr[i].userId;
+          fielIds += arr[i].id;
         }
-      }
-
-      this.sendAdParams.userIds = userIds;
-      if (departmentName.length > 1000) {
-        departmentName = "全公司";
-      }
-      this.insertAdParams.sendDepartmentName = departmentName;
-    },
-    dateOnChange(arr) {
-      const rangedate = arr;
-      this.params.startDate = rangedate[0];
-      if (rangedate[1] === undefined) {
-        this.params.endDate = "";
-      } else {
-        this.params.endDate = rangedate[1];
-      }
-    },
-    toDelAd() {
-      if (this.delAdParams.ids == "") {
-        this.$Message.warning("没有选中相应数据!");
-        return;
-      }
-      this.deleteofcourse = true;
-    },
-    sureDelete() {
-      deleteAd(this.delAdParams)
-        .then(res => {
+        this.delAdParams.ids = fielIds;
+        return fielIds;
+      },
+      showAdDetail(row, index) {
+        this.showAdParams = {
+          commonId: row.id
+        };
+        showAdPcs(this.showAdParams)
+          .then(res => {
+            const data = res.data;
+            if (data.code == 0) {
+              this.showAdInfoParams.commonId = row.id;
+              this.singleMessageDetail.AdTitle = row.adTitle;
+              this.singleMessageDetail.addTime = row.sendTime;
+              this.singleMessageDetail.AddUser = row.addUser;
+              var reg = new RegExp("<br>", "g");
+              console.info(row);
+              this.singleMessageDetail.Content = row.adContent.replace(reg, "\n");
+              this.singleMessageDetail.readed = data.data.isRead;
+              this.singleMessageDetail.noreaded = data.data.noRead;
+            } else {
+              this.$Message.warning("网络异常！");
+            }
+          })
+          .catch(err => {
+          });
+        this.modal1 = true;
+      },
+      recSortType(order) {
+        this.params.sortType = order.order;
+        this.showAllAdList();
+      },
+      circleUser(arr) {
+        let departmentName = "";
+        let userIds = "";
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].children == null) {
+            if (i > 0) {
+              departmentName += ",";
+              userIds += ",";
+            }
+            departmentName += arr[i].name;
+            userIds += arr[i].userId;
+          }
+        }
+        this.sendAdParams.userIds = userIds;
+        if (departmentName.length > 1000) {
+          departmentName = "全公司";
+        }
+        this.insertAdParams.sendDepartmentName = departmentName;
+      },
+      dateOnChange(arr) {
+        const rangedate = arr;
+        this.params.startDate = rangedate[0];
+        if (rangedate[1] === undefined) {
+          this.params.endDate = "";
+        } else {
+          this.params.endDate = rangedate[1];
+        }
+      },
+      openAdInfo() {
+        this.adPerInfo = true;
+        console.info(this.showAdInfoParams);
+        showAdInfo(this.showAdInfoParams).then(res => {
           const data = res.data;
           if (data.code == 0) {
-            this.$Message.info(data.msg);
-            this.showAllAdList();
+            for(let i=0;i<data.data.length;i++) {
+              this.AdInfoList = data.data[0];
+              this.AdNoInfoList = data.data[1];
+            }
           } else {
-            this.$Message.info(data.msg);
-          }
-        })
-        .catch(err => {});
-    },
-    handleSearch() {
-      console.info(this.params);
-      this.showAllAdList();
-    },
-    sureSend() {
-      if (this.insertAdParams.title == "") {
-        this.$Message.warning("标题不能为空！");
-        return;
-      }
-      if (this.insertAdParams.adStyle == "") {
-        this.$Message.warning("公告类型不能为空！");
-        return;
-      }
-      if (this.insertAdParams.content == "") {
-        this.$Message.warning("内容不能为空！");
-        return;
-      }
-      if (this.insertAdParams.sendDepartmentName == "") {
-        this.$Message.warning("发送对象不能为空！");
-        return;
-      }
-      let newcontent = this.insertAdParams.content.replace(/\n|\r\n/g, "<br>");
-      this.insertAdParams.content = newcontent;
-      insertAd(this.insertAdParams)
-        .then(res => {
-          const data = res.data;
-          let _self = this;
-          if (data.code == 0) {
-            _self.sendAdParams.commonId = data.data;
-            sendAdToUser(_self.sendAdParams).then(res => {
-              const data = res.data;
-              if (data.code == 0) {
-                this.$Message.success("操作成功!");
-                this.insertAd = false;
-                this.insertAdParams.title = "";
-                this.insertAdParams.content = "";
-                this.insertAdParams.sendDepartmentName = "";
-                this.insertAdParams.adStyle = "";
-                this.sendAdParams.userIds = "";
-                this.sendAdParams.commonId = "";
-                this.showDepTree();
-                this.showAllAdList();
-              }
-            });
-          }
-        })
-        .catch(err => {});
-    },
-    cancel() {
-      this.insertAdParams.sendDepartmentName = "";
-      this.sendAdParams.userIds = "";
-    },
-    showDepTree() {
-      let _self = this;
-      getDepTree(_self.depTreeParams).then(res => {
-        _self.depTree = res.data;
-      });
-    },
 
-    showAllAdList() {
-      showAllAd(this.params)
-        .then(res => {
-          const data = res.data;
-          if (data.code == 0) {
-            this.AllAdList = data.data;
-            this.page = data.rdPage;
           }
-        })
-        .catch(err => {});
+        }).catch(err => {
+
+        });
+      },
+
+      toDelAd() {
+        if (this.delAdParams.ids == "") {
+          this.$Message.warning("没有选中相应数据!");
+          return;
+        }
+        this.deleteofcourse = true;
+      },
+      sureDelete() {
+        deleteAd(this.delAdParams)
+          .then(res => {
+            const data = res.data;
+            if (data.code == 0) {
+              this.$Message.info(data.msg);
+              this.showAllAdList();
+            } else {
+              this.$Message.info(data.msg);
+            }
+          })
+          .catch(err => {
+          });
+      },
+      handleSearch() {
+        console.info(this.params);
+        this.showAllAdList();
+      },
+      sureSend() {
+        if (this.insertAdParams.title == "") {
+          this.$Message.warning("标题不能为空！");
+          return;
+        }
+        if (this.insertAdParams.adStyle == "") {
+          this.$Message.warning("公告类型不能为空！");
+          return;
+        }
+        if (this.insertAdParams.content == "") {
+          this.$Message.warning("内容不能为空！");
+          return;
+        }
+        if (this.insertAdParams.sendDepartmentName == "") {
+          this.$Message.warning("发送对象不能为空！");
+          return;
+        }
+        let newcontent = this.insertAdParams.content.replace(/\n|\r\n/g, "<br>");
+        this.insertAdParams.content = newcontent;
+        insertAd(this.insertAdParams)
+          .then(res => {
+            const data = res.data;
+            let _self = this;
+            if (data.code == 0) {
+              _self.sendAdParams.commonId = data.data;
+              sendAdToUser(_self.sendAdParams).then(res => {
+                const data = res.data;
+                if (data.code == 0) {
+                  this.$Message.success("操作成功!");
+                  this.insertAd = false;
+                  this.insertAdParams.title = "";
+                  this.insertAdParams.content = "";
+                  this.insertAdParams.sendDepartmentName = "";
+                  this.insertAdParams.adStyle = "";
+                  this.sendAdParams.userIds = "";
+                  this.sendAdParams.commonId = "";
+                  this.showDepTree();
+                  this.showAllAdList();
+                }
+              });
+            }
+          })
+          .catch(err => {
+          });
+      },
+      cancel() {
+        this.insertAdParams.sendDepartmentName = "";
+        this.sendAdParams.userIds = "";
+      },
+      showDepTree() {
+        let _self = this;
+        getDepTree(_self.depTreeParams).then(res => {
+          _self.depTree = res.data;
+        });
+      },
+
+      showAllAdList() {
+        showAllAd(this.params)
+          .then(res => {
+            const data = res.data;
+            if (data.code == 0) {
+              this.AllAdList = data.data;
+              this.page = data.rdPage;
+            }
+          })
+          .catch(err => {
+          });
+      }
     }
-  }
-};
+  };
 </script>
 <style scoped>
-.myTable .demo-table-info-row td {
-  color: red;
-}
+  .myTable .demo-table-info-row td {
+    color: red;
+  }
 
-.buttonarea {
-  margin-left: 20px;
-}
+  .buttonarea {
+    margin-left: 20px;
+  }
 
-.bodyarea {
-  margin-left: 30px;
-  margin-top: 30px;
-}
+  .bodyarea {
+    margin-left: 30px;
+    margin-top: 30px;
+  }
 
-.user-detail {
-}
+  .user-detail {
+  }
 </style>
 
 <style>
-.ivu-select-single .ivu-select-selection {
-  width: 100% !important;
-}
+  .ivu-select-single .ivu-select-selection {
+    width: 100% !important;
+  }
 </style>
